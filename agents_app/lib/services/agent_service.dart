@@ -5,11 +5,12 @@ import '../models/agent_model.dart';
 
 class AgentService {
   // Cambia esta URL a la correcta según tu IP/localhost
-  static const String _baseUrl = 'http://192.168.100.36/agents/by-user/1'; // ← Ajusta esto
+  static const String _baseUrl = 'http://192.168.100.36';
 
-  static Future<AgentData?> fetchAgentData() async {
+  static Future<AgentData?> fetchAgentData(int userId) async {
     try {
-      final response = await http.get(Uri.parse(_baseUrl));
+      final response =
+          await http.get(Uri.parse("${_baseUrl}/agents/by-user/${userId}"));
 
       if (response.statusCode == 200) {
         final jsonMap = jsonDecode(response.body);

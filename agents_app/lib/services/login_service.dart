@@ -1,7 +1,8 @@
+import 'package:agents_app/models/session_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-Future<bool> loginUser(String username, String password) async {
+Future<UserData?> loginUser(String username, String password) async {
   final url = Uri.parse('http://192.168.100.36/auth/login'); // Reemplaza con tu IP local
 
   try {
@@ -12,13 +13,16 @@ Future<bool> loginUser(String username, String password) async {
     );
 
     if (response.statusCode == 200) {
-      // Puedes ajustar esta validación según la estructura de respuesta de tu API
-      return true;
+      final decodedJson = jsonDecode(response.body);
+      print(decodedJson);
+      final loginResponse = SessionResponse.fromJson(decodedJson);
+      print(loginResponse);
+      return loginResponse.data; // Retorna el UserData
     } else {
-      return false;
+      return null;
     }
   } catch (e) {
     print('Error al conectarse con la API: $e');
-    return false;
+    return null;
   }
 }

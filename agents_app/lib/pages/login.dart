@@ -1,5 +1,7 @@
+import 'package:agents_app/controllers/globals.dart';
 import 'package:agents_app/services/login_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,13 +12,19 @@ class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  final global = Get.find<SessionController>();
   Future _login() async {
     final username = _usernameController.text;
     final password = _passwordController.text;
 
-    final success = await loginUser(username, password);
-    print(success);
-    if (success) {
+    final user = await loginUser(username, password);
+
+    if (user != null) {
+      global.setSession(
+        username: user.username,
+        token: 'abc123token',
+        userId: user.id,
+      );
       Navigator.pushReplacementNamed(context, '/home');
     } else {
       showDialog(
@@ -92,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () async{
+                        onPressed: () async {
                           await _login();
                         },
                         style: ElevatedButton.styleFrom(

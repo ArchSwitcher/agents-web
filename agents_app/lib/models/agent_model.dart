@@ -1,62 +1,58 @@
 class AgentData {
-  final int id;
-  final List<AgentCode> agentCodes;
+  final int? id;
+  final List<AgentCode>? agentCodes;
 
-  AgentData({required this.id, required this.agentCodes});
+  AgentData({this.id, this.agentCodes});
 
   factory AgentData.fromJson(Map<String, dynamic> json) {
     return AgentData(
       id: json['id'],
-      agentCodes: (json['agent_codes'] as List)
-          .map((e) => AgentCode.fromJson(e))
+      agentCodes: (json['agent_codes'] as List?)
+          ?.map((e) => AgentCode.fromJson(e))
           .toList(),
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'agent_codes': agentCodes.map((e) => e.toJson()).toList(),
+        if (id != null) 'id': id,
+        if (agentCodes != null)
+          'agent_codes': agentCodes!.map((e) => e.toJson()).toList(),
       };
 }
 
 class AgentCode {
-  final int id;
-  final String name;
-  final List<Agent> agents;
+  final int? id;
+  final String? name;
+  final List<Agent>? agents;
 
-  AgentCode({required this.id, required this.name, required this.agents});
+  AgentCode({this.id, this.name, this.agents});
 
   factory AgentCode.fromJson(Map<String, dynamic> json) {
     return AgentCode(
       id: json['id'],
       name: json['name'],
-      agents: (json['agents'] as List)
-          .map((e) => Agent.fromJson(e))
+      agents: (json['agents'] as List?)
+          ?.map((e) => Agent.fromJson(e))
           .toList(),
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'agents': agents.map((e) => e.toJson()).toList(),
+        if (id != null) 'id': id,
+        if (name != null) 'name': name,
+        if (agents != null)
+          'agents': agents!.map((e) => e.toJson()).toList(),
       };
 }
 
 class Agent {
-  final int id;
-  final String name;
-  final String route;
-  final int agentCodeId;
+  final int? id;
+  final String? name;
+  final String? route;
+  final int? agentCodeId;
   final String? pdfUrl;
 
-  Agent({
-    required this.id,
-    required this.name,
-    required this.route,
-    required this.agentCodeId,
-    this.pdfUrl,
-  });
+  Agent({this.id, this.name, this.route, this.agentCodeId, this.pdfUrl});
 
   factory Agent.fromJson(Map<String, dynamic> json) {
     return Agent(
@@ -69,10 +65,10 @@ class Agent {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'route': route,
-        'agent_code_id': agentCodeId,
-        'pdf_url': pdfUrl,
+        if (id != null) 'id': id,
+        if (name != null) 'name': name,
+        if (route != null) 'route': route,
+        if (agentCodeId != null) 'agent_code_id': agentCodeId,
+        if (pdfUrl != null) 'pdf_url': pdfUrl,
       };
 }

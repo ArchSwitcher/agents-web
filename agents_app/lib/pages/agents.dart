@@ -1,4 +1,7 @@
+import 'package:agents_app/controllers/globals.dart';
+import 'package:agents_app/pages/%20agents_detail.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../services/agent_service.dart';
 import '../models/agent_model.dart';
 
@@ -12,10 +15,11 @@ class Agents extends StatefulWidget {
 class _AgentsState extends State<Agents> {
   late Future<AgentData?> _agentDataFuture;
 
+  final global = Get.find<SessionController>();
   @override
   void initState() {
     super.initState();
-    _agentDataFuture = AgentService.fetchAgentData();
+    _agentDataFuture = AgentService.fetchAgentData(global.getUserId);
   }
 
   @override
@@ -33,7 +37,7 @@ class _AgentsState extends State<Agents> {
             return const Center(child: Text('Error al cargar datos.'));
           }
 
-          final agentCodes = snapshot.data!.agentCodes;
+          final agentCodes = snapshot.data!.agentCodes?? [];
 
           return SingleChildScrollView(
             scrollDirection: Axis.vertical,
@@ -47,12 +51,15 @@ class _AgentsState extends State<Agents> {
                 rows: agentCodes.map((code) {
                   return DataRow(cells: [
                     DataCell(Text(code.id.toString())),
-                    DataCell(Text(code.name)),
+                    DataCell(Text(code?.name ?? "name")),
                     DataCell(
                       ElevatedButton(
                         onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Clic en ${code.name}')),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => AgentsDetail(agents: code?.agents ?? []),
+                            ),
                           );
                         },
                         child: const Text('Ir'),
