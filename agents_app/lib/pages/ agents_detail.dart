@@ -35,12 +35,12 @@ class AgentsDetail extends StatelessWidget {
                     margin:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: ListTile(
-                      title: Text(agent?.name ?? "data1"),
-                      subtitle: Text('Ruta: ${agent.route}'),
+                      title: const Text("Información del Agente"),
+                      subtitle: Text(agent?.name ?? "data1"),
                       trailing: agent.pdfUrl != null
                           ? IconButton(
                               icon: const Icon(Icons.picture_as_pdf),
-                              onPressed: () => _launchURL(agent.pdfUrl!),
+                              onPressed: () => _launchURL("http://localhost:80/readPDFs3/readS3?filename=${agent.pdfUrl!}"),
                             )
                           : null,
                     ),
