@@ -12,8 +12,8 @@ class ContentCard extends StatelessWidget {
 
     return Center(
       child: FractionallySizedBox(
-        widthFactor: 0.9,
-        heightFactor: 0.9,
+        widthFactor: 0.95,
+        heightFactor: 0.95,
         child: Card(
           color: colorScheme.surface,
           elevation: 2,

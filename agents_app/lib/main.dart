@@ -3,6 +3,7 @@ import 'package:agents_app/controllers/globals.dart';
 import 'package:agents_app/screens/agents/agents_screen.dart';
 import 'package:agents_app/screens/clients/clients_screen.dart';
 import 'package:agents_app/screens/dashboard/dashboard_screen.dart';
+import 'package:agents_app/screens/groups/groups_screen.dart';
 import 'package:agents_app/screens/login_screen.dart';
 import 'package:agents_app/providers/menu_provider.dart';
 import 'package:agents_app/providers/sidebar_state_provider.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
               RouteConstants.dashboard : (context) => const DashboardScreen(),
               RouteConstants.agents : (context) => const AgentsScreen(),
               RouteConstants.clients : (context) => const ClientsScreen(),
+              RouteConstants.groups : (context) => const GroupsScreen(),
             },
             theme: appTheme
             ));

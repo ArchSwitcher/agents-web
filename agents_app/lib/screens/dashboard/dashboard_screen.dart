@@ -8,7 +8,7 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ResponsiveSidebarLayout(
-      title: 'Dashboard',
+      title: 'Tablero',
       currentRoute: RouteConstants.dashboard,
       userRole: 'admin',
       content: SingleChildScrollView(
@@ -31,7 +31,7 @@ class DashboardScreen extends StatelessWidget {
                 return const Wrap(
                   spacing: 16,
                   runSpacing: 16,
-                  children: const [
+                  children: [
                     _InfoCard(
                       icon: Icons.people,
                       label: 'Clientes',
@@ -102,7 +102,7 @@ class _InfoCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: SizedBox(
         width: 140,
-        height: 120,
+        height: 125,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(

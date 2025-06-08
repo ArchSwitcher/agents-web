@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 
+//https://coolors.co/palette/d9ed92-b5e48c-99d98c-76c893-52b69a-34a0a4-168aad-1a759f-1e6091-184e77
+
 final ThemeData appTheme = ThemeData(
   colorScheme: const ColorScheme(
     brightness: Brightness.light,
-    primary: Color(0xFF90CAF9),          // Azul pastel
+    primary: Color(0xFF184E77),
     onPrimary: Colors.white,
-    primaryContainer: Color(0xFFE3F2FD), // Fondo claro
-    secondary: Color(0xFFA5D6A7),        // Verde menta
+    primaryContainer: Color(0xFF2b8dcc),
+    secondary: Color(0xFF1E6091),
     onSecondary: Colors.black,
-    //background: Color(0xFFF5FAFF),       // Fondo global
+    //background: Color(0xFFF5FAFF),
     //onBackground: Color(0xFF212121),
+    surfaceContainerHighest: Color(0xFFe4effa),
     surface: Colors.white,
     onSurface: Color(0xFF212121),
-    error: Color(0xFFFFAB91),            // Coral
-    onError: Colors.white,
+    error: Color(0xFFd62828),
+    onError: Color(0xFFe63946),  //ae2012 alternative
   ),
   useMaterial3: true,
   scaffoldBackgroundColor: Color(0xFFF5FAFF),
   appBarTheme: const AppBarTheme(
-    backgroundColor: Color(0xFF90CAF9),
-    foregroundColor: Colors.white,
+    backgroundColor: Color(0xFF184E77),
+    foregroundColor: Color(0xFFd4f3f1),
     elevation: 0,
   ),
   textTheme: const TextTheme(

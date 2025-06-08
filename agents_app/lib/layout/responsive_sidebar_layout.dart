@@ -20,7 +20,7 @@ class ResponsiveSidebarLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-
+    
     return LayoutBuilder(
       builder: (context, constraints) {
         final appBar = AppBar(
@@ -32,6 +32,31 @@ class ResponsiveSidebarLayout extends StatelessWidget {
           elevation: 0.5,
           automaticallyImplyLeading: constraints.maxWidth <= 600,
           iconTheme: IconThemeData(color: colorScheme.onPrimary),
+        );
+
+        Widget backgroundWave = SizedBox(
+          height: constraints.maxHeight * 0.4,
+          width: double.infinity,
+          child: CustomPaint(
+            painter: WavePainter(color: colorScheme.primary),
+          ),
+        );
+
+        Widget stackedContent = Stack(
+          children: [
+            Positioned.fill(
+              child: Column(
+                children: [
+                  backgroundWave,
+                  Expanded(child: Container()),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 0),
+              child: ContentCard(child: content),
+            ),
+          ],
         );
 
         if (constraints.maxWidth > 600) {
@@ -46,7 +71,7 @@ class ResponsiveSidebarLayout extends StatelessWidget {
                   child: Column(
                     children: [
                       appBar,
-                      Expanded(child: ContentCard(child: content)),
+                      Expanded(child: stackedContent),
                     ],
                   ),
                 ),
@@ -62,10 +87,37 @@ class ResponsiveSidebarLayout extends StatelessWidget {
                 currentRoute: currentRoute,
               ),
             ),
-            body: ContentCard(child: content),
+            body: stackedContent,
           );
         }
       },
     );
   }
+}
+
+
+class WavePainter extends CustomPainter {
+
+  final Color color;
+
+  WavePainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+
+    final path = Path();
+    path.lineTo(0, size.height * 0.8);
+    path.quadraticBezierTo(
+        size.width / 2, size.height, size.width, size.height * 0.8);
+    path.lineTo(size.width, 0);
+    path.close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

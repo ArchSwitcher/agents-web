@@ -13,7 +13,7 @@ class _ClientsScreenState extends State<ClientsScreen> {
   @override
   Widget build(BuildContext context) {
     return const ResponsiveSidebarLayout(
-      title: 'Agentes',
+      title: 'Clientes',
       currentRoute: RouteConstants.clients,
       userRole: 'admin',
       content: Text("Generate list edit clients and groups")
