@@ -14,7 +14,7 @@ class MenuProvider extends ChangeNotifier {
     if (role == 'admin') {
       _menu = [
         MenuGroupModel(label: "Clientes", children: [
-          MenuItemModel(label: "Grupo", route: RouteConstants.home, icon: Icons.person),
+          MenuItemModel(label: "Clientess", route: RouteConstants.clients, icon: Icons.person),
           MenuItemModel(label: "Agentes", route: RouteConstants.agents, icon: Icons.shield),
         ]),
         MenuGroupModel(label: "Configuración", children: [

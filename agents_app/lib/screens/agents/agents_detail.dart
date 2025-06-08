@@ -1,7 +1,9 @@
+import 'package:agents_app/layout/responsive_sidebar_layout.dart';
+import 'package:agents_app/shared/constants/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../models/agent_model.dart';
+import '../../models/agent_model.dart';
 
 class AgentsDetail extends StatelessWidget {
   final List<Agent> agents;
@@ -20,9 +22,11 @@ class AgentsDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Lista de Agentes')),
-      body: agents.isEmpty
+  return ResponsiveSidebarLayout(
+      title: 'Agentes',
+      currentRoute: RouteConstants.agents,
+      userRole: 'admin',
+      content: agents.isEmpty
           ? const Center(child: Text('No hay agentes disponibles.'))
           : Padding(
               padding: const EdgeInsets.fromLTRB(200, 0, 200, 20),
@@ -47,6 +51,7 @@ class AgentsDetail extends StatelessWidget {
                 },
               ),
             ),
-    );
+      );
+
   }
 }

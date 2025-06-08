@@ -1,20 +1,22 @@
 import 'package:agents_app/controllers/globals.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
-import 'package:agents_app/pages/agents_detail.dart';
+import 'package:agents_app/models/agent_model.dart';
+import 'package:agents_app/screens/agents/agents_detail.dart';
+import 'package:agents_app/services/agent_service.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../services/agent_service.dart';
-import '../models/agent_model.dart';
 
-class Agents extends StatefulWidget {
-  const Agents({Key? key}) : super(key: key);
+
+class AgentsScreen extends StatefulWidget {
+  const AgentsScreen({ Key? key }) : super(key: key);
 
   @override
-  _AgentsState createState() => _AgentsState();
+  _AgentsScreenState createState() => _AgentsScreenState();
 }
 
-class _AgentsState extends State<Agents> {
+class _AgentsScreenState extends State<AgentsScreen> {
+
   late Future<AgentData?> _agentDataFuture;
 
   final global = Get.find<SessionController>();

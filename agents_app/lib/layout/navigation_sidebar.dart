@@ -1,9 +1,11 @@
+import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/utils/route_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/menu_provider.dart';
+import '../providers/sidebar_state_provider.dart';
 
-class NavigationSidebar extends StatefulWidget {
+class NavigationSidebar extends StatelessWidget {
   final String userRole;
   final String? currentRoute;
 
@@ -14,25 +16,18 @@ class NavigationSidebar extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<NavigationSidebar> createState() => _NavigationSidebarState();
-}
-
-class _NavigationSidebarState extends State<NavigationSidebar> {
-  String? _expandedParent;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final provider = Provider.of<MenuProvider>(context, listen: false);
-      provider.loadMenu(widget.userRole);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final menu = context.watch<MenuProvider>().menu;
+    final sidebarState = context.watch<SidebarStateProvider>();
     final colorScheme = Theme.of(context).colorScheme;
+
+    if (menu.isEmpty) {
+      // Cargar menú si aún no está cargado
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final provider = Provider.of<MenuProvider>(context, listen: false);
+        provider.loadMenu(userRole);
+      });
+    }
 
     return Container(
       width: 250,
@@ -51,14 +46,37 @@ class _NavigationSidebarState extends State<NavigationSidebar> {
                     ),
                   ),
                 ),
+                ListTile(
+                  leading: Icon(Icons.dashboard,
+                      color: colorScheme
+                          .primary //currentRoute == item.route ? colorScheme.primary : null,
+                      ),
+                  title: const Text("Dashboard"),
+                  selected: currentRoute == RouteConstants.dashboard,
+                  selectedTileColor: colorScheme.primary.withOpacity(0.1),
+                  onTap: () {
+                    context.read<SidebarStateProvider>().setExpandedGroup(null);
+
+                    if (currentRoute != null) {
+                      Navigator.of(context).pushReplacement(
+                        PageRouteBuilder(
+                          pageBuilder: (_, __, ___) =>
+                              getPageForRoute(RouteConstants.dashboard),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
+                      );
+                    }
+                  },
+                ),
                 for (var group in menu)
                   ExpansionTile(
-                    key: PageStorageKey(group.label), // ← mantiene expansión
-                    initiallyExpanded: _expandedParent == group.label,
+                    initiallyExpanded:
+                        sidebarState.expandedGroup == group.label,
                     onExpansionChanged: (expanded) {
-                      setState(() {
-                        _expandedParent = expanded ? group.label : null;
-                      });
+                      context
+                          .read<SidebarStateProvider>()
+                          .setExpandedGroup(expanded ? group.label : null);
                     },
                     title: Text(
                       group.label,
@@ -69,18 +87,20 @@ class _NavigationSidebarState extends State<NavigationSidebar> {
                         ListTile(
                           leading: Icon(
                             item.icon,
-                            color: widget.currentRoute == item.route
+                            color: currentRoute == item.route
                                 ? colorScheme.primary
                                 : null,
                           ),
                           title: Text(item.label),
-                          selected: widget.currentRoute == item.route,
-                          selectedTileColor: colorScheme.primary.withOpacity(0.1),
+                          selected: currentRoute == item.route,
+                          selectedTileColor:
+                              colorScheme.primary.withOpacity(0.1),
                           onTap: () {
-                            if (widget.currentRoute != item.route) {
+                            if (currentRoute != item.route) {
                               Navigator.of(context).pushReplacement(
                                 PageRouteBuilder(
-                                  pageBuilder: (_, __, ___) => getPageForRoute(item.route),
+                                  pageBuilder: (_, __, ___) =>
+                                      getPageForRoute(item.route),
                                   transitionDuration: Duration.zero,
                                   reverseTransitionDuration: Duration.zero,
                                 ),

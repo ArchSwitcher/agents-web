@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
     final password = _passwordController.text;
 
     final user = await loginUser(username, password);
-    Navigator.pushReplacementNamed(context, '/home');
+    Navigator.pushReplacementNamed(context, '/dashboard');
     return "";
 
     if (user != null) {
@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
         token: 'abc123token',
         userId: user.id,
       );
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/dashboard');
     } else {
       showDialog(
         context: context,

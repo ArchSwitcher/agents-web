@@ -1,9 +1,11 @@
 //import 'package:agents_app/Pages/login.dart';
 import 'package:agents_app/controllers/globals.dart';
-import 'package:agents_app/pages/agents.dart';
-import 'package:agents_app/pages/dashboard.dart';
-import 'package:agents_app/pages/login.dart';
+import 'package:agents_app/screens/agents/agents_screen.dart';
+import 'package:agents_app/screens/clients/clients_screen.dart';
+import 'package:agents_app/screens/dashboard/dashboard_screen.dart';
+import 'package:agents_app/screens/login_screen.dart';
 import 'package:agents_app/providers/menu_provider.dart';
+import 'package:agents_app/providers/sidebar_state_provider.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/theme/color_pallete.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => MenuProvider()),
+          ChangeNotifierProvider(create: (_) => SidebarStateProvider()),
         ],
         child: MaterialApp(
             title: 'El Ebano',
@@ -30,11 +33,12 @@ class MyApp extends StatelessWidget {
             initialRoute: '/',
             routes: {
               '/': (context) => LoginPage(),
-              RouteConstants.home : (context) => Dashboard(),
-              RouteConstants.agents : (context) => const Agents(),
+              RouteConstants.dashboard : (context) => const DashboardScreen(),
+              RouteConstants.agents : (context) => const AgentsScreen(),
+              RouteConstants.clients : (context) => const ClientsScreen(),
             },
             theme: appTheme
             ));
-    //home: const SidebarWidget(body: Text("data")));
+    //dashboard: const SidebarWidget(body: Text("data")));
   }
 }

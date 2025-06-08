@@ -1,16 +1,18 @@
-import 'package:agents_app/pages/agents.dart';
-import 'package:agents_app/pages/dashboard.dart';
+import 'package:agents_app/screens/agents/agents_screen.dart';
+import 'package:agents_app/screens/clients/clients_screen.dart';
+import 'package:agents_app/screens/dashboard/dashboard_screen.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:flutter/material.dart';
 
 Widget getPageForRoute(String route) {
   switch (route) {
-    case RouteConstants.home:
-      return const Dashboard();
+    case RouteConstants.dashboard:
+      return const DashboardScreen();
     case RouteConstants.agents:
-      return const Agents();
-    // ... otras rutas
+      return const AgentsScreen();
+    case RouteConstants.clients:
+      return const ClientsScreen();
     default:
-      return const Dashboard(); // fallback
+      return const DashboardScreen();
   }
 }
