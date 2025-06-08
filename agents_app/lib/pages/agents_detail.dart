@@ -1,4 +1,3 @@
-import 'package:agents_app/pages/modal_pdf.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -36,7 +35,7 @@ class AgentsDetail extends StatelessWidget {
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: ListTile(
                       title: const Text("Información del Agente"),
-                      subtitle: Text(agent?.name ?? "data1"),
+                      subtitle: Text(agent.name ?? "data1"),
                       trailing: agent.pdfUrl != null
                           ? IconButton(
                               icon: const Icon(Icons.picture_as_pdf),

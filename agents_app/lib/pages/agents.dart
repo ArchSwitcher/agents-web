@@ -1,5 +1,7 @@
 import 'package:agents_app/controllers/globals.dart';
-import 'package:agents_app/pages/%20agents_detail.dart';
+import 'package:agents_app/layout/responsive_sidebar_layout.dart';
+import 'package:agents_app/pages/agents_detail.dart';
+import 'package:agents_app/shared/constants/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../services/agent_service.dart';
@@ -24,9 +26,11 @@ class _AgentsState extends State<Agents> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Códigos de Agente')),
-      body: FutureBuilder<AgentData?>(
+    return ResponsiveSidebarLayout(
+      title: 'Agentes',
+      currentRoute: RouteConstants.agents,
+      userRole: 'admin',
+      content: FutureBuilder<AgentData?>(
         future: _agentDataFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -51,14 +55,14 @@ class _AgentsState extends State<Agents> {
                 rows: agentCodes.map((code) {
                   return DataRow(cells: [
                     DataCell(Text(code.id.toString())),
-                    DataCell(Text(code?.name ?? "name")),
+                    DataCell(Text(code.name ?? "name")),
                     DataCell(
                       ElevatedButton(
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => AgentsDetail(agents: code?.agents ?? []),
+                              builder: (_) => AgentsDetail(agents: code.agents ?? []),
                             ),
                           );
                         },
