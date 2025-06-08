@@ -1,20 +1,19 @@
+import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:agents_app/models/menu_model.dart';
 import 'package:agents_app/shared/constants/routes.dart';
-import 'package:flutter/material.dart';
-//import '../models/menu_item.dart';
 
-class MenuProvider extends ChangeNotifier {
-  List<MenuGroupModel> _menu = [];
-
-  List<MenuGroupModel> get menu => _menu;
+class MenuSidebarController extends GetxController {
+  var menu = <MenuGroupModel>[].obs;
 
   Future<void> loadMenu(String role) async {
     await Future.delayed(const Duration(milliseconds: 500));
 
     if (role == 'admin') {
-      _menu = [
+      menu.value = [
         MenuGroupModel(label: "Clientes", children: [
-          MenuItemModel(label: "Clientess", route: RouteConstants.clients, icon: Icons.person),
+          MenuItemModel(label: "Grupos", route: RouteConstants.clients, icon: Icons.person),
+          MenuItemModel(label: "Clientes", route: RouteConstants.clients, icon: Icons.person),
           MenuItemModel(label: "Agentes", route: RouteConstants.agents, icon: Icons.shield),
         ]),
         MenuGroupModel(label: "Configuración", children: [
@@ -22,15 +21,13 @@ class MenuProvider extends ChangeNotifier {
         ]),
       ];
     } else if (role == 'usuario') {
-      _menu = [
+      menu.value = [
         MenuGroupModel(label: "Perfil", children: [
           MenuItemModel(label: "Mi cuenta", route: "/cuenta", icon: Icons.account_circle),
         ]),
       ];
     } else {
-      _menu = [];
+      menu.clear();
     }
-
-    notifyListeners();
   }
 }

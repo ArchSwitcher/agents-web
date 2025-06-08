@@ -1,9 +1,9 @@
+import 'package:agents_app/controllers/sidebar/menu_sidebar_controller.dart';
+import 'package:agents_app/controllers/sidebar/sidebar_controller.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/utils/route_selector.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/menu_provider.dart';
-import '../providers/sidebar_state_provider.dart';
+import 'package:get/get.dart';
 
 class NavigationSidebar extends StatelessWidget {
   final String userRole;
@@ -17,26 +17,24 @@ class NavigationSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final menu = context.watch<MenuProvider>().menu;
-    final sidebarState = context.watch<SidebarStateProvider>();
+    final MenuSidebarController menuController = Get.find();
+    final SidebarController sidebarController = Get.find();
     final colorScheme = Theme.of(context).colorScheme;
 
-    if (menu.isEmpty) {
-      // Cargar menú si aún no está cargado
+    // Cargar menú si está vacío
+    if (menuController.menu.isEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        final provider = Provider.of<MenuProvider>(context, listen: false);
-        provider.loadMenu(userRole);
+        menuController.loadMenu(userRole);
       });
     }
-
     return Container(
       width: 250,
       color: colorScheme.surfaceContainerHighest,
       child: Column(
         children: [
-          // Sección 1: Encabezado tipo AppBar
+          // AppBar custom
           Container(
-            height: kToolbarHeight, // Altura igual a AppBar
+            height: kToolbarHeight,
             width: double.infinity,
             color: colorScheme.primary,
             alignment: Alignment.center,
@@ -50,20 +48,17 @@ class NavigationSidebar extends StatelessWidget {
             ),
           ),
 
-          // Sección 2: Imagen + título + subtítulo con fondo parche para el espacio vacío
+          // Avatar e información
           Container(
             height: 200,
             width: double.infinity,
             child: Stack(
               children: [
-                // Fondo que rellena el espacio fuera del borde redondeado
                 Container(
                   width: double.infinity,
                   height: double.infinity,
                   color: colorScheme.primary,
                 ),
-
-                // Contenedor con borde redondeado encima, ocupa todo el ancho
                 ClipRRect(
                   borderRadius: const BorderRadius.only(
                     topRight: Radius.circular(32),
@@ -105,93 +100,95 @@ class NavigationSidebar extends StatelessWidget {
             ),
           ),
 
-          // Sección 3: Cuerpo del sidebar con borde redondeado
+          // Menú dinámico
           Expanded(
             child: Container(
               decoration: BoxDecoration(color: colorScheme.surface),
-              child: menu.isEmpty
-                  ? const Center(child: CircularProgressIndicator())
-                  : ListView(
-                      padding: EdgeInsets.zero,
-                      children: [
-                        // Remueve el DrawerHeader, ya no se necesita
-                        ListTile(
-                          leading:
-                              Icon(Icons.dashboard, color: colorScheme.primary),
-                          title: const Text("Tablero"),
-                          selected: currentRoute == RouteConstants.dashboard,
-                          selectedTileColor:
-                              colorScheme.primary.withOpacity(0.1),
-                          onTap: () {
-                            context
-                                .read<SidebarStateProvider>()
-                                .setExpandedGroup(null);
-                            if (currentRoute != null) {
-                              Navigator.of(context).pushReplacement(
-                                PageRouteBuilder(
-                                  pageBuilder: (_, __, ___) =>
-                                      getPageForRoute(RouteConstants.dashboard),
-                                  transitionDuration: Duration.zero,
-                                  reverseTransitionDuration: Duration.zero,
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                        for (var group in menu)
-                          ExpansionTile(
-                            initiallyExpanded:
-                                sidebarState.expandedGroup == group.label,
-                            onExpansionChanged: (expanded) {
-                              context
-                                  .read<SidebarStateProvider>()
-                                  .setExpandedGroup(
-                                      expanded ? group.label : null);
-                            },
-                            title: Text(
-                              group.label,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
+              child: Obx(() {
+                final menu = menuController.menu;
+
+                if (menu.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                return ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.dashboard, color: colorScheme.primary),
+                      title: const Text("Tablero"),
+                      selected: currentRoute == RouteConstants.dashboard,
+                      selectedTileColor: colorScheme.primary.withOpacity(0.1),
+                      onTap: () {
+                        sidebarController.setExpandedGroup(null);
+                        if (currentRoute != null) {
+                          Navigator.of(context).pushReplacement(
+                            PageRouteBuilder(
+                              pageBuilder: (_, __, ___) =>
+                                  getPageForRoute(RouteConstants.dashboard),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
                             ),
-                            children: [
-                              for (var item in group.children)
-                                ListTile(
-                                  leading: Icon(
-                                    item.icon,
-                                    color: currentRoute == item.route
-                                        ? colorScheme.primary
-                                        : null,
-                                  ),
-                                  title: Text(item.label),
-                                  selected: currentRoute == item.route,
-                                  selectedTileColor:
-                                      colorScheme.primary.withOpacity(0.1),
-                                  onTap: () {
-                                    if (currentRoute != item.route) {
-                                      Navigator.of(context).pushReplacement(
-                                        PageRouteBuilder(
-                                          pageBuilder: (_, __, ___) =>
-                                              getPageForRoute(item.route),
-                                          transitionDuration: Duration.zero,
-                                          reverseTransitionDuration:
-                                              Duration.zero,
-                                        ),
-                                      );
-                                    }
-                                  },
-                                ),
-                            ],
-                          ),
-                        const Divider(),
-                        ListTile(
-                          leading: const Icon(Icons.logout),
-                          title: const Text("Cerrar sesión"),
-                          onTap: () {
-                            // lógica logout
-                          },
-                        ),
-                      ],
+                          );
+                        }
+                      },
                     ),
+                    for (var group in menu)
+                      Obx(() {
+                        final isExpanded =
+                            sidebarController.expandedGroup.value == group.label;
+                        return ExpansionTile(
+                          initiallyExpanded: isExpanded,
+                          onExpansionChanged: (expanded) {
+                            sidebarController
+                                .setExpandedGroup(expanded ? group.label : null);
+                          },
+                          title: Text(
+                            group.label,
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          children: [
+                            for (var item in group.children)
+                              ListTile(
+                                leading: Icon(
+                                  item.icon,
+                                  color: currentRoute == item.route
+                                      ? colorScheme.primary
+                                      : null,
+                                ),
+                                title: Text(item.label),
+                                selected: currentRoute == item.route,
+                                selectedTileColor:
+                                    colorScheme.primary.withOpacity(0.1),
+                                onTap: () {
+                                  if (currentRoute != item.route) {
+                                    Navigator.of(context).pushReplacement(
+                                      PageRouteBuilder(
+                                        pageBuilder: (_, __, ___) =>
+                                            getPageForRoute(item.route),
+                                        transitionDuration: Duration.zero,
+                                        reverseTransitionDuration:
+                                            Duration.zero,
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                          ],
+                        );
+                      }),
+                    const Divider(),
+                    ListTile(
+                      leading: const Icon(Icons.logout),
+                      title: const Text("Cerrar sesión"),
+                      onTap: () {
+                        // lógica logout
+                      },
+                    ),
+                  ],
+                );
+              }),
             ),
           ),
         ],

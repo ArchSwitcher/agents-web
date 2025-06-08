@@ -1,6 +1,6 @@
-import 'package:agents_app/screens/agents/agents_screen.dart';
-import 'package:agents_app/screens/clients/clients_screen.dart';
-import 'package:agents_app/screens/dashboard/dashboard_screen.dart';
+import 'package:agents_app/views/agents/agents_screen.dart';
+import 'package:agents_app/views/clients/clients_screen.dart';
+import 'package:agents_app/views/dashboard/dashboard_screen.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:flutter/material.dart';
 

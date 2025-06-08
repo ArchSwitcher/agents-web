@@ -1,7 +1,7 @@
 import 'package:agents_app/controllers/globals.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
 import 'package:agents_app/models/agent_model.dart';
-import 'package:agents_app/screens/agents/agents_detail.dart';
+import 'package:agents_app/views/agents/agents_detail.dart';
 import 'package:agents_app/services/agent_service.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:flutter/material.dart';
