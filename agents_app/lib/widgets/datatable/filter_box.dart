@@ -1,5 +1,5 @@
 import "dart:convert";
-import "package:agents_app/widgets/commons/custom_input_widget.dart";
+import "package:agents_app/widgets/inputs/custom_input_widget.dart";
 import "package:flutter/material.dart";
 
 

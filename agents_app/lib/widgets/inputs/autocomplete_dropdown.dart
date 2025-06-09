@@ -1,6 +1,6 @@
 
 import 'package:agents_app/models/dropdown_option_model.dart';
-import 'package:agents_app/widgets/commons/custom_input_widget.dart';
+import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
