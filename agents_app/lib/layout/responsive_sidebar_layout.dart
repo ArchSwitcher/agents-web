@@ -1,3 +1,4 @@
+import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:flutter/material.dart';
 import 'navigation_sidebar.dart';
 
@@ -6,27 +7,29 @@ class ResponsiveSidebarLayout extends StatelessWidget {
   final String title;
   final String currentRoute;
   final String userRole;
+  final String description;
 
-  const ResponsiveSidebarLayout({
-    Key? key,
-    required this.content,
-    required this.title,
-    required this.currentRoute,
-    required this.userRole,
-  }) : super(key: key);
+  const ResponsiveSidebarLayout(
+      {Key? key,
+      required this.content,
+      required this.title,
+      required this.currentRoute,
+      required this.userRole,
+      this.description = ""})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final appBar = AppBar(
-          title: Text(
-            title,
-            style: TextStyle(color: colorScheme.onPrimary),
-          ),
+          // title: Text(
+          //   title,
+          //   style: TextStyle(color: colorScheme.onPrimary),
+          // ),
           backgroundColor: colorScheme.primary,
           elevation: 0.5,
           automaticallyImplyLeading: constraints.maxWidth <= 600,
@@ -43,16 +46,34 @@ class ResponsiveSidebarLayout extends StatelessWidget {
 
         Widget stackedContent = Stack(
           children: [
+            // Fondo con la ola
             Positioned.fill(
               child: Column(
                 children: [
                   backgroundWave,
-                  Expanded(child: Container()),
+                  Expanded(child: Container()), // para completar el alto
                 ],
               ),
             ),
+            // Título y descripción encima de la ola
+            Positioned(
+              top: -10,
+              left: 58,
+              right: 24,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: CustomStyle.layoutTitleText(context)),
+                  const SizedBox(height: 4),
+                  if (description.isNotEmpty)
+                    Text(description,
+                        style: CustomStyle.layoutDescriptionText(context)),
+                ],
+              ),
+            ),
+            // Contenido general debajo del header
             Padding(
-              padding: const EdgeInsets.only(top: 0),
+              padding: EdgeInsets.only(top: constraints.maxHeight * 0.09),
               child: content,
             ),
           ],
@@ -70,7 +91,9 @@ class ResponsiveSidebarLayout extends StatelessWidget {
                   child: Column(
                     children: [
                       appBar,
-                      Expanded(child: stackedContent),
+                      Expanded(
+                        child: stackedContent,
+                      ),
                     ],
                   ),
                 ),
@@ -94,9 +117,7 @@ class ResponsiveSidebarLayout extends StatelessWidget {
   }
 }
 
-
 class WavePainter extends CustomPainter {
-
   final Color color;
 
   WavePainter({required this.color});

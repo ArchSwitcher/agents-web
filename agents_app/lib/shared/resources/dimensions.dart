@@ -1,4 +1,6 @@
 class Dimensions {
+  static const double titleTextSize = 30.00;
+  static const double descriptionTextSize = 18.00;
   static const double defaultTextSize = 14.00;
   static const double smallTextSize = 12.00;
   static const double extraSmallTextSize = 10.00;

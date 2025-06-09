@@ -10,6 +10,7 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ResponsiveSidebarLayout(
       title: 'Tablero',
+      description: "resumen de acciones y estadísticas",
       currentRoute: RouteConstants.dashboard,
       userRole: 'admin',
       content: SingleChildScrollView(
@@ -66,6 +67,8 @@ class DashboardScreen extends StatelessWidget {
             const SizedBox(height: 32),
             const ContentCard(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Actividades recientes',

@@ -1,3 +1,4 @@
+import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
 import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/constants/routes.dart';
@@ -18,17 +19,23 @@ class GroupsScreenState extends State<GroupsScreen> {
         title: 'Grupos',
         currentRoute: RouteConstants.groups,
         userRole: 'admin',
-        content: Column(children: [
-          CustomButton(
-              color: Color(0xffeaeaea),
-              text: "text",
-              isLoading: false,
-              onPress: () {
-                ToastService.success(
-                  title: "Éxito",
-                  subTitle: "Operación completada correctamente",
-                );
-              }),
-        ]));
+        content: Column(
+          children: [
+            ContentCard(
+              child: Column(children: [
+                CustomButton(
+                    color: Color(0xffeaeaea),
+                    text: "text",
+                    isLoading: false,
+                    onPress: () {
+                      ToastService.success(
+                        title: "Éxito",
+                        subTitle: "Operación completada correctamente",
+                      );
+                    }),
+              ]),
+            ),
+          ],
+        ));
   }
 }
