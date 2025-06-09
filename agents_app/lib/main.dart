@@ -12,6 +12,8 @@ import 'package:agents_app/theme/color_pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+
+// inspiration https://preview.themeon.net/nifty/tables/gridjs/
 void main() {
   Get.put(SessionController());
   Get.put(MenuSidebarController()); // nuevo

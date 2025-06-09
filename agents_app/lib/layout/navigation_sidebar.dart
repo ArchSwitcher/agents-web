@@ -71,7 +71,7 @@ class NavigationSidebar extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CircleAvatar(
+                        const CircleAvatar(
                           radius: 40,
                           backgroundImage:
                               AssetImage('lib/assets/images/men.png'),
