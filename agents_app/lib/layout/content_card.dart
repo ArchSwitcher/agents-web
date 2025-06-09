@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ContentCard extends StatelessWidget {
   final Widget child;
 
-  const ContentCard({Key? key, required this.child}) : super(key: key);
+  const ContentCard({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -13,14 +13,27 @@ class ContentCard extends StatelessWidget {
     return Center(
       child: FractionallySizedBox(
         widthFactor: 0.95,
-        heightFactor: 0.95,
-        child: Card(
-          color: colorScheme.surface,
-          elevation: 2,
-          shape: RoundedRectangleBorder(
+        child: Container(
+          decoration: BoxDecoration(
+            color: colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              // Sombra ligera alrededor
+              BoxShadow(
+                color: Colors.black.withOpacity(0.04),
+                spreadRadius: 1,
+                blurRadius: 10,
+                offset: const Offset(0, 2),
+              ),
+              // Sombra más marcada abajo
+              BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                spreadRadius: 1,
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              ),
+            ],
           ),
-          shadowColor: colorScheme.shadow.withOpacity(0.2),
           child: Padding(
             padding: const EdgeInsets.all(24.0),
             child: child,

@@ -1,4 +1,3 @@
-import 'package:agents_app/layout/content_card.dart';
 import 'package:flutter/material.dart';
 import 'navigation_sidebar.dart';
 
@@ -54,7 +53,7 @@ class ResponsiveSidebarLayout extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 0),
-              child: ContentCard(child: content),
+              child: content,
             ),
           ],
         );
