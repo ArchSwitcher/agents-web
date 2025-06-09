@@ -38,7 +38,7 @@ class CustomDataTable<T> extends StatelessWidget {
                   label: Expanded(
                     child: Text(
                       columns[index],
-                      style: CustomStyle.tableHeader,
+                      style: CustomStyle.tableHeader(context),
                       textAlign: TextAlign.left,
                       maxLines: 2,
                     ),

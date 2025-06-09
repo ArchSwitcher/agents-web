@@ -3,7 +3,7 @@ import "package:flutter/material.dart";
 
 class CustomButton extends StatelessWidget {
   final Color color;
-  final String text;
+  final Widget text;
   final bool isLoading;
   final VoidCallback onPress;
   const CustomButton(
@@ -27,6 +27,6 @@ class CustomButton extends StatelessWidget {
                 child: CircularProgressIndicator(
                     strokeWidth: 2, color: colorScheme.onPrimary),
               )
-            : Text(text, style: TextStyle(color: Colors.white)));
+            : text);
   }
 }

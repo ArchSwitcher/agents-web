@@ -43,7 +43,7 @@ class CustomDropdownWidget<T> extends StatelessWidget {
           height: Dimensions.heightSize * 0.5,
         ),
         DropdownButtonFormField<String>(
-          style: CustomStyle.textStyle,
+          style: CustomStyle.textStyle(context),
           onChanged: (value) {
             onValueChanged(value);
           },
@@ -54,14 +54,14 @@ class CustomDropdownWidget<T> extends StatelessWidget {
             hintText: hintText,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-            labelStyle: CustomStyle.textStyle,
+            labelStyle: CustomStyle.textStyle(context),
             filled: true,
             fillColor: colorScheme.primary,
-            hintStyle: CustomStyle.textStyle,
-            focusedBorder: CustomStyle.focusBorder,
-            enabledBorder: CustomStyle.focusErrorBorder,
-            focusedErrorBorder: CustomStyle.focusErrorBorder,
-            errorBorder: CustomStyle.focusErrorBorder,
+            hintStyle: CustomStyle.textStyle(context),
+            focusedBorder: CustomStyle.focusBorder(context),
+            enabledBorder: CustomStyle.focusErrorBorder(context),
+            focusedErrorBorder: CustomStyle.focusErrorBorder(context),
+            errorBorder: CustomStyle.focusErrorBorder(context),
             prefixIcon: const Icon(Icons.person_outline),
           ),
         ),

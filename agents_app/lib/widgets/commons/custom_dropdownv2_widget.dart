@@ -45,7 +45,7 @@ class _CustomDropdownV2WidgetState extends State<CustomDropdownV2Widget> {
           height: Dimensions.heightSize * 0.5,
         ),
         DropdownButtonFormField<DropDownOption>(
-          style: CustomStyle.textStyle,
+          style: CustomStyle.textStyle(context),
           onChanged: (value) {
             setState(() {
               _selectedValue = value;
@@ -65,14 +65,14 @@ class _CustomDropdownV2WidgetState extends State<CustomDropdownV2Widget> {
             hintText: widget.hintText,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-            labelStyle: CustomStyle.textStyle,
+            labelStyle: CustomStyle.textStyle(context),
             filled: true,
             fillColor: colorScheme.onPrimary,
-            hintStyle: CustomStyle.textStyle,
-            focusedBorder: CustomStyle.focusBorder,
-            enabledBorder: CustomStyle.focusErrorBorder,
-            focusedErrorBorder: CustomStyle.focusErrorBorder,
-            errorBorder: CustomStyle.focusErrorBorder,
+            hintStyle: CustomStyle.textStyle(context),
+            focusedBorder: CustomStyle.focusBorder(context),
+            enabledBorder: CustomStyle.focusErrorBorder(context),
+            focusedErrorBorder: CustomStyle.focusErrorBorder(context),
+            errorBorder: CustomStyle.focusErrorBorder(context),
             prefixIcon: widget.prefixIcon,
           ),
         ),

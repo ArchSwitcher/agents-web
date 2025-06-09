@@ -69,7 +69,7 @@ class CustomInputWidget extends StatelessWidget {
             onChanged: onChange,
             enabled: enabled,
             style: CustomStyle
-                .textStyle, // Make sure to define CustomStyle.textStyle
+                .textStyle(context), // Make sure to define CustomStyle.textStyle
             controller: controller,
             keyboardType: keyboardType,
             validator: validator,
@@ -77,14 +77,14 @@ class CustomInputWidget extends StatelessWidget {
               hintText: hintText,
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-              labelStyle: CustomStyle.textStyle,
+              labelStyle: CustomStyle.textStyle(context),
               filled: true,
               fillColor: colorScheme.onPrimary,
-              hintStyle: CustomStyle.textStyle,
-              focusedBorder: CustomStyle.focusBorder,
-              enabledBorder: CustomStyle.focusErrorBorder,
-              focusedErrorBorder: CustomStyle.focusErrorBorder,
-              errorBorder: CustomStyle.focusErrorBorder,
+              hintStyle: CustomStyle.textStyle(context),
+              focusedBorder: CustomStyle.focusBorder(context),
+              enabledBorder: CustomStyle.focusErrorBorder(context),
+              focusedErrorBorder: CustomStyle.focusErrorBorder(context),
+              errorBorder: CustomStyle.focusErrorBorder(context),
               prefixIcon: Icon(prefixIcon),
               suffixIcon: suffixIcon,
             ),

@@ -15,7 +15,7 @@ class CustomStyle {
 
   static TextStyle textStyle(BuildContext context) => TextStyle(
         fontSize: Dimensions.defaultTextSize,
-        color: Theme.of(context).colorScheme.onSurface,
+        color: Theme.of(context).colorScheme.onPrimary,
       );
 
   static TextStyle hintTextStyle(BuildContext context) => TextStyle(
