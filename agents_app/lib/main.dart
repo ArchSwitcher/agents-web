@@ -11,6 +11,7 @@ import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/theme/color_pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:toastification/toastification.dart';
 
 
 // inspiration https://preview.themeon.net/nifty/tables/gridjs/
@@ -26,18 +27,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'El Ebano',
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      getPages: [
-        GetPage(name: '/', page: () => LoginPage()),
-        GetPage(name: RouteConstants.dashboard, page: () => const DashboardScreen()),
-        GetPage(name: RouteConstants.agents, page: () => const AgentsScreen()),
-        GetPage(name: RouteConstants.clients, page: () => const ClientsScreen()),
-        GetPage(name: RouteConstants.groups, page: () => const GroupsScreen()),
-      ],
-      theme: appTheme,
+    return ToastificationWrapper(
+      child: GetMaterialApp(
+        title: 'El Ebano',
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/',
+        getPages: [
+          GetPage(name: '/', page: () => LoginPage()),
+          GetPage(name: RouteConstants.dashboard, page: () => const DashboardScreen()),
+          GetPage(name: RouteConstants.agents, page: () => const AgentsScreen()),
+          GetPage(name: RouteConstants.clients, page: () => const ClientsScreen()),
+          GetPage(name: RouteConstants.groups, page: () => const GroupsScreen()),
+        ],
+        theme: appTheme,
+      ),
     );
   }
 }

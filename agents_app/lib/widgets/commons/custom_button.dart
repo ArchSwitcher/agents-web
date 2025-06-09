@@ -1,18 +1,17 @@
 import "package:agents_app/shared/resources/dimensions.dart";
 import "package:flutter/material.dart";
 
-class ElevatedCustomButton extends StatelessWidget {
+class CustomButton extends StatelessWidget {
   final Color color;
   final String text;
   final bool isLoading;
   final VoidCallback onPress;
-  const ElevatedCustomButton(
-      {Key? key,
+  const CustomButton(
+      {super.key,
       required this.color,
       required this.text,
       required this.isLoading,
-      required this.onPress})
-      : super(key: key);
+      required this.onPress});
 
   @override
   Widget build(BuildContext context) {
