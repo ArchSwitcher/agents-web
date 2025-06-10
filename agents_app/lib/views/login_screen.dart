@@ -1,5 +1,6 @@
 import 'package:agents_app/controllers/globals.dart';
 import 'package:agents_app/services/login_service.dart';
+import 'package:agents_app/shared/constants/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,27 +17,29 @@ class _LoginPageState extends State<LoginPage> {
   Future _login() async {
     final username = _usernameController.text;
     final password = _passwordController.text;
-
     final user = await loginUser(username, password);
-    Navigator.pushReplacementNamed(context, '/dashboard');
-    return "";
+
+    print("user ${user} ${username} ${password}");
+    if (!mounted) {
+      return;
+    }
 
     if (user != null) {
       global.setSession(
         username: user.username,
-        token: 'abc123token',
+        token: user.token,
         userId: user.id,
       );
-      Navigator.pushReplacementNamed(context, '/dashboard');
+      Navigator.pushReplacementNamed(context, RouteConstants.dashboard);
     } else {
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
-          title: Text('Error'),
-          content: Text('Usuario o contraseña incorrectos'),
+          title: const Text('Error'),
+          content: const Text('Usuario o contraseña incorrectos'),
           actions: [
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () => Navigator.pop(context),
             )
           ],
@@ -47,13 +50,14 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF2196F3), Colors.white],
+            colors: [colorScheme.primary, colorScheme.surface],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -63,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
             elevation: 8,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            margin: EdgeInsets.symmetric(horizontal: 30),
+            margin: const EdgeInsets.symmetric(horizontal: 30),
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: ConstrainedBox(
@@ -71,34 +75,35 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Image.asset("lib/assets/icons/elebano.png"),
                     Text(
                       'Iniciar Sesión',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue[800],
+                        color: colorScheme.onSecondary,
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     TextField(
                       controller: _usernameController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Usuario',
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.person),
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: _passwordController,
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Contraseña',
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.lock),
                       ),
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -106,20 +111,16 @@ class _LoginPageState extends State<LoginPage> {
                           await _login();
                         },
                         style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(vertical: 14),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
                           backgroundColor: Colors.blue[700],
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Entrar',
                           style: TextStyle(
-                            fontSize: 16,
-                            color:
-                                //Color.from(alpha: 1, red: 1, green: 1, blue: 1),
-                                Color.fromARGB(1, 1, 1, 1)
-                          ),
+                              fontSize: 16, color: colorScheme.surface),
                         ),
                       ),
                     ),

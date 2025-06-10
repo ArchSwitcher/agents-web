@@ -57,10 +57,12 @@ class GroupsScreenState extends State<GroupsScreen> {
                         context: context,
                         controller: controller,
                         onAccept: () {
+                          // service create groups
                           ToastService.success(
                             title: "!!Grupo agregado",
                             subTitle: Strings.toastSuccessOperation,
                           );
+                          Navigator.of(context).pop();
                         },
                         onCancel: () {
                           print('Cancelado');

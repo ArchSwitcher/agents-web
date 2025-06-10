@@ -38,9 +38,13 @@ void showManageGroupModal(
     builder: (context) => GenericModal(
       content: manageGroupForm(controller, formKeyManageGroups),
       onAccept: () => {
-        if (formKeyManageGroups.currentState!.validate()) {onAccept} else {
-          ToastService.warning(title: "Grupos", subTitle: "Por favor, verifique campos")
-        }
+        if (formKeyManageGroups.currentState!.validate())
+          {onAccept?.call()}
+        else
+          {
+            ToastService.warning(
+                title: "Grupos", subTitle: "Por favor, verifique campos")
+          }
       },
       onCancel: onCancel,
       title: title,
