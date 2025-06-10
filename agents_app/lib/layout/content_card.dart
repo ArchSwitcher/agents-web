@@ -20,14 +20,14 @@ class ContentCard extends StatelessWidget {
             boxShadow: [
               // Sombra ligera alrededor
               BoxShadow(
-                color: Colors.black.withOpacity(0.04),
+                color: colorScheme.onSurface.withOpacity(0.04),
                 spreadRadius: 1,
                 blurRadius: 10,
                 offset: const Offset(0, 2),
               ),
               // Sombra más marcada abajo
               BoxShadow(
-                color: Colors.black.withOpacity(0.08),
+                color: colorScheme.onSurface.withOpacity(0.08),
                 spreadRadius: 1,
                 blurRadius: 20,
                 offset: const Offset(0, 10),

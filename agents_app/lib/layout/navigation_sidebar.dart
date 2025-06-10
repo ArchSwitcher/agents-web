@@ -29,7 +29,7 @@ class NavigationSidebar extends StatelessWidget {
     }
     return Container(
       width: 250,
-      color: colorScheme.surfaceContainerHighest,
+      color: colorScheme.surface,
       child: Column(
         children: [
           // AppBar custom
@@ -41,7 +41,7 @@ class NavigationSidebar extends StatelessWidget {
             child: Text(
               "ElEbano",
               style: TextStyle(
-                color: colorScheme.onPrimary,
+                color: colorScheme.surface,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -67,7 +67,7 @@ class NavigationSidebar extends StatelessWidget {
                     width: double.infinity,
                     height: double.infinity,
                     padding: const EdgeInsets.all(10),
-                    color: colorScheme.surfaceVariant,
+                    color: colorScheme.surface,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -89,7 +89,7 @@ class NavigationSidebar extends StatelessWidget {
                           "Administrador",
                           style: TextStyle(
                             fontSize: 14,
-                            color: colorScheme.onSurface.withOpacity(0.7),
+                            color: colorScheme.onSurface.withAlpha(250),
                           ),
                         ),
                       ],

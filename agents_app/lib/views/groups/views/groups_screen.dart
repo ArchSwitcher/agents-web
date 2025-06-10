@@ -18,7 +18,7 @@ class GroupsScreen extends StatefulWidget {
 
 class GroupsScreenState extends State<GroupsScreen> {
   final ManageGroupController controller = ManageGroupController();
-  final _formKeyDeveloper = GlobalKey<FormState>();
+  
 
   @override
   Widget build(BuildContext context) {
@@ -38,20 +38,21 @@ class GroupsScreenState extends State<GroupsScreen> {
                       children: [
                         Icon(
                           Icons.group_add,
-                          color: colorScheme.onPrimary,
+                          color: colorScheme.surface,
                         ),
                         const SizedBox(
                           width: 6,
                         ),
                         Text(
                           "Nuevo Grupo",
-                          style: CustomStyle.textStyle(context),
+                          style: CustomStyle.textStyleWhite(context),
                         )
                       ],
                     ),
                     isLoading: false,
                     onPress: () {
                       print('agregar Elemento');
+                      
                       showManageGroupModal(
                         context: context,
                         controller: controller,

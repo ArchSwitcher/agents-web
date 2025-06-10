@@ -28,12 +28,12 @@ class ResponsiveSidebarLayout extends StatelessWidget {
         final appBar = AppBar(
           // title: Text(
           //   title,
-          //   style: TextStyle(color: colorScheme.onPrimary),
+          //   style: TextStyle(color: colorScheme.surface),
           // ),
           backgroundColor: colorScheme.primary,
           elevation: 0.5,
           automaticallyImplyLeading: constraints.maxWidth <= 600,
-          iconTheme: IconThemeData(color: colorScheme.onPrimary),
+          iconTheme: IconThemeData(color: colorScheme.surface),
         );
 
         Widget backgroundWave = SizedBox(

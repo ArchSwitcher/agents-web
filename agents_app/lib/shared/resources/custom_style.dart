@@ -4,23 +4,29 @@ import 'package:agents_app/shared/resources/dimensions.dart';
 class CustomStyle {
   static TextStyle layoutTitleText(BuildContext context) => TextStyle(
         fontSize: Dimensions.titleTextSize,
-        color: Theme.of(context).colorScheme.onPrimary,
+        color: Theme.of(context).colorScheme.surface,
       );
 
   static TextStyle layoutDescriptionText(BuildContext context) => TextStyle(
         fontSize: Dimensions.descriptionTextSize,
-        color: Theme.of(context).colorScheme.onPrimary.withAlpha(204),
+        color: Theme.of(context).colorScheme.surface.withAlpha(204),
         fontStyle: FontStyle.italic,
       );
 
-  static TextStyle textStyle(BuildContext context) => TextStyle(
+  static TextStyle textStyleWhite(BuildContext context) => TextStyle(
         fontSize: Dimensions.defaultTextSize,
-        color: Theme.of(context).colorScheme.onPrimary,
+        color: Theme.of(context).colorScheme.surface,
       );
 
-  static TextStyle hintTextStyle(BuildContext context) => TextStyle(
-        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+  static TextStyle textStyleBlack(BuildContext context) => TextStyle(
         fontSize: Dimensions.defaultTextSize,
+        color: Theme.of(context).colorScheme.onSurface,
+      );
+
+  static TextStyle hintTextStyleBlack(BuildContext context) => TextStyle(
+        color: Theme.of(context).colorScheme.onSurface.withAlpha(180),
+        fontSize: Dimensions.defaultTextSize,
+        //white
       );
 
   static TextStyle listStyle(BuildContext context) => const TextStyle(
@@ -63,7 +69,7 @@ class CustomStyle {
   static TextStyle tableHeader(BuildContext context) => TextStyle(
         fontWeight: FontWeight.w600,
         fontSize: 17,
-        color: Theme.of(context).colorScheme.onPrimary,
+        color: Theme.of(context).colorScheme.surface,
         overflow: TextOverflow.ellipsis,
       );
 }

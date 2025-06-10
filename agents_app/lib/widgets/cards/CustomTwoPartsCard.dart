@@ -35,7 +35,7 @@ class _CustomTwoPartsCardState extends State<CustomTwoPartsCard> {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: colorScheme.onPrimaryContainer,
+                color: colorScheme.surfaceContainer,
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(15.0),
                   topRight: Radius.circular(15.0),

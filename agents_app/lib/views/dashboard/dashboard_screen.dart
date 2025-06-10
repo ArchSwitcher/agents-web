@@ -124,21 +124,21 @@ class _InfoCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 32, color: colorScheme.onPrimaryContainer),
+              Icon(icon, size: 32, color: colorScheme.surfaceContainer),
               const SizedBox(height: 8),
               Text(
                 value,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: colorScheme.onPrimaryContainer,
+                  color: colorScheme.surfaceContainer,
                 ),
               ),
               Text(
                 label,
                 style: TextStyle(
                   fontSize: 14,
-                  color: colorScheme.onPrimaryContainer,
+                  color: colorScheme.surfaceContainer,
                 ),
               ),
             ],

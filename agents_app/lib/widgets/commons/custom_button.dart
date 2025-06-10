@@ -25,7 +25,7 @@ class CustomButton extends StatelessWidget {
                 height: Dimensions.largeTextSize,
                 width: Dimensions.largeTextSize,
                 child: CircularProgressIndicator(
-                    strokeWidth: 2, color: colorScheme.onPrimary),
+                    strokeWidth: 2, color: colorScheme.surface),
               )
             : text);
   }
