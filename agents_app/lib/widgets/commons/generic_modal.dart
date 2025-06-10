@@ -27,14 +27,14 @@ class GenericModal extends StatelessWidget {
         TextButton(
           onPressed: () {
             onCancel?.call();
-            Navigator.of(context).pop(); // cerrar modal
+            Navigator.of(context).pop();
           },
           child: Text(cancelText),
         ),
         ElevatedButton(
           onPressed: () {
             onAccept?.call();
-            Navigator.of(context).pop(); // cerrar modal
+            Navigator.of(context).pop();
           },
           child: Text(acceptText),
         ),

@@ -21,7 +21,7 @@ class CustomInputWidget extends StatelessWidget {
   final Function(String)? onFieldSubmitted ;
 
   const CustomInputWidget(
-      {Key? key,
+      {super.key,
       required this.controller,
       required this.label,
       required this.hintText,
@@ -38,8 +38,7 @@ class CustomInputWidget extends StatelessWidget {
       this.suffixIcon,
       this.focusNode,
       this.onFieldSubmitted
-      })
-      : super(key: key);
+      });
 
   @override
   Widget build(BuildContext context) {
