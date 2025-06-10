@@ -15,9 +15,7 @@ Future<UserData?> loginUser(String username, String password) async {
 
     if (response.statusCode == 202) {
       final decodedJson = jsonDecode(response.body);
-      print(decodedJson);
       final loginResponse = SessionResponse.fromJson(decodedJson);
-      print(loginResponse);
       return loginResponse.data; // Retorna el UserData
     } else {
       return null;

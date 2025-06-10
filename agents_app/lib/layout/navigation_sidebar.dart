@@ -1,3 +1,4 @@
+import 'package:agents_app/controllers/globals.dart';
 import 'package:agents_app/controllers/sidebar/menu_sidebar_controller.dart';
 import 'package:agents_app/controllers/sidebar/sidebar_controller.dart';
 import 'package:agents_app/shared/constants/routes.dart';
@@ -18,6 +19,7 @@ class NavigationSidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MenuSidebarController menuController = Get.find();
+    final userInfo = Get.find<SessionController>();
     final SidebarController sidebarController = Get.find();
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -78,7 +80,7 @@ class NavigationSidebar extends StatelessWidget {
                         ),
                         const SizedBox(height: 5),
                         Text(
-                          "Juan Pérez",
+                          userInfo.getUsername,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

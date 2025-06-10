@@ -18,78 +18,9 @@ class DashboardScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ContentCard(
-              child: Column(
-                children: [
-                  const Text(
-                    'Bienvenido de nuevo 👋',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Aquí tienes un resumen del sistema.',
-                    style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                  ),
-                  const SizedBox(height: 24),
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      return const Wrap(
-                        spacing: 16,
-                        runSpacing: 16,
-                        children: [
-                          _InfoCard(
-                            icon: Icons.people,
-                            label: 'Clientes',
-                            value: '210',
-                          ),
-                          _InfoCard(
-                            icon: Icons.person,
-                            label: 'Usuarios',
-                            value: '128',
-                          ),
-                          _InfoCard(
-                            icon: Icons.shield,
-                            label: 'Agentes',
-                            value: '34',
-                          ),
-                          _InfoCard(
-                            icon: Icons.settings,
-                            label: 'Parámetros',
-                            value: '12',
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
+            resumeCards(context),
             const SizedBox(height: 32),
-            const ContentCard(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Actividades recientes',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 12),
-                  const _ActivityItem(
-                    icon: Icons.login,
-                    text: 'Usuario Juan Pérez inició sesión',
-                  ),
-                  const _ActivityItem(
-                    icon: Icons.edit,
-                    text: 'Se modificó el perfil de un agente',
-                  ),
-                  const _ActivityItem(
-                    icon: Icons.person_add,
-                    text: 'Nuevo cliente registrado',
-                  ),
-                ],
-              ),
-            ),
+            userReport(context)
           ],
         ),
       ),
@@ -165,4 +96,81 @@ class _ActivityItem extends StatelessWidget {
       title: Text(text),
     );
   }
+}
+
+Widget resumeCards(BuildContext context) {
+  return ContentCard(
+    child: Column(
+      children: [
+        const Text(
+          'Bienvenido de nuevo 👋',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Aquí tienes un resumen del sistema.',
+          style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+        ),
+        const SizedBox(height: 24),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            return const Wrap(
+              spacing: 16,
+              runSpacing: 16,
+              children: [
+                _InfoCard(
+                  icon: Icons.people,
+                  label: 'Clientes',
+                  value: '210',
+                ),
+                _InfoCard(
+                  icon: Icons.person,
+                  label: 'Usuarios',
+                  value: '128',
+                ),
+                _InfoCard(
+                  icon: Icons.shield,
+                  label: 'Agentes',
+                  value: '34',
+                ),
+                _InfoCard(
+                  icon: Icons.settings,
+                  label: 'Parámetros',
+                  value: '12',
+                ),
+              ],
+            );
+          },
+        ),
+      ],
+    ),
+  );
+}
+
+Widget userReport(BuildContext context) {
+  return const ContentCard(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Actividades recientes',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 12),
+        const _ActivityItem(
+          icon: Icons.login,
+          text: 'Usuario Juan Pérez inició sesión',
+        ),
+        const _ActivityItem(
+          icon: Icons.edit,
+          text: 'Se modificó el perfil de un agente',
+        ),
+        const _ActivityItem(
+          icon: Icons.person_add,
+          text: 'Nuevo cliente registrado',
+        ),
+      ],
+    ),
+  );
 }
