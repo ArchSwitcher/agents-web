@@ -1,3 +1,4 @@
+import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:flutter/material.dart';
 
 class GenericModal extends StatelessWidget {
@@ -27,10 +28,7 @@ class GenericModal extends StatelessWidget {
       content: content,
       actions: [
         TextButton(
-          style: TextButton.styleFrom(
-            backgroundColor: colorScheme.onError,
-            foregroundColor: colorScheme.surface
-          ),
+          style: CustomStyle.confirmModalButton(context),
           onPressed: () {
             onCancel?.call();
             Navigator.of(context).pop();

@@ -117,7 +117,8 @@ class NavigationSidebar extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   children: [
                     ListTile(
-                      leading: Icon(Icons.dashboard, color: colorScheme.primary),
+                      leading:
+                          Icon(Icons.dashboard, color: colorScheme.primary),
                       title: const Text("Tablero"),
                       selected: currentRoute == RouteConstants.dashboard,
                       selectedTileColor: colorScheme.primary.withOpacity(0.1),
@@ -138,17 +139,17 @@ class NavigationSidebar extends StatelessWidget {
                     for (var group in menu)
                       Obx(() {
                         final isExpanded =
-                            sidebarController.expandedGroup.value == group.label;
+                            sidebarController.expandedGroup.value ==
+                                group.label;
                         return ExpansionTile(
                           initiallyExpanded: isExpanded,
                           onExpansionChanged: (expanded) {
-                            sidebarController
-                                .setExpandedGroup(expanded ? group.label : null);
+                            sidebarController.setExpandedGroup(
+                                expanded ? group.label : null);
                           },
                           title: Text(
                             group.label,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           children: [
                             for (var item in group.children)
@@ -186,6 +187,12 @@ class NavigationSidebar extends StatelessWidget {
                       title: const Text("Cerrar sesión"),
                       onTap: () {
                         // lógica logout
+                        Navigator.of(context).pushReplacement(
+                            PageRouteBuilder(
+                              pageBuilder: (_, __, ___) => getPageForRoute("/"),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
+                            ));
                       },
                     ),
                   ],

@@ -72,4 +72,9 @@ class CustomStyle {
         color: Theme.of(context).colorScheme.surface,
         overflow: TextOverflow.ellipsis,
       );
+
+  static ButtonStyle confirmModalButton(BuildContext context) => TextButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.onError,
+            foregroundColor: Theme.of(context).colorScheme.surface
+          );
 }

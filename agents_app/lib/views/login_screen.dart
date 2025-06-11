@@ -1,6 +1,7 @@
 import 'package:agents_app/controllers/globals.dart';
 import 'package:agents_app/services/login_service.dart';
 import 'package:agents_app/shared/constants/routes.dart';
+import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -39,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
           content: const Text('Usuario o contraseña incorrectos'),
           actions: [
             TextButton(
+              style: CustomStyle.confirmModalButton(context),
               child: const Text('OK'),
               onPressed: () => Navigator.pop(context),
             )

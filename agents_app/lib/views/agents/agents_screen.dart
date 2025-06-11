@@ -1,29 +1,26 @@
-import 'package:agents_app/controllers/globals.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
 import 'package:agents_app/models/agent_model.dart';
 import 'package:agents_app/views/agents/agents_detail.dart';
-import 'package:agents_app/services/agent_service.dart';
+import 'package:agents_app/views/agents/services/agent_service.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 
 class AgentsScreen extends StatefulWidget {
-  const AgentsScreen({ Key? key }) : super(key: key);
+  const AgentsScreen({ super.key });
 
   @override
-  _AgentsScreenState createState() => _AgentsScreenState();
+  AgentsScreenState createState() => AgentsScreenState();
 }
 
-class _AgentsScreenState extends State<AgentsScreen> {
+class AgentsScreenState extends State<AgentsScreen> {
 
   late Future<AgentData?> _agentDataFuture;
 
-  final global = Get.find<SessionController>();
   @override
   void initState() {
     super.initState();
-    _agentDataFuture = AgentService.fetchAgentData(global.getUserId);
+    _agentDataFuture = AgentService.fetchAgentData();
   }
 
   @override
