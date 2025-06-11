@@ -1,3 +1,4 @@
+import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
 import 'package:agents_app/models/agent_model.dart';
 import 'package:agents_app/views/agents/agents_detail.dart';
@@ -42,34 +43,36 @@ class AgentsScreenState extends State<AgentsScreen> {
 
           final agentCodes = snapshot.data!.agentCodes?? [];
 
-          return SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Center(
-              child: DataTable(
-                columns: const [
-                  DataColumn(label: Text('ID')),
-                  DataColumn(label: Text('Nombre')),
-                  DataColumn(label: Text('Acción')),
-                ],
-                rows: agentCodes.map((code) {
-                  return DataRow(cells: [
-                    DataCell(Text(code.id.toString())),
-                    DataCell(Text(code.name ?? "name")),
-                    DataCell(
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => AgentsDetail(agents: code.agents ?? []),
-                            ),
-                          );
-                        },
-                        child: const Text('Ir'),
+          return ContentCard(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Center(
+                child: DataTable(
+                  columns: const [
+                    DataColumn(label: Text('ID')),
+                    DataColumn(label: Text('Nombre')),
+                    DataColumn(label: Text('Acción')),
+                  ],
+                  rows: agentCodes.map((code) {
+                    return DataRow(cells: [
+                      DataCell(Text(code.id.toString())),
+                      DataCell(Text(code.name ?? "name")),
+                      DataCell(
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => AgentsDetail(agents: code.agents ?? []),
+                              ),
+                            );
+                          },
+                          child: const Text('Ir'),
+                        ),
                       ),
-                    ),
-                  ]);
-                }).toList(),
+                    ]);
+                  }).toList(),
+                ),
               ),
             ),
           );
