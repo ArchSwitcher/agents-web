@@ -66,15 +66,22 @@ class CustomStyle {
         ),
       );
 
-  static TextStyle tableHeader(BuildContext context) => TextStyle(
+  static TextStyle tableHeader(BuildContext context, double fontSize) =>
+      TextStyle(
         fontWeight: FontWeight.w600,
-        fontSize: 17,
-        color: Theme.of(context).colorScheme.surface,
+        fontSize: fontSize,
+        color: Theme.of(context).colorScheme.onSurface,
         overflow: TextOverflow.ellipsis,
       );
 
-  static ButtonStyle confirmModalButton(BuildContext context) => TextButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.onError,
-            foregroundColor: Theme.of(context).colorScheme.surface
-          );
+  static ButtonStyle confirmModalButton(BuildContext context) =>
+      TextButton.styleFrom(
+          backgroundColor: Theme.of(context).colorScheme.onError,
+          foregroundColor: Theme.of(context).colorScheme.surface);
+
+  static TextStyle styleBoldMiddle(BuildContext context) => TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 18.5,
+        color: Theme.of(context).colorScheme.surface,
+      );
 }

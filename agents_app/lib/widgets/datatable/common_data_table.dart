@@ -1,0 +1,142 @@
+import 'package:agents_app/shared/resources/custom_style.dart';
+import 'package:agents_app/widgets/buttons/custom_elevation_button.dart';
+import 'package:get/get.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+//import 'package:autotanques/core/values/colors.dart';
+//import 'package:autotanques/core/styles/custom_text_style.dart';
+//import 'package:autotanques/global_widgets/new_widgets/custom_elevation_button.dart';
+
+DataCell cellDataTable(
+  dynamic element, {
+  String defaultValue = 'No disponible',
+  bool? hasError,
+  required BuildContext context,
+}) {
+  if (element is Widget) {
+    return DataCell(element);
+  }
+
+  if (element is String && element.length > 25) {
+    return _longString(element, hasError, context);
+  }
+
+  return DataCell(
+    Text(
+      element != null ? element.toString() : defaultValue,
+      overflow: TextOverflow.ellipsis,
+      style: _fontStyleError(context,hasError),
+    ),
+  );
+}
+
+DataCell _longString(String element, bool? hasError, BuildContext context) {
+  return DataCell(
+    Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 250),
+            child: Text(
+              element,
+              softWrap: false,
+              maxLines: 1,
+              overflow: TextOverflow.clip,
+              style: _fontStyleError(context, hasError),
+            ),
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            BuildContext? context = Get.context;
+            if (context != null && context.mounted) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Dialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    child: Container(
+                      width: 400,
+                      height: 300,
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          Center(
+                            child: Text(
+                              'Descripción',
+                              style: CustomStyle.styleBoldMiddle(context),
+                            ),
+                          ),
+                          const SizedBox(height: 8.0),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Flexible(
+                                  child: SingleChildScrollView(
+                                    child: Text(
+                                      element.toString(),
+                                      softWrap: true,
+                                      textAlign: TextAlign.justify,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 6,
+                                ),
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: ToolTipButton(
+                                    tooltipMessage:
+                                        'Copiar texto visible al portapapeles',
+                                    label: 'Copiar',
+                                    icon: Icons.copy,
+                                    onPressed: () async {
+                                      await Clipboard.setData(
+                                        ClipboardData(
+                                          text: element.toString(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('Cerrar'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            }
+          },
+          icon: Icon(
+            Icons.visibility,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+TextStyle _fontStyleError(BuildContext context, bool? hasError) =>
+  TextStyle(
+      color: hasError == true ? Theme.of(context).colorScheme.error : null);
+
+  WidgetStateProperty<Color> colorRowDataTable(int index, BuildContext context) {
+    return WidgetStateProperty.all<Color>(
+      index % 2 == 0 ? Theme.of(context).colorScheme.onSecondaryFixed : Theme.of(context).colorScheme.onSecondaryFixedVariant,
+    );
+  }
+

@@ -1,4 +1,3 @@
-
 import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/theme/responsive.dart';
 import 'package:flutter/material.dart';
@@ -27,21 +26,18 @@ class CustomDataTable<T> extends StatelessWidget {
         dataRowMaxHeight: double.infinity,
         showCheckboxColumn: false,
         headingRowHeight: responsive.hp(6),
-        headingRowColor:
-            WidgetStateProperty.all<Color>(colorScheme.secondary),
+        headingRowColor: WidgetStateProperty.all<Color>(colorScheme.surface),
         columns: isHeaderWidgets
             ? List.generate(headerWidgets.length,
                 (index) => DataColumn(label: headerWidgets[index]))
             : List.generate(
                 columns.length,
                 (index) => DataColumn(
-                  label: Expanded(
-                    child: Text(
-                      columns[index],
-                      style: CustomStyle.tableHeader(context),
-                      textAlign: TextAlign.left,
-                      maxLines: 2,
-                    ),
+                  label: Text(
+                    columns[index],
+                    style: CustomStyle.tableHeader(context, 20.0),
+                    textAlign: TextAlign.left,
+                    maxLines: 2,
                   ),
                 ),
               ),

@@ -1,13 +1,14 @@
+import 'package:agents_app/layout/contect_card_space.dart';
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
-import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/constants/routes.dart';
-import 'package:agents_app/shared/resources/custom_style.dart';
-import 'package:agents_app/shared/resources/strings.dart';
 import 'package:agents_app/views/groups/controllers/manage_group_controller.dart';
-import 'package:agents_app/views/groups/views/manage_group_modal.dart';
-import 'package:agents_app/widgets/commons/custom_button.dart';
+import 'package:agents_app/views/groups/widgets/commons.dart';
+import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 
 class GroupsScreen extends StatefulWidget {
   const GroupsScreen({super.key});
@@ -17,63 +18,43 @@ class GroupsScreen extends StatefulWidget {
 }
 
 class GroupsScreenState extends State<GroupsScreen> {
-  final ManageGroupController controller = ManageGroupController();
-  
+  final ManageGroupController controller = Get.put(ManageGroupController());
+  final tableHeaders = ["", "Código", "Nombre", "Estado"];
+  final List<double?> fixedColumnWidths = [120, 120, null, 120];
+  final columnSizes = [ColumnSize.S, ColumnSize.S, ColumnSize.L, ColumnSize.S];
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    double tableHeight =
+        controller.groups.length > 20 ? 0.60 : controller.groups.length * 0.07;
     return ResponsiveSidebarLayout(
         title: 'Grupos',
         description: "Configuración de grupos empresariales",
         currentRoute: RouteConstants.groups,
         userRole: 'admin',
-        content: Column(
-          children: [
-            ContentCard(
-              child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                CustomButton(
-                    color: colorScheme.primary,
-                    text: Row(
-                      children: [
-                        Icon(
-                          Icons.group_add,
-                          color: colorScheme.surface,
-                        ),
-                        const SizedBox(
-                          width: 6,
-                        ),
-                        Text(
-                          "Nuevo Grupo",
-                          style: CustomStyle.textStyleWhite(context),
-                        )
-                      ],
-                    ),
-                    isLoading: false,
-                    onPress: () {
-                      print('agregar Elemento');
-                      
-                      showManageGroupModal(
-                        context: context,
-                        controller: controller,
-                        onAccept: () {
-                          // service create groups
-                          ToastService.success(
-                            title: "!!Grupo agregado",
-                            subTitle: Strings.toastSuccessOperation,
-                          );
-                          Navigator.of(context).pop();
-                        },
-                        onCancel: () {
-                          print('Cancelado');
-                        },
-                      );
-                    }),
-              ]),
-            ),
-          ],
+        content: SingleChildScrollView(
+          child: Column(
+            children: [
+              // add new group
+              ContentCard(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [addGroup(context, controller)]),
+              ),
+              // table content, edit delete elements
+              cardContentSpace(),
+              ContentCard(child: Obx(() {
+                return CustomDataTableWidgetV2(
+                    minWidth: 500,
+                    dynamicHeight: false,
+                    tableHeight: tableHeight,
+                    fixedColumnWidths: fixedColumnWidths,
+                    columnSizes: columnSizes,
+                    tableHeaders: tableHeaders,
+                    tableRows: buildTableRows(controller, context));
+              }))
+            ],
+          ),
         ));
   }
 }
-
-
