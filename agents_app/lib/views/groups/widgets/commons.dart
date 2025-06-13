@@ -33,6 +33,7 @@ List<DataRow> buildTableRows(
 
 Widget addGroup(BuildContext context, ManageGroupController controller) {
   final colorScheme = Theme.of(context).colorScheme;
+  //controller.clear();
   return CustomButton(
       color: colorScheme.primary,
       text: Row(
@@ -53,6 +54,7 @@ Widget addGroup(BuildContext context, ManageGroupController controller) {
       isLoading: false,
       onPress: () async {
         showManageGroupModal(
+          title: "Agregar grupo",
           context: context,
           controller: controller,
           onAccept: () async {
@@ -70,6 +72,7 @@ Widget _editGroup(BuildContext context, GroupsModel element,
   return IconButton(
       onPressed: () {
         showManageGroupModal(
+          title: "Editar grupo",
           context: context,
           controller: controller,
           onAccept: () async {
@@ -91,6 +94,7 @@ Widget _deleteGroup(BuildContext context, GroupsModel element,
   return IconButton(
       onPressed: () {
         showManageGroupModal(
+          title: "Borrar Grupo",
           context: context,
           controller: controller,
           onAccept: () async {
@@ -100,7 +104,7 @@ Widget _deleteGroup(BuildContext context, GroupsModel element,
         );
       },
       icon: Icon(
-        Icons.edit_square,
-        color: Theme.of(context).colorScheme.onPrimaryFixed,
+        Icons.delete,
+        color: Theme.of(context).colorScheme.onError,
       ));
 }

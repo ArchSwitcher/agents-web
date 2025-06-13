@@ -11,7 +11,7 @@ class GroupService implements ToastService {
     final authController = Get.find<SessionController>();
     try {
       final response = await http.post(
-        Uri.parse("${Config.endPointBaseUrl}/group"),
+        Uri.parse("${Config.endPointBaseUrl}/group/createGroups"),
         headers: {
           'Authorization': 'bearer ${authController.getToken}',
           'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ class GroupService implements ToastService {
   static Future<List<GroupsModel>> fetchGroups() async {
     final authController = Get.find<SessionController>();
     final response =
-        await http.get(Uri.parse('${Config.endPointBaseUrl}/group'), headers: {
+        await http.get(Uri.parse('${Config.endPointBaseUrl}/group/getGroups'), headers: {
       'Authorization': 'bearer ${authController.getToken}',
       'Content-Type': 'application/json',
     });

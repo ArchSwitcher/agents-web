@@ -7,7 +7,7 @@ class ManageGroupController extends GetxController {
   final nameController = TextEditingController();
   String? id;
   RxList<GroupsModel> groups = <GroupsModel>[].obs;
-  RxBool isLoading = false.obs;
+  //RxBool isLoading = false.obs;
 
   @override
   void onInit() {
@@ -16,24 +16,25 @@ class ManageGroupController extends GetxController {
   }
 
   Future<void> fetchGroups() async {
-    isLoading.value = true;
+    //isLoading.value = true;
     try {
       final data = await GroupService.fetchGroups();
       groups.value = data;
+      
     } catch (e) {
       print(e);
     } finally {
-      isLoading.value = false;
+      // isLoading.value = false;
     }
   }
 
   Future<void> createGroup(BuildContext context) async {
     final groupCreated = await GroupService.newGroup(name);
     if (groupCreated) {
+      await fetchGroups();
       if (context.mounted) {
         Navigator.of(context).pop();
       }
-      await fetchGroups();
     }
   }
 
@@ -58,8 +59,13 @@ class ManageGroupController extends GetxController {
   }
 
   void setData({required String value, required String? id}) {
+    print("value ============ $value");
     nameController.text = value;
     this.id = id;
+  }
+
+  void clear() {
+    nameController.clear();
   }
 
   String get name => nameController.text;

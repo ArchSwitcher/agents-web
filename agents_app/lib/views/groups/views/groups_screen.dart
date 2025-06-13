@@ -8,7 +8,6 @@ import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 
 class GroupsScreen extends StatefulWidget {
   const GroupsScreen({super.key});
@@ -22,6 +21,7 @@ class GroupsScreenState extends State<GroupsScreen> {
   final tableHeaders = ["", "Código", "Nombre", "Estado"];
   final List<double?> fixedColumnWidths = [120, 120, null, 120];
   final columnSizes = [ColumnSize.S, ColumnSize.S, ColumnSize.L, ColumnSize.S];
+
 
   @override
   Widget build(BuildContext context) {
