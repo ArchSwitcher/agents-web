@@ -1,3 +1,4 @@
+import 'package:agents_app/models/dropdown_option_model.dart';
 import 'package:agents_app/models/group/groups_model.dart';
 import 'package:agents_app/views/groups/services/group_service.dart';
 import 'package:get/get.dart';
@@ -20,6 +21,15 @@ class ManageGroupController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  List<DropDownOption> get dropdownOptions {
+    return groups.map((group) {
+      return DropDownOption(
+        id: group.id.toString(),
+        label: group.name,
+      );
+    }).toList();
   }
 
   Future<void> createGroup(BuildContext context) async {

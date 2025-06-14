@@ -1,0 +1,93 @@
+import 'package:agents_app/layout/contect_card_space.dart';
+import 'package:agents_app/layout/content_card.dart';
+import 'package:agents_app/layout/responsive_sidebar_layout.dart';
+import 'package:agents_app/shared/constants/routes.dart';
+import 'package:agents_app/shared/helpers/table/index.dart';
+import 'package:agents_app/views/clients/controllers/client_controller.dart';
+import 'package:agents_app/views/clients/widgets/add_client.dart';
+import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
+import 'package:agents_app/widgets/datatable/filter_box.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class ClientsScreen extends StatefulWidget {
+  const ClientsScreen({super.key});
+
+  @override
+  _ClientsScreenState createState() => _ClientsScreenState();
+}
+
+class _ClientsScreenState extends State<ClientsScreen> {
+  final tableHeaders = [
+    "",
+    "Grupo",
+    "Nombre",
+    "Correo",
+    "Url",
+    "Teléfono",
+    "Usuario"
+  ];
+
+  final controller = Get.put(ManageClientController());
+
+  //final List<double?> fixedColumnWidths = [120, 120, null, 120];
+  //final columnSizes = [ColumnSize.S, ColumnSize.S, ColumnSize.L, ColumnSize.S];
+
+  @override
+  Widget build(BuildContext context) {
+    return ResponsiveSidebarLayout(
+        title: 'Clientes',
+        currentRoute: RouteConstants.clients,
+        userRole: 'admin',
+        content: SingleChildScrollView(
+          child: Column(
+            children: [
+              // add new group
+              ContentCard(
+                child: Wrap(
+                  spacing: 30, // espacio horizontal entre widgets
+                  runSpacing:
+                      20, // espacio vertical entre líneas si se hace wrap
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  alignment: WrapAlignment.spaceBetween,
+                  children: [
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        minWidth: 300,
+                        maxWidth: 600,
+                      ),
+                      child: FilterBox(
+                        elements: [],
+                        handleFilteredData: (List<dynamic> data) {
+                          //controller.groups.value = data;
+                        },
+                        isLoading: false,
+                        hint: "Buscar grupos",
+                        label: "Buscar grupo",
+                      ),
+                    ),
+                    SizedBox(
+                      width: 160,
+                      child: addClientButton(context, controller),
+                    )
+                  ],
+                ),
+              ),
+
+              // table content, edit delete elements
+              cardContentSpace(),
+              // ContentCard(child: Obx(() {
+              //   return CustomDataTableWidgetV2(
+              //       minWidth: 500,
+              //       dynamicHeight: false,
+              //       tableHeight: TableHelper.getTableHeight([]),
+              //       //fixedColumnWidths: fixedColumnWidths,
+              //       //columnSizes: columnSizes,
+              //       tableHeaders: tableHeaders,
+              //       tableRows: buildTableRows(controller, context));
+              // }))
+            ],
+          ),
+        ));
+  }
+}

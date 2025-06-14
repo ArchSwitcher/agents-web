@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class Loading extends StatefulWidget {
   final bool isLoading;
@@ -15,9 +16,9 @@ class _LoadingState extends State<Loading> {
       return Container();
     }
 
-    return CircularProgressIndicator(
-      valueColor:
-          AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primary),
+    return LoadingAnimationWidget.stretchedDots(
+      color: Theme.of(context).colorScheme.primary,
+      size: 50,
     );
   }
 }

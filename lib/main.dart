@@ -4,7 +4,7 @@ import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/controllers/sidebar/menu_sidebar_controller.dart';
 import 'package:agents_app/controllers/sidebar/sidebar_controller.dart';
 import 'package:agents_app/views/agents/agents_screen.dart';
-import 'package:agents_app/views/clients/clients_screen.dart';
+import 'package:agents_app/views/clients/views/clients_screen.dart';
 import 'package:agents_app/views/dashboard/dashboard_screen.dart';
 import 'package:agents_app/views/groups/views/groups_screen.dart';
 import 'package:agents_app/shared/constants/routes.dart';
