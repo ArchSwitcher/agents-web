@@ -12,13 +12,12 @@ class FilterBox<T> extends StatefulWidget {
   final String label;
 
   const FilterBox(
-      {Key? key,
+      {super.key,
       required this.elements,
       required this.handleFilteredData,
       required this.isLoading,
       required this.hint,
-      required this.label})
-      : super(key: key);
+      required this.label});
 
   @override
   State<FilterBox<T>> createState() => _FilterBoxState<T>();
@@ -47,7 +46,7 @@ class _FilterBoxState<T> extends State<FilterBox<T>> {
 
   filterByText() {
     if (filterBoxController.text.length == 0) {
-      return widget.handleFilteredData(data);
+      //return widget.handleFilteredData(data);
     }
     List<T> suggestions = data.where((element) {
       // encode depends on toJson method in each model, be aware of field do you want to include in the search,

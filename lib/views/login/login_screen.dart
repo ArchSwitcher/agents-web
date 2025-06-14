@@ -1,7 +1,8 @@
 import 'package:agents_app/controllers/globals.dart';
-import 'package:agents_app/services/login_service.dart';
+
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
+import 'package:agents_app/views/login/login_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,8 +20,6 @@ class _LoginPageState extends State<LoginPage> {
     final username = _usernameController.text;
     final password = _passwordController.text;
     final user = await loginUser(username, password);
-
-    print("user ${user} ${username} ${password}");
     if (!mounted) {
       return;
     }
@@ -78,14 +77,6 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Image.asset("lib/assets/icons/elebano.png"),
-                    Text(
-                      'Iniciar Sesión',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.onSecondary,
-                      ),
-                    ),
                     const SizedBox(height: 20),
                     TextField(
                       controller: _usernameController,

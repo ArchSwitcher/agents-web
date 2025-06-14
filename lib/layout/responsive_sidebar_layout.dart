@@ -1,4 +1,5 @@
 import 'package:agents_app/shared/resources/custom_style.dart';
+import 'package:agents_app/widgets/commons/global_loader_widget.dart';
 import 'package:flutter/material.dart';
 import 'navigation_sidebar.dart';
 
@@ -10,13 +11,12 @@ class ResponsiveSidebarLayout extends StatelessWidget {
   final String description;
 
   const ResponsiveSidebarLayout(
-      {Key? key,
+      {super.key,
       required this.content,
       required this.title,
       required this.currentRoute,
       required this.userRole,
-      this.description = ""})
-      : super(key: key);
+      this.description = ""});
 
   @override
   Widget build(BuildContext context) {
@@ -80,36 +80,47 @@ class ResponsiveSidebarLayout extends StatelessWidget {
         );
 
         if (constraints.maxWidth > 600) {
-          return Scaffold(
-            body: Row(
-              children: [
-                NavigationSidebar(
-                  userRole: userRole,
-                  currentRoute: currentRoute,
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      appBar,
-                      Expanded(
-                        child: stackedContent,
+          return Stack(
+            children: [
+              Scaffold(
+                // Tu scaffold original
+                body: Row(
+                  children: [
+                    NavigationSidebar(
+                      userRole: userRole,
+                      currentRoute: currentRoute,
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          appBar,
+                          Expanded(
+                            child: stackedContent,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              const GlobalLoader(), // Loader encima de todo
+            ],
           );
         } else {
-          return Scaffold(
-            appBar: appBar,
-            drawer: Drawer(
-              child: NavigationSidebar(
-                userRole: userRole,
-                currentRoute: currentRoute,
+          return Stack(
+            children: [
+              Scaffold(
+                appBar: appBar,
+                drawer: Drawer(
+                  child: NavigationSidebar(
+                    userRole: userRole,
+                    currentRoute: currentRoute,
+                  ),
+                ),
+                body: stackedContent,
               ),
-            ),
-            body: stackedContent,
+              const GlobalLoader(),
+            ],
           );
         }
       },

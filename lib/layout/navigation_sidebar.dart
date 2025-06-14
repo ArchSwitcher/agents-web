@@ -11,10 +11,10 @@ class NavigationSidebar extends StatelessWidget {
   final String? currentRoute;
 
   const NavigationSidebar({
-    Key? key,
+    super.key,
     required this.userRole,
     this.currentRoute,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

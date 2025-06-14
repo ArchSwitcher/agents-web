@@ -61,7 +61,7 @@ class GroupService implements ToastService {
     final authController = Get.find<SessionController>();
     try {
       final response = await http.put(
-        Uri.parse("${Config.endPointBaseUrl}/groups/$id"),
+        Uri.parse("${Config.endPointBaseUrl}/group/$id"),
         headers: {
           'Authorization': 'bearer ${authController.getToken}',
           'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ class GroupService implements ToastService {
     final authController = Get.find<SessionController>();
     try {
       final response = await http.delete(
-        Uri.parse("${Config.endPointBaseUrl}/groups/$id"),
+        Uri.parse("${Config.endPointBaseUrl}/group/$id"),
         headers: {
           'Authorization': 'bearer ${authController.getToken}',
           'Content-Type': 'application/json',

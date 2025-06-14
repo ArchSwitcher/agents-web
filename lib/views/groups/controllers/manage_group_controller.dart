@@ -7,11 +7,10 @@ class ManageGroupController extends GetxController {
   final nameController = TextEditingController();
   String? id;
   RxList<GroupsModel> groups = <GroupsModel>[].obs;
-  //RxBool isLoading = false.obs;
+  RxBool isLoading = true.obs;
 
 
   Future<void> fetchGroups() async {
-    //isLoading.value = true;
     try {
       final data = await GroupService.fetchGroups();
       groups.value = data;
@@ -19,7 +18,7 @@ class ManageGroupController extends GetxController {
     } catch (e) {
       print(e);
     } finally {
-      // isLoading.value = false;
+      isLoading.value = false;
     }
   }
 

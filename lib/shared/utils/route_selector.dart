@@ -3,7 +3,8 @@ import 'package:agents_app/views/clients/clients_screen.dart';
 import 'package:agents_app/views/dashboard/dashboard_screen.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/views/groups/views/groups_screen.dart';
-import 'package:agents_app/views/login_screen.dart';
+import 'package:agents_app/views/login/login_screen.dart';
+
 import 'package:flutter/material.dart';
 
 Widget getPageForRoute(String route) {
