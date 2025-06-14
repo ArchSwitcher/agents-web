@@ -4,6 +4,7 @@ import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
 import 'package:agents_app/models/group/groups_model.dart';
 import 'package:agents_app/shared/constants/routes.dart';
+import 'package:agents_app/shared/helpers/table/index.dart';
 import 'package:agents_app/views/groups/controllers/manage_group_controller.dart';
 import 'package:agents_app/views/groups/widgets/commons.dart';
 import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
@@ -44,8 +45,7 @@ class GroupsScreenState extends State<GroupsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double tableHeight =
-        controller.groups.length > 20 ? 0.60 : controller.groups.length * 0.07;
+
     return ResponsiveSidebarLayout(
         title: 'Grupos',
         description: "Configuración de grupos empresariales",
@@ -92,7 +92,7 @@ class GroupsScreenState extends State<GroupsScreen> {
                 return CustomDataTableWidgetV2(
                     minWidth: 500,
                     dynamicHeight: false,
-                    tableHeight: tableHeight,
+                    tableHeight: TableHelper.getTableHeight(controller.groups),
                     fixedColumnWidths: fixedColumnWidths,
                     columnSizes: columnSizes,
                     tableHeaders: tableHeaders,
