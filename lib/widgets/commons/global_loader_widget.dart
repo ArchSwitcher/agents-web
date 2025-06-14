@@ -25,8 +25,8 @@ class GlobalLoader extends StatelessWidget {
           ),
           // Loading animation centered
           Center(
-            child: LoadingAnimationWidget.inkDrop(
-              color: const Color(0xFF1E6091),
+            child: LoadingAnimationWidget.dotsTriangle(
+              color: Theme.of(context).colorScheme.secondary,
               size: 75,
             ),
           ),
