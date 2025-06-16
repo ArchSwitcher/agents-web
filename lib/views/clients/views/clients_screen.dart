@@ -1,6 +1,7 @@
 import 'package:agents_app/layout/contect_card_space.dart';
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
+import 'package:agents_app/models/client/clients_model.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/helpers/table/index.dart';
 import 'package:agents_app/views/clients/controllers/client_controller.dart';
@@ -30,7 +31,6 @@ class ClientsScreenState extends State<ClientsScreen> {
   ];
 
   final controller = Get.put(ManageClientController());
-
 
   //final List<double?> fixedColumnWidths = [120, 120, null, 120];
   //final columnSizes = [ColumnSize.S, ColumnSize.S, ColumnSize.L, ColumnSize.S];
@@ -71,13 +71,13 @@ class ClientsScreenState extends State<ClientsScreen> {
                         maxWidth: 600,
                       ),
                       child: FilterBox(
-                        elements: [],
-                        handleFilteredData: (List<dynamic> data) {
-                          //controller.groups.value = data;
+                        elements: [...controller.clients],
+                        handleFilteredData: (List<ClientModel> data) {
+                          controller.clients.value = data;
                         },
                         isLoading: false,
-                        hint: "Buscar grupos",
-                        label: "Buscar grupo",
+                        hint: "Buscar clientes",
+                        label: "Buscar cliente",
                       ),
                     ),
                     SizedBox(

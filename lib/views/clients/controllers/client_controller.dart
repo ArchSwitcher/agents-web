@@ -13,7 +13,7 @@ class ManageClientController extends GetxController {
   final ClientService _clientService = ClientService();
 
   RxBool isLoading = true.obs;
-  RxList clients = [].obs;
+  RxList<ClientModel> clients = <ClientModel>[].obs;
 
   Rx<DropDownOption> groupId =
       DropDownOption(id: '', label: 'Seleccione un grupo').obs;
