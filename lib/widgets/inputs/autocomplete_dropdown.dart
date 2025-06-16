@@ -17,6 +17,8 @@ class AutocompleteDropdownWidget extends StatefulWidget {
   final TextEditingController? textController;
   final bool clean;
   final FormFieldValidator<DropDownOption>? validator;
+  final DropDownOption? initialValue;
+  final bool enabled;
 
   const AutocompleteDropdownWidget({
     super.key,
@@ -30,6 +32,8 @@ class AutocompleteDropdownWidget extends StatefulWidget {
     this.textController,
     this.clean = true,
     this.validator,
+    this.initialValue,
+    this.enabled = true,
   });
 
   @override
@@ -44,28 +48,39 @@ class _AutocompleteDropdownWidgetState
 
   @override
   void initState() {
+    if(widget.initialValue != null) {
+      selectedOption = widget.initialValue;
+    }
     super.initState();
-    textEditingController = widget.textController ?? TextEditingController();
   }
+
 
   @override
   Widget build(BuildContext context) {
     return FormField<DropDownOption>(
+      initialValue: widget.initialValue,
       validator: widget.validator,
+      enabled: widget.enabled,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       builder: (FormFieldState<DropDownOption> fieldState) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Autocomplete<DropDownOption>(
+              
+              initialValue: TextEditingValue(text: widget.initialValue?.label ?? ''),
               optionsBuilder: (TextEditingValue textEditingValue) {
+                if (fieldState.value == null && selectedOption != null) {
+                  fieldState.didChange(selectedOption);
+                }
+
                 return widget.onTextChange(textEditingValue.text);
               },
               onSelected: (DropDownOption option) {
                 setState(() {
                   selectedOption = option;
                 });
-                fieldState.didChange(option);
+                fieldState.didChange(selectedOption);
                 widget.onSelected(option);
               },
               displayStringForOption: (DropDownOption option) => option.label,
@@ -76,6 +91,7 @@ class _AutocompleteDropdownWidgetState
                 VoidCallback onFieldSubmitted,
               ) {
                 return CustomInputWidget(
+                  enabled: widget.enabled,
                   onFocusChangeInput: widget.onFocusChange,
                   focusNode: focusNode,
                   onFieldSubmitted: (String value) => onFieldSubmitted(),
@@ -94,7 +110,7 @@ class _AutocompleteDropdownWidgetState
                     color: Colors.white,
                     elevation: 4.0,
                     child: ConstrainedBox(
-                      constraints: BoxConstraints(maxHeight: 200),
+                      constraints: const BoxConstraints(maxHeight: 200),
                       child: ListView.builder(
                         padding: EdgeInsets.zero,
                         shrinkWrap: true,

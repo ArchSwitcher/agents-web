@@ -1,6 +1,8 @@
 import 'package:agents_app/models/dropdown_option_model.dart';
 import 'package:agents_app/services/toast_service.dart';
+import 'package:agents_app/shared/helpers/validations/email_validator.dart';
 import 'package:agents_app/shared/helpers/validations/not_empty.dart';
+import 'package:agents_app/shared/helpers/validations/phone_validator.dart';
 import 'package:agents_app/views/clients/controllers/client_controller.dart';
 import 'package:agents_app/views/groups/controllers/manage_group_controller.dart';
 import 'package:agents_app/widgets/commons/generic_modal.dart';
@@ -53,8 +55,35 @@ class ManageClientFormState extends State<ManageClientForm> {
             controller: widget.controller.nameController,
             label: "Nombre de grupo",
             validator: (v) => notEmptyFieldValidator(v),
+            keyboardType: TextInputType.text,
             hintText: "Nombre del grupo",
             prefixIcon: Icons.group,
+          ),
+          CustomInputWidget(
+            enabled: widget.isEnabled,
+            controller: widget.controller.emailController,
+            label: "Correo electrónico",
+            validator: (v) => emailValidatorOptional(v),
+            keyboardType: TextInputType.emailAddress,
+            hintText: "Correo electrónico",
+            prefixIcon: Icons.mail_rounded,
+          ),
+          CustomInputWidget(
+            enabled: widget.isEnabled,
+            controller: widget.controller.urlController,
+            label: "Url",
+            keyboardType: TextInputType.url,
+            hintText: "Url",
+            prefixIcon: Icons.link,
+          ),
+          CustomInputWidget(
+            enabled: widget.isEnabled,
+            controller: widget.controller.phoneController,
+            label: "Teléfono",
+            validator: (v) => phoneValidatorOptional(v),
+            keyboardType: TextInputType.phone,
+            hintText: "Teléfono",
+            prefixIcon: Icons.phone_outlined,
           ),
         ],
       ),
@@ -67,7 +96,7 @@ void showManageClientModal(
     bool isEnabled = false,
     VoidCallback? onAccept,
     VoidCallback? onCancel,
-    String title = 'Grupo',
+    String title = 'Cliente',
     String acceptText = 'Aceptar',
     String cancelText = 'Cancelar',
     required ManageClientController controller}) {
@@ -106,6 +135,10 @@ Widget _groupDropdown(bool isEnabled, ManageClientController clientController,
     }
 
     return AutocompleteDropdownWidget(
+      enabled: isEnabled,
+      initialValue: DropDownOption(
+          id: clientController.groupId.value.id,
+          label: clientController.groupId.value.label),
       listItems: groupController.dropdownOptions,
       onSelected: (DropDownOption option) {
         clientController.groupId.value = option;

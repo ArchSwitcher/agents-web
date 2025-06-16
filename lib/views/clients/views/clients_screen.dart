@@ -5,6 +5,7 @@ import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/helpers/table/index.dart';
 import 'package:agents_app/views/clients/controllers/client_controller.dart';
 import 'package:agents_app/views/clients/widgets/add_client.dart';
+import 'package:agents_app/views/clients/widgets/table_row.dart';
 import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
 import 'package:agents_app/widgets/datatable/filter_box.dart';
 import 'package:flutter/material.dart';
@@ -14,24 +15,38 @@ class ClientsScreen extends StatefulWidget {
   const ClientsScreen({super.key});
 
   @override
-  _ClientsScreenState createState() => _ClientsScreenState();
+  ClientsScreenState createState() => ClientsScreenState();
 }
 
-class _ClientsScreenState extends State<ClientsScreen> {
+class ClientsScreenState extends State<ClientsScreen> {
   final tableHeaders = [
     "",
+    "Código",
     "Grupo",
     "Nombre",
     "Correo",
     "Url",
-    "Teléfono",
-    "Usuario"
+    "Teléfono"
   ];
 
   final controller = Get.put(ManageClientController());
 
+
   //final List<double?> fixedColumnWidths = [120, 120, null, 120];
   //final columnSizes = [ColumnSize.S, ColumnSize.S, ColumnSize.L, ColumnSize.S];
+
+  start() async {
+    await controller.fetchClients();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      start();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +60,8 @@ class _ClientsScreenState extends State<ClientsScreen> {
               // add new group
               ContentCard(
                 child: Wrap(
-                  spacing: 30, // espacio horizontal entre widgets
-                  runSpacing:
-                      20, // espacio vertical entre líneas si se hace wrap
+                  spacing: 30,
+                  runSpacing: 20,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   alignment: WrapAlignment.spaceBetween,
                   children: [
@@ -76,16 +90,16 @@ class _ClientsScreenState extends State<ClientsScreen> {
 
               // table content, edit delete elements
               cardContentSpace(),
-              // ContentCard(child: Obx(() {
-              //   return CustomDataTableWidgetV2(
-              //       minWidth: 500,
-              //       dynamicHeight: false,
-              //       tableHeight: TableHelper.getTableHeight([]),
-              //       //fixedColumnWidths: fixedColumnWidths,
-              //       //columnSizes: columnSizes,
-              //       tableHeaders: tableHeaders,
-              //       tableRows: buildTableRows(controller, context));
-              // }))
+              ContentCard(child: Obx(() {
+                return CustomDataTableWidgetV2(
+                    minWidth: 500,
+                    dynamicHeight: false,
+                    tableHeight: TableHelper.getTableHeight(controller.clients),
+                    //fixedColumnWidths: fixedColumnWidths,
+                    //columnSizes: columnSizes,
+                    tableHeaders: tableHeaders,
+                    tableRows: buildTableRowsClient(controller, context));
+              }))
             ],
           ),
         ));
