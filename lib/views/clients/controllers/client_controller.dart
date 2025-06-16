@@ -32,7 +32,7 @@ class ManageClientController extends GetxController {
     final loader = Get.find<LoaderController>();
     loader.show();
     try {
-      final data = await _clientService.fetchClients();
+      final data = await _clientService.getAll();
       clients.value = data;
     } catch (e) {
       print("Error fetching clients: $e");
@@ -44,7 +44,7 @@ class ManageClientController extends GetxController {
 
   newClient(ClientModel client) async {
     try {
-      final success = await _clientService.newClient(client);
+      final success = await _clientService.create(client);
       if (success) {
         await fetchClients();
       }
@@ -52,9 +52,10 @@ class ManageClientController extends GetxController {
       Get.snackbar("Error", "No se pudo crear el cliente: $e");
     }
   }
+
   editClient(ClientModel client) async {
     try {
-      final success = await _clientService.updateClient(client);
+      final success = await _clientService.update(client.id.toString(), client);
       if (success) {
         await fetchClients();
       }
@@ -62,9 +63,10 @@ class ManageClientController extends GetxController {
       Get.snackbar("Error", "No se pudo editar el cliente: $e");
     }
   }
+
   deleteClient(String id) async {
     try {
-      final success = await _clientService.deleteClient(id);
+      final success = await _clientService.delete(id);
       if (success) {
         await fetchClients();
       }
@@ -78,16 +80,17 @@ class ManageClientController extends GetxController {
     emailController.text = client.email;
     phoneController.text = client.phone;
     urlController.text = client.url;
-    groupId.value = DropDownOption(id: client.group.id, label: client.group.name);
+    groupId.value =
+        DropDownOption(id: client.group.id, label: client.group.name);
   }
 
-clear(){
+  clear() {
     nameController.clear();
     emailController.clear();
     phoneController.clear();
     urlController.clear();
-    groupId.value = DropDownOption(id: '', label: ''); 
-}
+    groupId.value = DropDownOption(id: '', label: '');
+  }
 
   // Add any additional methods or properties needed for managing clients
 }
