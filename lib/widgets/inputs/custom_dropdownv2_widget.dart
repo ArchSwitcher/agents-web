@@ -1,5 +1,5 @@
 
-import 'package:agents_app/models/dropdown_option_model.dart';
+import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/shared/resources/dimensions.dart';
 import 'package:flutter/material.dart';

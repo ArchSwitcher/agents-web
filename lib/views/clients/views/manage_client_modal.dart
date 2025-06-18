@@ -1,4 +1,4 @@
-import 'package:agents_app/models/dropdown_option_model.dart';
+import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/helpers/validations/email_validator.dart';
 import 'package:agents_app/shared/helpers/validations/not_empty.dart';

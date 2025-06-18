@@ -12,9 +12,10 @@ class MenuSidebarController extends GetxController {
     if (role == 'admin') {
       menu.value = [
         MenuGroupModel(label: "Clientes", children: [
-          MenuItemModel(label: "Grupos", route: RouteConstants.groups, icon: Icons.group),
-          MenuItemModel(label: "Clientes", route: RouteConstants.clients, icon: Icons.person),
-          MenuItemModel(label: "Agentes", route: RouteConstants.agents, icon: Icons.shield),
+          MenuItemModel(label: "Grupos", route: RouteConstants.groups, icon: Icons.group_work_outlined),
+          MenuItemModel(label: "Clientes", route: RouteConstants.clients, icon: Icons.person_outline),
+          MenuItemModel(label: "Agentes", route: RouteConstants.agents, icon: Icons.shield_outlined),
+          MenuItemModel(label: "Sucursales", route: RouteConstants.branches, icon: Icons.business_sharp),
         ]),
         MenuGroupModel(label: "Configuración", children: [
           MenuItemModel(label: "Parámetros", route: "/parametros", icon: Icons.settings),

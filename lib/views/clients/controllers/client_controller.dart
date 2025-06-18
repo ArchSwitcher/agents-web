@@ -1,6 +1,6 @@
 import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/models/client/clients_model.dart';
-import 'package:agents_app/models/dropdown_option_model.dart';
+import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/views/clients/services/client_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

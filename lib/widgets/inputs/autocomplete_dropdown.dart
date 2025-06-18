@@ -1,4 +1,4 @@
-import 'package:agents_app/models/dropdown_option_model.dart';
+import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/shared/resources/dimensions.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:flutter/material.dart';

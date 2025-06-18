@@ -166,15 +166,7 @@ class NavigationSidebar extends StatelessWidget {
                                     colorScheme.primary.withOpacity(0.1),
                                 onTap: () {
                                   if (currentRoute != item.route) {
-                                    Navigator.of(context).pushReplacement(
-                                      PageRouteBuilder(
-                                        pageBuilder: (_, __, ___) =>
-                                            getPageForRoute(item.route),
-                                        transitionDuration: Duration.zero,
-                                        reverseTransitionDuration:
-                                            Duration.zero,
-                                      ),
-                                    );
+                                    Get.offNamed(item.route);
                                   }
                                 },
                               ),
@@ -187,12 +179,11 @@ class NavigationSidebar extends StatelessWidget {
                       title: const Text("Cerrar sesión"),
                       onTap: () {
                         // lógica logout
-                        Navigator.of(context).pushReplacement(
-                            PageRouteBuilder(
-                              pageBuilder: (_, __, ___) => getPageForRoute("/"),
-                              transitionDuration: Duration.zero,
-                              reverseTransitionDuration: Duration.zero,
-                            ));
+                        Navigator.of(context).pushReplacement(PageRouteBuilder(
+                          pageBuilder: (_, __, ___) => getPageForRoute("/"),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ));
                       },
                     ),
                   ],

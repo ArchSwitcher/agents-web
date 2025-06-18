@@ -1,4 +1,4 @@
-import 'package:agents_app/models/dropdown_option_model.dart';
+import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/models/group/groups_model.dart';
 import 'package:agents_app/views/groups/services/group_service.dart';
 import 'package:get/get.dart';

@@ -4,6 +4,7 @@ import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/controllers/sidebar/menu_sidebar_controller.dart';
 import 'package:agents_app/controllers/sidebar/sidebar_controller.dart';
 import 'package:agents_app/views/agents/agents_screen.dart';
+import 'package:agents_app/views/branches/views/branches_screen.dart';
 import 'package:agents_app/views/clients/views/clients_screen.dart';
 import 'package:agents_app/views/dashboard/dashboard_screen.dart';
 import 'package:agents_app/views/groups/views/groups_screen.dart';
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: RouteConstants.agents, page: () => const AgentsScreen()),
           GetPage(name: RouteConstants.clients, page: () => const ClientsScreen()),
           GetPage(name: RouteConstants.groups, page: () => const GroupsScreen()),
+          GetPage(name: RouteConstants.branches, page: () => const BranchesScreen()),
         ],
         theme: appTheme,
       ),
