@@ -20,10 +20,10 @@ class ClientModel {
   factory ClientModel.fromJson(Map<String, dynamic> json) {
     return ClientModel(
       id: json['id'].toString(),
-      name: json['Name'],
-      email: json['Email'],
-      url: json['Url'],
-      phone: json['Phone'].toString(),
+      name: json['Name'].toString(),
+      email: json['Email'] ?? '',
+      url: json['Url'] ?? '',
+      phone: json['Phone'] != null ? json['Phone'].toString() : '',
       group: Group.fromJson(json['group']),
       admin: Admin.fromJson(json['admin']),
     );
@@ -32,12 +32,12 @@ class ClientModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'Name': name,
-      'Email': email,
-      'Url': url,
-      'Phone': phone,
-      'group': group.toJson(),
-      'admin': admin.toJson(),
+      'name': name,
+      'email': email,
+      'url': url,
+      'phone': phone,
+      'groupId': group.id,
+      'adminId': admin.id,
     };
   }
 }

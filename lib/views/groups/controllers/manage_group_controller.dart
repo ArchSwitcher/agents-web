@@ -10,17 +10,17 @@ class ManageGroupController extends GetxController {
   RxList<GroupsModel> groups = <GroupsModel>[].obs;
   RxBool isLoading = true.obs;
 
-
   Future<void> fetchGroups() async {
-    RxBool isLoading = true.obs;
+    isLoading.value = true;
     try {
       final data = await GroupService.fetchGroups();
       groups.value = data;
-      
     } catch (e) {
       print(e);
     } finally {
+      print("objects ============ ${groups.length}");
       isLoading.value = false;
+      update();
     }
   }
 

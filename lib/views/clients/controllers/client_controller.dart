@@ -42,6 +42,15 @@ class ManageClientController extends GetxController {
     }
   }
 
+  List<DropDownOption> get dropdownOptions {
+    return clients.map((client) {
+      return DropDownOption(
+        id: client.id.toString(),
+        label: client.name,
+      );
+    }).toList();
+  }
+
   newClient(ClientModel client) async {
     try {
       final success = await _clientService.create(client);

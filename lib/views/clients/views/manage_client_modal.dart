@@ -131,7 +131,7 @@ Widget _groupDropdown(bool isEnabled, ManageClientController clientController,
     ManageGroupController groupController) {
   return Obx(() {
     if (clientController.isLoading.value) {
-      return Loading(isLoading: clientController.isLoading.value);
+      return const Loading();
     }
 
     return AutocompleteDropdownWidget(

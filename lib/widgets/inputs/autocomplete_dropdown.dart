@@ -19,6 +19,7 @@ class AutocompleteDropdownWidget extends StatefulWidget {
   final FormFieldValidator<DropDownOption>? validator;
   final DropDownOption? initialValue;
   final bool enabled;
+  final IconData prefixIcon;
 
   const AutocompleteDropdownWidget({
     super.key,
@@ -34,6 +35,7 @@ class AutocompleteDropdownWidget extends StatefulWidget {
     this.validator,
     this.initialValue,
     this.enabled = true,
+    this.prefixIcon = Icons.person_outline,
   });
 
   @override
@@ -98,7 +100,7 @@ class _AutocompleteDropdownWidgetState
                   controller: textEditingController,
                   label: widget.label,
                   hintText: widget.hintText,
-                  prefixIcon: Icons.person_outline,
+                  prefixIcon: widget.prefixIcon,
                 );
               },
               optionsViewBuilder: (BuildContext context,

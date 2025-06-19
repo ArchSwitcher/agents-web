@@ -35,14 +35,14 @@ class CustomLabelWidget extends StatelessWidget {
           readOnly: true,
           controller: controller,
           style: CustomStyle
-              .textStyleWhite(context), // Make sure to define CustomStyle.textStyleWhite
+              .textStyleBlack(context), // Make sure to define CustomStyle.textStyleWhite
           decoration: InputDecoration(
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-            labelStyle: CustomStyle.textStyleWhite(context),
+            labelStyle: CustomStyle.textStyleBlack(context),
             filled: true,
-            fillColor: colorScheme.primary,
-            hintStyle: CustomStyle.textStyleWhite(context),
+            fillColor: colorScheme.onTertiaryContainer,
+            hintStyle: CustomStyle.textStyleBlack(context),
             focusedBorder: CustomStyle.focusBorder(context),
             enabledBorder: CustomStyle.focusErrorBorder(context),
             errorBorder: CustomStyle.focusErrorBorder(context),

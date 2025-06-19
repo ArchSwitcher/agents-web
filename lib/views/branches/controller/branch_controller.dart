@@ -26,9 +26,24 @@ class BranchController extends GetxController {
   // Controllers for form fields
   final codeGpController = TextEditingController();
   final nameController = TextEditingController();
-  final emailController = TextEditingController();
-  final phoneController = TextEditingController();
+  final nitController = TextEditingController();
+  final socialReasonController = TextEditingController();
   final urlController = TextEditingController(text: "");
+  final TextEditingController latitudeController = TextEditingController();
+  final TextEditingController longitudeController = TextEditingController();
+  Rx<DropDownOption> groupId =
+      DropDownOption(id: '', label: 'Seleccione un grupo').obs;
+
+  Rx<DropDownOption> client =
+      DropDownOption(id: '', label: 'Seleccione un grupo').obs;
+
+  RxList<DropDownOption> adviser = <DropDownOption>[].obs;
+
+  RxList<DropDownOption> territoryManager = <DropDownOption>[].obs;
+
+  RxList<DropDownOption> accountBoss = <DropDownOption>[].obs;
+
+  RxList<DropDownOption> billPerson = <DropDownOption>[].obs;
 
   // Reactive variables
   RxBool isLoading = true.obs;
@@ -91,8 +106,8 @@ class BranchController extends GetxController {
   void onClose() {
     codeGpController.dispose();
     nameController.dispose();
-    emailController.dispose();
-    phoneController.dispose();
+    nitController.dispose();
+    socialReasonController.dispose();
     urlController.dispose();
     super.onClose();
   }

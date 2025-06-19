@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 //https://coolors.co/palette/d9ed92-b5e48c-99d98c-76c893-52b69a-34a0a4-168aad-1a759f-1e6091-184e77
 
 final ThemeData appTheme = ThemeData(
-  colorScheme: const ColorScheme(
+  colorScheme: ColorScheme(
     brightness: Brightness.light,
     primary: Color(0xFF184E77),
     primaryFixed: Color(0xFF1A759F),
@@ -12,6 +12,7 @@ final ThemeData appTheme = ThemeData(
     onPrimaryFixed: Color(0xFF76C893),
     secondary: Color(0xFF34A0A4),
     onSecondary: Colors.black,
+    // onSurfaceVariant: Colors.grey[200],
     //background: Color(0xFFF5FAFF),
     //onBackground: Color(0xFF212121),
     onSecondaryFixed: Color(0xFFF2F8FD), //BASE 184E77
@@ -19,8 +20,9 @@ final ThemeData appTheme = ThemeData(
     surfaceContainerHighest: Color(0xFF1E6091),
     surface: Colors.white,
     onSurface: Color(0xFF1f2421),
+    onTertiaryContainer: Colors.grey[200],
     error: Color(0xFFd62828),
-    onError: Color(0xFFe63946),  //ae2012 alternative
+    onError: Color(0xFFe63946), //ae2012 alternative
   ),
   useMaterial3: true,
   scaffoldBackgroundColor: Color(0xFFF5FAFF),

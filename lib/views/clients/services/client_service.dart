@@ -8,19 +8,27 @@ import 'package:http/http.dart' as http;
 class ClientService extends BaseService implements CrudService<ClientModel> {
   @override
   Future<List<ClientModel>> getAll() async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/client/getClients'),
-      headers: buildHeaders(),
-    );
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/client/getClients'),
+        headers: buildHeaders(),
+      );
 
-    if (response.statusCode == 200) {
-      final decoded = json.decode(response.body);
-      final List data = decoded['data'];
-      return data.map((json) => ClientModel.fromJson(json)).toList();
-    } else {
-      ToastService.warning(
-          title: "No hay clientes", subTitle: "No existe ningún cliente aún.");
-      throw Exception('Error al cargar clientes');
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        final List data = decoded['data'];
+        return data.map((json) => ClientModel.fromJson(json)).toList();
+      } else {
+        ToastService.warning(
+            title: "No hay clientes",
+            subTitle: "No existe ningún cliente aún.");
+        throw Exception('Error al cargar clientes');
+      }
+    } catch (e) {
+      print("objects ============ $e");
+      ToastService.error(
+          title: "Error", subTitle: "No se pudo cargar los clientes");
+      return [];
     }
   }
 
@@ -41,17 +49,26 @@ class ClientService extends BaseService implements CrudService<ClientModel> {
 
   @override
   Future<bool> create(ClientModel client) async {
-    final response = await http.post(
-      Uri.parse("$baseUrl/client/createClient"),
-      headers: buildHeaders(),
-      body: jsonEncode(client.toJson()),
-    );
+    try {
+      final response = await http.post(
+        Uri.parse("$baseUrl/client/createClient"),
+        headers: buildHeaders(),
+        body: jsonEncode(client.toJson()),
+      );
 
-    if (response.statusCode == 200) {
-      ToastService.success(title: "Cliente creado", subTitle: "Éxito");
-      return true;
-    } else {
-      ToastService.error(title: "Error", subTitle: "No se pudo crear");
+      print("Response status: ${jsonEncode(client.toJson())}");
+
+      if (response.statusCode == 200) {
+        ToastService.success(title: "Cliente creado", subTitle: "Éxito");
+        return true;
+      } else {
+        ToastService.error(title: "Error", subTitle: "No se pudo crear");
+        return false;
+      }
+    } catch (e) {
+      print("Error creating client: $e");
+      ToastService.error(
+          title: "Error", subTitle: "No se pudo crear el cliente");
       return false;
     }
   }
@@ -65,7 +82,8 @@ class ClientService extends BaseService implements CrudService<ClientModel> {
     );
 
     if (response.statusCode == 200) {
-      ToastService.success(title: "Actualizado", subTitle: "Cliente actualizado");
+      ToastService.success(
+          title: "Actualizado", subTitle: "Cliente actualizado");
       return true;
     } else {
       ToastService.error(title: "Error", subTitle: "No se pudo actualizar");
