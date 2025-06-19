@@ -14,18 +14,28 @@ class GenericListController extends GetxController {
   final RxBool isLoadingGeneration = true.obs;
   final RxBool isLoadingFactory = true.obs;
 
-  
+  final RxList<DropDownOption> employees = <DropDownOption>[].obs;
+  final RxList<DropDownOption> classification = <DropDownOption>[].obs;
+  final RxList<DropDownOption> cities = <DropDownOption>[].obs;
+  final RxList<DropDownOption> countries = <DropDownOption>[].obs;
+  final RxList<DropDownOption> zones = <DropDownOption>[].obs;
+  final RxList<DropDownOption> billingTypes = <DropDownOption>[].obs;
+  final RxList<DropDownOption> generationTypes = <DropDownOption>[].obs;
+  final RxList<DropDownOption> factories = <DropDownOption>[].obs;
+  final RxList<DropDownOption> departments = <DropDownOption>[].obs;
+
   Future<List<DropDownOption>> fetchClassification() async {
     try {
       isLoadingClassification.value = true;
       final data =
           await genericListService.getAll("common/getAllClassification");
-      return data.map((item) {
+      employees.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
           label: item.name,
         );
       }).toList();
+      return employees;
     } catch (e) {
       print("Error fetching classification: $e");
       return [];
@@ -38,12 +48,13 @@ class GenericListController extends GetxController {
     try {
       isLoadingBilling.value = true;
       final data = await genericListService.getAll("common/getAllBillingType");
-      return data.map((item) {
+      billingTypes.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
           label: item.name,
         );
       }).toList();
+      return billingTypes;
     } catch (e) {
       print("Error fetching billing types: $e");
       return [];
@@ -57,12 +68,13 @@ class GenericListController extends GetxController {
       isLoadingGeneration.value = true;
       final data =
           await genericListService.getAll("common/getAllGenerationType");
-      return data.map((item) {
+      generationTypes.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
           label: item.name,
         );
       }).toList();
+      return generationTypes;
     } catch (e) {
       print("Error fetching generation types: $e");
       return [];
@@ -71,16 +83,37 @@ class GenericListController extends GetxController {
     }
   }
 
-  Future<List<DropDownOption>> fetchDepartments() async {
+  // Fetch countries
+  Future<List<DropDownOption>> fetchCountries() async {
     try {
-      isLoadingCity.value = true;
-      final data = await genericListService.getAll("common/getDepartments");
-      return data.map((item) {
+      isLoadingCountry.value = true;
+      final data = await genericListService.getAll("common/getCountries");
+      countries.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
           label: item.name,
         );
       }).toList();
+      return countries;
+    } catch (e) {
+      print("Error fetching countries: $e");
+      return [];
+    } finally {
+      isLoadingCountry.value = false;
+    }
+  }
+
+  Future<List<DropDownOption>> fetchDepartments() async {
+    try {
+      isLoadingCity.value = true;
+      final data = await genericListService.getAll("common/getDepartments");
+      departments.value = data.map((item) {
+        return DropDownOption(
+          id: item.id.toString(),
+          label: item.name,
+        );
+      }).toList();
+      return departments;
     } catch (e) {
       print("Error fetching departments: $e");
       return [];
@@ -93,12 +126,13 @@ class GenericListController extends GetxController {
     try {
       isLoadingFactory.value = true;
       final data = await genericListService.getAll("common/getAllFactories");
-      return data.map((item) {
+      factories.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
           label: item.name,
         );
       }).toList();
+      return factories;
     } catch (e) {
       print("Error fetching factories: $e");
       return [];
@@ -111,12 +145,13 @@ class GenericListController extends GetxController {
     try {
       isLoadingZone.value = true;
       final data = await genericListService.getAll("common/getAllZones");
-      return data.map((item) {
+      zones.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
           label: item.name,
         );
       }).toList();
+      return zones;
     } catch (e) {
       print("Error fetching zones: $e");
       return [];

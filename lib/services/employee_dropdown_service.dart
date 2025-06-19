@@ -8,14 +8,13 @@ import 'package:http/http.dart' as http;
 class EmployeeDropdownService extends BaseService {
   Future<List<DropDownOption>> fetchEmployees(String type) async {
     final response =
-        await http.get(Uri.parse('$baseUrl/getEmployeeByType?type=$type'));
+        await http.get(Uri.parse('$baseUrl/common/getEmployeeByType?type=$type'));
 
     if (response.statusCode == 200) {
       final decoded = json.decode(response.body);
       final List data = decoded['data'];
       final employeeList =
           data.map((json) => EmployeeModel.fromJson(json)).toList();
-
       return employeeList
           .map((e) => DropDownOption(
               id: e.id.toString(),

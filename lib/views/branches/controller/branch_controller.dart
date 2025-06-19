@@ -37,13 +37,45 @@ class BranchController extends GetxController {
   Rx<DropDownOption> client =
       DropDownOption(id: '', label: 'Seleccione un grupo').obs;
 
-  RxList<DropDownOption> adviser = <DropDownOption>[].obs;
+  RxBool isLoadingAdviser = true.obs;
+  RxBool isLoadingTerritoryManager = true.obs;
+  RxBool isLoadingAccountBoss = true.obs;
+  RxBool isLoadingBillPerson = true.obs;
+  RxList<DropDownOption> advisers = <DropDownOption>[].obs;
+  RxList<DropDownOption> territoryManagers = <DropDownOption>[].obs;
+  RxList<DropDownOption> accountBosses = <DropDownOption>[].obs;
+  RxList<DropDownOption> billPersons = <DropDownOption>[].obs;
 
-  RxList<DropDownOption> territoryManager = <DropDownOption>[].obs;
+  Rx<DropDownOption> adviser = DropDownOption(id: '', label: 'Seleccione un asesor').obs;
+  Rx<DropDownOption> territoryManager = DropDownOption(id: '', label: 'Seleccione un gerente de territorio').obs;
+  Rx<DropDownOption> accountBoss = DropDownOption(id: '', label: 'Seleccione un jefe de cuenta').obs;
+  Rx<DropDownOption> billPerson = DropDownOption(id: '', label: 'Seleccione una persona de facturación').obs;
 
-  RxList<DropDownOption> accountBoss = <DropDownOption>[].obs;
+  Rx<DropDownOption> employee = DropDownOption(id: '', label: 'Seleccione un empleado').obs;
+  Rx<DropDownOption> classification = DropDownOption(id: '', label: 'Seleccione una clasificación').obs;
+  Rx<DropDownOption> city = DropDownOption(id: '', label: 'Seleccione una ciudad').obs;
+  Rx<DropDownOption> country = DropDownOption(id: '', label: 'Seleccione un país').obs;
+  Rx<DropDownOption> zone = DropDownOption(id: '', label: 'Seleccione una zona').obs;
+  Rx<DropDownOption> billingType = DropDownOption(id: '', label: 'Seleccione un tipo de facturación').obs;
+  Rx<DropDownOption> generationType = DropDownOption(id: '', label: 'Seleccione un tipo de generación').obs;
+  Rx<DropDownOption> factory = DropDownOption(id: '', label: 'Seleccione una fábrica').obs;
 
-  RxList<DropDownOption> billPerson = <DropDownOption>[].obs;
+  
+  Rx<DropDownOption> fiscalCountry = DropDownOption(id: '', label: 'Seleccione un país fiscal').obs;
+  Rx<DropDownOption> fiscalDepartment = DropDownOption(id: '', label: 'Seleccione un departamento fiscal').obs;
+  Rx<DropDownOption> fiscalZone = DropDownOption(id: '', label: 'Seleccione una zona fiscal').obs;
+  final TextEditingController fiscalAddress = TextEditingController();
+
+  Rx<DropDownOption> physicalCountry = DropDownOption(id: '', label: 'Seleccione un país').obs;
+  Rx<DropDownOption> physicalDepartment = DropDownOption(id: '', label: 'Seleccione un departamento').obs;
+  Rx<DropDownOption> physicalZone = DropDownOption(id: '', label: 'Seleccione una zona').obs;
+  final TextEditingController physicalAddress = TextEditingController();
+
+  Rx<DropDownOption> paymentCountry = DropDownOption(id: '', label: 'Seleccione un país').obs;
+  Rx<DropDownOption> paymentDepartment = DropDownOption(id: '', label: 'Seleccione un departamento').obs;
+  Rx<DropDownOption> paymentZone = DropDownOption(id: '', label: 'Seleccione una zona').obs;
+  final TextEditingController paymentAddress = TextEditingController();
+
 
   // Reactive variables
   RxBool isLoading = true.obs;
