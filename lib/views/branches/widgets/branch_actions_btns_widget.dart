@@ -36,54 +36,30 @@ Widget addBranchButton(BuildContext context) {
 Widget editBranchButton(BuildContext context, String branchId) {
   final colorScheme = Theme.of(context).colorScheme;
 
-  return CustomButton(
-      color: colorScheme.primary,
-      text: Row(
-        children: [
-          Icon(
-            Icons.edit,
-            color: colorScheme.surface,
-          ),
-          const SizedBox(
-            width: 6,
-          ),
-          Text(
-            "Editar sucursal",
-            style: CustomStyle.textStyleWhite(context),
-          )
-        ],
-      ),
-      isLoading: false,
-      onPress: () async {
+  return IconButton(
+      onPressed: () {
         Navigator.pushNamed(context, RouteConstants.manageBranch, arguments: {
           'title': "Editar sucursal",
           'branchId': branchId,
         });
-      });
+      },
+      icon: Icon(
+        Icons.edit,
+        color: colorScheme.primary,
+        size: 20,
+      ));
 }
 
 Widget deleteBranchButton(BuildContext context, BranchModel branch) {
   final colorScheme = Theme.of(context).colorScheme;
 
-  return CustomButton(
-      color: colorScheme.error,
-      text: Row(
-        children: [
-          Icon(
-            Icons.delete,
-            color: colorScheme.surface,
-          ),
-          const SizedBox(
-            width: 6,
-          ),
-          Text(
-            "Eliminar sucursal",
-            style: CustomStyle.textStyleWhite(context),
-          )
-        ],
-      ),
-      isLoading: false,
-      onPress: () async {
+  return IconButton(
+      onPressed: () {
         deleteBranchModal(context: context, branch: branch);
-      });
+      },
+      icon: Icon(
+        Icons.delete,
+        color: colorScheme.error,
+        size: 20,
+      ));
 }

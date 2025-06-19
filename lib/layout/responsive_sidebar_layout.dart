@@ -9,6 +9,7 @@ class ResponsiveSidebarLayout extends StatelessWidget {
   final String currentRoute;
   final String userRole;
   final String description;
+  final bool showBackButton;
 
   const ResponsiveSidebarLayout(
       {super.key,
@@ -16,7 +17,8 @@ class ResponsiveSidebarLayout extends StatelessWidget {
       required this.title,
       required this.currentRoute,
       required this.userRole,
-      this.description = ""});
+      this.description = "",
+      this.showBackButton = false});
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +32,28 @@ class ResponsiveSidebarLayout extends StatelessWidget {
           //   title,
           //   style: TextStyle(color: colorScheme.surface),
           // ),
+          leading: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (showBackButton)
+                IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Navega hacia atrás
+                  },
+                ),
+              if (constraints.maxWidth <= 600)
+                IconButton(
+                  icon: const Icon(Icons.menu),
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer(); // Abre el menú lateral
+                  },
+                ),
+            ],
+          ),
           backgroundColor: colorScheme.primary,
           elevation: 0.5,
-          automaticallyImplyLeading: constraints.maxWidth <= 600,
+          automaticallyImplyLeading: false,
           iconTheme: IconThemeData(color: colorScheme.surface),
         );
 

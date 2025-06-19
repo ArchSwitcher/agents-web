@@ -14,16 +14,17 @@ class BranchService extends BaseService implements CrudService<BranchModel> {
       headers: buildHeaders(),
     );
 
-    if (response.statusCode == 200) {
+    try {
+      if (response.statusCode == 200) {
       final decoded = json.decode(response.body);
       final List data = decoded['data'];
       return data.map((json) => BranchModel.fromJson(json)).toList();
     } else {
-      ToastService.error(
-        title: "Sucursales",
-        subTitle: "Error al cargar sucursales",
-      );
       throw Exception('Error al cargar sucursales');
+    }
+    } catch (e) {
+      print("objects: error ---- $e");
+      throw Exception('Error al cargar sucursales: $e');
     }
   }
 

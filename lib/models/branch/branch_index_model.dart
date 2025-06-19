@@ -57,8 +57,8 @@ class BranchModel {
     required this.billInfo,
   });
 
-  factory BranchModel.fromJson(Map<String, dynamic> json) {
-    final data = json['data'];
+  factory BranchModel.fromJson(Map<String, dynamic> data) {
+    // final data = json['data'];
 
     return BranchModel(
       id: data['id'].toString(),

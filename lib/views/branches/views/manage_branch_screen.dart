@@ -75,6 +75,7 @@ class ManageBranchScreenState extends State<ManageBranchScreen> {
       title: "Administrar Sucursal",
       currentRoute: RouteConstants.branches,
       userRole: "admin",
+      showBackButton: true,
       content: SingleChildScrollView(
         child: Form(
           child: Column(

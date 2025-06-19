@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/layout/contect_card_space.dart';
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
@@ -22,7 +23,10 @@ class BranchesScreen extends StatefulWidget {
 
 class _BranchesScreenState extends State<BranchesScreen> {
   final BranchController controller = Get.put(BranchController());
+  final loader = Get.find<LoaderController>();
+
   final List<String> headers = [
+    "",
     'Cliente',
     'Sucursal',
     'Latitud',
@@ -35,6 +39,38 @@ class _BranchesScreenState extends State<BranchesScreen> {
     'Tipo de Facturación',
     'Tipo de Generación'
   ];
+  final List<double?> fixedColumnWidths = [
+    100,
+    120,
+    120,
+    120,
+    120,
+    120,
+    150,
+    150,
+    150,
+    150,
+    150,
+    150
+  ];
+
+  
+
+  start() async {
+    loader.show();
+    await Future.delayed(const Duration(seconds: 1));
+    await controller.fetchBranches();
+    loader.hide();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      start();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,10 +113,10 @@ class _BranchesScreenState extends State<BranchesScreen> {
               cardContentSpace(),
               ContentCard(child: Obx(() {
                 return CustomDataTableWidgetV2(
-                    minWidth: 500,
+                    minWidth: 1680,
                     dynamicHeight: false,
-                    tableHeight: TableHelper.getTableHeight([]),
-                    //fixedColumnWidths: fixedColumnWidths,
+                    tableHeight: TableHelper.getTableHeight(controller.branches),
+                    fixedColumnWidths: fixedColumnWidths,
                     //columnSizes: columnSizes,
                     tableHeaders: headers,
                     tableRows: buildTableRowsBranches(controller, context));
