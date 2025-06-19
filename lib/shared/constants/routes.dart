@@ -4,5 +4,6 @@ static const agents =  "/agents";
 static const clients =  "/clients";
 static const groups =  "/groups";
 static const branches =  "/branches";
+static const manageBranch =  "/manage-branch";
 
 }

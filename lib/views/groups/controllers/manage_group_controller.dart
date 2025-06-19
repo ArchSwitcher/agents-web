@@ -12,6 +12,7 @@ class ManageGroupController extends GetxController {
 
 
   Future<void> fetchGroups() async {
+    RxBool isLoading = true.obs;
     try {
       final data = await GroupService.fetchGroups();
       groups.value = data;

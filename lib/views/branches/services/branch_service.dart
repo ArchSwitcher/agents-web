@@ -3,11 +3,10 @@ import 'dart:convert';
 import 'package:agents_app/models/branch/branch_index_model.dart';
 import 'package:agents_app/services/base_service.dart';
 import 'package:agents_app/services/crud_service.dart';
+import 'package:agents_app/services/toast_service.dart';
 import 'package:http/http.dart' as http;
 
-abstract class BranchService extends BaseService
-    implements CrudService<BranchModel> {
-
+class BranchService extends BaseService implements CrudService<BranchModel> {
   @override
   Future<List<BranchModel>> getAll() async {
     final response = await http.get(
@@ -20,6 +19,10 @@ abstract class BranchService extends BaseService
       final List data = decoded['data'];
       return data.map((json) => BranchModel.fromJson(json)).toList();
     } else {
+      ToastService.error(
+        title: "Sucursales",
+        subTitle: "Error al cargar sucursales",
+      );
       throw Exception('Error al cargar sucursales');
     }
   }
@@ -35,6 +38,10 @@ abstract class BranchService extends BaseService
       final data = json.decode(response.body)['data'];
       return BranchModel.fromJson(data);
     } else {
+      ToastService.error(
+        title: "Sucursal",
+        subTitle: "Error al cargar sucursal",
+      );
       throw Exception('Sucursal no encontrada');
     }
   }
@@ -48,8 +55,16 @@ abstract class BranchService extends BaseService
     );
 
     if (response.statusCode == 200) {
+      ToastService.success(
+        title: "Sucursal",
+        subTitle: "Sucursal creada correctamente",
+      );
       return true;
     } else {
+      ToastService.error(
+        title: "Sucursal",
+        subTitle: "Error al crear sucursal",
+      );
       throw Exception('Error al crear sucursal');
     }
   }
@@ -63,8 +78,16 @@ abstract class BranchService extends BaseService
     );
 
     if (response.statusCode == 200) {
+      ToastService.success(
+        title: "Sucursal",
+        subTitle: "Sucursal actualizada correctamente",
+      );
       return true;
     } else {
+      ToastService.error(
+        title: "Sucursal",
+        subTitle: "Error al actualizar sucursal",
+      );
       throw Exception('Error al actualizar sucursal');
     }
   }
@@ -77,8 +100,16 @@ abstract class BranchService extends BaseService
     );
 
     if (response.statusCode == 200) {
+      ToastService.success(
+        title: "Sucursal",
+        subTitle: "Sucursal eliminada correctamente",
+      );
       return true;
     } else {
+      ToastService.error(
+        title: "Sucursal",
+        subTitle: "Error al eliminar sucursal",
+      );
       throw Exception('Error al eliminar sucursal');
     }
   }

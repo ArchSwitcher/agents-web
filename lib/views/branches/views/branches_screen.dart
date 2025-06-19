@@ -5,6 +5,9 @@ import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/helpers/table/index.dart';
+import 'package:agents_app/views/branches/controller/branch_controller.dart';
+import 'package:agents_app/views/branches/widgets/branch_actions_btns_widget.dart';
+import 'package:agents_app/views/branches/widgets/branch_table_row_widget.dart';
 import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
 import 'package:agents_app/widgets/datatable/filter_box.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +21,21 @@ class BranchesScreen extends StatefulWidget {
 }
 
 class _BranchesScreenState extends State<BranchesScreen> {
+  final BranchController controller = Get.put(BranchController());
+  final List<String> headers = [
+    'Cliente',
+    'Sucursal',
+    'Latitud',
+    'Longitud',
+    'NIT',
+    'Jefe de Territorio',
+    'Dirección Fiscal',
+    'Dirección de Pago',
+    'Dirección Comercial',
+    'Tipo de Facturación',
+    'Tipo de Generación'
+  ];
+
   @override
   Widget build(BuildContext context) {
     return ResponsiveSidebarLayout(
@@ -50,7 +68,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
                         label: "Buscar sucursal",
                       ),
                     ),
-                    const SizedBox(width: 160, child: Text("button"))
+                    SizedBox(width: 160, child: addBranchButton(context)),
                   ],
                 ),
               ),
@@ -64,8 +82,8 @@ class _BranchesScreenState extends State<BranchesScreen> {
                     tableHeight: TableHelper.getTableHeight([]),
                     //fixedColumnWidths: fixedColumnWidths,
                     //columnSizes: columnSizes,
-                    tableHeaders: const [],
-                    tableRows: const []);
+                    tableHeaders: headers,
+                    tableRows: buildTableRowsBranches(controller, context));
               }))
             ],
           ),

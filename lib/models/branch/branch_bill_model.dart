@@ -1,27 +1,33 @@
+import 'package:agents_app/models/branch/branch_index_model.dart';
+
 class BillInfoBranch {
   int? billCollectorId;
-  String billingType;
-  String generationType;
+  SimpleEntity? billingType;
+  SimpleEntity? generationType;
 
   BillInfoBranch({
     this.billCollectorId,
-    required this.billingType,
-    required this.generationType,
+    this.billingType,
+    this.generationType,
   });
 
   factory BillInfoBranch.fromNestedJson(Map<String, dynamic> json) {
     return BillInfoBranch(
       billCollectorId: json['billCollector']?['id'],
-      billingType: json['billingType']['id'].toString(),
-      generationType: json['generationType']['id'].toString(),
+      billingType: json['billingType'] != null
+          ? SimpleEntity.fromJson(json['billingType'])
+          : null,
+      generationType: json['generationType'] != null
+          ? SimpleEntity.fromJson(json['generationType'])
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       "billCollectorId": billCollectorId,
-      "billingType": billingType,
-      "generationType": generationType,
+      "billingType": billingType?.id.toString(),
+      "generationType": generationType?.id.toString(),
     };
   }
 }
