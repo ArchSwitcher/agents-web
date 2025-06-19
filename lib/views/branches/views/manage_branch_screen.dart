@@ -3,8 +3,10 @@ import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
 import 'package:agents_app/models/branch/branch_index_model.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
+import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/constants/database_constants.dart';
 import 'package:agents_app/shared/constants/routes.dart';
+import 'package:agents_app/shared/helpers/validations/not_empty.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/views/branches/controller/branch_controller.dart';
 import 'package:agents_app/widgets/buttons/custom_button.dart';
@@ -27,6 +29,7 @@ class ManageBranchScreen extends StatefulWidget {
 
 class ManageBranchScreenState extends State<ManageBranchScreen> {
   final BranchController controller = Get.put(BranchController());
+  final formKey = GlobalKey<FormState>();
 
   void start() async {
     await controller.groupController.fetchGroups();
@@ -59,6 +62,8 @@ class ManageBranchScreenState extends State<ManageBranchScreen> {
     await controller.genericListController.fetchCountries();
     await controller.genericListController.fetchDepartments();
     await controller.genericListController.fetchZones();
+    await controller.genericListController.fetchClassification();
+    await controller.genericListController.fetchFactories();
   }
 
   @override
@@ -78,6 +83,7 @@ class ManageBranchScreenState extends State<ManageBranchScreen> {
       showBackButton: true,
       content: SingleChildScrollView(
         child: Form(
+          key: formKey,
           child: Column(
             children: [
               ContentCard(
@@ -126,7 +132,7 @@ class ManageBranchScreenState extends State<ManageBranchScreen> {
                                     return null;
                                   },
                                   label: "Grupo",
-                                  hintText: "Seleccione un grupo",
+                                  hintText: "Grupo",
                                   onFocusChange: (hasFocus) {},
                                   resetClean: (clean) {
                                     controller.groupId.value = DropDownOption(
@@ -183,7 +189,7 @@ class ManageBranchScreenState extends State<ManageBranchScreen> {
                                   return null;
                                 },
                                 label: "Cliente-Empresa",
-                                hintText: "Seleccione un cliente",
+                                hintText: "Cliente",
                                 onFocusChange: (hasFocus) {},
                                 resetClean: (clean) {
                                   controller.client.value = DropDownOption(
@@ -283,31 +289,141 @@ class ManageBranchScreenState extends State<ManageBranchScreen> {
               ),
               cardContentSpace(),
               ContentCard(
+                  child: Column(
+                children: [
+                  LayoutBuilder(builder: (context, constraints) {
+                    final isWideScreen = constraints.maxWidth > 600;
+                    final width = isWideScreen
+                        ? (constraints.maxWidth / 4) - 40
+                        : constraints.maxWidth - 40;
+                    return Wrap(
+                      spacing: 30,
+                      runSpacing: 20,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      alignment: WrapAlignment.spaceBetween,
+                      direction: isWideScreen ? Axis.horizontal : Axis.vertical,
+                      children: [
+                        Obx(() {
+                          if (controller.genericListController
+                              .isLoadingClassification.value) {
+                            return SizedBox(
+                                width: width,
+                                child: const Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Loading()));
+                          }
+                          return SizedBox(
+                            width: width,
+                            child: AutocompleteDropdownWidget(
+                              enabled: true,
+                              listItems: controller
+                                  .genericListController.classification,
+                              onSelected: (DropDownOption option) {
+                                controller.classification.value = option;
+                              },
+                              label: "Clasificación",
+                              hintText: "Clasificación",
+                              onFocusChange: (hasFocus) {},
+                              resetClean: (clean) {
+                                controller.classification.value =
+                                    DropDownOption(
+                                  id: '',
+                                  label: 'Seleccione una clasificación',
+                                );
+                              },
+                              onTextChange: (text) async {
+                                List<DropDownOption> filteredOptions =
+                                    controller
+                                        .genericListController.classification
+                                        .where((option) => option.label
+                                            .toLowerCase()
+                                            .contains(text.toLowerCase()))
+                                        .toList();
+                                return filteredOptions.isEmpty
+                                    ? [
+                                        DropDownOption(
+                                            id: '', label: 'No hay resultados')
+                                      ]
+                                    : filteredOptions;
+                              },
+                            ),
+                          );
+                        }),
+                        Obx(() {
+                          if (controller
+                              .genericListController.isLoadingFactory.value) {
+                            return SizedBox(
+                                width: width,
+                                child: const Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Loading()));
+                          }
+                          return SizedBox(
+                            width: width,
+                            child: AutocompleteDropdownWidget(
+                              enabled: true,
+                              listItems:
+                                  controller.genericListController.factories,
+                              onSelected: (DropDownOption option) {
+                                controller.factory.value = option;
+                              },
+                              label: "Fábrica",
+                              hintText: "Fábrica",
+                              onFocusChange: (hasFocus) {},
+                              resetClean: (clean) {
+                                controller.factory.value = DropDownOption(
+                                  id: '',
+                                  label: 'Seleccione una fábrica',
+                                );
+                              },
+                              onTextChange: (text) async {
+                                List<DropDownOption> filteredOptions =
+                                    controller.genericListController.factories
+                                        .where((option) => option.label
+                                            .toLowerCase()
+                                            .contains(text.toLowerCase()))
+                                        .toList();
+                                return filteredOptions.isEmpty
+                                    ? [
+                                        DropDownOption(
+                                            id: '', label: 'No hay resultados')
+                                      ]
+                                    : filteredOptions;
+                              },
+                            ),
+                          );
+                        }),
+                        SizedBox(
+                          width: width,
+                          child: CustomInputWidget(
+                            controller: controller.latitudeController,
+                            label: "Latitud",
+                            hintText: "Ingrese la latitud",
+                            validator: (value) => notEmptyFieldValidator(value),
+                            prefixIcon: Icons.location_on,
+                          ),
+                        ),
+                        SizedBox(
+                          width: width,
+                          child: CustomInputWidget(
+                            controller: controller.longitudeController,
+                            validator: (value) => notEmptyFieldValidator(value),
+                            label: "Longitud",
+                            hintText: "Ingrese la longitud",
+                            prefixIcon: Icons.location_on,
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
+                ],
+              )),
+              cardContentSpace(),
+              ContentCard(
                 child: Column(
                   children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Dirección física",
-                        style: CustomStyle.hintTextStyleBlack(context),
-                      ),
-                    ),
                     _physicalAddressSection(controller),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Dirección fiscal",
-                        style: CustomStyle.hintTextStyleBlack(context),
-                      ),
-                    ),
                     _fiscalAddressSection(controller),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Dirección de cobro",
-                        style: CustomStyle.hintTextStyleBlack(context),
-                      ),
-                    ),
                     _paymentAddressSection(controller)
                   ],
                 ),
@@ -349,7 +465,7 @@ class ManageBranchScreenState extends State<ManageBranchScreen> {
                                 controller.adviser.value = option;
                               },
                               label: "Asesor",
-                              hintText: "Seleccione un asesor",
+                              hintText: "Asesor",
                               onFocusChange: (hasFocus) {},
                               resetClean: (clean) {
                                 controller.adviser.value = DropDownOption(
@@ -399,7 +515,7 @@ class ManageBranchScreenState extends State<ManageBranchScreen> {
                                 controller.territoryManager.value = option;
                               },
                               label: "Gerente de Territorio",
-                              hintText: "Seleccione un gerente de territorio",
+                              hintText: "Gerente de territorio",
                               onFocusChange: (hasFocus) {},
                               resetClean: (clean) {
                                 controller.territoryManager.value =
@@ -450,7 +566,7 @@ class ManageBranchScreenState extends State<ManageBranchScreen> {
                               },
 
                               label: "Jefe de Cuenta",
-                              hintText: "Seleccione un jefe de cuenta",
+                              hintText: "Jefe de cuenta",
                               onFocusChange: (hasFocus) {},
                               resetClean: (clean) {
                                 controller.accountBoss.value = DropDownOption(
@@ -511,7 +627,7 @@ class ManageBranchScreenState extends State<ManageBranchScreen> {
                                 controller.billPerson.value = option;
                               },
                               label: "Cobrador",
-                              hintText: "Seleccione un cobrador",
+                              hintText: "Cobrador",
                               onFocusChange: (hasFocus) {},
                               resetClean: (clean) {
                                 controller.billPerson.value = DropDownOption(
@@ -559,7 +675,7 @@ class ManageBranchScreenState extends State<ManageBranchScreen> {
                                 controller.billingType.value = option;
                               },
                               label: "Tipo de Facturación",
-                              hintText: "Seleccione un tipo de facturación",
+                              hintText: "Tipo de facturación",
                               onFocusChange: (hasFocus) {},
                               resetClean: (clean) {
                                 controller.billingType.value = DropDownOption(
@@ -608,15 +724,13 @@ class ManageBranchScreenState extends State<ManageBranchScreen> {
                                 controller.generationType.value = option;
                               },
                               label: "Tipo de Generación",
-                              hintText:
-                                  "Seleccione un tipo de generación de energía",
+                              hintText: "Tipo de generación",
                               onFocusChange: (hasFocus) {},
                               resetClean: (clean) {
                                 controller.generationType.value =
                                     DropDownOption(
                                   id: '',
-                                  label:
-                                      'Seleccione un tipo de generación de energía',
+                                  label: 'Seleccione un tipo de generación',
                                 );
                               },
                               onTextChange: (text) async {
@@ -681,7 +795,17 @@ class ManageBranchScreenState extends State<ManageBranchScreen> {
                             style: CustomStyle.textStyleWhite(context),
                           ),
                           isLoading: false,
-                          onPress: () {})),
+                          onPress: () async {
+                            if (formKey.currentState!.validate()) {
+                              await controller.createBranch();
+                              Navigator.pop(context);
+                            } else {
+                              ToastService.warning(
+                                  title: "Validación",
+                                  subTitle:
+                                      "Por favor, complete todos los campos obligatorios.");
+                            }
+                          })),
                 ],
               )),
               cardContentSpace(),
@@ -693,6 +817,8 @@ class ManageBranchScreenState extends State<ManageBranchScreen> {
     );
   }
 }
+
+/////////////////////// sections  //////////////////////////////////////
 
 Widget _physicalAddressSection(BranchController controller) {
   return LayoutBuilder(builder: (context, constraints) {
@@ -708,14 +834,15 @@ Widget _physicalAddressSection(BranchController controller) {
       direction: isWideScreen ? Axis.horizontal : Axis.vertical,
       children: [
         LoadingAutocompleteDropdown(
+          prefixIcon: Icons.location_on,
           enabled: true,
           isLoading: controller.genericListController.isLoadingCountry,
           listItems: controller.genericListController.countries,
           onSelected: (DropDownOption option) {
             controller.fiscalCountry.value = option;
           },
-          label: "País",
-          hintText: "Seleccione un país",
+          label: "Dirección física",
+          hintText: "País",
           resetValue: controller.fiscalCountry,
           width: width,
           onTextChange: (text) async {
@@ -732,14 +859,15 @@ Widget _physicalAddressSection(BranchController controller) {
 
         // LoadingAutocompleteDropdown for Department
         LoadingAutocompleteDropdown(
+          prefixIcon: Icons.location_city,
           enabled: true,
           isLoading: controller.genericListController.isLoadingCity,
           listItems: controller.genericListController.departments,
           onSelected: (DropDownOption option) {
             controller.fiscalDepartment.value = option;
           },
-          label: "Departamento",
-          hintText: "Seleccione un departamento",
+          label: "",
+          hintText: "Departamento",
           resetValue: controller.fiscalDepartment,
           width: width,
           onTextChange: (text) async {
@@ -756,14 +884,15 @@ Widget _physicalAddressSection(BranchController controller) {
 
         // LoadingAutocompleteDropdown for Zone
         LoadingAutocompleteDropdown(
+          prefixIcon: Icons.map,
           enabled: true,
           isLoading: controller.genericListController.isLoadingZone,
           listItems: controller.genericListController.zones,
           onSelected: (DropDownOption option) {
             controller.fiscalZone.value = option;
           },
-          label: "Zona",
-          hintText: "Seleccione una zona",
+          label: "",
+          hintText: "Zona",
           resetValue: controller.fiscalZone,
           width: width,
           onTextChange: (text) async {
@@ -781,8 +910,8 @@ Widget _physicalAddressSection(BranchController controller) {
           width: width,
           child: CustomInputWidget(
             controller: controller.physicalAddress,
-            label: "Dirección",
-            hintText: "Ingrese la dirección",
+            label: "",
+            hintText: "Dirección",
             prefixIcon: Icons.location_on,
           ),
         ),
@@ -805,14 +934,15 @@ Widget _fiscalAddressSection(BranchController controller) {
       direction: isWideScreen ? Axis.horizontal : Axis.vertical,
       children: [
         LoadingAutocompleteDropdown(
+          prefixIcon: Icons.location_on,
           enabled: true,
           isLoading: controller.genericListController.isLoadingCountry,
           listItems: controller.genericListController.countries,
           onSelected: (DropDownOption option) {
             controller.physicalCountry.value = option;
           },
-          label: "País",
-          hintText: "Seleccione un país",
+          label: "Dirección fiscal",
+          hintText: "País",
           resetValue: controller.physicalCountry,
           width: width,
           onTextChange: (text) async {
@@ -829,14 +959,15 @@ Widget _fiscalAddressSection(BranchController controller) {
 
         // LoadingAutocompleteDropdown for Department
         LoadingAutocompleteDropdown(
+          prefixIcon: Icons.location_city,
           enabled: true,
           isLoading: controller.genericListController.isLoadingCity,
           listItems: controller.genericListController.departments,
           onSelected: (DropDownOption option) {
             controller.physicalDepartment.value = option;
           },
-          label: "Departamento",
-          hintText: "Seleccione un departamento",
+          label: "",
+          hintText: "Departamento",
           resetValue: controller.physicalDepartment,
           width: width,
           onTextChange: (text) async {
@@ -853,14 +984,15 @@ Widget _fiscalAddressSection(BranchController controller) {
 
         // LoadingAutocompleteDropdown for Zone
         LoadingAutocompleteDropdown(
+          prefixIcon: Icons.map,
           enabled: true,
           isLoading: controller.genericListController.isLoadingZone,
           listItems: controller.genericListController.zones,
           onSelected: (DropDownOption option) {
             controller.physicalZone.value = option;
           },
-          label: "Zona",
-          hintText: "Seleccione una zona",
+          label: "",
+          hintText: "Zona",
           resetValue: controller.physicalZone,
           width: width,
           onTextChange: (text) async {
@@ -877,8 +1009,8 @@ Widget _fiscalAddressSection(BranchController controller) {
         SizedBox(
           width: width,
           child: CustomInputWidget(
-            controller: controller.physicalAddress,
-            label: "Dirección",
+            controller: controller.fiscalAddress,
+            label: "",
             hintText: "Ingrese la dirección",
             prefixIcon: Icons.location_on,
           ),
@@ -902,14 +1034,15 @@ Widget _paymentAddressSection(BranchController controller) {
       direction: isWideScreen ? Axis.horizontal : Axis.vertical,
       children: [
         LoadingAutocompleteDropdown(
+          prefixIcon: Icons.location_on,
           enabled: true,
           isLoading: controller.genericListController.isLoadingCountry,
           listItems: controller.genericListController.countries,
           onSelected: (DropDownOption option) {
             controller.paymentCountry.value = option;
           },
-          label: "País",
-          hintText: "Seleccione un país",
+          label: "Dirección de cobro",
+          hintText: "País",
           resetValue: controller.paymentCountry,
           width: width,
           onTextChange: (text) async {
@@ -926,14 +1059,15 @@ Widget _paymentAddressSection(BranchController controller) {
 
         // LoadingAutocompleteDropdown for Department
         LoadingAutocompleteDropdown(
+          prefixIcon: Icons.location_city,
           enabled: true,
           isLoading: controller.genericListController.isLoadingCity,
           listItems: controller.genericListController.departments,
           onSelected: (DropDownOption option) {
             controller.paymentDepartment.value = option;
           },
-          label: "Departamento",
-          hintText: "Seleccione un departamento",
+          label: "",
+          hintText: "Departamento",
           resetValue: controller.paymentDepartment,
           width: width,
           onTextChange: (text) async {
@@ -950,14 +1084,15 @@ Widget _paymentAddressSection(BranchController controller) {
 
         // LoadingAutocompleteDropdown for Zone
         LoadingAutocompleteDropdown(
+          prefixIcon: Icons.map,
           enabled: true,
           isLoading: controller.genericListController.isLoadingZone,
           listItems: controller.genericListController.zones,
           onSelected: (DropDownOption option) {
             controller.paymentZone.value = option;
           },
-          label: "Zona",
-          hintText: "Seleccione una zona",
+          label: "",
+          hintText: "Zona",
           resetValue: controller.paymentZone,
           width: width,
           onTextChange: (text) async {
@@ -975,7 +1110,7 @@ Widget _paymentAddressSection(BranchController controller) {
           width: width,
           child: CustomInputWidget(
             controller: controller.paymentAddress,
-            label: "Dirección",
+            label: "",
             hintText: "Ingrese la dirección",
             prefixIcon: Icons.location_on,
           ),

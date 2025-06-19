@@ -1,4 +1,6 @@
 import 'package:agents_app/controllers/generic_list_controller.dart';
+import 'package:agents_app/models/branch/branch_address_model.dart';
+import 'package:agents_app/models/branch/branch_bill_model.dart';
 import 'package:agents_app/models/branch/branch_index_model.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/services/employee_dropdown_service.dart';
@@ -29,7 +31,6 @@ class BranchController extends GetxController {
   final nameController = TextEditingController();
   final nitController = TextEditingController();
   final socialReasonController = TextEditingController();
-  final urlController = TextEditingController(text: "");
   final TextEditingController latitudeController = TextEditingController();
   final TextEditingController longitudeController = TextEditingController();
   Rx<DropDownOption> groupId =
@@ -105,6 +106,51 @@ class BranchController extends GetxController {
   final RxBool isLoadingClients = true.obs;
   final RxBool isLoadingGroups = true.obs;
 
+  get branchValues {
+    return BranchModel(
+      codeGp: codeGpController.text,
+      branchName: nameController.text,
+      nit: nitController.text,
+      latitude: latitudeController.text.isNotEmpty
+          ? double.parse(latitudeController.text)
+          : 0.0,
+      longitude: longitudeController.text.isNotEmpty
+          ? double.parse(longitudeController.text)
+          : 0.0,
+      clientId: client.value.id,
+      classificationId: classification.value.id,
+      factoryId: factory.value.id,
+      accountBossId: accountBoss.value.id,
+      adviserId: adviser.value.id,
+      territoryBossId: territoryManager.value.id,
+      businessAddress: AddressBranch(
+        countryId: physicalCountry.value.id,
+        departmentId: physicalDepartment.value.id,
+        zone: physicalZone.value.id,
+        address: physicalAddress.text,
+      ),
+      fiscalAddress: AddressBranch(
+        countryId: fiscalCountry.value.id,
+        departmentId: fiscalDepartment.value.id,
+        zone: fiscalZone.value.id,
+        address: fiscalAddress.text,
+      ),
+      paymentAddress: AddressBranch(
+        countryId: paymentCountry.value.id,
+        departmentId: paymentDepartment.value.id,
+        zone: paymentZone.value.id,
+        address: paymentAddress.text,
+      ),
+      billInfo: BillInfoBranch(
+        billCollectorId: billPerson.value.id,
+        billingType: SimpleEntity(
+            id: billingType.value.id, name: billingType.value.label),
+        generationType: SimpleEntity(
+            id: generationType.value.id, name: generationType.value.label),
+      ),
+    );
+  }
+
   Future<List<DropDownOption>> fetchClients() async {
     try {
       isLoadingClients.value = true;
@@ -174,9 +220,10 @@ class BranchController extends GetxController {
   }
 
   // create branch
-  Future<bool> createBranch(BranchModel branch) async {
+  Future<bool> createBranch() async {
     try {
-      final success = await _branchService.create(branch);
+      print("objects: branch values ---- ${branchValues}");
+      final success = await _branchService.create(branchValues);
       if (success) {
         ToastService.success(
           title: "Sucursal",
@@ -217,11 +264,13 @@ class BranchController extends GetxController {
 
   @override
   void onClose() {
+    // clean all controller
     codeGpController.dispose();
     nameController.dispose();
     nitController.dispose();
     socialReasonController.dispose();
-    urlController.dispose();
+    latitudeController.dispose();
+    longitudeController.dispose();
     super.onClose();
   }
 }

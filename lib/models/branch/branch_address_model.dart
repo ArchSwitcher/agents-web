@@ -1,8 +1,8 @@
 class AddressBranch {
   String address;
-  int departmentId;
-  int countryId;
-  int zone;
+  String departmentId;
+  String countryId;
+  String zone;
 
   AddressBranch({
     required this.address,
@@ -14,9 +14,9 @@ class AddressBranch {
   factory AddressBranch.fromNestedJson(Map<String, dynamic> json) {
     return AddressBranch(
       address: json['address'],
-      departmentId: json['department']['id'],
-      countryId: json['country']['id'],
-      zone: json['zone']['id'],
+      departmentId: json['department']['id'] != null ? json['department']['id'].toString() : '',
+      countryId: json['country']['id'] != null ? json['country']['id'].toString() : '',
+      zone: json['zone']['id'] != null ? json['zone']['id'].toString() : '',
     );
   }
 

@@ -9,22 +9,22 @@ class BranchModel {
   double latitude;
   double longitude;
 
-  int clientId;
+  String clientId;
   SimpleEntity? client;
 
-  int classificationId;
+  String classificationId;
   SimpleEntity? classification;
 
-  int factoryId;
+  String factoryId;
   SimpleEntity? factory;
 
-  int accountBossId;
+  String accountBossId;
   SimpleEntity? accountBoss;
 
-  int adviserId;
+  String adviserId;
   SimpleEntity? adviser;
 
-  int territoryBossId;
+  String territoryBossId;
   SimpleEntity? territoryBoss;
 
   AddressBranch businessAddress;
@@ -67,17 +67,17 @@ class BranchModel {
       nit: data['nit'],
       latitude: double.parse(data['latitude']),
       longitude: double.parse(data['longitude']),
-      clientId: data['client']['id'],
+      clientId: data['client']['id'] != null ? data['client']['id'].toString() : '',
       client: SimpleEntity.fromJson(data['client']),
-      classificationId: data['classification']['id'],
+      classificationId: data['classification']['id'] != null ? data['classification']['id'].toString() : '',
       classification: SimpleEntity.fromJson(data['classification']),
-      factoryId: data['factory']['id'],
+      factoryId: data['factory']['id'] != null ? data['factory']['id'].toString() : '',
       factory: SimpleEntity.fromJson(data['factory']),
-      accountBossId: data['accountBoss']['id'],
+      accountBossId: data['accountBoss']['id'] != null ? data['accountBoss']['id'].toString() : '',
       accountBoss: SimpleEntity.fromJson(data['accountBoss']),
-      adviserId: data['adviser']['id'],
+      adviserId: data['adviser']['id'] != null ? data['adviser']['id'].toString() : '',
       adviser: SimpleEntity.fromJson(data['adviser']),
-      territoryBossId: data['territoryBoss']['id'],
+      territoryBossId: data['territoryBoss']['id'] != null ? data['territoryBoss']['id'].toString() : '',
       territoryBoss: SimpleEntity.fromJson(data['territoryBoss']),
       businessAddress: AddressBranch.fromNestedJson(data['businessAddress']),
       fiscalAddress: AddressBranch.fromNestedJson(data['fiscalAddress']),
@@ -111,14 +111,14 @@ class BranchModel {
 
 
 class SimpleEntity {
-  final int id;
+  final String id;
   final String name;
 
   SimpleEntity({required this.id, required this.name});
 
   factory SimpleEntity.fromJson(Map<String, dynamic> json) {
     return SimpleEntity(
-      id: json['id'],
+      id: json['id'] != null ? json['id'].toString() : '',
       name: json['name'],
     );
   }

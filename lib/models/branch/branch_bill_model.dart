@@ -1,7 +1,7 @@
 import 'package:agents_app/models/branch/branch_index_model.dart';
 
 class BillInfoBranch {
-  int? billCollectorId;
+  String? billCollectorId;
   SimpleEntity? billingType;
   SimpleEntity? generationType;
 

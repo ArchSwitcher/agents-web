@@ -50,10 +50,12 @@ class BranchService extends BaseService implements CrudService<BranchModel> {
   @override
   Future<bool> create(BranchModel item) async {
     final response = await http.post(
-      Uri.parse("$baseUrl/branch/createBranch"),
+      Uri.parse("$baseUrl/branch"),
       headers: buildHeaders(),
       body: jsonEncode(item.toJson()),
     );
+
+    print("objects: response ---- ${item.toJson()}");
 
     if (response.statusCode == 200) {
       ToastService.success(

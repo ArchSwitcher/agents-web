@@ -29,13 +29,13 @@ class GenericListController extends GetxController {
       isLoadingClassification.value = true;
       final data =
           await genericListService.getAll("common/getAllClassification");
-      employees.value = data.map((item) {
+      classification.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
           label: item.name,
         );
       }).toList();
-      return employees;
+      return classification;
     } catch (e) {
       print("Error fetching classification: $e");
       return [];
