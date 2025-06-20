@@ -16,6 +16,7 @@ class MenuSidebarController extends GetxController {
           MenuItemModel(label: "Clientes", route: RouteConstants.clients, icon: Icons.person_outline),
           MenuItemModel(label: "Agentes", route: RouteConstants.agents, icon: Icons.shield_outlined),
           MenuItemModel(label: "Sucursales", route: RouteConstants.branches, icon: Icons.business_sharp),
+          MenuItemModel(label: "Posiciones", route: RouteConstants.positions, icon: Icons.location_on_outlined),
         ]),
         MenuGroupModel(label: "Configuración", children: [
           MenuItemModel(label: "Parámetros", route: "/parametros", icon: Icons.settings),

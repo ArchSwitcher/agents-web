@@ -1,5 +1,6 @@
 import 'package:agents_app/models/branch/branch_address_model.dart';
 import 'package:agents_app/models/branch/branch_bill_model.dart';
+import 'package:agents_app/models/common/simple_entity_model.dart';
 
 class BranchModel {
   String id = '';
@@ -110,16 +111,3 @@ class BranchModel {
 
 
 
-class SimpleEntity {
-  final String id;
-  final String name;
-
-  SimpleEntity({required this.id, required this.name});
-
-  factory SimpleEntity.fromJson(Map<String, dynamic> json) {
-    return SimpleEntity(
-      id: json['id'] != null ? json['id'].toString() : '',
-      name: json['name'],
-    );
-  }
-}

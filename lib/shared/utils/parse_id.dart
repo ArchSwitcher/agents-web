@@ -1,0 +1,1 @@
+String parseId(dynamic value) => value == null ? '' : value.toString().trim();

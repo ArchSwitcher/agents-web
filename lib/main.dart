@@ -12,6 +12,8 @@ import 'package:agents_app/views/groups/views/groups_screen.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/theme/color_pallete.dart';
 import 'package:agents_app/views/login/login_screen.dart';
+import 'package:agents_app/views/positions/views/manage_position_screen.dart';
+import 'package:agents_app/views/positions/views/positions_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -44,7 +46,9 @@ class MyApp extends StatelessWidget {
           GetPage(name: RouteConstants.clients, page: () => const ClientsScreen()),
           GetPage(name: RouteConstants.groups, page: () => const GroupsScreen()),
           GetPage(name: RouteConstants.branches, page: () => const BranchesScreen()),
-          GetPage(name: RouteConstants.manageBranch, page: () => const ManageBranchScreen())
+          GetPage(name: RouteConstants.manageBranch, page: () => const ManageBranchScreen()),
+          GetPage(name: RouteConstants.positions, page: () => const PositionsScreen()),
+          GetPage(name: RouteConstants.managePosition, page: () => const ManagePositionScreen()),
         ],
         theme: appTheme,
       ),

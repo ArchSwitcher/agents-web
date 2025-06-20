@@ -1,4 +1,6 @@
-import 'package:agents_app/models/branch/branch_index_model.dart';
+
+
+import 'package:agents_app/models/common/simple_entity_model.dart';
 
 class BillInfoBranch {
   String? billCollectorId;

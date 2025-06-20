@@ -3,6 +3,7 @@ import 'package:agents_app/models/branch/branch_address_model.dart';
 import 'package:agents_app/models/branch/branch_bill_model.dart';
 import 'package:agents_app/models/branch/branch_index_model.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
+import 'package:agents_app/models/common/simple_entity_model.dart';
 import 'package:agents_app/services/employee_dropdown_service.dart';
 import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/views/branches/services/branch_service.dart';
