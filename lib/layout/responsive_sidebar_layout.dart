@@ -28,10 +28,6 @@ class ResponsiveSidebarLayout extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final appBar = AppBar(
-          // title: Text(
-          //   title,
-          //   style: TextStyle(color: colorScheme.surface),
-          // ),
           leading: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -43,10 +39,15 @@ class ResponsiveSidebarLayout extends StatelessWidget {
                   },
                 ),
               if (constraints.maxWidth <= 600)
-                IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer(); // Abre el menú lateral
+                Builder(
+                  builder: (BuildContext context) {
+                    return IconButton(
+                      icon: const Icon(Icons.menu),
+                      onPressed: () {
+                        Scaffold.of(context)
+                            .openDrawer(); // Abre el menú lateral
+                      },
+                    );
                   },
                 ),
             ],

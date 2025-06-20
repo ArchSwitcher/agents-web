@@ -1,3 +1,4 @@
+import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:agents_app/widgets/commons/loading.dart';
@@ -15,6 +16,7 @@ class LoadingAutocompleteDropdown extends StatelessWidget {
   final Future<List<DropDownOption>> Function(String) onTextChange;
   final bool enabled;
   final IconData prefixIcon;
+  final String loadingText;
 
   const LoadingAutocompleteDropdown({
     super.key,
@@ -28,6 +30,7 @@ class LoadingAutocompleteDropdown extends StatelessWidget {
     required this.enabled,
     required this.onTextChange,
     this.prefixIcon = Icons.person_outline,
+    this.loadingText = '',
 
   });
 
@@ -37,9 +40,15 @@ class LoadingAutocompleteDropdown extends StatelessWidget {
       if (isLoading.value) {
         return SizedBox(
           width: width,
-          child: const Align(
+          child:  Align(
             alignment: Alignment.centerLeft,
-            child: Loading(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(loadingText, style: CustomStyle.hintTextStyleBlack(context),),
+                const Loading(),
+              ],
+            ),
           ),
         );
       }

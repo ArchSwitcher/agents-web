@@ -13,6 +13,13 @@ class GenericListController extends GetxController {
   final RxBool isLoadingBilling = true.obs;
   final RxBool isLoadingGeneration = true.obs;
   final RxBool isLoadingFactory = true.obs;
+  final RxBool isLoadingAgency = true.obs;
+  final RxBool isLoadingCompany = true.obs;
+  final RxBool isLoadingServiceType = true.obs;
+  final RxBool isLoadingShiftTime = true.obs;
+  final RxBool isLoadingTransport = true.obs;
+  final RxBool isLoadingClientsByGroup = true.obs;
+  final RxBool isLoadingBranchByClient = true.obs;
 
   final RxList<DropDownOption> employees = <DropDownOption>[].obs;
   final RxList<DropDownOption> classification = <DropDownOption>[].obs;
@@ -23,6 +30,16 @@ class GenericListController extends GetxController {
   final RxList<DropDownOption> generationTypes = <DropDownOption>[].obs;
   final RxList<DropDownOption> factories = <DropDownOption>[].obs;
   final RxList<DropDownOption> departments = <DropDownOption>[].obs;
+  final RxList<DropDownOption> agencies = <DropDownOption>[].obs;
+  final RxList<DropDownOption> companies = <DropDownOption>[].obs;
+  final RxList<DropDownOption> serviceTypes = <DropDownOption>[].obs;
+  final RxList<DropDownOption> shiftTimes = <DropDownOption>[].obs;
+  final RxList<DropDownOption> transports = <DropDownOption>[].obs;
+  final RxList<DropDownOption> clientsByGroup = <DropDownOption>[].obs;
+  final RxList<DropDownOption> branchesByClient = <DropDownOption>[].obs;
+
+// getAllAgency
+// getAllCompany
 
   Future<List<DropDownOption>> fetchClassification() async {
     try {
@@ -157,6 +174,145 @@ class GenericListController extends GetxController {
       return [];
     } finally {
       isLoadingZone.value = false;
+    }
+  }
+
+  // implementa este metodo  con future  igual al de arriba getAllAgency
+  Future<List<DropDownOption>> getAllAgency() async {
+    try {
+      isLoadingAgency.value = true;
+      final data = await genericListService.getAll("common/getAllAgency");
+      agencies.value = data.map((item) {
+        return DropDownOption(
+          id: item.id.toString(),
+          label: item.name,
+        );
+      }).toList();
+      return agencies;
+    } catch (e) {
+      print("Error fetching agencies: $e");
+      return [];
+    } finally {
+      isLoadingAgency.value = false;
+    }
+  }
+
+  Future<List<DropDownOption>> getAllCompany() async {
+    try {
+      isLoadingCompany.value = true;
+      final data = await genericListService.getAll("common/getAllCompany");
+
+      companies.value = data.map((item) {
+        return DropDownOption(
+          id: item.id.toString(),
+          label: item.name,
+        );
+      }).toList();
+      return companies;
+    } catch (e) {
+      print("Error fetching companies: $e");
+      return [];
+    } finally {
+      isLoadingCompany.value = false;
+    }
+  }
+
+  Future<List<DropDownOption>> getAllServiceType() async {
+    try {
+      isLoadingServiceType.value = true;
+      final data = await genericListService.getAll("common/getAllServiceType");
+      serviceTypes.value = data.map((item) {
+        return DropDownOption(
+          id: item.id.toString(),
+          label: item.name,
+        );
+      }).toList();
+      return serviceTypes;
+    } catch (e) {
+      print("Error fetching service types: $e");
+      return [];
+    } finally {
+      isLoadingServiceType.value = false;
+    }
+  }
+
+  Future<List<DropDownOption>> getAllShiftTime() async {
+    try {
+      isLoadingShiftTime.value = true;
+      final data = await genericListService.getAll("common/getAllShiftTime");
+      shiftTimes.value = data.map((item) {
+        return DropDownOption(
+          id: item.id.toString(),
+          label: item.name,
+        );
+      }).toList();
+      return shiftTimes;
+    } catch (e) {
+      print("Error fetching shift times: $e");
+      return [];
+    } finally {
+      isLoadingShiftTime.value = false;
+    }
+  }
+
+  Future<List<DropDownOption>> getAllTransport() async {
+    try {
+      isLoadingTransport.value = true;
+      final data = await genericListService.getAll("common/getAllTransport");
+      transports.value = data.map((item) {
+        return DropDownOption(
+          id: item.id.toString(),
+          label: item.name,
+        );
+      }).toList();
+      return transports;
+    } catch (e) {
+      print("Error fetching transports: $e");
+      return [];
+    } finally {
+      isLoadingTransport.value = false;
+    }
+  }
+
+  Future<List<DropDownOption>> fetchClientsByGroupId(String groupId) async {
+    try {
+      isLoadingClientsByGroup.value = true;
+      final data =
+          await genericListService.getAll("client/getClientsByGroup/$groupId");
+
+      clientsByGroup.value = data.map((item) {
+        return DropDownOption(
+          id: item.id.toString(),
+          label: item.name,
+        );
+      }).toList();
+      return clientsByGroup;
+    } catch (e) {
+      print("Error fetching clients branches: $e");
+      return [];
+    } finally {
+      isLoadingClientsByGroup.value = false;
+    }
+  }
+
+  Future<List<DropDownOption>> fetchBranchByClientId(String clientId) async {
+    try {
+      isLoadingBranchByClient.value = true;
+      final data =
+          await genericListService.getAll("branch/branchByClient/$clientId");
+
+       branchesByClient.value = data.map((item) {
+        return DropDownOption(
+          id: item.id.toString(),
+          label: item.name,
+        );
+      }).toList();
+      return branchesByClient;
+    } catch (e) {
+      print("Error fetching clients branches: $e");
+      return [];
+    } finally {
+      isLoadingBranchByClient.value = false;
     }
   }
 }
