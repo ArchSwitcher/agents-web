@@ -19,7 +19,7 @@ class CustomDatePicker extends StatefulWidget {
   final bool enabled;
 
   const CustomDatePicker(
-      {Key? key,
+      {super.key,
       required this.initialDate,
       this.firstDate,
       this.lastDate,
@@ -31,14 +31,13 @@ class CustomDatePicker extends StatefulWidget {
       this.validator,
       this.onChange,
       this.onTap,
-      this.enabled = true})
-      : super(key: key);
+      this.enabled = true});
 
   @override
-  _CustomDatePickerState createState() => _CustomDatePickerState();
+  CustomDatePickerState createState() => CustomDatePickerState();
 }
 
-class _CustomDatePickerState extends State<CustomDatePicker> {
+class CustomDatePickerState extends State<CustomDatePicker> {
   late DateTime _selectedDate;
   String formatDate(DateTime date) {
     return DateFormat('yyyy-MM-dd').format(date);
@@ -91,7 +90,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
           enabled: widget.enabled,
           onChanged: widget.onChange,
           readOnly: true,
-          style: CustomStyle.textStyleWhite(context),
+          style: CustomStyle.textStyleBlack(context),
           controller: widget.controller,
           keyboardType: widget.keyboardType,
           validator: widget.validator,
@@ -99,10 +98,10 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
             hintText: widget.hintText,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-            labelStyle: CustomStyle.textStyleWhite(context),
+            labelStyle: CustomStyle.textStyleBlack(context),
             filled: true,
-            fillColor: colorScheme.primary,
-            hintStyle: CustomStyle.textStyleWhite(context),
+            fillColor: colorScheme.surface,
+            hintStyle: CustomStyle.textStyleBlack(context),
             focusedBorder: CustomStyle.focusBorder(context),
             enabledBorder: CustomStyle.focusErrorBorder(context),
             focusedErrorBorder: CustomStyle.focusErrorBorder(context),
