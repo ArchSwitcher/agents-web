@@ -1,6 +1,8 @@
 import 'package:agents_app/controllers/generic_list_controller.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
+import 'package:agents_app/models/position/equipment_model.dart';
 import 'package:agents_app/services/employee_dropdown_service.dart';
+import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/views/groups/controllers/manage_group_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -70,6 +72,8 @@ class PositionController extends GetxController {
   TextEditingController address = TextEditingController();
   TextEditingController observations = TextEditingController();
 
+  final RxList<EquipmentModel> equipmentList = <EquipmentModel>[].obs;
+
   void clearFields() {
     startTime.clear();
     endTime.clear();
@@ -87,6 +91,7 @@ class PositionController extends GetxController {
     subCity.clear();
     address.clear();
     observations.clear();
+    equipmentList.clear();
   }
 
   final weekDays = <WeekDay>[
@@ -152,6 +157,36 @@ class PositionController extends GetxController {
               "endTime": day.endTimeController.text,
             })
         .toList();
+  }
+
+  addEquipment(DropDownOption equipment, String quantity) {
+    if (equipment.id.isEmpty || quantity.isEmpty) {
+      Get.snackbar("Error", "Debe seleccionar un equipo y una cantidad.");
+      return;
+    }
+    ToastService.success(
+        title: "Equipo", subTitle: "Equipo agregado correctamente.");
+
+    equipmentList.add(EquipmentModel(
+        quantity: int.parse(quantity),
+        cost: 0,
+        currency: "GTQ",
+        equipmentTypeId: int.parse(equipment.id)));
+
+    equipmentType.value =
+        DropDownOption(id: '', label: 'Seleccione un tipo de equipo');
+    equipmentQuantity.clear();
+  }
+
+  deleteEquipment(int index) {
+    if (index < 0 || index >= equipmentList.length) {
+      ToastService.warning(
+          title: "Advertencia", subTitle: "Índice de equipo no válido.");
+      return;
+    }
+    equipmentList.removeAt(index);
+    ToastService.success(
+        title: "Equipo", subTitle: "Equipo eliminado correctamente.");
   }
 }
 
