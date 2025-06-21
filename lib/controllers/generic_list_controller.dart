@@ -20,6 +20,7 @@ class GenericListController extends GetxController {
   final RxBool isLoadingTransport = true.obs;
   final RxBool isLoadingClientsByGroup = true.obs;
   final RxBool isLoadingBranchByClient = true.obs;
+  final RxBool isLoadingEquipmentType = true.obs;
 
   final RxList<DropDownOption> employees = <DropDownOption>[].obs;
   final RxList<DropDownOption> classification = <DropDownOption>[].obs;
@@ -37,7 +38,7 @@ class GenericListController extends GetxController {
   final RxList<DropDownOption> transports = <DropDownOption>[].obs;
   final RxList<DropDownOption> clientsByGroup = <DropDownOption>[].obs;
   final RxList<DropDownOption> branchesByClient = <DropDownOption>[].obs;
-
+  final RxList<DropDownOption> equipmentTypes = <DropDownOption>[].obs;
 // getAllAgency
 // getAllCompany
 
@@ -314,6 +315,26 @@ class GenericListController extends GetxController {
       isLoadingBranchByClient.value = false;
     }
   }
+
+ Future<List<DropDownOption>> getAllEquipmentType() async {
+    try {
+      isLoadingEquipmentType.value = true;
+      final data = await genericListService.getAll("common/equipmentType");
+      equipmentTypes.value = data.map((item) {
+        return DropDownOption(
+          id: item.id.toString(),
+          label: item.name,
+        );
+      }).toList();
+      return equipmentTypes;
+    } catch (e) {
+      print("Error fetching equipment types: $e");
+      return [];
+    } finally {
+      isLoadingEquipmentType.value = false;
+    }
+  }
+  
 
   //clean clientsByGroup
   void cleanClientsByGroup() {

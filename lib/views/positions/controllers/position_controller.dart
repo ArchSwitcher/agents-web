@@ -36,6 +36,13 @@ class PositionController extends GetxController {
   final Rx<DropDownOption> serviceType =
       DropDownOption(id: '', label: 'Seleccione un tipo de servicio').obs;
 
+// Equipment related fields
+  final Rx<DropDownOption> equipmentType =
+      DropDownOption(id: '', label: 'Seleccione un tipo de equipo').obs;
+  final TextEditingController equipmentQuantity = TextEditingController();
+
+  // Shift related fields
+
   final Rx<DropDownOption> shiftTime =
       DropDownOption(id: '', label: 'Seleccione un turno').obs;
 
@@ -146,8 +153,6 @@ class PositionController extends GetxController {
             })
         .toList();
   }
-
-
 }
 
 class WeekDay {
@@ -162,6 +167,4 @@ class WeekDay {
     required this.endTimeController,
     required this.isSelected,
   });
-
-
 }

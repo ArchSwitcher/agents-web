@@ -2,6 +2,7 @@ import 'package:agents_app/models/branch/branch_index_model.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/views/positions/controllers/position_controller.dart';
+import 'package:agents_app/views/positions/widgets/equipment_modal_widget.dart';
 import 'package:agents_app/views/positions/widgets/schedule_modal_widget.dart';
 import 'package:agents_app/widgets/buttons/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +92,8 @@ Widget openScheduleModalButton(
   );
 }
 
-Widget manageEquipmentButton(BuildContext context, double width) {
+Widget manageEquipmentButton(
+    BuildContext context, double width, PositionController controller) {
   final colorScheme = Theme.of(context).colorScheme;
 
   return SizedBox(
@@ -110,6 +112,8 @@ Widget manageEquipmentButton(BuildContext context, double width) {
           ],
         ),
         isLoading: false,
-        onPress: () {}),
+        onPress: () {
+          showEquipmentModal(context: context, controller: controller);
+        }),
   );
 }

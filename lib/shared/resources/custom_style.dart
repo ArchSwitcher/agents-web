@@ -84,4 +84,10 @@ class CustomStyle {
         fontSize: 18.5,
         color: Theme.of(context).colorScheme.surface,
       );
+
+  static TextStyle styleBoldLarge(BuildContext context) => TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 20.0,
+        color: Theme.of(context).colorScheme.onSurface,
+      );
 }

@@ -8,6 +8,7 @@ class GenericModal extends StatelessWidget {
   final String title;
   final String acceptText;
   final String cancelText;
+  final String subtitle;
 
   const GenericModal({
     super.key,
@@ -17,6 +18,7 @@ class GenericModal extends StatelessWidget {
     this.title = 'Confirmación',
     this.acceptText = 'Aceptar',
     this.cancelText = 'Cancelar',
+    this.subtitle = '',
   });
 
   @override
@@ -24,27 +26,44 @@ class GenericModal extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     return AlertDialog(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      title: Text(title),
+      // title with title and subtitle
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: CustomStyle.styleBoldLarge(context)),
+          const SizedBox(height: 4),
+          Text(
+            subtitle,
+            style: CustomStyle.hintTextStyleBlack(context),
+          ),
+        ],
+      ),
+
       content: content,
       actions: [
-        TextButton(
-          style: CustomStyle.confirmModalButton(context),
-          onPressed: () {
-            onCancel?.call();
-            Navigator.of(context).pop();
-          },
-          child: Text(cancelText),
-        ),
-        ElevatedButton(
-          style: TextButton.styleFrom(
-            backgroundColor: colorScheme.primaryFixed,
-            foregroundColor: colorScheme.surface
+        SizedBox(
+          width: 100,
+          child: ElevatedButton(
+            style: CustomStyle.confirmModalButton(context),
+            onPressed: () {
+              onCancel?.call();
+              Navigator.of(context).pop();
+            },
+            child: Text(cancelText),
           ),
-          onPressed: () {
-            onAccept?.call();
-            //Navigator.of(context).pop();
-          },
-          child: Text(acceptText),
+        ),
+        SizedBox(
+          width: 100,
+          child: ElevatedButton(
+            style: TextButton.styleFrom(
+                backgroundColor: colorScheme.primaryFixed,
+                foregroundColor: colorScheme.surface),
+            onPressed: () {
+              onAccept?.call();
+              //Navigator.of(context).pop();
+            },
+            child: Text(acceptText),
+          ),
         ),
       ],
     );

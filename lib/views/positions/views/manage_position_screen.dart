@@ -36,6 +36,7 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
     await controller.genericListController.getAllCompany();
     await controller.genericListController.getAllAgency();
     await controller.groupController.fetchGroups();
+    await controller.genericListController.getAllEquipmentType();
 
     controller.isLoadingEmployee.value = true;
     controller.advisers.value = await controller.employeeDropdownService
@@ -381,7 +382,7 @@ Widget _formStepContent(PositionController controller, BuildContext context) {
             SizedBox(
               width: width,
             ),
-            manageEquipmentButton(context, width),
+            manageEquipmentButton(context, width, controller),
             openScheduleModalButton(context, width, controller),
             SizedBox(width: width)
           ],
