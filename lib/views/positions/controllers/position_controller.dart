@@ -13,18 +13,23 @@ class PositionController extends GetxController {
   final EmployeeDropdownService employeeDropdownService =
       Get.put(EmployeeDropdownService());
 
-    final ManageGroupController groupController =
+  final ManageGroupController groupController =
       Get.put(ManageGroupController());
 
   final RxBool isLoadingPosition = true.obs;
 
-  final Rx<DropDownOption> group = DropDownOption(id: '', label: 'Seleccione un grupo').obs;
-  final Rx<DropDownOption> client = DropDownOption(id: '', label: 'Seleccione un cliente').obs;
-  final Rx<DropDownOption> branch = DropDownOption(id: '', label: 'Seleccione una sucursal').obs;
-  final Rx<DropDownOption> adviser = DropDownOption(id: '', label: 'Seleccione un asesor').obs;
-  final Rx<DropDownOption> company = DropDownOption(id: '', label: 'Seleccione una sucursal').obs;
-  final Rx<DropDownOption> agency = DropDownOption(id: '', label: 'Seleccione un asesor').obs;
-  
+  final Rx<DropDownOption> group =
+      DropDownOption(id: '', label: 'Seleccione un grupo').obs;
+  final Rx<DropDownOption> client =
+      DropDownOption(id: '', label: 'Seleccione un cliente').obs;
+  final Rx<DropDownOption> branch =
+      DropDownOption(id: '', label: 'Seleccione una sucursal').obs;
+  final Rx<DropDownOption> adviser =
+      DropDownOption(id: '', label: 'Seleccione un asesor').obs;
+  final Rx<DropDownOption> company =
+      DropDownOption(id: '', label: 'Seleccione una sucursal').obs;
+  final Rx<DropDownOption> agency =
+      DropDownOption(id: '', label: 'Seleccione un asesor').obs;
 
   final RxList<DropDownOption> advisers = <DropDownOption>[].obs;
 
@@ -57,4 +62,106 @@ class PositionController extends GetxController {
       DropDownOption(id: '', label: 'Seleccione una zona').obs;
   TextEditingController address = TextEditingController();
   TextEditingController observations = TextEditingController();
+
+  void clearFields() {
+    startTime.clear();
+    endTime.clear();
+    startDate.clear();
+    endDate.clear();
+    serviceQuantity.clear();
+    serviceAgent.clear();
+    scheduleQuantity.clear();
+    bonus.clear();
+    transport.clear();
+    foodQuantity.clear();
+    shiftValue.clear();
+    minimumPrice.clear();
+    servicePrice.clear();
+    subCity.clear();
+    address.clear();
+    observations.clear();
+  }
+
+  final weekDays = <WeekDay>[
+    WeekDay(
+      name: "Lunes",
+      startTimeController: TextEditingController(text: "00:00"),
+      endTimeController: TextEditingController(text: "00:00"),
+      isSelected: false.obs,
+    ),
+    WeekDay(
+      name: "Martes",
+      startTimeController: TextEditingController(text: "00:00"),
+      endTimeController: TextEditingController(text: "00:00"),
+      isSelected: false.obs,
+    ),
+    WeekDay(
+      name: "Miércoles",
+      startTimeController: TextEditingController(text: "00:00"),
+      endTimeController: TextEditingController(text: "00:00"),
+      isSelected: false.obs,
+    ),
+    WeekDay(
+      name: "Jueves",
+      startTimeController: TextEditingController(text: "00:00"),
+      endTimeController: TextEditingController(text: "00:00"),
+      isSelected: false.obs,
+    ),
+    WeekDay(
+      name: "Viernes",
+      startTimeController: TextEditingController(text: "00:00"),
+      endTimeController: TextEditingController(text: "00:00"),
+      isSelected: false.obs,
+    ),
+    WeekDay(
+      name: "Sábado",
+      startTimeController: TextEditingController(text: "00:00"),
+      endTimeController: TextEditingController(text: "00:00"),
+      isSelected: false.obs,
+    ),
+    WeekDay(
+      name: "Domingo",
+      startTimeController: TextEditingController(text: "00:00"),
+      endTimeController: TextEditingController(text: "00:00"),
+      isSelected: false.obs,
+    ),
+  ].obs;
+
+  void toggleWeekDay(WeekDay day) {
+    day.isSelected.value = !day.isSelected.value;
+
+    if (!day.isSelected.value) {
+      day.startTimeController.clear();
+      day.endTimeController.clear();
+    }
+  }
+
+  List<Map<String, String>> getSelectedDays() {
+    return weekDays
+        .where((day) => day.isSelected.value)
+        .map((day) => {
+              "day": day.name,
+              "startTime": day.startTimeController.text,
+              "endTime": day.endTimeController.text,
+            })
+        .toList();
+  }
+
+
+}
+
+class WeekDay {
+  final String name;
+  final TextEditingController startTimeController;
+  final TextEditingController endTimeController;
+  final RxBool isSelected;
+
+  WeekDay({
+    required this.name,
+    required this.startTimeController,
+    required this.endTimeController,
+    required this.isSelected,
+  });
+
+
 }

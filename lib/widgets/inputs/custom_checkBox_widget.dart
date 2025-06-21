@@ -1,61 +1,56 @@
 // import 'package:developer_company/shared/resources/colors.dart';
+import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:flutter/material.dart';
 
 class CustomCheckbox extends StatefulWidget {
   final bool value;
-  final ValueChanged<bool>? onChanged;
-  final Color selectedColor;
+  final void Function(bool?)? onChanged;
+  final Color activeColor;
   final Color unSelectedColor;
   final Color checkColor;
+  final String text;
 
   const CustomCheckbox(
-      {Key? key,
+      {super.key,
       required this.value,
       required this.onChanged,
-      required this.selectedColor,
+      required this.activeColor,
       required this.unSelectedColor,
-      required this.checkColor})
-      : super(key: key);
+      required this.checkColor,
+      this.text = ""
+      });
 
   @override
-  _CustomCheckboxState createState() => _CustomCheckboxState();
+  CustomCheckboxState createState() => CustomCheckboxState();
 }
 
-class _CustomCheckboxState extends State<CustomCheckbox> {
-  // bool? _value;
-
-  @override
-  void initState() {
-    super.initState();
-    // _value = widget.value;
-  }
-
+class CustomCheckboxState extends State<CustomCheckbox> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          widget.onChanged!(widget.value);
-          // _value = !_value!;
-        });
-      },
-      child: Container(
-        width: 20.0,
-        height: 20.0,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: widget.value ? widget.selectedColor : widget.unSelectedColor,
-            width: 2.0,
+    // adding textbox in the right side of the checkbox
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 30,
+            height: 30,
+            child: Checkbox(
+              value: widget.value,
+              onChanged: widget.onChanged,
+              activeColor: widget.activeColor,
+              checkColor: widget.checkColor,
+            ),
           ),
-          borderRadius: BorderRadius.circular(4.0),
-        ),
-        child: widget.value
-            ? Icon(
-                Icons.check,
-                size: 16.0,
-                color: widget.checkColor,
-              )
-            : null,
+          const SizedBox(width: 8),
+          Text(
+            widget.text,
+            style: CustomStyle.defaultStyle(context),
+          ),
+        ],
       ),
     );
   }

@@ -6,6 +6,7 @@ import 'package:agents_app/shared/constants/database_constants.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/views/positions/controllers/position_controller.dart';
+import 'package:agents_app/views/positions/widgets/actions_btns_widget.dart';
 import 'package:agents_app/widgets/buttons/custom_button.dart';
 import 'package:agents_app/widgets/commons/loading.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
@@ -25,7 +26,7 @@ class ManagePositionScreen extends StatefulWidget {
 class ManagePositionScreenState extends State<ManagePositionScreen> {
   final _formKey = GlobalKey<FormState>();
   final controller = Get.put(PositionController());
-  int _currentStep = 0;
+  int _currentStep = 4;
 
   start() async {
     await controller.genericListController.getAllShiftTime();
@@ -320,7 +321,6 @@ Widget _formStepContent(PositionController controller, BuildContext context) {
       cardContentSpace(),
       ContentCard(child: LayoutBuilder(builder: (context, constraints) {
         final isWideScreen = constraints.maxWidth > 600;
-        final colorScheme = Theme.of(context).colorScheme;
 
         final width = isWideScreen
             ? (constraints.maxWidth / 3) - 40
@@ -381,42 +381,8 @@ Widget _formStepContent(PositionController controller, BuildContext context) {
             SizedBox(
               width: width,
             ),
-            SizedBox(
-              width: width,
-              child: CustomButton(
-                  color: colorScheme.surface,
-                  text: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(Icons.security, color: colorScheme.primary),
-                      Text(
-                        "Equipo",
-                        style: CustomStyle.textStyleBlack(context)
-                            .copyWith(color: colorScheme.primary),
-                      ),
-                    ],
-                  ),
-                  isLoading: false,
-                  onPress: () {}),
-            ),
-            SizedBox(
-              width: width,
-              child: CustomButton(
-                  color: colorScheme.surface,
-                  text: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(Icons.umbrella, color: colorScheme.primary),
-                      Text(
-                        "Cobertura",
-                        style: CustomStyle.textStyleBlack(context)
-                            .copyWith(color: colorScheme.primary),
-                      ),
-                    ],
-                  ),
-                  isLoading: false,
-                  onPress: () {}),
-            ),
+            manageEquipmentButton(context, width),
+            openScheduleModalButton(context, width, controller),
             SizedBox(width: width)
           ],
         );
