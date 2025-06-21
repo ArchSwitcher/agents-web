@@ -143,8 +143,8 @@ class PositionController extends GetxController {
     day.isSelected.value = !day.isSelected.value;
 
     if (!day.isSelected.value) {
-      day.startTimeController.clear();
-      day.endTimeController.clear();
+      day.startTimeController.text = "00:00";
+      day.endTimeController.text = "00:00";
     }
   }
 

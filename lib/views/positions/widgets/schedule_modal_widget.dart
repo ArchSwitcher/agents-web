@@ -14,34 +14,33 @@ void showScheduleModal({
   showDialog(
     context: context,
     builder: (context) => GenericModal(
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Obx(
-            () => Column(
-              children: controller.weekDays.map((day) {
-                return WeekDayTime(
-                  endTimeController: day.endTimeController,
-                  startTimeController: day.startTimeController,
-                  weekDay: day.name,
-                  isSelected: day.isSelected.value,
-                  onChanged: (value) {
-                    controller.toggleWeekDay(day);
-                  },
-                );
-              }).toList(),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Obx(
+              () => Column(
+                children: controller.weekDays.map((day) {
+                  return WeekDayTime(
+                    endTimeController: day.endTimeController,
+                    startTimeController: day.startTimeController,
+                    weekDay: day.name,
+                    isSelected: day.isSelected.value,
+                    onChanged: (value) {
+                      controller.toggleWeekDay(day);
+                    },
+                  );
+                }).toList(),
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            "Selecciona los días de la semana y las horas de inicio y fin.",
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-        ],
+            const SizedBox(height: 16),
+          ],
+        ),
       ),
       onAccept: onAccept,
       onCancel: onCancel,
       title: "Cobertura de horario",
+      subtitle: 'Selecciona los días de la semana y las horas de inicio y fin.',
       acceptText: "Aceptar",
       cancelText: "Cerrar",
     ),
