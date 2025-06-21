@@ -7,7 +7,7 @@ class SimpleEntity {
   factory SimpleEntity.fromJson(Map<String, dynamic> json) {
     return SimpleEntity(
       id: json['id'] != null ? json['id'].toString() : '',
-      name: json['name'],
+      name: json['name'] != null ? json['name'].toString() : '',
     );
   }
 }

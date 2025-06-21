@@ -1,9 +1,11 @@
 import 'package:agents_app/controllers/generic_list_controller.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/models/position/equipment_model.dart';
+import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/services/employee_dropdown_service.dart';
 import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/views/groups/controllers/manage_group_controller.dart';
+import 'package:agents_app/views/positions/services/position_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +20,10 @@ class PositionController extends GetxController {
   final ManageGroupController groupController =
       Get.put(ManageGroupController());
 
+  final positionServices = PositionServices();
+
   final RxBool isLoadingPosition = true.obs;
+  final RxBool isLoadingPositions = true.obs;
 
   final Rx<DropDownOption> group =
       DropDownOption(id: '', label: 'Seleccione un grupo').obs;
@@ -162,7 +167,8 @@ class PositionController extends GetxController {
   addEquipment(DropDownOption equipment, String quantity) {
     if (equipment.id.isEmpty || quantity.isEmpty) {
       ToastService.warning(
-          title: "Advertencia", subTitle: "Por favor, complete todos los campos.");
+          title: "Advertencia",
+          subTitle: "Por favor, complete todos los campos.");
       return;
     }
     ToastService.success(
@@ -188,6 +194,87 @@ class PositionController extends GetxController {
     equipmentList.removeAt(index);
     ToastService.success(
         title: "Equipo", subTitle: "Equipo eliminado correctamente.");
+  }
+
+  fetchPositions() async {
+    isLoadingPositions.value = true;
+    try {
+      await positionServices.getAll();
+    } catch (e) {
+      ToastService.error(
+        title: "Posiciones",
+        subTitle: "Error al cargar posiciones: $e",
+      );
+    } finally {
+      isLoadingPositions.value = false;
+    }
+  }
+
+  Future<bool> newUpdatePosition(String? idPosition) async {
+    try {
+      isLoadingPosition.value = true;
+      final positionData = {
+        "id": idPosition, 
+        "groupId": group.value.id,
+        "clientId": client.value.id,
+        "branchId": branch.value.id,
+        "adviserId": adviser.value.id,
+        "companyId": company.value.id,
+        "agencyId": agency.value.id,
+        "serviceTypeId": serviceType.value.id,
+        "shiftTimeId": shiftTime.value.id,
+        "startTime": startTime.text,
+        "endTime": endTime.text,
+        "startDate": startDate.text,
+        "endDate": endDate.text,
+        "serviceQuantity": serviceQuantity.text,
+        "serviceAgent": serviceAgent.text,
+        "scheduleQuantity": scheduleQuantity.text,
+        "bonus": bonus.text,
+        "transport": transport.text,
+        "foodQuantity": foodQuantity.text,
+        "shiftValue": shiftValue.text,
+        "minimumPrice": minimumPrice.text,
+        "servicePrice": servicePrice.text,
+        "departmentId": department.value.id,
+        "subCity": subCity.text,
+        "zoneId": zone.value.id,
+        "address": address.text,
+        "observations": observations.text,
+      };
+
+      final selectedDays = getSelectedDays();
+      if (selectedDays.isEmpty) {
+        ToastService.warning(
+            title: 'Advertencia', subTitle: 'Seleccione al menos un día.');
+        return false;
+      }
+
+      PositionModel positionDataData = PositionModel.fromJson(positionData);
+
+      final position = await positionServices.create(positionDataData);
+
+      if (position) {
+        ToastService.success(
+            title: 'Éxito', subTitle: 'Posición creada correctamente.');
+      } else {
+        ToastService.error(
+            title: 'Error', subTitle: 'No se pudo crear la posición.');
+      }
+      return position;
+    } catch (e) {
+      ToastService.error(
+          title: 'Error', subTitle: 'Error al crear la posición: $e');
+      return false;
+    } finally {
+      isLoadingPosition.value = false;
+    }
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchPositions();
   }
 }
 

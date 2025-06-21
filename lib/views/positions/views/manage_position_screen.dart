@@ -59,6 +59,7 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
         description: "Gestión de posiciones para clientes",
         currentRoute: RouteConstants.positions,
         userRole: "admin",
+        showBackButton: true,
         content: SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -633,17 +634,22 @@ Widget _formStepContent(PositionController controller, BuildContext context) {
                   label: "Observaciones",
                   hintText: "Observaciones",
                   prefixIcon: Icons.notes),
-              Align(
-                alignment: Alignment.centerRight,
-                child: CustomButton(
-                    color: Theme.of(context).colorScheme.primary,
-                    text: Text(
-                      "Guardar",
-                      style: CustomStyle.textStyleWhite(context),
-                    ),
-                    isLoading: false,
-                    onPress: () {}),
-              )
+              Obx(() {
+                return Align(
+                  alignment: Alignment.centerRight,
+                  child: CustomButton(
+                      color: Theme.of(context).colorScheme.primary,
+                      text: Text(
+                        "Guardar",
+                        style: CustomStyle.textStyleWhite(context),
+                      ),
+                      isLoading: controller.isLoadingPosition.value,
+                      onPress: () async {
+                        const isNewPosition = null;
+                        await controller.newUpdatePosition(isNewPosition);
+                      }),
+                );
+              })
             ]);
       })),
     ],

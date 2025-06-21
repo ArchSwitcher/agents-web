@@ -1,14 +1,14 @@
 import 'package:agents_app/models/common/simple_entity_model.dart';
 import 'package:agents_app/models/position/day_model.dart';
 import 'package:agents_app/models/position/equipment_model.dart';
-import 'package:agents_app/shared/utils/parse_id.dart';
+
 
 class PositionModel {
   String? id;
   String name;
   String location;
-  double latitude;
-  double longitude;
+  String latitude;
+  String longitude;
   String physicalAddress;
   String fiscalAddress;
   String billingAddress;
@@ -16,14 +16,14 @@ class PositionModel {
   String endDate;
   String initTime;
   String endTime;
-  String? serviceQuantity;
+  String serviceQuantity;
   String serviceAgent;
   String scheduleQuantity;
-  double servicePrice;
-  double bonus;
-  bool meals;
-  double shiftValue;
-  double minimunPrice;
+  String servicePrice;
+  String bonus;
+  String meals;
+  String shiftValue;
+  String minimunPrice;
   String departament;
   String remarks;
   String document;
@@ -38,7 +38,7 @@ class PositionModel {
   String serviceTypeId;
   String shiftTimeId;
   String countryService;
-  double transportationCost;
+  String transportationCost;
   String adviserId;
   String supportDocument;
 
@@ -101,60 +101,59 @@ class PositionModel {
   });
 
   factory PositionModel.fromJson(Map<String, dynamic> json) {
-  final p = json['positions'];
+    final p = json;
 
-  return PositionModel(
-    id: parseId(p['Id']),
-    name: p['Name'] ?? '',
-    location: p['Location'] ?? '',
-    latitude: double.tryParse(p['Latitude'] ?? '0') ?? 0,
-    longitude: double.tryParse(p['Longitude'] ?? '0') ?? 0,
-    physicalAddress: p['Physical_address'] ?? '',
-    fiscalAddress: p['Fiscal_address'] ?? '',
-    billingAddress: p['BillingAddress'] ?? '',
-    initDate: p['Init_date'] ?? '',
-    endDate: p['End_date'] ?? '',
-    initTime: p['Init_time'] ?? '',
-    endTime: p['End_time'] ?? '',
-    serviceQuantity: p['Service_quantity'] ?? 0,
-    serviceAgent: p['Service_agent'] ?? '',
-    scheduleQuantity: p['Schedule_quantity'].toString(),
-    servicePrice: (p['Service_price'] ?? 0).toDouble(),
-    bonus: (p['Bonus'] ?? 0).toDouble(),
-    meals: p['Meals'] == "1" || p['Meals'] == true,
-    shiftValue: (p['ShiftValue'] ?? 0).toDouble(),
-    minimunPrice: (p['Minimun_price'] ?? 0).toDouble(),
-    departament: p['Departament'] ?? '',
-    remarks: p['Remarks'] ?? '',
-    document: p['Document'] ?? '',
-    prosena: parseId(p['Prosena']),
-    positionName: p['Position_name'] ?? '',
-    paymentFrequency: p['Payment_frequency'] ?? '',
-    agencyId: parseId(p['AGENCY_Id']),
-    transportId: parseId(p['TRANSPORT_Id']),
-    addressId: parseId(p['ADDRESS_Id']),
-    branchId: parseId(p['BRANCH_Id']),
-    companyId: parseId(p['COMPANY_Id']),
-    serviceTypeId: parseId(p['SERVICE_TYPE_Id']),
-    shiftTimeId: parseId(p['SHIFT_TIME_Id']),
-    countryService: p['Country_service'] ?? '',
-    transportationCost: (p['Transportation_cost'] ?? 0).toDouble(),
-    adviserId: parseId(p['BOSS_POSITIONs']?[0]?['EMPLOYEE']?['Id']),
-    supportDocument: '',
+    String str(dynamic v) => v == null ? '' : v.toString();
 
-    // Objetos anidados
-    agency: p['AGENCY'] != null ? SimpleEntity.fromJson(p['AGENCY']) : null,
-    branch: p['BRANCH'] != null ? SimpleEntity.fromJson(p['BRANCH']) : null,
-    company: p['COMPANY'] != null ? SimpleEntity.fromJson(p['COMPANY']) : null,
-    shiftTime: p['SHIFT_TIME'] != null ? SimpleEntity.fromJson(p['SHIFT_TIME']) : null,
-    serviceType: p['SERVICE_TYPE'] != null ? SimpleEntity.fromJson(p['SERVICE_TYPE']) : null,
-    transport: p['TRANSPORT'] != null ? SimpleEntity.fromJson(p['TRANSPORT']) : null,
+    return PositionModel(
+      id: str(p['Id']),
+      name: str(p['Name']),
+      location: str(p['Location']),
+      latitude: str(p['Latitude']),
+      longitude: str(p['Longitude']),
+      physicalAddress: str(p['Physical_address']),
+      fiscalAddress: str(p['Fiscal_address']),
+      billingAddress: str(p['BillingAddress']),
+      initDate: str(p['Init_date']),
+      endDate: str(p['End_date']),
+      initTime: str(p['Init_time']),
+      endTime: str(p['End_time']),
+      serviceQuantity: str(p['Service_quantity']),
+      serviceAgent: str(p['Service_agent']),
+      scheduleQuantity: str(p['Schedule_quantity']),
+      servicePrice: str(p['Service_price']),
+      bonus: str(p['Bonus']),
+      meals: p['Meals'] == "1" || p['Meals'] == true ? "true" : "false",
+      shiftValue: str(p['ShiftValue']),
+      minimunPrice: str(p['Minimun_price']),
+      departament: str(p['Departament']),
+      remarks: str(p['Remarks']),
+      document: str(p['Document']),
+      prosena: str(p['Prosena']),
+      positionName: str(p['Position_name']),
+      paymentFrequency: str(p['Payment_frequency']),
+      agencyId: str(p['AGENCY_Id']),
+      transportId: str(p['TRANSPORT_Id']),
+      addressId: str(p['ADDRESS_Id']),
+      branchId: str(p['BRANCH_Id']),
+      companyId: str(p['COMPANY_Id']),
+      serviceTypeId: str(p['SERVICE_TYPE_Id']),
+      shiftTimeId: str(p['SHIFT_TIME_Id']),
+      countryService: str(p['Country_service']),
+      transportationCost: str(p['Transportation_cost']),
+      adviserId: str(p['BOSS_POSITIONs']?[0]?['EMPLOYEE']?['Id']),
+      supportDocument: '',
 
-    days: (p['ASIGN_DAYs'] as List?)?.map((d) => DayModel.fromJson(d)).toList() ?? [],
-    equipment: (p['EQUIPMENTs'] as List?)?.map((e) => EquipmentModel.fromJson(e)).toList() ?? [],
-  );
-}
-
+      agency: p['AGENCY'] != null ? SimpleEntity.fromJson(p['AGENCY']) : null,
+      branch: p['BRANCH'] != null ? SimpleEntity.fromJson(p['BRANCH']) : null,
+      company: p['COMPANY'] != null ? SimpleEntity.fromJson(p['COMPANY']) : null,
+      shiftTime: p['SHIFT_TIME'] != null ? SimpleEntity.fromJson(p['SHIFT_TIME']) : null,
+      serviceType: p['SERVICE_TYPE'] != null ? SimpleEntity.fromJson(p['SERVICE_TYPE']) : null,
+      transport: p['TRANSPORT'] != null ? SimpleEntity.fromJson(p['TRANSPORT']) : null,
+      days: (p['ASIGN_DAYs'] as List?)?.map((d) => DayModel.fromJson(d)).toList() ?? [],
+      equipment: (p['EQUIPMENTs'] as List?)?.map((e) => EquipmentModel.fromJson(e)).toList() ?? [],
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {

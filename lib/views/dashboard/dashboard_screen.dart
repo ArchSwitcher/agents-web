@@ -121,12 +121,12 @@ Widget resumeCards(BuildContext context) {
                 _InfoCard(
                   icon: Icons.people,
                   label: 'Clientes',
-                  value: '210',
+                  value: '215',
                 ),
                 _InfoCard(
                   icon: Icons.person,
                   label: 'Usuarios',
-                  value: '128',
+                  value: '130',
                 ),
                 _InfoCard(
                   icon: Icons.shield,
