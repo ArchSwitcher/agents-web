@@ -1,11 +1,16 @@
+import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/layout/contect_card_space.dart';
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
 import 'package:agents_app/shared/constants/routes.dart';
+import 'package:agents_app/shared/helpers/table/index.dart';
+import 'package:agents_app/views/positions/controllers/position_controller.dart';
 import 'package:agents_app/views/positions/widgets/actions_btns_widget.dart';
+import 'package:agents_app/views/positions/widgets/table_rows_widget.dart';
+import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
 import 'package:agents_app/widgets/datatable/filter_box.dart';
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
 
 class PositionsScreen extends StatefulWidget {
   const PositionsScreen({super.key});
@@ -15,6 +20,36 @@ class PositionsScreen extends StatefulWidget {
 }
 
 class PositionsScreenState extends State<PositionsScreen> {
+  final PositionController controller =
+      Get.put<PositionController>(PositionController());
+  final LoaderController loaderController = Get.find<LoaderController>();
+
+  final List<String> headers = [
+    "",
+    'Código',
+    'Nombre',
+    'Latitud',
+    'Longitud',
+    "proseña",
+    "Agencia",
+    "Sucursal",
+    "Horario"
+  ];
+
+  start() async {
+    loaderController.show();
+    await controller.fetchPositions();
+    loaderController.hide();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      start();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ResponsiveSidebarLayout(
@@ -57,16 +92,18 @@ class PositionsScreenState extends State<PositionsScreen> {
 
               // table content, edit delete elements
               cardContentSpace(),
-              // ContentCard(child: Obx(() {
-              //   return CustomDataTableWidgetV2(
-              //       minWidth: 500,
-              //       dynamicHeight: false,
-              //       tableHeight: TableHelper.getTableHeight(controller.groups),
-              //       fixedColumnWidths: fixedColumnWidths,
-              //       columnSizes: columnSizes,
-              //       tableHeaders: tableHeaders,
-              //       tableRows: buildTableRows(controller, context));
-              // }))
+
+              ContentCard(child: Obx(() {
+                return CustomDataTableWidgetV2(
+                    minWidth: 1680,
+                    dynamicHeight: false,
+                    tableHeight:
+                        TableHelper.getTableHeight(controller.positions),
+                    // fixedColumnWidths: fixedColumnWidths,
+                    // columnSizes: columnSizes,
+                    tableHeaders: headers,
+                    tableRows: buildTableRows(controller, context));
+              }))
             ],
           ),
         ));

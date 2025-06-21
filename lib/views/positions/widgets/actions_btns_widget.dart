@@ -1,4 +1,4 @@
-import 'package:agents_app/models/branch/branch_index_model.dart';
+
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/views/positions/controllers/position_controller.dart';
@@ -52,7 +52,7 @@ Widget editPositionButton(BuildContext context, String branchId) {
       ));
 }
 
-Widget deletePositionButton(BuildContext context, BranchModel branch) {
+Widget deletePositionButton(BuildContext context, String positionId) {
   final colorScheme = Theme.of(context).colorScheme;
 
   return IconButton(

@@ -144,12 +144,30 @@ class PositionModel {
       adviserId: str(p['BOSS_POSITIONs']?[0]?['EMPLOYEE']?['Id']),
       supportDocument: '',
 
-      agency: p['AGENCY'] != null ? SimpleEntity.fromJson(p['AGENCY']) : null,
-      branch: p['BRANCH'] != null ? SimpleEntity.fromJson(p['BRANCH']) : null,
-      company: p['COMPANY'] != null ? SimpleEntity.fromJson(p['COMPANY']) : null,
-      shiftTime: p['SHIFT_TIME'] != null ? SimpleEntity.fromJson(p['SHIFT_TIME']) : null,
-      serviceType: p['SERVICE_TYPE'] != null ? SimpleEntity.fromJson(p['SERVICE_TYPE']) : null,
-      transport: p['TRANSPORT'] != null ? SimpleEntity.fromJson(p['TRANSPORT']) : null,
+      agency: p['AGENCY'] != null ? SimpleEntity.fromJson({
+        "id": p['AGENCY']['Id'],
+        "name": p['AGENCY']['Name'],
+      }) : null,
+      branch: p['BRANCH'] != null ? SimpleEntity.fromJson({
+        "id": p['BRANCH']['Id'],
+        "name": p['BRANCH']['Branch_name'],
+      }) : null,
+      company: p['COMPANY'] != null ? SimpleEntity.fromJson({
+        "id": p['COMPANY']['Id'],
+        "name": p['COMPANY']['Name'],
+      }) : null,
+      shiftTime: p['SHIFT_TIME'] != null ? SimpleEntity.fromJson({
+        "id": p['SHIFT_TIME']['Id'],
+        "name": p['SHIFT_TIME']['Name'],
+      }) : null,
+      serviceType: p['SERVICE_TYPE'] != null ? SimpleEntity.fromJson({
+        "id": p['SERVICE_TYPE']['Id'],
+        "name": p['SERVICE_TYPE']['Name'],
+      }) : null,
+      transport: p['TRANSPORT'] != null ? SimpleEntity.fromJson({
+        "id": p['TRANSPORT']['Id'],
+        "name": p['TRANSPORT']['Name'],
+      }) : null,
       days: (p['ASIGN_DAYs'] as List?)?.map((d) => DayModel.fromJson(d)).toList() ?? [],
       equipment: (p['EQUIPMENTs'] as List?)?.map((e) => EquipmentModel.fromJson(e)).toList() ?? [],
     );
