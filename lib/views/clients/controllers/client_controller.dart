@@ -32,7 +32,7 @@ class ManageClientController extends GetxController {
     final loader = Get.find<LoaderController>();
     loader.show();
     try {
-      final data = await _clientService.getAll();
+      final data = await _clientService.getAll(null);
       clients.value = data;
     } catch (e) {
       print("Error fetching clients: $e");

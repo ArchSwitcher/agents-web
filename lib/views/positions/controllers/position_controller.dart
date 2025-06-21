@@ -79,6 +79,8 @@ class PositionController extends GetxController {
 
   final RxList<EquipmentModel> equipmentList = <EquipmentModel>[].obs;
 
+  final RxList<PositionModel> positions = <PositionModel>[].obs;
+
   void clearFields() {
     startTime.clear();
     endTime.clear();
@@ -199,7 +201,7 @@ class PositionController extends GetxController {
   fetchPositions() async {
     isLoadingPositions.value = true;
     try {
-      await positionServices.getAll();
+      positions.value = await positionServices.getAll("3");
     } catch (e) {
       ToastService.error(
         title: "Posiciones",
@@ -214,7 +216,7 @@ class PositionController extends GetxController {
     try {
       isLoadingPosition.value = true;
       final positionData = {
-        "id": idPosition, 
+        "id": idPosition,
         "groupId": group.value.id,
         "clientId": client.value.id,
         "branchId": branch.value.id,

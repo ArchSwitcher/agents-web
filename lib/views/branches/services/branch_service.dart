@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 class BranchService extends BaseService implements CrudService<BranchModel> {
   @override
-  Future<List<BranchModel>> getAll() async {
+  Future<List<BranchModel>> getAll(dynamic value) async {
     final response = await http.get(
       Uri.parse('$baseUrl/branch'),
       headers: buildHeaders(),

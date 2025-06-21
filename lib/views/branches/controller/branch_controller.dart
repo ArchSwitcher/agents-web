@@ -206,7 +206,7 @@ class BranchController extends GetxController {
     try {
       isLoading.value = true;
 
-      final data = await _branchService.getAll();
+      final data = await _branchService.getAll(null);
       branches.value = data;
     } catch (e) {
       ToastService.error(

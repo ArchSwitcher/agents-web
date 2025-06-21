@@ -9,9 +9,9 @@ import 'package:http/http.dart' as http;
 class PositionServices extends BaseService
     implements CrudService<PositionModel> {
   @override
-  Future<List<PositionModel>> getAll() async {
+  Future<List<PositionModel>> getAll(dynamic statusType) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/position/getPositionStatusTypeById/3'),
+      Uri.parse('$baseUrl/position/getPositionStatusTypeById/$statusType'),
       headers: buildHeaders(),
     );
 

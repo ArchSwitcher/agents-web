@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 class ClientService extends BaseService implements CrudService<ClientModel> {
   @override
-  Future<List<ClientModel>> getAll() async {
+  Future<List<ClientModel>> getAll(dynamic value) async {
     try {
       final response = await http.get(
         Uri.parse('$baseUrl/client/getClients'),
