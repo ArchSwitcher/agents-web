@@ -161,7 +161,8 @@ class PositionController extends GetxController {
 
   addEquipment(DropDownOption equipment, String quantity) {
     if (equipment.id.isEmpty || quantity.isEmpty) {
-      Get.snackbar("Error", "Debe seleccionar un equipo y una cantidad.");
+      ToastService.warning(
+          title: "Advertencia", subTitle: "Por favor, complete todos los campos.");
       return;
     }
     ToastService.success(
