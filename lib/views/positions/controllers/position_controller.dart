@@ -22,6 +22,9 @@ class PositionController extends GetxController {
   final Rx<DropDownOption> client = DropDownOption(id: '', label: 'Seleccione un cliente').obs;
   final Rx<DropDownOption> branch = DropDownOption(id: '', label: 'Seleccione una sucursal').obs;
   final Rx<DropDownOption> adviser = DropDownOption(id: '', label: 'Seleccione un asesor').obs;
+  final Rx<DropDownOption> company = DropDownOption(id: '', label: 'Seleccione una sucursal').obs;
+  final Rx<DropDownOption> agency = DropDownOption(id: '', label: 'Seleccione un asesor').obs;
+  
 
   final RxList<DropDownOption> advisers = <DropDownOption>[].obs;
 

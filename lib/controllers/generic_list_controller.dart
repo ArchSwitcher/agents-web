@@ -177,7 +177,6 @@ class GenericListController extends GetxController {
     }
   }
 
-  // implementa este metodo  con future  igual al de arriba getAllAgency
   Future<List<DropDownOption>> getAllAgency() async {
     try {
       isLoadingAgency.value = true;
@@ -314,5 +313,14 @@ class GenericListController extends GetxController {
     } finally {
       isLoadingBranchByClient.value = false;
     }
+  }
+
+  //clean clientsByGroup
+  void cleanClientsByGroup() {
+    clientsByGroup.value = [];
+  }
+  //clean branchesByClient
+  void cleanBranchesByClient() {
+    branchesByClient.value = [];
   }
 }

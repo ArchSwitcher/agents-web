@@ -7,6 +7,7 @@ import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/views/positions/controllers/position_controller.dart';
 import 'package:agents_app/widgets/buttons/custom_button.dart';
+import 'package:agents_app/widgets/commons/loading.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:agents_app/widgets/inputs/custom_label_widget.dart';
 import 'package:agents_app/widgets/inputs/date_picker.dart';
@@ -24,12 +25,15 @@ class ManagePositionScreen extends StatefulWidget {
 class ManagePositionScreenState extends State<ManagePositionScreen> {
   final _formKey = GlobalKey<FormState>();
   final controller = Get.put(PositionController());
+  int _currentStep = 0;
 
   start() async {
     await controller.genericListController.getAllShiftTime();
     await controller.genericListController.getAllServiceType();
     await controller.genericListController.fetchDepartments();
     await controller.genericListController.fetchZones();
+    await controller.genericListController.getAllCompany();
+    await controller.genericListController.getAllAgency();
     await controller.groupController.fetchGroups();
 
     controller.isLoadingEmployee.value = true;
@@ -81,9 +85,13 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
                           controller.group.value = option;
                           controller.genericListController
                               .fetchClientsByGroupId(option.id);
-                          // name controller again
                           controller.client.value =
                               DropDownOption(id: "", label: "");
+                          controller.genericListController
+                              .cleanClientsByGroup();
+                          setState(() {
+                            _currentStep = 1;
+                          });
                         },
                         label: "Grupo",
                         hintText: "Grupo",
@@ -96,30 +104,34 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
                                   .toLowerCase()
                                   .contains(text.toLowerCase()))
                               .toList();
-                          return filteredOptions.isEmpty
-                              ? [
-                                  DropDownOption(
-                                      id: '', label: 'No hay resultados')
-                                ]
-                              : filteredOptions;
+                          return filteredOptions.isEmpty ? [] : filteredOptions;
                         },
                       ),
                       //loading dropdown client
                       LoadingAutocompleteDropdown(
-                        loadingText: controller
-                            .genericListController.isLoadingClientsByGroup.value ? "Seleccione un grupo para ver clientes" : "",
+                        loadingText: controller.genericListController
+                                .isLoadingClientsByGroup.value
+                            ? "Seleccione un grupo para ver clientes"
+                            : "",
                         prefixIcon: Icons.business,
                         enabled: true,
                         isLoading: controller
                             .genericListController.isLoadingClientsByGroup,
-                        listItems:
-                            controller.genericListController.clientsByGroup,
+                        listItems: controller
+                                .genericListController.clientsByGroup.isEmpty
+                            ? []
+                            : controller.genericListController.clientsByGroup,
                         onSelected: (DropDownOption option) {
                           controller.client.value = option;
                           controller.genericListController
                               .fetchBranchByClientId(option.id);
                           controller.branch.value =
                               DropDownOption(id: "", label: "");
+                          controller.genericListController
+                              .cleanBranchesByClient();
+                          setState(() {
+                            _currentStep = 2;
+                          });
                         },
                         label: "Cliente",
                         hintText: "Cliente",
@@ -132,28 +144,29 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
                                   .toLowerCase()
                                   .contains(text.toLowerCase()))
                               .toList();
-                          return filteredOptions.isEmpty
-                              ? [
-                                  DropDownOption(
-                                      id: '', label: 'No hay resultados')
-                                ]
-                              : filteredOptions;
+                          return filteredOptions.isEmpty ? [] : filteredOptions;
                         },
                       ),
 
                       //loading dropdown branch
                       LoadingAutocompleteDropdown(
-
-                        loadingText: controller
-                            .genericListController.isLoadingBranchByClient.value ? "Seleccione un cliente para ver sucursales" : "",
+                        loadingText: controller.genericListController
+                                .isLoadingBranchByClient.value
+                            ? "Seleccione un cliente para ver sucursales"
+                            : "",
                         prefixIcon: Icons.store,
                         enabled: true,
                         isLoading: controller
                             .genericListController.isLoadingBranchByClient,
-                        listItems:
-                            controller.genericListController.branchesByClient,
+                        listItems: controller
+                                .genericListController.branchesByClient.isEmpty
+                            ? []
+                            : controller.genericListController.branchesByClient,
                         onSelected: (DropDownOption option) {
                           controller.branch.value = option;
+                          setState(() {
+                            _currentStep = 3;
+                          });
                         },
                         label: "Sucursal",
                         hintText: "Sucursal",
@@ -166,436 +179,131 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
                                   .toLowerCase()
                                   .contains(text.toLowerCase()))
                               .toList();
-                          return filteredOptions.isEmpty
-                              ? [
-                                  DropDownOption(
-                                      id: '', label: 'No hay resultados')
-                                ]
-                              : filteredOptions;
+                          return filteredOptions.isEmpty ? [] : filteredOptions;
                         },
                       ),
 
-                      //loading dropdown adviser
-                      LoadingAutocompleteDropdown(
-                        prefixIcon: Icons.person,
-                        enabled: true,
-                        isLoading: controller.isLoadingEmployee,
-                        listItems: controller.advisers,
-                        onSelected: (DropDownOption option) {
-                          controller.adviser.value = option;
-                        },
-                        label: "Asesor",
-                        hintText: "Asesor",
-                        resetValue: controller.adviser,
-                        width: width,
-                        onTextChange: (text) async {
-                          List<DropDownOption> filteredOptions = controller
-                              .advisers
-                              .where((option) => option.label
-                                  .toLowerCase()
-                                  .contains(text.toLowerCase()))
-                              .toList();
-                          return filteredOptions.isEmpty
-                              ? [
-                                  DropDownOption(
-                                      id: '', label: 'No hay resultados')
-                                ]
-                              : filteredOptions;
-                        },
-                      ),
-                    ],
-                  );
-                })),
-                cardContentSpace(),
-                ContentCard(
-                    child: LayoutBuilder(builder: (context, constraints) {
-                  final isWideScreen = constraints.maxWidth > 600;
-                  final colorScheme = Theme.of(context).colorScheme;
-
-                  final width = isWideScreen
-                      ? (constraints.maxWidth / 3) - 40
-                      : constraints.maxWidth - 40;
-
-                  return Wrap(
-                    spacing: 30, // espacio horizontal entre widgets
-                    runSpacing:
-                        20, // espacio vertical entre líneas si se hace wrap
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    alignment: WrapAlignment.spaceBetween,
-                    children: [
-                      LoadingAutocompleteDropdown(
-                        prefixIcon: Icons.work,
-                        enabled: true,
-                        isLoading: controller
-                            .genericListController.isLoadingServiceType,
-                        listItems:
-                            controller.genericListController.serviceTypes,
-                        onSelected: (DropDownOption option) {
-                          controller.serviceType.value = option;
-                        },
-                        label: "",
-                        hintText: "Tipo de servicio",
-                        resetValue: controller.serviceType,
-                        width: width,
-                        onTextChange: (text) async {
-                          List<DropDownOption> filteredOptions = controller
-                              .genericListController.serviceTypes
-                              .where((option) => option.label
-                                  .toLowerCase()
-                                  .contains(text.toLowerCase()))
-                              .toList();
-                          return filteredOptions.isEmpty
-                              ? [
-                                  DropDownOption(
-                                      id: '', label: 'No hay resultados')
-                                ]
-                              : filteredOptions;
-                        },
-                      ),
-                      LoadingAutocompleteDropdown(
-                        prefixIcon: Icons.access_time,
-                        enabled: true,
-                        isLoading:
-                            controller.genericListController.isLoadingShiftTime,
-                        listItems: controller.genericListController.shiftTimes,
-                        onSelected: (DropDownOption option) {
-                          controller.shiftTime.value = option;
-                        },
-                        label: "",
-                        hintText: "Horario",
-                        resetValue: controller.shiftTime,
-                        width: width,
-                        onTextChange: (text) async {
-                          List<DropDownOption> filteredOptions = controller
-                              .genericListController.shiftTimes
-                              .where((option) => option.label
-                                  .toLowerCase()
-                                  .contains(text.toLowerCase()))
-                              .toList();
-                          return filteredOptions.isEmpty
-                              ? [
-                                  DropDownOption(
-                                      id: '', label: 'No hay resultados')
-                                ]
-                              : filteredOptions;
-                        },
-                      ),
-                      SizedBox(
-                        width: width,
-                      ),
-                      SizedBox(
-                        width: width,
-                        child: CustomButton(
-                            color: colorScheme.surface,
-                            text: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(Icons.security,
-                                    color: colorScheme.primary),
-                                Text(
-                                  "Equipo",
-                                  style: CustomStyle.textStyleBlack(context)
-                                      .copyWith(color: colorScheme.primary),
-                                ),
-                              ],
-                            ),
-                            isLoading: false,
-                            onPress: () {}),
-                      ),
-                      SizedBox(
-                        width: width,
-                        child: CustomButton(
-                            color: colorScheme.surface,
-                            text: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(Icons.umbrella,
-                                    color: colorScheme.primary),
-                                Text(
-                                  "Cobertura",
-                                  style: CustomStyle.textStyleBlack(context)
-                                      .copyWith(color: colorScheme.primary),
-                                ),
-                              ],
-                            ),
-                            isLoading: false,
-                            onPress: () {}),
-                      ),
-                      SizedBox(width: width)
-                    ],
-                  );
-                })),
-                cardContentSpace(),
-                ContentCard(
-                    child: LayoutBuilder(builder: (context, constraints) {
-                  final isWideScreen = constraints.maxWidth > 750;
-
-                  final width = isWideScreen
-                      ? (constraints.maxWidth / 4) - 40
-                      : constraints.maxWidth - 40;
-
-                  return Wrap(
-                    spacing: 30, // espacio horizontal entre widgets
-                    runSpacing:
-                        20, // espacio vertical entre líneas si se hace wrap
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    alignment: WrapAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: width,
-                        child: CustomInputWidget(
-                            controller: controller.startTime,
-                            label: "Hora inicio*",
-                            hintText: "Hora inicio",
-                            prefixIcon: Icons.access_time),
-                      ),
-                      SizedBox(
-                        width: width,
-                        child: CustomInputWidget(
-                            controller: controller.endTime,
-                            label: "Hora fin*",
-                            hintText: "Hora fin",
-                            prefixIcon: Icons.access_time),
-                      ),
+                      (_currentStep == 3 || _currentStep == 4)
+                          ? LoadingAutocompleteDropdown(
+                              prefixIcon: Icons.person,
+                              enabled: true,
+                              isLoading: controller.isLoadingEmployee,
+                              listItems: controller.advisers,
+                              onSelected: (DropDownOption option) {
+                                controller.adviser.value = option;
+                                setState(() {
+                                  _currentStep = 4;
+                                });
+                              },
+                              label: "Asesor",
+                              hintText: "Asesor",
+                              resetValue: controller.adviser,
+                              width: width,
+                              onTextChange: (text) async {
+                                List<DropDownOption> filteredOptions =
+                                    controller.advisers
+                                        .where((option) => option.label
+                                            .toLowerCase()
+                                            .contains(text.toLowerCase()))
+                                        .toList();
+                                return filteredOptions.isEmpty
+                                    ? [
+                                        DropDownOption(
+                                            id: '', label: 'No hay resultados')
+                                      ]
+                                    : filteredOptions;
+                              },
+                            )
+                          : const Loading(),
                       SizedBox(
                         width: width,
                         child: CustomDatePicker(
-                            initialDate: DateTime(2020),
-                            controller: controller.startDate,
-                            label: "Fecha inicio",
-                            hintText: "Fecha inicio",
+                            enabled: false,
+                            initialDate: DateTime(DateTime.now().year,
+                                DateTime.now().month, DateTime.now().day),
+                            controller: TextEditingController(),
+                            label: "Fecha",
+                            hintText: "",
                             prefixIcon: Icons.calendar_today),
                       ),
+
+                      LoadingAutocompleteDropdown(
+                        prefixIcon: Icons.business,
+                        enabled: true,
+                        isLoading:
+                            controller.genericListController.isLoadingCompany,
+                        listItems:
+                            controller.genericListController.companies.isEmpty
+                                ? []
+                                : controller.genericListController.companies,
+                        onSelected: (DropDownOption option) {
+                          controller.company.value = option;
+                        },
+                        label: "Empresa",
+                        hintText: "Empresa",
+                        resetValue: controller.company,
+                        width: width,
+                        onTextChange: (text) async {
+                          List<DropDownOption> filteredOptions = controller
+                              .genericListController.companies
+                              .where((option) => option.label
+                                  .toLowerCase()
+                                  .contains(text.toLowerCase()))
+                              .toList();
+                          return filteredOptions.isEmpty
+                              ? [
+                                  DropDownOption(
+                                      id: '', label: 'No hay resultados')
+                                ]
+                              : filteredOptions;
+                        },
+                      ),
+
+                      // dropdown for agency
+                      LoadingAutocompleteDropdown(
+                        prefixIcon: Icons.business,
+                        enabled: true,
+                        isLoading:
+                            controller.genericListController.isLoadingAgency,
+                        listItems:
+                            controller.genericListController.agencies.isEmpty
+                                ? []
+                                : controller.genericListController.agencies,
+                        onSelected: (DropDownOption option) {
+                          controller.agency.value = option;
+                        },
+                        label: "Agencia",
+                        hintText: "Agencia",
+                        resetValue: controller.agency,
+                        width: width,
+                        onTextChange: (text) async {
+                          List<DropDownOption> filteredOptions = controller
+                              .genericListController.agencies
+                              .where((option) => option.label
+                                  .toLowerCase()
+                                  .contains(text.toLowerCase()))
+                              .toList();
+                          return filteredOptions.isEmpty
+                              ? [
+                                  DropDownOption(
+                                      id: '', label: 'No hay resultados')
+                                ]
+                              : filteredOptions;
+                        },
+                      ),
+
                       SizedBox(
                           width: width,
-                          child: CustomDatePicker(
-                              initialDate: DateTime(2020),
-                              controller: controller.endDate,
-                              label: "Fecha fin",
-                              hintText: "Fecha fin",
-                              prefixIcon: Icons.calendar_today)),
+                          child: CustomLabelWidget(
+                              title: "Moneda",
+                              label: "Quetzal",
+                              prefixIcon: Icons.attach_money)),
                     ],
                   );
                 })),
-                cardContentSpace(),
-                ContentCard(
-                    child: Column(
-                  children: [
-                    LayoutBuilder(builder: (context, constraints) {
-                      final isWideScreen = constraints.maxWidth > 750;
-                      final width = isWideScreen
-                          ? (constraints.maxWidth / 4) - 40
-                          : constraints.maxWidth - 40;
-
-                      return Wrap(
-                          spacing: 30,
-                          runSpacing: 20,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          alignment: WrapAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: width,
-                              child: CustomInputWidget(
-                                  controller: controller.serviceQuantity,
-                                  label: "Cantidad de servicio",
-                                  hintText: "Cantidad de servicio",
-                                  prefixIcon: Icons.numbers),
-                            ),
-                            SizedBox(
-                              width: width,
-                              child: CustomInputWidget(
-                                  controller: controller.serviceAgent,
-                                  label: "Agente de servicio",
-                                  hintText: "Agente de servicio",
-                                  prefixIcon: Icons.person),
-                            ),
-                            SizedBox(
-                              width: width,
-                              child: CustomInputWidget(
-                                  controller: controller.scheduleQuantity,
-                                  label: "Cantidad de horarios",
-                                  hintText: "Cantidad de horarios",
-                                  prefixIcon: Icons.numbers),
-                            ),
-                            SizedBox(
-                                width: width,
-                                child: CustomLabelWidget(
-                                    title: "País servicio",
-                                    label: "Guatemala",
-                                    prefixIcon: Icons.flag)),
-
-                            //bonus, transport, food quantity
-                            SizedBox(
-                              width: width,
-                              child: CustomInputWidget(
-                                  controller: controller.bonus,
-                                  label: "Bono",
-                                  hintText: "Bono",
-                                  prefixIcon: Icons.attach_money),
-                            ),
-                            SizedBox(
-                              width: width,
-                              child: CustomInputWidget(
-                                  controller: controller.transport,
-                                  label: "Transporte",
-                                  hintText: "Transporte",
-                                  prefixIcon: Icons.directions_bus),
-                            ),
-                            SizedBox(
-                              width: width,
-                              child: CustomInputWidget(
-                                  controller: controller.foodQuantity,
-                                  label: "Alimentación",
-                                  hintText: "Alimentación",
-                                  prefixIcon: Icons.fastfood),
-                            ),
-                            SizedBox(
-                              width: width,
-                              child: CustomInputWidget(
-                                  controller: controller.shiftValue,
-                                  label: "Valor del turno",
-                                  hintText: "Valor del turno",
-                                  prefixIcon: Icons.attach_money),
-                            ),
-                          ]);
-                    }),
-                    LayoutBuilder(builder: (context, constraints) {
-                      final isWideScreen = constraints.maxWidth > 750;
-                      final width = isWideScreen
-                          ? (constraints.maxWidth / 2) - 40
-                          : constraints.maxWidth - 40;
-
-                      return Wrap(
-                          spacing: 30,
-                          runSpacing: 20,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          alignment: WrapAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: width,
-                              child: CustomLabelWidget(
-                                  title: "Precio mínimo",
-                                  label: controller.minimumPrice.text,
-                                  prefixIcon: Icons.attach_money),
-                            ),
-                            SizedBox(
-                              width: width,
-                              child: CustomInputWidget(
-                                  controller: controller.servicePrice,
-                                  label: "Precio del servicio",
-                                  hintText: "Precio del servicio",
-                                  prefixIcon: Icons.attach_money),
-                            ),
-                          ]);
-                    }),
-                  ],
-                )),
-                cardContentSpace(),
-                ContentCard(
-                    child: LayoutBuilder(builder: (context, constraints) {
-                  final isWideScreen = constraints.maxWidth > 750;
-                  final width = isWideScreen
-                      ? (constraints.maxWidth / 4) - 40
-                      : constraints.maxWidth - 40;
-
-                  return Wrap(
-                      spacing: 30, // espacio horizontal entre widgets
-                      runSpacing:
-                          20, // espacio vertical entre líneas si se hace wrap
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      alignment: WrapAlignment.spaceBetween,
-                      children: [
-                        LoadingAutocompleteDropdown(
-                          prefixIcon: Icons.business,
-                          enabled: true,
-                          isLoading:
-                              controller.genericListController.isLoadingCity,
-                          listItems:
-                              controller.genericListController.departments,
-                          onSelected: (DropDownOption option) {
-                            controller.department.value = option;
-                          },
-                          label: "Departamento",
-                          hintText: "Departamento",
-                          resetValue: controller.department,
-                          width: width,
-                          onTextChange: (text) async {
-                            List<DropDownOption> filteredOptions = controller
-                                .genericListController.departments
-                                .where((option) => option.label
-                                    .toLowerCase()
-                                    .contains(text.toLowerCase()))
-                                .toList();
-                            return filteredOptions.isEmpty
-                                ? [
-                                    DropDownOption(
-                                        id: '', label: 'No hay resultados')
-                                  ]
-                                : filteredOptions;
-                          },
-                        ),
-                        SizedBox(
-                            width: width,
-                            child: CustomInputWidget(
-                                controller: controller.subCity,
-                                label: "Ciudad",
-                                hintText: "Ciudad",
-                                prefixIcon: Icons.location_city)),
-                        //loading dropdown zone
-                        LoadingAutocompleteDropdown(
-                          prefixIcon: Icons.location_on,
-                          enabled: true,
-                          isLoading:
-                              controller.genericListController.isLoadingZone,
-                          listItems: controller.genericListController.zones,
-                          onSelected: (DropDownOption option) {
-                            controller.zone.value = option;
-                          },
-                          label: "Zona",
-                          hintText: "Zona",
-                          resetValue: controller.zone,
-                          width: width,
-                          onTextChange: (text) async {
-                            List<DropDownOption> filteredOptions = controller
-                                .genericListController.zones
-                                .where((option) => option.label
-                                    .toLowerCase()
-                                    .contains(text.toLowerCase()))
-                                .toList();
-                            return filteredOptions.isEmpty
-                                ? [
-                                    DropDownOption(
-                                        id: '', label: 'No hay resultados')
-                                  ]
-                                : filteredOptions;
-                          },
-                        ),
-                        SizedBox(
-                            width: width,
-                            child: CustomInputWidget(
-                                controller: controller.address,
-                                label: "Dirección",
-                                hintText: "Dirección",
-                                prefixIcon: Icons.home)),
-
-                        CustomInputWidget(
-                            controller: controller.observations,
-                            label: "Observaciones",
-                            hintText: "Observaciones",
-                            prefixIcon: Icons.notes),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: CustomButton(
-                              color: Theme.of(context).colorScheme.primary,
-                              text: Text(
-                                "Guardar",
-                                style: CustomStyle.textStyleWhite(context),
-                              ),
-                              isLoading: false,
-                              onPress: () {}),
-                        )
-                      ]);
-                })),
+                _currentStep == 4
+                    ? _formStepContent(controller, context)
+                    : const SizedBox(),
                 cardContentSpace(),
                 cardContentSpace(),
                 cardContentSpace(),
@@ -604,4 +312,373 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
           ),
         ));
   }
+}
+
+Widget _formStepContent(PositionController controller, BuildContext context) {
+  return Column(
+    children: [
+      cardContentSpace(),
+      ContentCard(child: LayoutBuilder(builder: (context, constraints) {
+        final isWideScreen = constraints.maxWidth > 600;
+        final colorScheme = Theme.of(context).colorScheme;
+
+        final width = isWideScreen
+            ? (constraints.maxWidth / 3) - 40
+            : constraints.maxWidth - 40;
+
+        return Wrap(
+          spacing: 30, // espacio horizontal entre widgets
+          runSpacing: 20, // espacio vertical entre líneas si se hace wrap
+          crossAxisAlignment: WrapCrossAlignment.center,
+          alignment: WrapAlignment.spaceBetween,
+          children: [
+            LoadingAutocompleteDropdown(
+              prefixIcon: Icons.work,
+              enabled: true,
+              isLoading: controller.genericListController.isLoadingServiceType,
+              listItems: controller.genericListController.serviceTypes,
+              onSelected: (DropDownOption option) {
+                controller.serviceType.value = option;
+              },
+              label: "",
+              hintText: "Tipo de servicio",
+              resetValue: controller.serviceType,
+              width: width,
+              onTextChange: (text) async {
+                List<DropDownOption> filteredOptions = controller
+                    .genericListController.serviceTypes
+                    .where((option) =>
+                        option.label.toLowerCase().contains(text.toLowerCase()))
+                    .toList();
+                return filteredOptions.isEmpty
+                    ? [DropDownOption(id: '', label: 'No hay resultados')]
+                    : filteredOptions;
+              },
+            ),
+            LoadingAutocompleteDropdown(
+              prefixIcon: Icons.access_time,
+              enabled: true,
+              isLoading: controller.genericListController.isLoadingShiftTime,
+              listItems: controller.genericListController.shiftTimes,
+              onSelected: (DropDownOption option) {
+                controller.shiftTime.value = option;
+              },
+              label: "",
+              hintText: "Horario",
+              resetValue: controller.shiftTime,
+              width: width,
+              onTextChange: (text) async {
+                List<DropDownOption> filteredOptions = controller
+                    .genericListController.shiftTimes
+                    .where((option) =>
+                        option.label.toLowerCase().contains(text.toLowerCase()))
+                    .toList();
+                return filteredOptions.isEmpty
+                    ? [DropDownOption(id: '', label: 'No hay resultados')]
+                    : filteredOptions;
+              },
+            ),
+            SizedBox(
+              width: width,
+            ),
+            SizedBox(
+              width: width,
+              child: CustomButton(
+                  color: colorScheme.surface,
+                  text: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(Icons.security, color: colorScheme.primary),
+                      Text(
+                        "Equipo",
+                        style: CustomStyle.textStyleBlack(context)
+                            .copyWith(color: colorScheme.primary),
+                      ),
+                    ],
+                  ),
+                  isLoading: false,
+                  onPress: () {}),
+            ),
+            SizedBox(
+              width: width,
+              child: CustomButton(
+                  color: colorScheme.surface,
+                  text: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(Icons.umbrella, color: colorScheme.primary),
+                      Text(
+                        "Cobertura",
+                        style: CustomStyle.textStyleBlack(context)
+                            .copyWith(color: colorScheme.primary),
+                      ),
+                    ],
+                  ),
+                  isLoading: false,
+                  onPress: () {}),
+            ),
+            SizedBox(width: width)
+          ],
+        );
+      })),
+      cardContentSpace(),
+      ContentCard(child: LayoutBuilder(builder: (context, constraints) {
+        final isWideScreen = constraints.maxWidth > 750;
+
+        final width = isWideScreen
+            ? (constraints.maxWidth / 4) - 40
+            : constraints.maxWidth - 40;
+
+        return Wrap(
+          spacing: 30, // espacio horizontal entre widgets
+          runSpacing: 20, // espacio vertical entre líneas si se hace wrap
+          crossAxisAlignment: WrapCrossAlignment.center,
+          alignment: WrapAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              width: width,
+              child: CustomInputWidget(
+                  controller: controller.startTime,
+                  label: "Hora inicio*",
+                  hintText: "Hora inicio",
+                  prefixIcon: Icons.access_time),
+            ),
+            SizedBox(
+              width: width,
+              child: CustomInputWidget(
+                  controller: controller.endTime,
+                  label: "Hora fin*",
+                  hintText: "Hora fin",
+                  prefixIcon: Icons.access_time),
+            ),
+            SizedBox(
+              width: width,
+              child: CustomDatePicker(
+                  initialDate: DateTime(2020),
+                  controller: controller.startDate,
+                  label: "Fecha inicio",
+                  hintText: "Fecha inicio",
+                  prefixIcon: Icons.calendar_today),
+            ),
+            SizedBox(
+                width: width,
+                child: CustomDatePicker(
+                    initialDate: DateTime(2020),
+                    controller: controller.endDate,
+                    label: "Fecha fin",
+                    hintText: "Fecha fin",
+                    prefixIcon: Icons.calendar_today)),
+          ],
+        );
+      })),
+      cardContentSpace(),
+      ContentCard(
+          child: Column(
+        children: [
+          LayoutBuilder(builder: (context, constraints) {
+            final isWideScreen = constraints.maxWidth > 750;
+            final width = isWideScreen
+                ? (constraints.maxWidth / 4) - 40
+                : constraints.maxWidth - 40;
+
+            return Wrap(
+                spacing: 30,
+                runSpacing: 20,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                alignment: WrapAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: width,
+                    child: CustomInputWidget(
+                        controller: controller.serviceQuantity,
+                        label: "Cantidad de servicio",
+                        hintText: "Cantidad de servicio",
+                        prefixIcon: Icons.numbers),
+                  ),
+                  SizedBox(
+                    width: width,
+                    child: CustomInputWidget(
+                        controller: controller.serviceAgent,
+                        label: "Agente de servicio",
+                        hintText: "Agente de servicio",
+                        prefixIcon: Icons.person),
+                  ),
+                  SizedBox(
+                    width: width,
+                    child: CustomInputWidget(
+                        controller: controller.scheduleQuantity,
+                        label: "Cantidad de horarios",
+                        hintText: "Cantidad de horarios",
+                        prefixIcon: Icons.numbers),
+                  ),
+                  SizedBox(
+                      width: width,
+                      child: CustomLabelWidget(
+                          title: "País servicio",
+                          label: "Guatemala",
+                          prefixIcon: Icons.flag)),
+
+                  //bonus, transport, food quantity
+                  SizedBox(
+                    width: width,
+                    child: CustomInputWidget(
+                        controller: controller.bonus,
+                        label: "Bono",
+                        hintText: "Bono",
+                        prefixIcon: Icons.attach_money),
+                  ),
+                  SizedBox(
+                    width: width,
+                    child: CustomInputWidget(
+                        controller: controller.transport,
+                        label: "Transporte",
+                        hintText: "Transporte",
+                        prefixIcon: Icons.directions_bus),
+                  ),
+                  SizedBox(
+                    width: width,
+                    child: CustomInputWidget(
+                        controller: controller.foodQuantity,
+                        label: "Alimentación",
+                        hintText: "Alimentación",
+                        prefixIcon: Icons.fastfood),
+                  ),
+                  SizedBox(
+                    width: width,
+                    child: CustomInputWidget(
+                        controller: controller.shiftValue,
+                        label: "Valor del turno",
+                        hintText: "Valor del turno",
+                        prefixIcon: Icons.attach_money),
+                  ),
+                ]);
+          }),
+          LayoutBuilder(builder: (context, constraints) {
+            final isWideScreen = constraints.maxWidth > 750;
+            final width = isWideScreen
+                ? (constraints.maxWidth / 2) - 40
+                : constraints.maxWidth - 40;
+
+            return Wrap(
+                spacing: 30,
+                runSpacing: 20,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                alignment: WrapAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: width,
+                    child: CustomLabelWidget(
+                        title: "Precio mínimo",
+                        label: controller.minimumPrice.text,
+                        prefixIcon: Icons.attach_money),
+                  ),
+                  SizedBox(
+                    width: width,
+                    child: CustomInputWidget(
+                        controller: controller.servicePrice,
+                        label: "Precio del servicio",
+                        hintText: "Precio del servicio",
+                        prefixIcon: Icons.attach_money),
+                  ),
+                ]);
+          }),
+        ],
+      )),
+      cardContentSpace(),
+      ContentCard(child: LayoutBuilder(builder: (context, constraints) {
+        final isWideScreen = constraints.maxWidth > 750;
+        final width = isWideScreen
+            ? (constraints.maxWidth / 4) - 40
+            : constraints.maxWidth - 40;
+
+        return Wrap(
+            spacing: 30, // espacio horizontal entre widgets
+            runSpacing: 20, // espacio vertical entre líneas si se hace wrap
+            crossAxisAlignment: WrapCrossAlignment.center,
+            alignment: WrapAlignment.spaceBetween,
+            children: [
+              LoadingAutocompleteDropdown(
+                prefixIcon: Icons.business,
+                enabled: true,
+                isLoading: controller.genericListController.isLoadingCity,
+                listItems: controller.genericListController.departments,
+                onSelected: (DropDownOption option) {
+                  controller.department.value = option;
+                },
+                label: "Departamento",
+                hintText: "Departamento",
+                resetValue: controller.department,
+                width: width,
+                onTextChange: (text) async {
+                  List<DropDownOption> filteredOptions = controller
+                      .genericListController.departments
+                      .where((option) => option.label
+                          .toLowerCase()
+                          .contains(text.toLowerCase()))
+                      .toList();
+                  return filteredOptions.isEmpty
+                      ? [DropDownOption(id: '', label: 'No hay resultados')]
+                      : filteredOptions;
+                },
+              ),
+              SizedBox(
+                  width: width,
+                  child: CustomInputWidget(
+                      controller: controller.subCity,
+                      label: "Ciudad",
+                      hintText: "Ciudad",
+                      prefixIcon: Icons.location_city)),
+              //loading dropdown zone
+              LoadingAutocompleteDropdown(
+                prefixIcon: Icons.location_on,
+                enabled: true,
+                isLoading: controller.genericListController.isLoadingZone,
+                listItems: controller.genericListController.zones,
+                onSelected: (DropDownOption option) {
+                  controller.zone.value = option;
+                },
+                label: "Zona",
+                hintText: "Zona",
+                resetValue: controller.zone,
+                width: width,
+                onTextChange: (text) async {
+                  List<DropDownOption> filteredOptions = controller
+                      .genericListController.zones
+                      .where((option) => option.label
+                          .toLowerCase()
+                          .contains(text.toLowerCase()))
+                      .toList();
+                  return filteredOptions.isEmpty
+                      ? [DropDownOption(id: '', label: 'No hay resultados')]
+                      : filteredOptions;
+                },
+              ),
+              SizedBox(
+                  width: width,
+                  child: CustomInputWidget(
+                      controller: controller.address,
+                      label: "Dirección",
+                      hintText: "Dirección",
+                      prefixIcon: Icons.home)),
+
+              CustomInputWidget(
+                  controller: controller.observations,
+                  label: "Observaciones",
+                  hintText: "Observaciones",
+                  prefixIcon: Icons.notes),
+              Align(
+                alignment: Alignment.centerRight,
+                child: CustomButton(
+                    color: Theme.of(context).colorScheme.primary,
+                    text: Text(
+                      "Guardar",
+                      style: CustomStyle.textStyleWhite(context),
+                    ),
+                    isLoading: false,
+                    onPress: () {}),
+              )
+            ]);
+      })),
+    ],
+  );
 }
