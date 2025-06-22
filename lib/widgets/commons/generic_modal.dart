@@ -9,6 +9,8 @@ class GenericModal extends StatelessWidget {
   final String acceptText;
   final String cancelText;
   final String subtitle;
+  final bool showAcceptButton;
+  final bool showCancelButton;
 
   const GenericModal({
     super.key,
@@ -19,6 +21,8 @@ class GenericModal extends StatelessWidget {
     this.acceptText = 'Aceptar',
     this.cancelText = 'Cancelar',
     this.subtitle = '',
+    this.showAcceptButton = true,
+    this.showCancelButton = true,
   });
 
   @override
@@ -41,6 +45,7 @@ class GenericModal extends StatelessWidget {
 
       content: content,
       actions: [
+        showCancelButton ?
         SizedBox(
           width: 100,
           child: ElevatedButton(
@@ -51,7 +56,8 @@ class GenericModal extends StatelessWidget {
             },
             child: Text(cancelText),
           ),
-        ),
+        ): const SizedBox.shrink(),
+        showAcceptButton ?
         SizedBox(
           width: 100,
           child: ElevatedButton(
@@ -64,7 +70,7 @@ class GenericModal extends StatelessWidget {
             },
             child: Text(acceptText),
           ),
-        ),
+        ): const SizedBox.shrink(),
       ],
     );
   }

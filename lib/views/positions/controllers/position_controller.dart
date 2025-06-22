@@ -1,5 +1,6 @@
 import 'package:agents_app/controllers/generic_list_controller.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
+import 'package:agents_app/models/position/day_model.dart';
 import 'package:agents_app/models/position/equipment_model.dart';
 import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/services/employee_dropdown_service.dart';
@@ -103,42 +104,49 @@ class PositionController extends GetxController {
 
   final weekDays = <WeekDay>[
     WeekDay(
+      id: 1,
       name: "Lunes",
       startTimeController: TextEditingController(text: "00:00"),
       endTimeController: TextEditingController(text: "00:00"),
       isSelected: false.obs,
     ),
     WeekDay(
+      id: 2,
       name: "Martes",
       startTimeController: TextEditingController(text: "00:00"),
       endTimeController: TextEditingController(text: "00:00"),
       isSelected: false.obs,
     ),
     WeekDay(
+      id: 3,
       name: "Miércoles",
       startTimeController: TextEditingController(text: "00:00"),
       endTimeController: TextEditingController(text: "00:00"),
       isSelected: false.obs,
     ),
     WeekDay(
+      id: 4,
       name: "Jueves",
       startTimeController: TextEditingController(text: "00:00"),
       endTimeController: TextEditingController(text: "00:00"),
       isSelected: false.obs,
     ),
     WeekDay(
+      id: 5,
       name: "Viernes",
       startTimeController: TextEditingController(text: "00:00"),
       endTimeController: TextEditingController(text: "00:00"),
       isSelected: false.obs,
     ),
     WeekDay(
+      id: 6,
       name: "Sábado",
       startTimeController: TextEditingController(text: "00:00"),
       endTimeController: TextEditingController(text: "00:00"),
       isSelected: false.obs,
     ),
     WeekDay(
+      id: 7,
       name: "Domingo",
       startTimeController: TextEditingController(text: "00:00"),
       endTimeController: TextEditingController(text: "00:00"),
@@ -215,35 +223,92 @@ class PositionController extends GetxController {
   Future<bool> newUpdatePosition(String? idPosition) async {
     try {
       isLoadingPosition.value = true;
-      final positionData = {
-        "id": idPosition,
-        "groupId": group.value.id,
-        "clientId": client.value.id,
-        "branchId": branch.value.id,
-        "adviserId": adviser.value.id,
-        "companyId": company.value.id,
-        "agencyId": agency.value.id,
-        "serviceTypeId": serviceType.value.id,
-        "shiftTimeId": shiftTime.value.id,
-        "startTime": startTime.text,
-        "endTime": endTime.text,
-        "startDate": startDate.text,
-        "endDate": endDate.text,
-        "serviceQuantity": serviceQuantity.text,
-        "serviceAgent": serviceAgent.text,
-        "scheduleQuantity": scheduleQuantity.text,
-        "bonus": bonus.text,
-        "transport": transport.text,
-        "foodQuantity": foodQuantity.text,
-        "shiftValue": shiftValue.text,
-        "minimumPrice": minimumPrice.text,
-        "servicePrice": servicePrice.text,
-        "departmentId": department.value.id,
-        "subCity": subCity.text,
-        "zoneId": zone.value.id,
-        "address": address.text,
-        "observations": observations.text,
-      };
+      // final positionData = {
+      //   "id": idPosition,
+      //   "name": "posicion ${DateTime.now().toIso8601String()}",
+      //   "groupId": group.value.id,
+      //   "clientId": client.value.id,
+      //   "branchId": branch.value.id,
+      //   "adviserId": adviser.value.id,
+      //   "companyId": company.value.id,
+      //   "agencyId": agency.value.id,
+      //   "serviceTypeId": serviceType.value.id,
+      //   "shiftTimeId": shiftTime.value.id,
+      //   "startTime": startTime.text,
+      //   "endTime": endTime.text,
+      //   "startDate": startDate.text,
+      //   "endDate": endDate.text,
+      //   "serviceQuantity": serviceQuantity.text,
+      //   "serviceAgent": serviceAgent.text,
+      //   "scheduleQuantity": scheduleQuantity.text,
+      //   "bonus": bonus.text,
+      //   "transport": transport.text,
+      //   "foodQuantity": foodQuantity.text,
+      //   "shiftValue": shiftValue.text,
+      //   "minimumPrice": minimumPrice.text,
+      //   "servicePrice": servicePrice.text,
+      //   "departmentId": department.value.id,
+      //   "subCity": subCity.text,
+      //   "zoneId": zone.value.id,
+      //   "address": address.text,
+      //   "observations": observations.text,
+      // };
+
+      final List<DayModel> days = weekDays
+          .map((day) => DayModel(
+              initTime: day.startTimeController.text,
+              endTime: day.endTimeController.text,
+              daysId: day.id))
+          .toList();
+
+      PositionModel positionData = PositionModel(
+        id: idPosition,
+        branchId: branch.value.id,
+        adviserId: adviser.value.id,
+        companyId: company.value.id,
+        agencyId: agency.value.id,
+        serviceTypeId: serviceType.value.id,
+        shiftTimeId: shiftTime.value.id,
+        endTime: endTime.text,
+        endDate: endDate.text,
+        serviceQuantity: serviceQuantity.text,
+        serviceAgent: serviceAgent.text,
+        scheduleQuantity: scheduleQuantity.text,
+        bonus: bonus.text,  //should be nullable
+        transportId: "1",
+        shiftValue: shiftValue.text,
+        minimunPrice: minimumPrice.text,
+        servicePrice: servicePrice.text,
+        departament: department.value.label,
+        countryService: "Guatemala",
+        location: subCity.text,
+        paymentFrequency: shiftTime.value.label,
+        transportationCost: transport.text,
+        initDate: startDate.text,
+        initTime: startTime.text,
+        days: days,
+        equipment: equipmentList,
+        remarks: observations.text, //should be nullable
+
+        //has left
+        supportDocument: null,
+        meals: null,
+        document: null,
+        // valor del turno
+        // precio minimo
+        // foodQuantity: foodQuantity.text,
+        //zoneId: zone.value.id,
+        name: "posicion ${DateTime.now().toIso8601String()}",
+        addressId: "12",
+        latitude: "0.0",
+        longitude: "0.0",
+        physicalAddress: "Dirección física",
+        fiscalAddress: "Dirección fiscal",
+        billingAddress: "Dirección de facturación",
+        positionName: "Posición de prueba",
+        // groupId: group.value.id,
+        // clientId: client.value.id,
+      );
 
       final selectedDays = getSelectedDays();
       if (selectedDays.isEmpty) {
@@ -252,9 +317,9 @@ class PositionController extends GetxController {
         return false;
       }
 
-      PositionModel positionDataData = PositionModel.fromJson(positionData);
+      // PositionModel positionDataData = PositionModel.fromJson(positionData);
 
-      final position = await positionServices.create(positionDataData);
+      final position = await positionServices.create(positionData);
 
       if (position) {
         ToastService.success(
@@ -281,12 +346,14 @@ class PositionController extends GetxController {
 }
 
 class WeekDay {
+  final int id;
   final String name;
   final TextEditingController startTimeController;
   final TextEditingController endTimeController;
   final RxBool isSelected;
 
   WeekDay({
+    required this.id,
     required this.name,
     required this.startTimeController,
     required this.endTimeController,

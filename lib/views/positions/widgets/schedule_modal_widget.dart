@@ -14,6 +14,7 @@ void showScheduleModal({
   showDialog(
     context: context,
     builder: (context) => GenericModal(
+      showAcceptButton: false,
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,

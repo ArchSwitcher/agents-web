@@ -15,6 +15,7 @@ void showEquipmentModal({
   showDialog(
     context: context,
     builder: (context) => GenericModal(
+      showAcceptButton: false,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

@@ -2,7 +2,6 @@ import 'package:agents_app/models/common/simple_entity_model.dart';
 import 'package:agents_app/models/position/day_model.dart';
 import 'package:agents_app/models/position/equipment_model.dart';
 
-
 class PositionModel {
   String? id;
   String name;
@@ -20,14 +19,14 @@ class PositionModel {
   String serviceAgent;
   String scheduleQuantity;
   String servicePrice;
-  String bonus;
-  String meals;
-  String shiftValue;
-  String minimunPrice;
+  String? bonus;
+  String? meals;
+  String? shiftValue;
+  String? minimunPrice;
   String departament;
-  String remarks;
-  String document;
-  String prosena;
+  String? remarks;
+  String? document;
+  String? prosena;
   String positionName;
   String paymentFrequency;
   String agencyId;
@@ -38,9 +37,9 @@ class PositionModel {
   String serviceTypeId;
   String shiftTimeId;
   String countryService;
-  String transportationCost;
+  String? transportationCost;
   String adviserId;
-  String supportDocument;
+  String? supportDocument;
 
   SimpleEntity? agency;
   SimpleEntity? branch;
@@ -69,14 +68,14 @@ class PositionModel {
     required this.serviceAgent,
     required this.scheduleQuantity,
     required this.servicePrice,
-    required this.bonus,
-    required this.meals,
-    required this.shiftValue,
-    required this.minimunPrice,
+    this.bonus,
+    this.meals,
+    this.shiftValue,
+    this.minimunPrice,
     required this.departament,
-    required this.remarks,
-    required this.document,
-    required this.prosena,
+    this.remarks,
+    this.document,
+    this.prosena,
     required this.positionName,
     required this.paymentFrequency,
     required this.agencyId,
@@ -87,9 +86,9 @@ class PositionModel {
     required this.serviceTypeId,
     required this.shiftTimeId,
     required this.countryService,
-    required this.transportationCost,
+    this.transportationCost,
     required this.adviserId,
-    required this.supportDocument,
+    this.supportDocument,
     required this.days,
     required this.equipment,
     this.agency,
@@ -122,13 +121,15 @@ class PositionModel {
       serviceAgent: str(p['Service_agent']),
       scheduleQuantity: str(p['Schedule_quantity']),
       servicePrice: str(p['Service_price']),
-      bonus: str(p['Bonus']),
-      meals: p['Meals'] == "1" || p['Meals'] == true ? "true" : "false",
-      shiftValue: str(p['ShiftValue']),
-      minimunPrice: str(p['Minimun_price']),
+      bonus: p['Bonus'] != null ? str(p['Bonus']) : null,
+      meals: p['Meals'] != null
+          ? (p['Meals'] == "1" || p['Meals'] == true ? "true" : "false")
+          : null,
+      shiftValue: p['ShiftValue'] != null ? str(p['ShiftValue']) : null,
+      minimunPrice: p['Minimun_price'] != null ? str(p['Minimun_price']) : null,
       departament: str(p['Departament']),
-      remarks: str(p['Remarks']),
-      document: str(p['Document']),
+      remarks: p['Remarks'] != null ? str(p['Remarks']) : null,
+      document: p['Document'] != null ? str(p['Document']) : null,
       prosena: str(p['Prosena']),
       positionName: str(p['Position_name']),
       paymentFrequency: str(p['Payment_frequency']),
@@ -140,36 +141,56 @@ class PositionModel {
       serviceTypeId: str(p['SERVICE_TYPE_Id']),
       shiftTimeId: str(p['SHIFT_TIME_Id']),
       countryService: str(p['Country_service']),
-      transportationCost: str(p['Transportation_cost']),
+      transportationCost: p['Transportation_cost'] != null
+          ? str(p['Transportation_cost'])
+          : null,
       adviserId: str(p['BOSS_POSITIONs']?[0]?['EMPLOYEE']?['Id']),
-      supportDocument: '',
-
-      agency: p['AGENCY'] != null ? SimpleEntity.fromJson({
-        "id": p['AGENCY']['Id'],
-        "name": p['AGENCY']['Name'],
-      }) : null,
-      branch: p['BRANCH'] != null ? SimpleEntity.fromJson({
-        "id": p['BRANCH']['Id'],
-        "name": p['BRANCH']['Branch_name'],
-      }) : null,
-      company: p['COMPANY'] != null ? SimpleEntity.fromJson({
-        "id": p['COMPANY']['Id'],
-        "name": p['COMPANY']['Name'],
-      }) : null,
-      shiftTime: p['SHIFT_TIME'] != null ? SimpleEntity.fromJson({
-        "id": p['SHIFT_TIME']['Id'],
-        "name": p['SHIFT_TIME']['Name'],
-      }) : null,
-      serviceType: p['SERVICE_TYPE'] != null ? SimpleEntity.fromJson({
-        "id": p['SERVICE_TYPE']['Id'],
-        "name": p['SERVICE_TYPE']['Name'],
-      }) : null,
-      transport: p['TRANSPORT'] != null ? SimpleEntity.fromJson({
-        "id": p['TRANSPORT']['Id'],
-        "name": p['TRANSPORT']['Name'],
-      }) : null,
-      days: (p['ASIGN_DAYs'] as List?)?.map((d) => DayModel.fromJson(d)).toList() ?? [],
-      equipment: (p['EQUIPMENTs'] as List?)?.map((e) => EquipmentModel.fromJson(e)).toList() ?? [],
+      supportDocument:
+          p['Support_document'] != null ? str(p['Support_document']) : null,
+      agency: p['AGENCY'] != null
+          ? SimpleEntity.fromJson({
+              "id": p['AGENCY']['Id'],
+              "name": p['AGENCY']['Name'],
+            })
+          : null,
+      branch: p['BRANCH'] != null
+          ? SimpleEntity.fromJson({
+              "id": p['BRANCH']['Id'],
+              "name": p['BRANCH']['Branch_name'],
+            })
+          : null,
+      company: p['COMPANY'] != null
+          ? SimpleEntity.fromJson({
+              "id": p['COMPANY']['Id'],
+              "name": p['COMPANY']['Name'],
+            })
+          : null,
+      shiftTime: p['SHIFT_TIME'] != null
+          ? SimpleEntity.fromJson({
+              "id": p['SHIFT_TIME']['Id'],
+              "name": p['SHIFT_TIME']['Name'],
+            })
+          : null,
+      serviceType: p['SERVICE_TYPE'] != null
+          ? SimpleEntity.fromJson({
+              "id": p['SERVICE_TYPE']['Id'],
+              "name": p['SERVICE_TYPE']['Name'],
+            })
+          : null,
+      transport: p['TRANSPORT'] != null
+          ? SimpleEntity.fromJson({
+              "id": p['TRANSPORT']['Id'],
+              "name": p['TRANSPORT']['Name'],
+            })
+          : null,
+      days: (p['ASIGN_DAYs'] as List?)
+              ?.map((d) => DayModel.fromJson(d))
+              .toList() ??
+          [],
+      equipment: (p['EQUIPMENTs'] as List?)
+              ?.map((e) => EquipmentModel.fromJson(e))
+              .toList() ??
+          [],
     );
   }
 
@@ -216,3 +237,17 @@ class PositionModel {
     };
   }
 }
+
+
+/*
+OPCIONALES
+bonus	String?
+meals	String?
+shiftValue	String?
+minimunPrice	String?
+remarks	String?
+document	String?
+prosena	String?
+transportationCost	String?
+supportDocument	String?
+ */
