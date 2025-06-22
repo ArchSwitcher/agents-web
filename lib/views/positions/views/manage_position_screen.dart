@@ -2,6 +2,7 @@ import 'package:agents_app/layout/contect_card_space.dart';
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
+import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/constants/database_constants.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
@@ -26,7 +27,7 @@ class ManagePositionScreen extends StatefulWidget {
 class ManagePositionScreenState extends State<ManagePositionScreen> {
   final _formKey = GlobalKey<FormState>();
   final controller = Get.put(PositionController());
-  int _currentStep = 4;
+  int _currentStep = 0;
 
   start() async {
     await controller.genericListController.getAllShiftTime();
@@ -305,7 +306,7 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
                   );
                 })),
                 _currentStep == 4
-                    ? _formStepContent(controller, context)
+                    ? _formStepContent(controller, context, _formKey)
                     : const SizedBox(),
                 cardContentSpace(),
                 cardContentSpace(),
@@ -317,7 +318,7 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
   }
 }
 
-Widget _formStepContent(PositionController controller, BuildContext context) {
+Widget _formStepContent(PositionController controller, BuildContext context, GlobalKey<FormState> formKey) {
   return Column(
     children: [
       cardContentSpace(),
@@ -645,8 +646,16 @@ Widget _formStepContent(PositionController controller, BuildContext context) {
                       ),
                       isLoading: controller.isLoadingPosition.value,
                       onPress: () async {
+                        if(!formKey.currentState!.validate()) {
+                          ToastService.warning(title: "Validación", subTitle: "por favor, complete todos los campos obligatorios.");
+                          return;
+                        }
+                        //validacion de dias y equipo
+                        
+                        controller.isLoadingPosition.value = true;
                         const isNewPosition = null;
                         await controller.newUpdatePosition(isNewPosition);
+                        controller.isLoadingPosition.value = false;
                       }),
                 );
               })

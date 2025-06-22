@@ -23,7 +23,7 @@ class PositionController extends GetxController {
 
   final positionServices = PositionServices();
 
-  final RxBool isLoadingPosition = true.obs;
+  final RxBool isLoadingPosition = false  .obs;
   final RxBool isLoadingPositions = true.obs;
 
   final Rx<DropDownOption> group =
@@ -291,7 +291,7 @@ class PositionController extends GetxController {
         remarks: observations.text, //should be nullable
 
         //has left
-        supportDocument: null,
+        supportDocument: "https://example.com/document.pdf",
         meals: null,
         document: null,
         // valor del turno

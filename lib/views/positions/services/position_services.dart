@@ -56,7 +56,7 @@ class PositionServices extends BaseService
       body: jsonEncode(item.toJson()),
     );
 
-    print("objects ----############ ${item.toJson()}");
+    print("objects ----############ ---- ${item.toJson()}");
 
     if (response.statusCode == 200) {
       ToastService.success(
