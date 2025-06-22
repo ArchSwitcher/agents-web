@@ -2,6 +2,7 @@ import 'package:agents_app/layout/contect_card_space.dart';
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
+import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/constants/database_constants.dart';
 import 'package:agents_app/shared/constants/routes.dart';
@@ -25,6 +26,11 @@ class ManagePositionScreen extends StatefulWidget {
 }
 
 class ManagePositionScreenState extends State<ManagePositionScreen> {
+// get value of route arguments
+  final String? title = Get.arguments?['title'] ?? "Nueva posición";
+  final PositionModel? position = Get.arguments?['position'];
+  final bool isEdit = Get.arguments?['isEdit'] ?? true;
+
   final _formKey = GlobalKey<FormState>();
   final controller = Get.put(PositionController());
   int _currentStep = 0;
@@ -50,6 +56,10 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       start();
+      if(isEdit && position != null) {
+        controller.loadPositionData(position!);
+        _currentStep = 4;
+      } 
     });
   }
 

@@ -16,7 +16,7 @@ List<DataRow> buildTableRows(
         cells: [
           DataCell(Row(
             children: [
-              editPositionButton(context, element.id.toString()),
+              editPositionButton(context, element),
               deletePositionButton(context, element.id.toString()),
             ],
           )),

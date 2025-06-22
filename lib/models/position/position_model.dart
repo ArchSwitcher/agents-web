@@ -47,6 +47,7 @@ class PositionModel {
   SimpleEntity? shiftTime;
   SimpleEntity? serviceType;
   SimpleEntity? transport;
+  SimpleEntity? adviser;
 
   List<DayModel> days;
   List<EquipmentModel> equipment;
@@ -97,6 +98,7 @@ class PositionModel {
     this.shiftTime,
     this.serviceType,
     this.transport,
+    this.adviser,
   });
 
   factory PositionModel.fromJson(Map<String, dynamic> json) {
@@ -145,8 +147,16 @@ class PositionModel {
           ? str(p['Transportation_cost'])
           : null,
       adviserId: str(p['BOSS_POSITIONs']?[0]?['EMPLOYEE']?['Id']),
-      supportDocument:
-          p['Support_document'] != null ? str(p['Support_document']) : null,
+      adviser: p['BOSS_POSITIONs']?[0]?['EMPLOYEE'] != null
+          ? SimpleEntity.fromJson({
+              "id": p['BOSS_POSITIONs']?[0]?['EMPLOYEE']?['Id'],
+              "name": p['BOSS_POSITIONs']?[0]?['EMPLOYEE']?['PERSON']
+                      ?['First_name'] +
+                  // ignore: prefer_interpolation_to_compose_strings
+                  " " +
+                  p['BOSS_POSITIONs']?[0]?['EMPLOYEE']?['PERSON']?['Last_name'],
+            })
+          : null,
       agency: p['AGENCY'] != null
           ? SimpleEntity.fromJson({
               "id": p['AGENCY']['Id'],
@@ -212,7 +222,11 @@ class PositionModel {
       "schedule_quantity": scheduleQuantity,
       "service_price": servicePrice,
       "bonus": bonus,
-      "meals": meals == null ? false : meals == "true" ? true : false,
+      "meals": meals == null
+          ? false
+          : meals == "true"
+              ? true
+              : false,
       "shiftValue": shiftValue,
       "minimun_price": double.tryParse(minimunPrice ?? "") ?? 0.0,
       "departament": departament,

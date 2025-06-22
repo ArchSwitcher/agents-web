@@ -23,7 +23,7 @@ class PositionController extends GetxController {
 
   final positionServices = PositionServices();
 
-  final RxBool isLoadingPosition = false  .obs;
+  final RxBool isLoadingPosition = false.obs;
   final RxBool isLoadingPositions = true.obs;
 
   final Rx<DropDownOption> group =
@@ -165,7 +165,7 @@ class PositionController extends GetxController {
 
   List<Map<String, String>> getSelectedDays() {
     return weekDays
-        .where((day) => day.isSelected.value)
+        .where((day) => day.isSelected.value == true)
         .map((day) => {
               "day": day.name,
               "startTime": day.startTimeController.text,
@@ -274,7 +274,7 @@ class PositionController extends GetxController {
         serviceQuantity: serviceQuantity.text,
         serviceAgent: serviceAgent.text,
         scheduleQuantity: scheduleQuantity.text,
-        bonus: bonus.text,  //should be nullable
+        bonus: bonus.text, //should be nullable
         transportId: "1",
         shiftValue: shiftValue.text,
         minimunPrice: minimumPrice.text,
@@ -333,6 +333,92 @@ class PositionController extends GetxController {
       ToastService.error(
           title: 'Error', subTitle: 'Error al crear la posición: $e');
       return false;
+    } finally {
+      isLoadingPosition.value = false;
+    }
+  }
+
+  // function to load all data for the position form should be recieve arguments PositionModel
+
+  Future<void> loadPositionData(PositionModel position) async {
+    try {
+      isLoadingPosition.value = true;
+
+      // Load group, client, branch, adviser, company, agency, and service type
+      // group.value = DropDownOption(
+      //     id: position.groupId ?? '',
+      //     label: position.groupName ?? 'Seleccione un grupo');
+      // client.value = DropDownOption(
+      //     id: position.clientId ?? '',
+      //     label: position.clientName ?? 'Seleccione un cliente');
+      branch.value = DropDownOption(
+          id: position.branchId,
+          label: position.branch!.name);
+      adviser.value = DropDownOption(
+          id: position.adviserId,
+          label: position.adviser!.name);
+      company.value = DropDownOption(
+          id: position.companyId ,
+          label: position.company!.name );
+      agency.value = DropDownOption(
+          id: position.agencyId ,
+          label: position.agency!.name);
+      serviceType.value = DropDownOption(
+          id: position.serviceTypeId,
+          label: position.serviceType!.name);
+      shiftTime.value = DropDownOption(
+          id: position.shiftTimeId,
+          label: position.shiftTime!.name);
+
+      // Load other fields
+      startTime.text = position.initTime ;
+      endTime.text = position.endTime ;
+      startDate.text = position.initDate;
+      endDate.text = position.endDate ;
+      serviceQuantity.text = position.serviceQuantity.toString() ;
+      serviceAgent.text = position.serviceAgent.toString() ;
+      scheduleQuantity.text = position.scheduleQuantity.toString() ;
+      bonus.text = position.bonus.toString() ;
+      transport.text = position.transportationCost.toString() ;
+      foodQuantity.text = position.meals.toString() ;
+      shiftValue.text = position.shiftValue.toString() ;
+      minimumPrice.text = position.minimunPrice.toString() ;
+      servicePrice.text = position.servicePrice.toString() ;
+
+      department.value = DropDownOption(
+          id: "", label: position.departament);
+      subCity.text = position.location;
+      zone.value = DropDownOption(
+          id: '',
+          label:
+              'Seleccione una zona'); // Assuming zone is not provided in PositionModel
+      address.text = position.physicalAddress;
+      observations.text = position.remarks ?? '';
+
+      // Load equipment list
+      equipmentList.clear();
+      equipmentList.addAll(position.equipment);
+
+      // Load week days
+      for (var day in position.days) {
+        final weekDay = weekDays.firstWhere(
+          (d) => d.id == day.daysId,
+          orElse: () => WeekDay(
+            id: day.daysId,
+            name: 'Día ${day.daysId}',
+            startTimeController: TextEditingController(text: day.initTime),
+            endTimeController: TextEditingController(text: day.endTime),
+            isSelected: false.obs,
+          ),
+        );
+        weekDay.startTimeController.text = day.initTime;
+        weekDay.endTimeController.text = day.endTime;
+        weekDay.isSelected.value = true;
+      }
+    } catch (e) {
+      ToastService.error(
+          title: 'Error',
+          subTitle: 'Error al cargar los datos de la posición: $e');
     } finally {
       isLoadingPosition.value = false;
     }

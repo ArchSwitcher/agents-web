@@ -1,4 +1,5 @@
 
+import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/views/positions/controllers/position_controller.dart';
@@ -35,14 +36,15 @@ Widget addPositionButton(BuildContext context) {
       });
 }
 
-Widget editPositionButton(BuildContext context, String branchId) {
+Widget editPositionButton(BuildContext context, PositionModel position) {
   final colorScheme = Theme.of(context).colorScheme;
 
   return IconButton(
       onPressed: () {
-        Navigator.pushNamed(context, RouteConstants.manageBranch, arguments: {
-          'title': "Editar posición",
-          'branchId': branchId,
+        Navigator.pushNamed(context, RouteConstants.managePosition, arguments: {
+          'title': "Editar posición para cliente",
+          'position': position,
+          'isEdit': true,
         });
       },
       icon: Icon(
