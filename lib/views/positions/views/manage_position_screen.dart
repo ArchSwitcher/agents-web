@@ -27,7 +27,7 @@ class ManagePositionScreen extends StatefulWidget {
 
 class ManagePositionScreenState extends State<ManagePositionScreen> {
 // get value of route arguments
-  final String? title = Get.arguments?['title'] ?? "Nueva posición";
+  final String title = Get.arguments?['title'] ?? "Gestión de posiciones para clientes";
   final PositionModel? position = Get.arguments?['position'];
   final bool isEdit = Get.arguments?['isEdit'] ?? true;
 
@@ -67,7 +67,7 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
   Widget build(BuildContext context) {
     return ResponsiveSidebarLayout(
         title: "Posición",
-        description: "Gestión de posiciones para clientes",
+        description: title,
         currentRoute: RouteConstants.positions,
         userRole: "admin",
         showBackButton: true,
