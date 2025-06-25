@@ -27,7 +27,8 @@ class ManagePositionScreen extends StatefulWidget {
 
 class ManagePositionScreenState extends State<ManagePositionScreen> {
 // get value of route arguments
-  final String title = Get.arguments?['title'] ?? "Gestión de posiciones para clientes";
+  final String title =
+      Get.arguments?['title'] ?? "Gestión de posiciones para clientes";
   final PositionModel? position = Get.arguments?['position'];
   final bool isEdit = Get.arguments?['isEdit'] ?? true;
 
@@ -51,15 +52,20 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
     controller.isLoadingEmployee.value = false;
   }
 
+  loadEdit() {
+    if (isEdit && position != null) {
+      controller.loadPositionData(position!);
+      _currentStep = 4;
+    }
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       start();
-      if(isEdit && position != null) {
-        controller.loadPositionData(position!);
-        _currentStep = 4;
-      } 
+      loadEdit();
     });
   }
 
@@ -91,6 +97,7 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
                     alignment: WrapAlignment.spaceBetween,
                     children: [
                       LoadingAutocompleteDropdown(
+                        initialValue: controller.group.value,
                         prefixIcon: Icons.group,
                         enabled: true,
                         isLoading: controller.groupController.isLoading,
@@ -123,6 +130,7 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
                       ),
                       //loading dropdown client
                       LoadingAutocompleteDropdown(
+                        initialValue: controller.client.value,
                         loadingText: controller.genericListController
                                 .isLoadingClientsByGroup.value
                             ? "Seleccione un grupo para ver clientes"
@@ -164,6 +172,7 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
 
                       //loading dropdown branch
                       LoadingAutocompleteDropdown(
+                        initialValue: controller.branch.value,
                         loadingText: controller.genericListController
                                 .isLoadingBranchByClient.value
                             ? "Seleccione un cliente para ver sucursales"
@@ -199,6 +208,7 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
 
                       (_currentStep == 3 || _currentStep == 4)
                           ? LoadingAutocompleteDropdown(
+                              initialValue: controller.adviser.value,
                               prefixIcon: Icons.person,
                               enabled: true,
                               isLoading: controller.isLoadingEmployee,
@@ -242,6 +252,7 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
                       ),
 
                       LoadingAutocompleteDropdown(
+                        initialValue: controller.company.value,
                         prefixIcon: Icons.business,
                         enabled: true,
                         isLoading:
@@ -275,6 +286,7 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
 
                       // dropdown for agency
                       LoadingAutocompleteDropdown(
+                        initialValue: controller.agency.value,
                         prefixIcon: Icons.business,
                         enabled: true,
                         isLoading:
@@ -328,7 +340,8 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
   }
 }
 
-Widget _formStepContent(PositionController controller, BuildContext context, GlobalKey<FormState> formKey) {
+Widget _formStepContent(PositionController controller, BuildContext context,
+    GlobalKey<FormState> formKey) {
   return Column(
     children: [
       cardContentSpace(),
@@ -346,6 +359,7 @@ Widget _formStepContent(PositionController controller, BuildContext context, Glo
           alignment: WrapAlignment.spaceBetween,
           children: [
             LoadingAutocompleteDropdown(
+              initialValue: controller.serviceType.value,
               prefixIcon: Icons.work,
               enabled: true,
               isLoading: controller.genericListController.isLoadingServiceType,
@@ -369,6 +383,7 @@ Widget _formStepContent(PositionController controller, BuildContext context, Glo
               },
             ),
             LoadingAutocompleteDropdown(
+              initialValue: controller.shiftTime.value,
               prefixIcon: Icons.access_time,
               enabled: true,
               isLoading: controller.genericListController.isLoadingShiftTime,
@@ -577,12 +592,17 @@ Widget _formStepContent(PositionController controller, BuildContext context, Glo
             alignment: WrapAlignment.spaceBetween,
             children: [
               LoadingAutocompleteDropdown(
+                initialValue: controller.department.value,
                 prefixIcon: Icons.business,
                 enabled: true,
                 isLoading: controller.genericListController.isLoadingCity,
                 listItems: controller.genericListController.departments,
                 onSelected: (DropDownOption option) {
                   controller.department.value = option;
+                  controller.genericListController
+                      .fetchMunicipalities(option.id);
+                  controller.municipality.value = DropDownOption(id: "", label: "");
+                  controller.genericListController.cleanMunicipalities();
                 },
                 label: "Departamento",
                 hintText: "Departamento",
@@ -596,19 +616,44 @@ Widget _formStepContent(PositionController controller, BuildContext context, Glo
                           .contains(text.toLowerCase()))
                       .toList();
                   return filteredOptions.isEmpty
-                      ? [DropDownOption(id: '', label: 'No hay resultados')]
+                      ? []
                       : filteredOptions;
                 },
               ),
-              SizedBox(
-                  width: width,
-                  child: CustomInputWidget(
-                      controller: controller.subCity,
-                      label: "Ciudad",
-                      hintText: "Ciudad",
-                      prefixIcon: Icons.location_city)),
+              LoadingAutocompleteDropdown(
+                initialValue: controller.municipality.value,
+                loadingText:
+                    controller.genericListController.isLoadingMunicipality.value
+                        ? "Seleccione un departamento para ver municipios"
+                        : "",
+                prefixIcon: Icons.location_city,
+                enabled: true,
+                isLoading:
+                    controller.genericListController.isLoadingMunicipality,
+                listItems:
+                    controller.genericListController.municipalities.isEmpty
+                        ? []
+                        : controller.genericListController.municipalities,
+                onSelected: (DropDownOption option) {
+                  controller.municipality.value = option;
+                },
+                label: "Municipio",
+                hintText: "Municipio",
+                resetValue: controller.municipality,
+                width: width,
+                onTextChange: (text) async {
+                  List<DropDownOption> filteredOptions = controller
+                      .genericListController.municipalities
+                      .where((option) => option.label
+                          .toLowerCase()
+                          .contains(text.toLowerCase()))
+                      .toList();
+                  return filteredOptions.isEmpty ? [] : filteredOptions;
+                },
+              ),
               //loading dropdown zone
               LoadingAutocompleteDropdown(
+                initialValue: controller.zone.value,
                 prefixIcon: Icons.location_on,
                 enabled: true,
                 isLoading: controller.genericListController.isLoadingZone,
@@ -656,12 +701,15 @@ Widget _formStepContent(PositionController controller, BuildContext context, Glo
                       ),
                       isLoading: controller.isLoadingPosition.value,
                       onPress: () async {
-                        if(!formKey.currentState!.validate()) {
-                          ToastService.warning(title: "Validación", subTitle: "por favor, complete todos los campos obligatorios.");
+                        if (!formKey.currentState!.validate()) {
+                          ToastService.warning(
+                              title: "Validación",
+                              subTitle:
+                                  "por favor, complete todos los campos obligatorios.");
                           return;
                         }
                         //validacion de dias y equipo
-                        
+
                         controller.isLoadingPosition.value = true;
                         const isNewPosition = null;
                         await controller.newUpdatePosition(isNewPosition);

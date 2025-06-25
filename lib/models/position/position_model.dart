@@ -48,6 +48,8 @@ class PositionModel {
   SimpleEntity? serviceType;
   SimpleEntity? transport;
   SimpleEntity? adviser;
+  SimpleEntity? group;
+  SimpleEntity? client;
 
   List<DayModel> days;
   List<EquipmentModel> equipment;
@@ -99,6 +101,8 @@ class PositionModel {
     this.serviceType,
     this.transport,
     this.adviser,
+    this.group,
+    this.client,
   });
 
   factory PositionModel.fromJson(Map<String, dynamic> json) {
@@ -191,6 +195,18 @@ class PositionModel {
           ? SimpleEntity.fromJson({
               "id": p['TRANSPORT']['Id'],
               "name": p['TRANSPORT']['Name'],
+            })
+          : null,
+      group: p['GROUP'] != null
+          ? SimpleEntity.fromJson({
+              "id": p['GROUP']['Id'],
+              "name": p['GROUP']['Name'],
+            })
+          : null,
+      client: p['CLIENT'] != null
+          ? SimpleEntity.fromJson({
+              "id": p['CLIENT']['Id'],
+              "name": p['CLIENT']['Name'],
             })
           : null,
       days: (p['ASIGN_DAYs'] as List?)

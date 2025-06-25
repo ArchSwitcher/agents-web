@@ -17,6 +17,7 @@ class LoadingAutocompleteDropdown extends StatelessWidget {
   final bool enabled;
   final IconData prefixIcon;
   final String loadingText;
+  final DropDownOption? initialValue;
 
   const LoadingAutocompleteDropdown({
     super.key,
@@ -31,6 +32,7 @@ class LoadingAutocompleteDropdown extends StatelessWidget {
     required this.onTextChange,
     this.prefixIcon = Icons.person_outline,
     this.loadingText = '',
+    this.initialValue
 
   });
 
@@ -55,6 +57,7 @@ class LoadingAutocompleteDropdown extends StatelessWidget {
       return SizedBox(
         width: width,
         child: AutocompleteDropdownWidget(
+          initialValue: initialValue,
           prefixIcon: prefixIcon,
           enabled: enabled,
           listItems: listItems,

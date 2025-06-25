@@ -51,6 +51,9 @@ class _AutocompleteDropdownWidgetState
   @override
   void initState() {
     if(widget.initialValue != null) {
+      // selectedOption = widget.initialValue;
+      widget.listItems
+          .firstWhere((option) => option.id == widget.initialValue!.id, orElse: () => DropDownOption(id: '', label: ''));
       selectedOption = widget.initialValue;
     }
     super.initState();

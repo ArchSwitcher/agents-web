@@ -21,6 +21,8 @@ class GenericListController extends GetxController {
   final RxBool isLoadingClientsByGroup = true.obs;
   final RxBool isLoadingBranchByClient = true.obs;
   final RxBool isLoadingEquipmentType = true.obs;
+  final RxBool isLoadingStatusType = true.obs;
+  final RxBool isLoadingMunicipality = true.obs;
 
   final RxList<DropDownOption> employees = <DropDownOption>[].obs;
   final RxList<DropDownOption> classification = <DropDownOption>[].obs;
@@ -39,8 +41,9 @@ class GenericListController extends GetxController {
   final RxList<DropDownOption> clientsByGroup = <DropDownOption>[].obs;
   final RxList<DropDownOption> branchesByClient = <DropDownOption>[].obs;
   final RxList<DropDownOption> equipmentTypes = <DropDownOption>[].obs;
-// getAllAgency
-// getAllCompany
+  final RxList<DropDownOption> statusTypes = <DropDownOption>[].obs;
+  final RxList<DropDownOption> municipalities = <DropDownOption>[].obs;
+
 
   Future<List<DropDownOption>> fetchClassification() async {
     try {
@@ -137,6 +140,25 @@ class GenericListController extends GetxController {
       return [];
     } finally {
       isLoadingCity.value = false;
+    }
+  }
+
+    Future<List<DropDownOption>> fetchMunicipalities(String departmentId) async {
+    try {
+      isLoadingMunicipality.value = true;
+      final data = await genericListService.getAll("common/getMunicipalitiesByDepartment/$departmentId");
+      municipalities.value = data.map((item) {
+        return DropDownOption(
+          id: item.id.toString(),
+          label: item.name,
+        );
+      }).toList();
+      return municipalities;
+    } catch (e) {
+      print("Error fetching municipalities: $e");
+      return [];
+    } finally {
+      isLoadingMunicipality.value = false;
     }
   }
 
@@ -334,6 +356,25 @@ class GenericListController extends GetxController {
       isLoadingEquipmentType.value = false;
     }
   }
+
+   Future<List<DropDownOption>> getAllStatusType() async {
+    try {
+      isLoadingStatusType.value = true;
+      final data = await genericListService.getAll("common/getAllStatusType");
+      statusTypes.value = data.map((item) {
+        return DropDownOption(
+          id: item.id.toString(),
+          label: item.name,
+        );
+      }).toList();
+      return statusTypes;
+    } catch (e) {
+      print("Error fetching status types: $e");
+      return [];
+    } finally {
+      isLoadingStatusType.value = false;
+    }
+  }
   
 
   //clean clientsByGroup
@@ -343,5 +384,9 @@ class GenericListController extends GetxController {
   //clean branchesByClient
   void cleanBranchesByClient() {
     branchesByClient.value = [];
+  }
+
+  void cleanMunicipalities() {
+    municipalities.value = [];
   }
 }

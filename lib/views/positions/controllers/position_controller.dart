@@ -38,6 +38,8 @@ class PositionController extends GetxController {
       DropDownOption(id: '', label: 'Seleccione una sucursal').obs;
   final Rx<DropDownOption> agency =
       DropDownOption(id: '', label: 'Seleccione un asesor').obs;
+  final Rx<DropDownOption> statusType =
+      DropDownOption(id: '', label: 'Seleccione un estado').obs; // statusType
 
   final RxList<DropDownOption> advisers = <DropDownOption>[].obs;
 
@@ -72,6 +74,9 @@ class PositionController extends GetxController {
 
   Rx<DropDownOption> department =
       DropDownOption(id: '', label: 'Seleccione una departamento').obs;
+  Rx<DropDownOption> municipality =
+      DropDownOption(id: '', label: '').obs;
+
   TextEditingController subCity = TextEditingController();
   Rx<DropDownOption> zone =
       DropDownOption(id: '', label: 'Seleccione una zona').obs;
@@ -344,13 +349,13 @@ class PositionController extends GetxController {
     try {
       isLoadingPosition.value = true;
 
-      // Load group, client, branch, adviser, company, agency, and service type
-      // group.value = DropDownOption(
-      //     id: position.groupId ?? '',
-      //     label: position.groupName ?? 'Seleccione un grupo');
-      // client.value = DropDownOption(
-      //     id: position.clientId ?? '',
-      //     label: position.clientName ?? 'Seleccione un cliente');
+      group.value = DropDownOption(
+          id: position.group?.id ?? '',
+          label: position.group?.name ?? '');
+      print("position group: ${position.group?.name}");
+      client.value = DropDownOption(
+          id: position.client?.id ?? '',
+          label: position.client?.name ?? '');
       branch.value = DropDownOption(
           id: position.branchId,
           label: position.branch!.name);
