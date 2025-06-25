@@ -1,6 +1,9 @@
+import 'package:agents_app/controllers/generic_list_controller.dart';
 import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/models/client/clients_model.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
+import 'package:agents_app/services/employee_dropdown_service.dart';
+import 'package:agents_app/shared/constants/database_constants.dart';
 import 'package:agents_app/views/clients/services/client_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +14,12 @@ class ManageClientController extends GetxController {
   final phoneController = TextEditingController();
   final urlController = TextEditingController(text: "");
   final ClientService _clientService = ClientService();
+
+  final GenericListController genericListController =
+      Get.put(GenericListController());
+
+  final EmployeeDropdownService employeeService =
+      Get.put(EmployeeDropdownService());
 
   RxBool isLoading = true.obs;
   RxList<ClientModel> clients = <ClientModel>[].obs;
@@ -25,6 +34,31 @@ class ManageClientController extends GetxController {
     phoneController.dispose();
     urlController.dispose();
     super.onClose();
+  }
+
+  //generate variables for dropdowns
+  RxBool isLoadingAdviser = true.obs;
+  RxBool isLoadingAccountBoss = true.obs;
+  RxBool isLoadingBillPerson = true.obs;
+  RxList<DropDownOption> advisers = <DropDownOption>[].obs;
+  RxList<DropDownOption> accountBosses = <DropDownOption>[].obs;
+  RxList<DropDownOption> billPersons = <DropDownOption>[].obs;
+
+  fetchEmployees() async {
+    isLoadingAdviser.value = true;
+    advisers.value = await employeeService
+        .fetchEmployees(EmployeeTypeDatabaseConstants.adviser);
+    isLoadingAdviser.value = false;
+
+    isLoadingAccountBoss.value = true;
+    accountBosses.value = accountBosses.value = await employeeService
+        .fetchEmployees(EmployeeTypeDatabaseConstants.accountManager);
+    isLoadingAccountBoss.value = false;
+
+    isLoadingBillPerson.value = true;
+    billPersons.value = billPersons.value = await employeeService
+        .fetchEmployees(EmployeeTypeDatabaseConstants.billMan);
+    isLoadingBillPerson.value = false;
   }
 
   fetchClients() async {
@@ -101,5 +135,28 @@ class ManageClientController extends GetxController {
     groupId.value = DropDownOption(id: '', label: '');
   }
 
-  // Add any additional methods or properties needed for managing clients
+  Rx<DropDownOption> fiscalCountry =
+      DropDownOption(id: '', label: 'Seleccione un país fiscal').obs;
+  Rx<DropDownOption> fiscalDepartment =
+      DropDownOption(id: '', label: 'Seleccione un departamento fiscal').obs;
+  Rx<DropDownOption> fiscalZone =
+      DropDownOption(id: '', label: 'Seleccione una zona fiscal').obs;
+  final TextEditingController fiscalAddress = TextEditingController();
+
+  Rx<DropDownOption> paymentCountry =
+      DropDownOption(id: '', label: 'Seleccione un país').obs;
+  Rx<DropDownOption> paymentDepartment =
+      DropDownOption(id: '', label: 'Seleccione un departamento').obs;
+  Rx<DropDownOption> paymentZone =
+      DropDownOption(id: '', label: 'Seleccione una zona').obs;
+  final TextEditingController paymentAddress = TextEditingController();
+
+//bill info
+  Rx<DropDownOption> billPerson =
+      DropDownOption(id: '', label: 'Seleccione una persona de facturación')
+          .obs;
+  Rx<DropDownOption> billingType =
+      DropDownOption(id: '', label: 'Seleccione un tipo de facturación').obs;
+  Rx<DropDownOption> generationType =
+      DropDownOption(id: '', label: 'Seleccione un tipo de generación').obs;
 }

@@ -1,6 +1,6 @@
 import 'package:agents_app/models/client/clients_model.dart';
 import 'package:agents_app/views/clients/controllers/client_controller.dart';
-import 'package:agents_app/views/clients/views/manage_client_modal.dart';
+import 'package:agents_app/views/clients/widgets/action_btns_client.dart';
 import 'package:agents_app/widgets/datatable/common_data_table.dart';
 import 'package:flutter/material.dart';
 
@@ -14,8 +14,8 @@ List<DataRow> buildTableRowsClient(
         cells: [
           DataCell(Row(
             children: [
-              _editClient(context, element, controller),
-              _deleteClient(context, element, controller)
+              editClient(context, element),
+              deleteClient(context, element)
             ],
           )),
           cellDataTable(element.id, context: context),
@@ -31,69 +31,3 @@ List<DataRow> buildTableRowsClient(
   );
 }
 
-Widget _editClient(BuildContext context, ClientModel element,
-    ManageClientController controller) {
-  return IconButton(
-    onPressed: () {
-      controller.setData(element);
-
-      showManageClientModal(
-        title: "Editar cliente",
-        isEnabled: true,
-        context: context,
-        controller: controller,
-        onAccept: () async {
-          final client = ClientModel(
-            id: element.id,
-            name: controller.nameController.text.trim(),
-            email: controller.emailController.text.trim(),
-            phone: controller.phoneController.text.trim(),
-            url: controller.urlController.text.trim(),
-            group: Group(
-                id: controller.groupId.value.id,
-                name: controller.groupId.value.label),
-            admin: Admin(
-                id: "1", name: 'Admin'), // Assuming admin is always 1 for now
-          );
-          await controller.editClient(client);
-          if (context.mounted) {
-            Navigator.of(context).pop();
-          }
-        },
-        onCancel: () {},
-      );
-    },
-    icon: Icon(
-      Icons.edit_square,
-      color: Theme.of(context).colorScheme.onPrimaryFixed,
-    ),
-  );
-}
-
-Widget _deleteClient(BuildContext context, ClientModel element,
-    ManageClientController controller) {
-  return IconButton(
-    onPressed: () {
-      controller.setData(element);
-
-      showManageClientModal(
-        title: "Eliminar cliente",
-        isEnabled: false,
-        context: context,
-        controller: controller,
-        onAccept: () async {
-         
-          await controller.deleteClient(element.id.toString());
-          if (context.mounted) {
-            Navigator.of(context).pop();
-          }
-        },
-        onCancel: () {},
-      );
-    },
-    icon: Icon(
-      Icons.delete,
-      color: Theme.of(context).colorScheme.error,
-    ),
-  );
-}

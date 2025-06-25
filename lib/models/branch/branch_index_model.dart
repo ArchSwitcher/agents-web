@@ -1,5 +1,4 @@
-import 'package:agents_app/models/branch/branch_address_model.dart';
-import 'package:agents_app/models/branch/branch_bill_model.dart';
+import 'package:agents_app/models/address/address_model.dart';
 import 'package:agents_app/models/common/simple_entity_model.dart';
 
 class BranchModel {
@@ -25,13 +24,8 @@ class BranchModel {
   String adviserId;
   SimpleEntity? adviser;
 
-  String territoryBossId;
-  SimpleEntity? territoryBoss;
+  Address businessAddress;
 
-  AddressBranch businessAddress;
-  AddressBranch fiscalAddress;
-  AddressBranch paymentAddress;
-  BillInfoBranch billInfo;
 
   BranchModel({
     this.id = '',
@@ -50,12 +44,7 @@ class BranchModel {
     this.accountBoss,
     required this.adviserId,
     this.adviser,
-    required this.territoryBossId,
-    this.territoryBoss,
     required this.businessAddress,
-    required this.fiscalAddress,
-    required this.paymentAddress,
-    required this.billInfo,
   });
 
   factory BranchModel.fromJson(Map<String, dynamic> data) {
@@ -78,12 +67,7 @@ class BranchModel {
       accountBoss: SimpleEntity.fromJson(data['accountBoss']),
       adviserId: data['adviser']['id'] != null ? data['adviser']['id'].toString() : '',
       adviser: SimpleEntity.fromJson(data['adviser']),
-      territoryBossId: data['territoryBoss']['id'] != null ? data['territoryBoss']['id'].toString() : '',
-      territoryBoss: SimpleEntity.fromJson(data['territoryBoss']),
-      businessAddress: AddressBranch.fromNestedJson(data['businessAddress']),
-      fiscalAddress: AddressBranch.fromNestedJson(data['fiscalAddress']),
-      paymentAddress: AddressBranch.fromNestedJson(data['paymentAddress']),
-      billInfo: BillInfoBranch.fromNestedJson(data['billInfo']),
+      businessAddress: Address.fromNestedJson(data['businessAddress']),
     );
   }
 
@@ -100,11 +84,7 @@ class BranchModel {
       "factoryId": factoryId,
       "accountBossId": accountBossId,
       "adviserId": adviserId,
-      "territoryBossId": territoryBossId,
       "businessAddress": businessAddress.toJson(),
-      "fiscalAddress": fiscalAddress.toJson(),
-      "paymentAddress": paymentAddress.toJson(),
-      "billInfo": billInfo.toJson(),
     };
   }
 }

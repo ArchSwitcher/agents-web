@@ -32,12 +32,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
     'Latitud',
     'Longitud',
     'NIT',
-    'Jefe de Territorio',
-    'Dirección Fiscal',
-    'Dirección de Pago',
-    'Dirección Comercial',
-    'Tipo de Facturación',
-    'Tipo de Generación'
+    'Dirección física',
   ];
   final List<double?> fixedColumnWidths = [
     100,
@@ -48,13 +43,8 @@ class _BranchesScreenState extends State<BranchesScreen> {
     120,
     150,
     150,
-    150,
-    150,
-    150,
-    150
   ];
 
-  
 
   start() async {
     loader.show();

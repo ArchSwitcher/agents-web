@@ -23,13 +23,7 @@ List<DataRow> buildTableRowsBranches(
           cellDataTable(element.latitude, context: context),
           cellDataTable(element.longitude, context: context),
           cellDataTable(element.nit, context: context),
-          cellDataTable(element.territoryBoss?.name, context: context),
-          cellDataTable(element.fiscalAddress.address, context: context),
-          cellDataTable(element.paymentAddress.address, context: context),
           cellDataTable(element.businessAddress.address, context: context),
-          cellDataTable(element.billInfo.billingType?.name, context: context),
-          cellDataTable(element.billInfo.generationType?.name,
-              context: context),
         ],
         color: colorRowDataTable(index, context),
       );

@@ -2,19 +2,19 @@
 
 import 'package:agents_app/models/common/simple_entity_model.dart';
 
-class BillInfoBranch {
+class Billing {
   String? billCollectorId;
   SimpleEntity? billingType;
   SimpleEntity? generationType;
 
-  BillInfoBranch({
+  Billing({
     this.billCollectorId,
     this.billingType,
     this.generationType,
   });
 
-  factory BillInfoBranch.fromNestedJson(Map<String, dynamic> json) {
-    return BillInfoBranch(
+  factory Billing.fromNestedJson(Map<String, dynamic> json) {
+    return Billing(
       billCollectorId: json['billCollector']?['id'],
       billingType: json['billingType'] != null
           ? SimpleEntity.fromJson(json['billingType'])

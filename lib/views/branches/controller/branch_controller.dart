@@ -1,9 +1,7 @@
 import 'package:agents_app/controllers/generic_list_controller.dart';
-import 'package:agents_app/models/branch/branch_address_model.dart';
-import 'package:agents_app/models/branch/branch_bill_model.dart';
+import 'package:agents_app/models/address/address_model.dart';
 import 'package:agents_app/models/branch/branch_index_model.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
-import 'package:agents_app/models/common/simple_entity_model.dart';
 import 'package:agents_app/services/employee_dropdown_service.dart';
 import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/views/branches/services/branch_service.dart';
@@ -41,23 +39,19 @@ class BranchController extends GetxController {
       DropDownOption(id: '', label: 'Seleccione un grupo').obs;
 
   RxBool isLoadingAdviser = true.obs;
-  RxBool isLoadingTerritoryManager = true.obs;
   RxBool isLoadingAccountBoss = true.obs;
   RxBool isLoadingBillPerson = true.obs;
   RxList<DropDownOption> advisers = <DropDownOption>[].obs;
-  RxList<DropDownOption> territoryManagers = <DropDownOption>[].obs;
   RxList<DropDownOption> accountBosses = <DropDownOption>[].obs;
   RxList<DropDownOption> billPersons = <DropDownOption>[].obs;
 
   Rx<DropDownOption> adviser =
       DropDownOption(id: '', label: 'Seleccione un asesor').obs;
-  Rx<DropDownOption> territoryManager =
-      DropDownOption(id: '', label: 'Seleccione un gerente de territorio').obs;
+  // Rx<DropDownOption> territoryManager =
+  //     DropDownOption(id: '', label: 'Seleccione un gerente de territorio').obs; //! se debe de quitar
   Rx<DropDownOption> accountBoss =
       DropDownOption(id: '', label: 'Seleccione un jefe de cuenta').obs;
-  Rx<DropDownOption> billPerson =
-      DropDownOption(id: '', label: 'Seleccione una persona de facturación')
-          .obs;
+
 
   Rx<DropDownOption> employee =
       DropDownOption(id: '', label: 'Seleccione un empleado').obs;
@@ -76,13 +70,13 @@ class BranchController extends GetxController {
   Rx<DropDownOption> factory =
       DropDownOption(id: '', label: 'Seleccione una fábrica').obs;
 
-  Rx<DropDownOption> fiscalCountry =
-      DropDownOption(id: '', label: 'Seleccione un país fiscal').obs;
-  Rx<DropDownOption> fiscalDepartment =
-      DropDownOption(id: '', label: 'Seleccione un departamento fiscal').obs;
-  Rx<DropDownOption> fiscalZone =
-      DropDownOption(id: '', label: 'Seleccione una zona fiscal').obs;
-  final TextEditingController fiscalAddress = TextEditingController();
+  // Rx<DropDownOption> fiscalCountry =
+  //     DropDownOption(id: '', label: 'Seleccione un país fiscal').obs;
+  // Rx<DropDownOption> fiscalDepartment =
+  //     DropDownOption(id: '', label: 'Seleccione un departamento fiscal').obs;
+  // Rx<DropDownOption> fiscalZone =
+  //     DropDownOption(id: '', label: 'Seleccione una zona fiscal').obs;
+  // final TextEditingController fiscalAddress = TextEditingController();
 
   Rx<DropDownOption> physicalCountry =
       DropDownOption(id: '', label: 'Seleccione un país').obs;
@@ -92,13 +86,13 @@ class BranchController extends GetxController {
       DropDownOption(id: '', label: 'Seleccione una zona').obs;
   final TextEditingController physicalAddress = TextEditingController();
 
-  Rx<DropDownOption> paymentCountry =
-      DropDownOption(id: '', label: 'Seleccione un país').obs;
-  Rx<DropDownOption> paymentDepartment =
-      DropDownOption(id: '', label: 'Seleccione un departamento').obs;
-  Rx<DropDownOption> paymentZone =
-      DropDownOption(id: '', label: 'Seleccione una zona').obs;
-  final TextEditingController paymentAddress = TextEditingController();
+  // Rx<DropDownOption> paymentCountry =
+  //     DropDownOption(id: '', label: 'Seleccione un país').obs;
+  // Rx<DropDownOption> paymentDepartment =
+  //     DropDownOption(id: '', label: 'Seleccione un departamento').obs;
+  // Rx<DropDownOption> paymentZone =
+  //     DropDownOption(id: '', label: 'Seleccione una zona').obs;
+  // final TextEditingController paymentAddress = TextEditingController();
 
   // Reactive variables
   RxBool isLoading = true.obs;
@@ -123,32 +117,20 @@ class BranchController extends GetxController {
       factoryId: factory.value.id,
       accountBossId: accountBoss.value.id,
       adviserId: adviser.value.id,
-      territoryBossId: territoryManager.value.id,
-      businessAddress: AddressBranch(
+      // territoryBossId: territoryManager.value.id,
+      businessAddress: Address(
         countryId: physicalCountry.value.id,
         departmentId: physicalDepartment.value.id,
         zone: physicalZone.value.id,
         address: physicalAddress.text,
       ),
-      fiscalAddress: AddressBranch(
-        countryId: fiscalCountry.value.id,
-        departmentId: fiscalDepartment.value.id,
-        zone: fiscalZone.value.id,
-        address: fiscalAddress.text,
-      ),
-      paymentAddress: AddressBranch(
-        countryId: paymentCountry.value.id,
-        departmentId: paymentDepartment.value.id,
-        zone: paymentZone.value.id,
-        address: paymentAddress.text,
-      ),
-      billInfo: BillInfoBranch(
-        billCollectorId: billPerson.value.id,
-        billingType: SimpleEntity(
-            id: billingType.value.id, name: billingType.value.label),
-        generationType: SimpleEntity(
-            id: generationType.value.id, name: generationType.value.label),
-      ),
+      // billInfo: BillInfoBranch(
+      //   billCollectorId: billPerson.value.id,
+      //   billingType: SimpleEntity(
+      //       id: billingType.value.id, name: billingType.value.label),
+      //   generationType: SimpleEntity(
+      //       id: generationType.value.id, name: generationType.value.label),
+      // ),
     );
   }
 
