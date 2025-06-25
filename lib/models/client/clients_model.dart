@@ -107,9 +107,9 @@ class Admin {
 }
 
 class Turn {
-  final String? id;
-  final String name;
-  final List<DailySchedule> schedule;
+   String? id;
+   String name;
+   List<DailySchedule> schedule;
 
   Turn({
     this.id,

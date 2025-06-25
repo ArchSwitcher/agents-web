@@ -2,12 +2,14 @@ import 'package:agents_app/layout/contect_card_space.dart';
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
+import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/helpers/validations/email_validator.dart';
 import 'package:agents_app/shared/helpers/validations/not_empty.dart';
 import 'package:agents_app/shared/helpers/validations/phone_validator.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/views/clients/controllers/client_controller.dart';
+import 'package:agents_app/views/clients/widgets/schedule_modal_widget.dart';
 import 'package:agents_app/views/groups/controllers/manage_group_controller.dart';
 import 'package:agents_app/widgets/buttons/custom_button.dart';
 import 'package:agents_app/widgets/commons/loading.dart';
@@ -98,9 +100,33 @@ class ManageClientScreenState extends State<ManageClientScreen> {
                 child: _billInfo(controller),
               ),
               cardContentSpace(),
-              ContentCard(child: _turnConfiguration(colorScheme)),
-              cardContentSpace(),
-              cardContentSpace()
+              ContentCard(child: _turnConfiguration(colorScheme, controller)),
+              Padding(
+                padding: const EdgeInsets.all(50.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    CustomButton(
+                      width: 35,
+                      height: 25,
+                        color: colorScheme.primary,
+                        text: Text(
+                          "Guardar",
+                          style: CustomStyle.textStyleWhite(context),
+                        ),
+                        isLoading: false,
+                        onPress: () {
+                          if (controller.turns.isEmpty) {
+                            ToastService.warning(
+                                title: "No se puede guardar",
+                                subTitle: "No hay turnos configurados.");
+                            return;
+                          }
+                          if (formKey.currentState!.validate()) {}
+                        })
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -538,48 +564,65 @@ Widget _billInfo(ManageClientController controller) {
   });
 }
 
-Widget _turnConfiguration(ColorScheme colorScheme) {
+Widget _turnConfiguration(
+    ColorScheme colorScheme, ManageClientController controller) {
   return LayoutBuilder(builder: (context, constraints) {
     final isWideScreen = constraints.maxWidth > 750;
 
     final width = isWideScreen
         ? (constraints.maxWidth / 5) - 40
         : constraints.maxWidth - 40;
-    return Wrap(
-      spacing: 30,
-      runSpacing: 20,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      alignment: WrapAlignment.start,
-      children: [
-        SizedBox(
-            width: width,
-            child: CustomButton(
-                color: colorScheme.primary,
-                text: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.timelapse,
-                      color: colorScheme.surface,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      "Agregar turno",
-                      style: CustomStyle.textStyleWhite(context),
-                    ),
-                  ],
-                ),
-                isLoading: false,
-                onPress: () {
-                  //logic for add turn
-                })),
-        _turnCard(width, colorScheme, context),
-      ],
-    );
+    return Obx(() {
+      return Wrap(
+        spacing: 30,
+        runSpacing: 20,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        alignment: WrapAlignment.start,
+        children: [
+          SizedBox(
+              width: width,
+              child: CustomButton(
+                  color: colorScheme.primary,
+                  text: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.timelapse,
+                        color: colorScheme.surface,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        "Agregar turno",
+                        style: CustomStyle.textStyleWhite(context),
+                      ),
+                    ],
+                  ),
+                  isLoading: false,
+                  onPress: () {
+                    showScheduleModal(
+                        context: context,
+                        controller: controller,
+                        onAccept: () {
+                          controller.addTurn();
+                          Navigator.of(context).pop();
+                        });
+                  })),
+          // List of turn cards with index
+
+          ...controller.turns.asMap().entries.map((entry) {
+            int index = entry.key;
+            var turn = entry.value;
+            return _turnCard(
+                width, colorScheme, context, turn.name, controller, index);
+          }),
+        ],
+      );
+    });
   });
 }
 
-Widget _turnCard(double width, ColorScheme colorScheme, BuildContext context) {
+Widget _turnCard(double width, ColorScheme colorScheme, BuildContext context,
+    String name, ManageClientController controller, int index) {
   return SizedBox(
     width: width,
     child: Card(
@@ -593,7 +636,7 @@ Widget _turnCard(double width, ColorScheme colorScheme, BuildContext context) {
             children: [
               Expanded(
                 child: Text(
-                  "Turno Vespertino (14:00 - 18:00)",
+                  name,
                   style: CustomStyle.textStyleBlack(context),
                   softWrap: true,
                 ),
@@ -610,13 +653,36 @@ Widget _turnCard(double width, ColorScheme colorScheme, BuildContext context) {
                         padding: const EdgeInsets.all(0),
                         icon: Icon(Icons.edit_calendar_rounded,
                             color: colorScheme.primary),
-                        onPressed: () {},
+                        onPressed: () {
+                          controller.selectTurn(index);
+                          showScheduleModal(
+                            description: "Editar turno",
+                            context: context,
+                            controller: controller,
+                            onAccept: () {
+                              controller.editTurn(index);
+                              Navigator.of(context).pop();
+                            },
+                          );
+                        },
                       ),
                       IconButton(
                         iconSize: 20,
                         padding: const EdgeInsets.all(0),
                         icon: Icon(Icons.close, color: colorScheme.error),
-                        onPressed: () {},
+                        onPressed: () {
+                          controller.selectTurn(index);
+                          showScheduleModal(
+                              description:
+                                  "¿Está seguro de que desea eliminar este turno?",
+                              isEdit: false,
+                              context: context,
+                              controller: controller,
+                              onAccept: () {
+                                controller.deleteTurn(index);
+                                Navigator.of(context).pop();
+                              });
+                        },
                       ),
                     ],
                   ),
