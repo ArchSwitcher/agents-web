@@ -1,5 +1,4 @@
 import 'package:agents_app/models/common/simple_entity_model.dart';
-import 'package:agents_app/models/position/day_model.dart';
 import 'package:agents_app/models/position/equipment_model.dart';
 
 class PositionModel {
@@ -51,7 +50,7 @@ class PositionModel {
   SimpleEntity? group;
   SimpleEntity? client;
 
-  List<DayModel> days;
+  // List<DayModel> days;
   List<EquipmentModel> equipment;
 
   PositionModel({
@@ -92,7 +91,7 @@ class PositionModel {
     this.transportationCost,
     required this.adviserId,
     this.supportDocument,
-    required this.days,
+    // required this.days,
     required this.equipment,
     this.agency,
     this.branch,
@@ -209,10 +208,10 @@ class PositionModel {
               "name": p['CLIENT']['Name'],
             })
           : null,
-      days: (p['ASIGN_DAYs'] as List?)
-              ?.map((d) => DayModel.fromJson(d))
-              .toList() ??
-          [],
+      // days: (p['ASIGN_DAYs'] as List?)
+      //         ?.map((d) => DayModel.fromJson(d))
+      //         .toList() ??
+      //     [],
       equipment: (p['EQUIPMENTs'] as List?)
               ?.map((e) => EquipmentModel.fromJson(e))
               .toList() ??
@@ -262,7 +261,7 @@ class PositionModel {
       "transportation_cost": transportationCost,
       "adviser_id": adviserId,
       "support_document": supportDocument ?? "-",
-      "days": days.map((e) => e.toJson()).toList(),
+      // "days": days.map((e) => e.toJson()).toList(),
       "equipment": equipment.map((e) => e.toJson()).toList(),
     };
   }

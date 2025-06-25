@@ -410,7 +410,6 @@ Widget _formStepContent(PositionController controller, BuildContext context,
               width: width,
             ),
             manageEquipmentButton(context, width, controller),
-            openScheduleModalButton(context, width, controller),
             SizedBox(width: width)
           ],
         );

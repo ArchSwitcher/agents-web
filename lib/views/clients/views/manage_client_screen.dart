@@ -98,83 +98,9 @@ class ManageClientScreenState extends State<ManageClientScreen> {
                 child: _billInfo(controller),
               ),
               cardContentSpace(),
-              ContentCard(child: LayoutBuilder(builder: (context, constraints) {
-                final isWideScreen = constraints.maxWidth > 750;
-
-                final width = isWideScreen
-                    ? (constraints.maxWidth / 5) - 40
-                    : constraints.maxWidth - 40;
-                return Wrap(
-                  spacing: 30,
-                  runSpacing: 20,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  alignment: WrapAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                        width: width,
-                        child: CustomButton(
-                            color: colorScheme.primary,
-                            text: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.timelapse,
-                                  color: colorScheme.surface,
-                                ),
-                                SizedBox(width: 8),
-                                Text(
-                                  "Agregar turno",
-                                  style: CustomStyle.textStyleWhite(context),
-                                ),
-                              ],
-                            ),
-                            isLoading: false,
-                            onPress: () {
-                              //logic for add turn
-                            })),
-                    SizedBox(
-                        width: width,
-                        child: CustomButton(
-                            color: colorScheme.primaryFixed,
-                            text: Text(
-                              "Configurar Nuevo Cobro",
-                              style: CustomStyle.textStyleWhite(context),
-                            ),
-                            isLoading: false,
-                            onPress: () {})),
-                    SizedBox(
-                        width: width,
-                        child: CustomButton(
-                            color: colorScheme.primaryFixed,
-                            text: Text(
-                              "Guardar Cliente",
-                              style: CustomStyle.textStyleWhite(context),
-                            ),
-                            isLoading: false,
-                            onPress: () {})),
-                    SizedBox(
-                        width: width,
-                        child: CustomButton(
-                            color: colorScheme.primaryFixed,
-                            text: Text(
-                              "Guardar Cliente",
-                              style: CustomStyle.textStyleWhite(context),
-                            ),
-                            isLoading: false,
-                            onPress: () {})),
-                    SizedBox(
-                        width: width,
-                        child: CustomButton(
-                            color: colorScheme.primaryFixed,
-                            text: Text(
-                              "Eliminar Cliente",
-                              style: CustomStyle.textStyleWhite(context),
-                            ),
-                            isLoading: false,
-                            onPress: () {})),
-                  ],
-                );
-              })),
+              ContentCard(child: _turnConfiguration(colorScheme)),
+              cardContentSpace(),
+              cardContentSpace()
             ],
           ),
         ),
@@ -610,4 +536,96 @@ Widget _billInfo(ManageClientController controller) {
       ],
     );
   });
+}
+
+Widget _turnConfiguration(ColorScheme colorScheme) {
+  return LayoutBuilder(builder: (context, constraints) {
+    final isWideScreen = constraints.maxWidth > 750;
+
+    final width = isWideScreen
+        ? (constraints.maxWidth / 5) - 40
+        : constraints.maxWidth - 40;
+    return Wrap(
+      spacing: 30,
+      runSpacing: 20,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      alignment: WrapAlignment.start,
+      children: [
+        SizedBox(
+            width: width,
+            child: CustomButton(
+                color: colorScheme.primary,
+                text: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.timelapse,
+                      color: colorScheme.surface,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      "Agregar turno",
+                      style: CustomStyle.textStyleWhite(context),
+                    ),
+                  ],
+                ),
+                isLoading: false,
+                onPress: () {
+                  //logic for add turn
+                })),
+        _turnCard(width, colorScheme, context),
+      ],
+    );
+  });
+}
+
+Widget _turnCard(double width, ColorScheme colorScheme, BuildContext context) {
+  return SizedBox(
+    width: width,
+    child: Card(
+      elevation: 4.0,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: IntrinsicHeight(
+          // permite crecer en alto si es necesario
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  "Turno Vespertino (14:00 - 18:00)",
+                  style: CustomStyle.textStyleBlack(context),
+                  softWrap: true,
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        iconSize: 20,
+                        padding: const EdgeInsets.all(0),
+                        icon: Icon(Icons.edit_calendar_rounded,
+                            color: colorScheme.primary),
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        iconSize: 20,
+                        padding: const EdgeInsets.all(0),
+                        icon: Icon(Icons.close, color: colorScheme.error),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
 }

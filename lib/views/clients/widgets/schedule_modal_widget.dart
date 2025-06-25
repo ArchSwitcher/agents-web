@@ -1,4 +1,4 @@
-import 'package:agents_app/views/positions/controllers/position_controller.dart';
+import 'package:agents_app/views/clients/controllers/client_controller.dart';
 import 'package:agents_app/widgets/commons/generic_modal.dart';
 import 'package:agents_app/widgets/inputs/custom_checkBox_widget.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
@@ -9,7 +9,7 @@ void showScheduleModal({
   required BuildContext context,
   VoidCallback? onAccept,
   VoidCallback? onCancel,
-  required PositionController controller,
+  required ManageClientController controller,
 }) {
   showDialog(
     context: context,

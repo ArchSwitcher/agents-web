@@ -2,6 +2,7 @@ import 'package:agents_app/controllers/generic_list_controller.dart';
 import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/models/client/clients_model.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
+import 'package:agents_app/models/schedule/schedule_days_model.dart';
 import 'package:agents_app/services/employee_dropdown_service.dart';
 import 'package:agents_app/shared/constants/database_constants.dart';
 import 'package:agents_app/views/clients/services/client_service.dart';
@@ -159,4 +160,86 @@ class ManageClientController extends GetxController {
       DropDownOption(id: '', label: 'Seleccione un tipo de facturación').obs;
   Rx<DropDownOption> generationType =
       DropDownOption(id: '', label: 'Seleccione un tipo de generación').obs;
+
+// assign days
+
+  final weekDays = <WeekDay>[].obs;
+  final turns = <Turn>[].obs;
+
+  void toggleWeekDay(WeekDay day) {
+    day.isSelected.value = !day.isSelected.value;
+    if (!day.isSelected.value) {
+      day.startTimeController.text = "00:00";
+      day.endTimeController.text = "00:00";
+    }
+  }
+
+  List<DailySchedule> getSelectedDays() {
+    return weekDays
+        .where((day) => day.isSelected.value == true)
+        .map((day) => DailySchedule(
+            daysId: day.id,
+            initTime: day.startTimeController.text,
+            endTime: day.endTimeController.text))
+        .toList();
+  }
+
+  // set turn
+  void setTurns(String name) {
+    turns.add(Turn(name: name, schedule: getSelectedDays()));
+  }
+
+  void initializeWeekDays() {
+    weekDays.value = [
+      WeekDay(
+        id: 1,
+        name: "Lunes",
+        startTimeController: TextEditingController(text: "00:00"),
+        endTimeController: TextEditingController(text: "00:00"),
+        isSelected: false.obs,
+      ),
+      WeekDay(
+        id: 2,
+        name: "Martes",
+        startTimeController: TextEditingController(text: "00:00"),
+        endTimeController: TextEditingController(text: "00:00"),
+        isSelected: false.obs,
+      ),
+      WeekDay(
+        id: 3,
+        name: "Miércoles",
+        startTimeController: TextEditingController(text: "00:00"),
+        endTimeController: TextEditingController(text: "00:00"),
+        isSelected: false.obs,
+      ),
+      WeekDay(
+        id: 4,
+        name: "Jueves",
+        startTimeController: TextEditingController(text: "00:00"),
+        endTimeController: TextEditingController(text: "00:00"),
+        isSelected: false.obs,
+      ),
+      WeekDay(
+        id: 5,
+        name: "Viernes",
+        startTimeController: TextEditingController(text: "00:00"),
+        endTimeController: TextEditingController(text: "00:00"),
+        isSelected: false.obs,
+      ),
+      WeekDay(
+        id: 6,
+        name: "Sábado",
+        startTimeController: TextEditingController(text: "00:00"),
+        endTimeController: TextEditingController(text: "00:00"),
+        isSelected: false.obs,
+      ),
+      WeekDay(
+        id: 7,
+        name: "Domingo",
+        startTimeController: TextEditingController(text: "00:00"),
+        endTimeController: TextEditingController(text: "00:00"),
+        isSelected: false.obs,
+      ),
+    ];
+  }
 }
