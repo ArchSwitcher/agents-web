@@ -62,9 +62,9 @@ class PositionController extends GetxController {
   final TextEditingController endDate = TextEditingController();
 
   final TextEditingController serviceQuantity = TextEditingController();
-  final TextEditingController serviceAgent = TextEditingController();
   final TextEditingController scheduleQuantity = TextEditingController();
 
+  final TextEditingController serviceAgent = TextEditingController();
   final TextEditingController bonus = TextEditingController();
   final TextEditingController transport = TextEditingController();
   final TextEditingController foodQuantity = TextEditingController();
@@ -93,9 +93,9 @@ class PositionController extends GetxController {
     startDate.clear();
     endDate.clear();
     serviceQuantity.clear();
-    serviceAgent.clear();
     scheduleQuantity.clear();
     bonus.clear();
+    serviceAgent.clear();
     transport.clear();
     foodQuantity.clear();
     shiftValue.clear();
@@ -244,9 +244,9 @@ class PositionController extends GetxController {
       //   "startDate": startDate.text,
       //   "endDate": endDate.text,
       //   "serviceQuantity": serviceQuantity.text,
-      //   "serviceAgent": serviceAgent.text,
       //   "scheduleQuantity": scheduleQuantity.text,
       //   "bonus": bonus.text,
+      //   "serviceAgent": serviceAgent.text,
       //   "transport": transport.text,
       //   "foodQuantity": foodQuantity.text,
       //   "shiftValue": shiftValue.text,
@@ -277,9 +277,9 @@ class PositionController extends GetxController {
         endTime: endTime.text,
         endDate: endDate.text,
         serviceQuantity: serviceQuantity.text,
-        serviceAgent: serviceAgent.text,
         scheduleQuantity: scheduleQuantity.text,
         bonus: bonus.text, //should be nullable
+        serviceAgent: serviceAgent.text,
         transportId: "1",
         shiftValue: shiftValue.text,
         minimunPrice: minimumPrice.text,
@@ -381,9 +381,9 @@ class PositionController extends GetxController {
       startDate.text = position.initDate;
       endDate.text = position.endDate ;
       serviceQuantity.text = position.serviceQuantity.toString() ;
-      serviceAgent.text = position.serviceAgent.toString() ;
       scheduleQuantity.text = position.scheduleQuantity.toString() ;
       bonus.text = position.bonus.toString() ;
+      serviceAgent.text = position.serviceAgent.toString() ;
       transport.text = position.transportationCost.toString() ;
       foodQuantity.text = position.meals.toString() ;
       shiftValue.text = position.shiftValue.toString() ;

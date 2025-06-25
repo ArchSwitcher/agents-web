@@ -124,7 +124,7 @@ class PositionModel {
       initTime: str(p['Init_time']),
       endTime: str(p['End_time']),
       serviceQuantity: str(p['Service_quantity']),
-      serviceAgent: str(p['Service_agent']),
+      serviceAgent: str(p['Service_agent']), //QUITAR 
       scheduleQuantity: str(p['Schedule_quantity']),
       servicePrice: str(p['Service_price']),
       bonus: p['Bonus'] != null ? str(p['Bonus']) : null,
