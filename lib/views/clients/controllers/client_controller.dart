@@ -24,8 +24,7 @@ class ManageClientController extends GetxController {
   RxBool isLoading = true.obs;
   RxList<ClientModel> clients = <ClientModel>[].obs;
 
-  Rx<DropDownOption> groupId =
-      DropDownOption(id: '', label: 'Seleccione un grupo').obs;
+  Rx<DropDownOption> groupId = DropDownOption(id: '', label: '').obs;
 
   @override
   void onClose() {
@@ -135,30 +134,21 @@ class ManageClientController extends GetxController {
     groupId.value = DropDownOption(id: '', label: '');
   }
 
-  Rx<DropDownOption> fiscalCountry =
-      DropDownOption(id: '', label: 'Seleccione un país fiscal').obs;
-  Rx<DropDownOption> fiscalDepartment =
-      DropDownOption(id: '', label: 'Seleccione un departamento fiscal').obs;
-  Rx<DropDownOption> fiscalZone =
-      DropDownOption(id: '', label: 'Seleccione una zona fiscal').obs;
+  Rx<DropDownOption> fiscalCountry = DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> fiscalDepartment = DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> fiscalMunicipality = DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> fiscalZone = DropDownOption(id: '', label: '').obs;
   final TextEditingController fiscalAddress = TextEditingController();
 
-  Rx<DropDownOption> paymentCountry =
-      DropDownOption(id: '', label: 'Seleccione un país').obs;
-  Rx<DropDownOption> paymentDepartment =
-      DropDownOption(id: '', label: 'Seleccione un departamento').obs;
-  Rx<DropDownOption> paymentZone =
-      DropDownOption(id: '', label: 'Seleccione una zona').obs;
+  Rx<DropDownOption> paymentCountry = DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> paymentDepartment = DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> paymentMunicipality =
+      DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> paymentZone = DropDownOption(id: '', label: '').obs;
   final TextEditingController paymentAddress = TextEditingController();
 
 //bill info
-  Rx<DropDownOption> billPerson =
-      DropDownOption(id: '', label: 'Seleccione una persona de facturación')
-          .obs;
-  Rx<DropDownOption> billingType =
-      DropDownOption(id: '', label: 'Seleccione un tipo de facturación').obs;
-  Rx<DropDownOption> generationType =
-      DropDownOption(id: '', label: 'Seleccione un tipo de generación').obs;
-
-
+  Rx<DropDownOption> billPerson = DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> billingType = DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> generationType = DropDownOption(id: '', label: '').obs;
 }

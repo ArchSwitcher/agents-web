@@ -2,6 +2,7 @@ import 'package:agents_app/controllers/generic_list_controller.dart';
 import 'package:agents_app/models/address/address_model.dart';
 import 'package:agents_app/models/branch/branch_index_model.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
+import 'package:agents_app/models/common/simple_entity_model.dart';
 import 'package:agents_app/models/schedule/schedule_days_model.dart';
 import 'package:agents_app/services/employee_dropdown_service.dart';
 import 'package:agents_app/services/toast_service.dart';
@@ -34,10 +35,10 @@ class BranchController extends GetxController {
   final TextEditingController latitudeController = TextEditingController();
   final TextEditingController longitudeController = TextEditingController();
   Rx<DropDownOption> groupId =
-      DropDownOption(id: '', label: 'Seleccione un grupo').obs;
+      DropDownOption(id: '', label: '').obs;
 
   Rx<DropDownOption> client =
-      DropDownOption(id: '', label: 'Seleccione un grupo').obs;
+      DropDownOption(id: '', label: '').obs;
 
   RxBool isLoadingAdviser = true.obs;
   RxBool isLoadingAccountBoss = true.obs;
@@ -47,29 +48,28 @@ class BranchController extends GetxController {
   RxList<DropDownOption> billPersons = <DropDownOption>[].obs;
 
   Rx<DropDownOption> adviser =
-      DropDownOption(id: '', label: 'Seleccione un asesor').obs;
+      DropDownOption(id: '', label: '').obs;
   // Rx<DropDownOption> territoryManager =
   //     DropDownOption(id: '', label: 'Seleccione un gerente de territorio').obs; //! se debe de quitar
   Rx<DropDownOption> accountBoss =
-      DropDownOption(id: '', label: 'Seleccione un jefe de cuenta').obs;
-
+      DropDownOption(id: '', label: '').obs;
 
   Rx<DropDownOption> employee =
-      DropDownOption(id: '', label: 'Seleccione un empleado').obs;
+      DropDownOption(id: '', label: '').obs;
   Rx<DropDownOption> classification =
-      DropDownOption(id: '', label: 'Seleccione una clasificación').obs;
+      DropDownOption(id: '', label: '').obs;
   Rx<DropDownOption> city =
-      DropDownOption(id: '', label: 'Seleccione una ciudad').obs;
+      DropDownOption(id: '', label: '').obs;
   Rx<DropDownOption> country =
-      DropDownOption(id: '', label: 'Seleccione un país').obs;
+      DropDownOption(id: '', label: '').obs;
   Rx<DropDownOption> zone =
-      DropDownOption(id: '', label: 'Seleccione una zona').obs;
+      DropDownOption(id: '', label: '').obs;
   Rx<DropDownOption> billingType =
-      DropDownOption(id: '', label: 'Seleccione un tipo de facturación').obs;
+      DropDownOption(id: '', label: '').obs;
   Rx<DropDownOption> generationType =
-      DropDownOption(id: '', label: 'Seleccione un tipo de generación').obs;
+      DropDownOption(id: '', label: '').obs;
   Rx<DropDownOption> factory =
-      DropDownOption(id: '', label: 'Seleccione una fábrica').obs;
+      DropDownOption(id: '', label: '').obs;
 
   // Rx<DropDownOption> fiscalCountry =
   //     DropDownOption(id: '', label: 'Seleccione un país fiscal').obs;
@@ -119,9 +119,19 @@ class BranchController extends GetxController {
       accountBossId: accountBoss.value.id,
       adviserId: adviser.value.id,
       businessAddress: Address(
-        countryId: physicalCountry.value.id,
-        departmentId: physicalDepartment.value.id,
-        zone: physicalZone.value.id,
+        country: physicalCountry.value.id.isNotEmpty
+            ? SimpleEntity(
+                id: physicalCountry.value.id, name: physicalCountry.value.label)
+            : null,
+        department: physicalDepartment.value.id.isNotEmpty
+            ? SimpleEntity(
+                id: physicalDepartment.value.id,
+                name: physicalDepartment.value.label)
+            : null,
+        zone: physicalZone.value.id.isNotEmpty
+            ? SimpleEntity(
+                id: physicalZone.value.id, name: physicalZone.value.label)
+            : null,
         address: physicalAddress.text,
       ),
       turns: turns.toList(),
@@ -251,8 +261,7 @@ class BranchController extends GetxController {
     super.onClose();
   }
 
-
-  //shcedule 
+  //shcedule
   // assign days
 
   final TextEditingController turnName = TextEditingController(text: "");

@@ -216,9 +216,9 @@ Widget _basicInfo(ManageClientController controller, bool isEnabled,
 
 Widget _fiscalAddressSection(ManageClientController controller) {
   return LayoutBuilder(builder: (context, constraints) {
-    final isWideScreen = constraints.maxWidth > 600;
+    final isWideScreen = constraints.maxWidth > 650;
     final width = isWideScreen
-        ? (constraints.maxWidth / 4) - 40
+        ? (constraints.maxWidth / 5) - 40
         : constraints.maxWidth - 40;
     return Wrap(
       spacing: 30,
@@ -228,7 +228,7 @@ Widget _fiscalAddressSection(ManageClientController controller) {
       direction: isWideScreen ? Axis.horizontal : Axis.vertical,
       children: [
         LoadingAutocompleteDropdown(
-          prefixIcon: Icons.location_on,
+          prefixIcon: Icons.public,
           enabled: true,
           isLoading: controller.genericListController.isLoadingCountry,
           listItems: controller.genericListController.countries,
@@ -253,12 +253,15 @@ Widget _fiscalAddressSection(ManageClientController controller) {
 
         // LoadingAutocompleteDropdown for Department
         LoadingAutocompleteDropdown(
-          prefixIcon: Icons.location_city,
+          prefixIcon: Icons.map,
           enabled: true,
           isLoading: controller.genericListController.isLoadingCity,
           listItems: controller.genericListController.departments,
           onSelected: (DropDownOption option) {
             controller.fiscalDepartment.value = option;
+            controller.fiscalMunicipality.value =
+                DropDownOption(id: '', label: '');
+            controller.genericListController.fetchMunicipalities(option.id);
           },
           label: "",
           hintText: "Departamento",
@@ -275,10 +278,33 @@ Widget _fiscalAddressSection(ManageClientController controller) {
                 : filteredOptions;
           },
         ),
+        LoadingAutocompleteDropdown(
+          prefixIcon: Icons.apartment,
+          enabled: true,
+          isLoading: controller.genericListController.isLoadingMunicipality,
+          listItems: controller.genericListController.municipalities,
+          onSelected: (DropDownOption option) {
+            controller.fiscalMunicipality.value = option;
+          },
+          label: "",
+          hintText: "Municipio",
+          resetValue: controller.fiscalMunicipality,
+          width: width,
+          onTextChange: (text) async {
+            List<DropDownOption> filteredOptions = controller
+                .genericListController.municipalities
+                .where((option) =>
+                    option.label.toLowerCase().contains(text.toLowerCase()))
+                .toList();
+            return filteredOptions.isEmpty
+                ? [DropDownOption(id: '', label: 'No hay resultados')]
+                : filteredOptions;
+          },
+        ),
 
         // LoadingAutocompleteDropdown for Zone
         LoadingAutocompleteDropdown(
-          prefixIcon: Icons.map,
+          prefixIcon: Icons.location_on,
           enabled: true,
           isLoading: controller.genericListController.isLoadingZone,
           listItems: controller.genericListController.zones,
@@ -306,7 +332,7 @@ Widget _fiscalAddressSection(ManageClientController controller) {
             controller: controller.fiscalAddress,
             label: "",
             hintText: "Dirección",
-            prefixIcon: Icons.location_on,
+            prefixIcon: Icons.home,
           ),
         ),
       ],
@@ -316,9 +342,9 @@ Widget _fiscalAddressSection(ManageClientController controller) {
 
 Widget _paymentAddressSection(ManageClientController controller) {
   return LayoutBuilder(builder: (context, constraints) {
-    final isWideScreen = constraints.maxWidth > 600;
+    final isWideScreen = constraints.maxWidth > 650;
     final width = isWideScreen
-        ? (constraints.maxWidth / 4) - 40
+        ? (constraints.maxWidth / 5) - 40
         : constraints.maxWidth - 40;
     return Wrap(
       spacing: 30,
@@ -328,7 +354,7 @@ Widget _paymentAddressSection(ManageClientController controller) {
       direction: isWideScreen ? Axis.horizontal : Axis.vertical,
       children: [
         LoadingAutocompleteDropdown(
-          prefixIcon: Icons.location_on,
+          prefixIcon: Icons.public,
           enabled: true,
           isLoading: controller.genericListController.isLoadingCountry,
           listItems: controller.genericListController.countries,
@@ -353,7 +379,7 @@ Widget _paymentAddressSection(ManageClientController controller) {
 
         // LoadingAutocompleteDropdown for Department
         LoadingAutocompleteDropdown(
-          prefixIcon: Icons.location_city,
+          prefixIcon: Icons.map,
           enabled: true,
           isLoading: controller.genericListController.isLoadingCity,
           listItems: controller.genericListController.departments,
@@ -376,9 +402,33 @@ Widget _paymentAddressSection(ManageClientController controller) {
           },
         ),
 
+         LoadingAutocompleteDropdown(
+          prefixIcon: Icons.apartment,
+          enabled: true,
+          isLoading: controller.genericListController.isLoadingMunicipality,
+          listItems: controller.genericListController.municipalities,
+          onSelected: (DropDownOption option) {
+            controller.fiscalMunicipality.value = option;
+          },
+          label: "",
+          hintText: "Municipio",
+          resetValue: controller.fiscalMunicipality,
+          width: width,
+          onTextChange: (text) async {
+            List<DropDownOption> filteredOptions = controller
+                .genericListController.municipalities
+                .where((option) =>
+                    option.label.toLowerCase().contains(text.toLowerCase()))
+                .toList();
+            return filteredOptions.isEmpty
+                ? [DropDownOption(id: '', label: 'No hay resultados')]
+                : filteredOptions;
+          },
+        ),
+
         // LoadingAutocompleteDropdown for Zone
         LoadingAutocompleteDropdown(
-          prefixIcon: Icons.map,
+          prefixIcon: Icons.location_on,
           enabled: true,
           isLoading: controller.genericListController.isLoadingZone,
           listItems: controller.genericListController.zones,
@@ -405,8 +455,8 @@ Widget _paymentAddressSection(ManageClientController controller) {
           child: CustomInputWidget(
             controller: controller.paymentAddress,
             label: "",
-            hintText: "Ingrese la dirección",
-            prefixIcon: Icons.location_on,
+            hintText: "Dirección",
+            prefixIcon: Icons.home,
           ),
         ),
       ],

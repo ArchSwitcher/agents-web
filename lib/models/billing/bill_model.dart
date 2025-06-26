@@ -15,7 +15,8 @@ class Billing {
 
   factory Billing.fromNestedJson(Map<String, dynamic> json) {
     return Billing(
-      billCollectorId: json['billCollector']?['id'],
+      // ignore: prefer_null_aware_operators
+      billCollectorId: json['billCollector']?['id'] == null ? null : json['billCollector']?['id'].toString(),
       billingType: json['billingType'] != null
           ? SimpleEntity.fromJson(json['billingType'])
           : null,
