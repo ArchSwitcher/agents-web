@@ -1,8 +1,11 @@
+import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/layout/contect_card_space.dart';
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
+import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/constants/routes.dart';
+import 'package:agents_app/shared/helpers/validations/dropdown_validator.dart';
 import 'package:agents_app/shared/helpers/validations/email_validator.dart';
 import 'package:agents_app/shared/helpers/validations/not_empty.dart';
 import 'package:agents_app/shared/helpers/validations/phone_validator.dart';
@@ -31,6 +34,7 @@ class ManageClientScreenState extends State<ManageClientScreen> {
       Get.put(ManageGroupController());
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final ManageClientController controller = Get.put(ManageClientController());
+  final LoaderController loaderController = Get.put(LoaderController());
 
   final bool isEnabled = Get.arguments?['isEdit'] ?? true;
   final String title = Get.arguments?['title'] ?? "Agregar cliente";
@@ -95,6 +99,10 @@ class ManageClientScreenState extends State<ManageClientScreen> {
               )),
               cardContentSpace(),
               ContentCard(
+                child: _managers(controller),
+              ),
+              cardContentSpace(),
+              ContentCard(
                 child: _billInfo(controller),
               ),
               Padding(
@@ -111,9 +119,19 @@ class ManageClientScreenState extends State<ManageClientScreen> {
                           style: CustomStyle.textStyleWhite(context),
                         ),
                         isLoading: false,
-                        onPress: () {
-                          if (formKey.currentState!.validate()) {}
-                        })
+                        onPress: () async {
+                          if (!formKey.currentState!.validate()) {
+                            ToastService.warning(title: "Validación", subTitle: "Por favor, rellene todos los campos obligatorios.");
+                            return;
+                          }
+                            loaderController.show();
+                            await controller.newClient();
+                            loaderController.hide();
+                            Get.back(result: true);
+                          
+                        }
+                        
+                        )
                   ],
                 ),
               ),
@@ -123,6 +141,75 @@ class ManageClientScreenState extends State<ManageClientScreen> {
       ),
     );
   }
+}
+
+Widget _managers(ManageClientController controller) {
+  return LayoutBuilder(builder: (context, constraints) {
+    final isWideScreen = constraints.maxWidth > 600;
+    final width = isWideScreen
+        ? (constraints.maxWidth / 3) - 40
+        : constraints.maxWidth - 40;
+    return Wrap(
+      spacing: 30,
+      runSpacing: 20,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      alignment: WrapAlignment.start,
+      children: [
+        LoadingAutocompleteDropdown(
+          enabled: true,
+          width: width,
+          resetValue: controller.adviser,
+          isLoading: controller.isLoadingAdviser,
+          listItems: controller.advisers,
+          onSelected: (DropDownOption option) {
+            controller.adviser.value = option;
+          },
+          initialValue: DropDownOption(
+            id: controller.adviser.value.id,
+            label: controller.adviser.value.label,
+          ),
+          validator: (DropDownOption? value) {
+            if (value == null || value.id.isEmpty) {
+              return 'Debe seleccionar un asesor válido';
+            }
+            return null;
+          },
+          label: "Asesor",
+          hintText: "Seleccione un asesor",
+          onTextChange: (text) async {
+            List<DropDownOption> filteredOptions = controller.advisers
+                .where((option) =>
+                    option.label.toLowerCase().contains(text.toLowerCase()))
+                .toList();
+            return filteredOptions.isEmpty ? [] : filteredOptions;
+          },
+        ),
+        LoadingAutocompleteDropdown(
+          enabled: true,
+          width: width,
+          resetValue: controller.accountManager,
+          isLoading: controller.isLoadingAccountBoss,
+          listItems: controller.accountBosses,
+          onSelected: (DropDownOption option) {
+            controller.accountManager.value = option;
+          },
+          initialValue: DropDownOption(
+            id: controller.accountManager.value.id,
+            label: controller.accountManager.value.label,
+          ),
+          label: "Jefe de cuenta",
+          hintText: "Seleccione un jefe de cuenta",
+          onTextChange: (text) async {
+            List<DropDownOption> filteredOptions = controller.accountBosses
+                .where((option) =>
+                    option.label.toLowerCase().contains(text.toLowerCase()))
+                .toList();
+            return filteredOptions.isEmpty ? [] : filteredOptions;
+          },
+        ),
+      ],
+    );
+  });
 }
 
 Widget _basicInfo(ManageClientController controller, bool isEnabled,
@@ -167,10 +254,10 @@ Widget _basicInfo(ManageClientController controller, bool isEnabled,
         child: CustomInputWidget(
           enabled: isEnabled,
           controller: controller.nameController,
-          label: "Nombre de grupo",
+          label: "Nombre del cliente",
           validator: (v) => notEmptyFieldValidator(v),
           keyboardType: TextInputType.text,
-          hintText: "Nombre del grupo",
+          hintText: "Nombre del cliente",
           prefixIcon: Icons.group,
         ),
       ),
@@ -229,6 +316,7 @@ Widget _fiscalAddressSection(ManageClientController controller) {
       children: [
         LoadingAutocompleteDropdown(
           prefixIcon: Icons.public,
+          validator: (value) => notEmptyDropdownOption(value, "País requerido"),
           enabled: true,
           isLoading: controller.genericListController.isLoadingCountry,
           listItems: controller.genericListController.countries,
@@ -245,9 +333,7 @@ Widget _fiscalAddressSection(ManageClientController controller) {
                 .where((option) =>
                     option.label.toLowerCase().contains(text.toLowerCase()))
                 .toList();
-            return filteredOptions.isEmpty
-                ? [DropDownOption(id: '', label: 'No hay resultados')]
-                : filteredOptions;
+            return filteredOptions.isEmpty ? [] : filteredOptions;
           },
         ),
 
@@ -257,11 +343,16 @@ Widget _fiscalAddressSection(ManageClientController controller) {
           enabled: true,
           isLoading: controller.genericListController.isLoadingCity,
           listItems: controller.genericListController.departments,
-          onSelected: (DropDownOption option) {
+          validator: (value) => notEmptyDropdownOption(value, "Departamento requerido"), 
+          onSelected: (DropDownOption option) async {
             controller.fiscalDepartment.value = option;
             controller.fiscalMunicipality.value =
                 DropDownOption(id: '', label: '');
-            controller.genericListController.fetchMunicipalities(option.id);
+            controller.isLoadingFiscalMunicipalities.value = true;
+            controller.fiscalMunicipalities.value = await controller
+                .genericListController
+                .fetchMunicipalitiesOnly(option.id);
+            controller.isLoadingFiscalMunicipalities.value = false;
           },
           label: "",
           hintText: "Departamento",
@@ -279,10 +370,11 @@ Widget _fiscalAddressSection(ManageClientController controller) {
           },
         ),
         LoadingAutocompleteDropdown(
+          validator: (value) => notEmptyDropdownOption(value, "Municipio requerido"),
           prefixIcon: Icons.apartment,
           enabled: true,
-          isLoading: controller.genericListController.isLoadingMunicipality,
-          listItems: controller.genericListController.municipalities,
+          isLoading: controller.isLoadingFiscalMunicipalities,
+          listItems: controller.fiscalMunicipalities,
           onSelected: (DropDownOption option) {
             controller.fiscalMunicipality.value = option;
           },
@@ -292,18 +384,17 @@ Widget _fiscalAddressSection(ManageClientController controller) {
           width: width,
           onTextChange: (text) async {
             List<DropDownOption> filteredOptions = controller
-                .genericListController.municipalities
+                .fiscalMunicipalities
                 .where((option) =>
                     option.label.toLowerCase().contains(text.toLowerCase()))
                 .toList();
-            return filteredOptions.isEmpty
-                ? [DropDownOption(id: '', label: 'No hay resultados')]
-                : filteredOptions;
+            return filteredOptions.isEmpty ? [] : filteredOptions;
           },
         ),
 
         // LoadingAutocompleteDropdown for Zone
         LoadingAutocompleteDropdown(
+          validator: (value) => notEmptyDropdownOption(value, "Zona requerida"),
           prefixIcon: Icons.location_on,
           enabled: true,
           isLoading: controller.genericListController.isLoadingZone,
@@ -333,6 +424,7 @@ Widget _fiscalAddressSection(ManageClientController controller) {
             label: "",
             hintText: "Dirección",
             prefixIcon: Icons.home,
+            validator: (value) => notEmptyFieldValidator(value),
           ),
         ),
       ],
@@ -354,6 +446,7 @@ Widget _paymentAddressSection(ManageClientController controller) {
       direction: isWideScreen ? Axis.horizontal : Axis.vertical,
       children: [
         LoadingAutocompleteDropdown(
+          validator: (value) => notEmptyDropdownOption(value, "País requerido"),
           prefixIcon: Icons.public,
           enabled: true,
           isLoading: controller.genericListController.isLoadingCountry,
@@ -371,20 +464,24 @@ Widget _paymentAddressSection(ManageClientController controller) {
                 .where((option) =>
                     option.label.toLowerCase().contains(text.toLowerCase()))
                 .toList();
-            return filteredOptions.isEmpty
-                ? [DropDownOption(id: '', label: 'No hay resultados')]
-                : filteredOptions;
+            return filteredOptions.isEmpty ? [] : filteredOptions;
           },
         ),
 
         // LoadingAutocompleteDropdown for Department
         LoadingAutocompleteDropdown(
+          validator: (value) => notEmptyDropdownOption(value, "Departamento requerido"),
           prefixIcon: Icons.map,
           enabled: true,
           isLoading: controller.genericListController.isLoadingCity,
           listItems: controller.genericListController.departments,
-          onSelected: (DropDownOption option) {
+          onSelected: (DropDownOption option) async{
             controller.paymentDepartment.value = option;
+            controller.paymentMunicipality.value =
+                DropDownOption(id: '', label: '');
+            controller.isLoadingPaymentMunicipalities.value = true;
+            controller.paymentMunicipalities.value = await controller.genericListController.fetchMunicipalitiesOnly(option.id);
+            controller.isLoadingPaymentMunicipalities.value = false;
           },
           label: "",
           hintText: "Departamento",
@@ -396,38 +493,36 @@ Widget _paymentAddressSection(ManageClientController controller) {
                 .where((option) =>
                     option.label.toLowerCase().contains(text.toLowerCase()))
                 .toList();
-            return filteredOptions.isEmpty
-                ? [DropDownOption(id: '', label: 'No hay resultados')]
-                : filteredOptions;
+            return filteredOptions.isEmpty ? [] : filteredOptions;
           },
         ),
 
-         LoadingAutocompleteDropdown(
+        LoadingAutocompleteDropdown(
+          validator: (value) => notEmptyDropdownOption(value, "Municipio requerido"),
           prefixIcon: Icons.apartment,
           enabled: true,
-          isLoading: controller.genericListController.isLoadingMunicipality,
-          listItems: controller.genericListController.municipalities,
+          isLoading: controller.isLoadingPaymentMunicipalities,
+          listItems: controller.paymentMunicipalities,
           onSelected: (DropDownOption option) {
-            controller.fiscalMunicipality.value = option;
+            controller.paymentMunicipality.value = option;
           },
           label: "",
           hintText: "Municipio",
-          resetValue: controller.fiscalMunicipality,
+          resetValue: controller.paymentMunicipality,
           width: width,
           onTextChange: (text) async {
             List<DropDownOption> filteredOptions = controller
-                .genericListController.municipalities
+                .paymentMunicipalities
                 .where((option) =>
                     option.label.toLowerCase().contains(text.toLowerCase()))
                 .toList();
-            return filteredOptions.isEmpty
-                ? [DropDownOption(id: '', label: 'No hay resultados')]
-                : filteredOptions;
+            return filteredOptions.isEmpty ? [] : filteredOptions;
           },
         ),
 
         // LoadingAutocompleteDropdown for Zone
         LoadingAutocompleteDropdown(
+          validator: (value) => notEmptyDropdownOption(value, "Zona requerida"),
           prefixIcon: Icons.location_on,
           enabled: true,
           isLoading: controller.genericListController.isLoadingZone,
@@ -457,6 +552,7 @@ Widget _paymentAddressSection(ManageClientController controller) {
             label: "",
             hintText: "Dirección",
             prefixIcon: Icons.home,
+            validator: (value) => notEmptyFieldValidator(value),
           ),
         ),
       ],
@@ -488,6 +584,7 @@ Widget _billInfo(ManageClientController controller) {
                 ? (constraints.maxWidth / 3) - 40
                 : constraints.maxWidth - 40,
             child: AutocompleteDropdownWidget(
+              validator: (value) => notEmptyDropdownOption(value, "Cobrador requerido"),
               enabled: true,
               // initialValue: DropDownOption(
               //     id: controller.clientId.value.id,
@@ -531,6 +628,7 @@ Widget _billInfo(ManageClientController controller) {
                 ? (constraints.maxWidth / 3) - 40
                 : constraints.maxWidth - 40,
             child: AutocompleteDropdownWidget(
+              validator: (value) => notEmptyDropdownOption(value, "Tipo de facturación requerido"),
               enabled: true,
               listItems: controller.genericListController.billingTypes,
               onSelected: (DropDownOption option) {
@@ -572,6 +670,7 @@ Widget _billInfo(ManageClientController controller) {
                 ? (constraints.maxWidth / 3) - 40
                 : constraints.maxWidth - 40,
             child: AutocompleteDropdownWidget(
+              validator: (value) => notEmptyDropdownOption(value, "Tipo de generación requerido"),
               enabled: true,
               listItems: controller.genericListController.generationTypes,
               onSelected: (DropDownOption option) {

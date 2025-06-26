@@ -65,8 +65,11 @@ class ClientModel {
       'accountBossId': accountManager?.id,
       'adviserId': adviser?.id,
       'fiscalAddress': fiscalAddress?.toJson(),
-      'paymentAddress': paymentAddress?.toJson(),
-      'billing': billing.toJson(),
+      'businessAddress': paymentAddress?.toJson(),
+      "billingTypeId": billing.billingType?.id,
+      "generationTypeId": billing.generationType?.id,
+      "billingCollectorId": billing.billCollectorId,
+      // 'billing': billing.toJson(),
     };
   }
 }
@@ -75,13 +78,13 @@ class Employee {
   final String? id;
   final String name;
   final String contact;
-  final SimpleEntity type;
+  final SimpleEntity? type;
 
   Employee({
     this.id,
     required this.name,
     required this.contact,
-    required this.type,
+    this.type,
   });
 
   factory Employee.fromJson(Map<String, dynamic> json) {

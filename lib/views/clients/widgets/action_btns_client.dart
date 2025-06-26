@@ -28,7 +28,8 @@ Widget addClientButton(
       ),
       isLoading: false,
       onPress: () async {
-        Navigator.pushNamed(context, RouteConstants.manageClient);
+       await Navigator.pushNamed(context, RouteConstants.manageClient);
+      controller.fetchClients();
       });
 }
 

@@ -161,6 +161,21 @@ class GenericListController extends GetxController {
       isLoadingMunicipality.value = false;
     }
   }
+    Future<List<DropDownOption>> fetchMunicipalitiesOnly(String departmentId) async {
+    try {
+      
+      final data = await genericListService.getAll("common/getMunicipalitiesByDepartment/$departmentId");
+      final munis = data.map((item) {
+        return DropDownOption(
+          id: item.id.toString(),
+          label: item.name,
+        );
+      }).toList();
+      return munis;
+    } catch (e) {
+      return [];
+    } 
+  }
 
   Future<List<DropDownOption>> fetchFactories() async {
     try {

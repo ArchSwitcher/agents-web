@@ -1,7 +1,10 @@
 import 'package:agents_app/controllers/generic_list_controller.dart';
 import 'package:agents_app/controllers/loader_controller.dart';
+import 'package:agents_app/models/address/address_model.dart';
+import 'package:agents_app/models/billing/bill_model.dart';
 import 'package:agents_app/models/client/clients_model.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
+import 'package:agents_app/models/common/simple_entity_model.dart';
 import 'package:agents_app/services/employee_dropdown_service.dart';
 import 'package:agents_app/shared/constants/database_constants.dart';
 import 'package:agents_app/views/clients/services/client_service.dart';
@@ -25,6 +28,8 @@ class ManageClientController extends GetxController {
   RxList<ClientModel> clients = <ClientModel>[].obs;
 
   Rx<DropDownOption> groupId = DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> adviser = DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> accountManager = DropDownOption(id: '', label: '').obs;
 
   @override
   void onClose() {
@@ -42,6 +47,11 @@ class ManageClientController extends GetxController {
   RxList<DropDownOption> advisers = <DropDownOption>[].obs;
   RxList<DropDownOption> accountBosses = <DropDownOption>[].obs;
   RxList<DropDownOption> billPersons = <DropDownOption>[].obs;
+  RxList<DropDownOption> fiscalMunicipalities = <DropDownOption>[].obs;
+  RxList<DropDownOption> paymentMunicipalities = <DropDownOption>[].obs;
+  RxBool isLoadingFiscalMunicipalities = true.obs;
+  RxBool isLoadingPaymentMunicipalities = true.obs;
+
 
   fetchEmployees() async {
     isLoadingAdviser.value = true;
@@ -84,8 +94,75 @@ class ManageClientController extends GetxController {
     }).toList();
   }
 
-  newClient(ClientModel client) async {
+  newClient() async {
     try {
+      ClientModel client = ClientModel(
+          name: nameController.text,
+          email: emailController.text,
+          url: urlController.text,
+          phone: phoneController.text,
+          group: groupId.value.id.isNotEmpty
+              ? SimpleEntity(id: groupId.value.id, name: groupId.value.label)
+              : SimpleEntity(id: '', name: ''),
+          admin: SimpleEntity(
+              id: '1', name: "Admin"), // should be chosen from dropdown
+          billing: Billing(
+              billingType: billingType.value.id.isNotEmpty
+                  ? SimpleEntity(
+                      id: billingType.value.id, name: billingType.value.label)
+                  : SimpleEntity(id: '', name: ''),
+              generationType: generationType.value.id.isNotEmpty
+                  ? SimpleEntity(
+                      id: generationType.value.id,
+                      name: generationType.value.label)
+                  : SimpleEntity(id: '', name: ''),
+              billCollectorId: billPerson.value.id),
+          fiscalAddress: Address(
+              country: fiscalCountry.value.id.isNotEmpty
+                  ? SimpleEntity(
+                      id: fiscalCountry.value.id,
+                      name: fiscalCountry.value.label)
+                  : SimpleEntity(id: '', name: ''),
+              department: fiscalDepartment.value.id.isNotEmpty
+                  ? SimpleEntity(
+                      id: fiscalDepartment.value.id,
+                      name: fiscalDepartment.value.label)
+                  : SimpleEntity(id: '', name: ''),
+              municipality: fiscalMunicipality.value.id.isNotEmpty
+                  ? SimpleEntity(
+                      id: fiscalMunicipality.value.id,
+                      name: fiscalMunicipality.value.label)
+                  : SimpleEntity(id: '', name: ''),
+              zone: fiscalZone.value.id.isNotEmpty
+                  ? SimpleEntity(
+                      id: fiscalZone.value.id, name: fiscalZone.value.label)
+                  : SimpleEntity(id: '', name: ''),
+              address: fiscalAddress.text),
+          paymentAddress: Address(
+              country: paymentCountry.value.id.isNotEmpty
+                  ? SimpleEntity(
+                      id: paymentCountry.value.id,
+                      name: paymentCountry.value.label)
+                  : SimpleEntity(id: '', name: ''),
+              department: paymentDepartment.value.id.isNotEmpty
+                  ? SimpleEntity(
+                      id: paymentDepartment.value.id,
+                      name: paymentDepartment.value.label)
+                  : SimpleEntity(id: '', name: ''),
+              municipality: paymentMunicipality.value.id.isNotEmpty
+                  ? SimpleEntity(
+                      id: paymentMunicipality.value.id,
+                      name: paymentMunicipality.value.label)
+                  : null,
+              zone: paymentZone.value.id.isNotEmpty
+                  ? SimpleEntity(
+                      id: paymentZone.value.id, name: paymentZone.value.label)
+                  : SimpleEntity(id: '', name: ''),
+              address: paymentAddress.text),
+          adviser: Employee(id: adviser.value.id, name: adviser.value.label, contact: "",),
+          accountManager: Employee(
+              id: accountManager.value.id.isEmpty ? null : accountManager.value.id, name: accountManager.value.label, contact: ""));
+
       final success = await _clientService.create(client);
       if (success) {
         await fetchClients();
