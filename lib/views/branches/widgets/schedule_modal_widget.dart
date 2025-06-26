@@ -1,7 +1,7 @@
 import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/helpers/validations/not_empty.dart';
 import 'package:agents_app/shared/helpers/validations/time_validatot.dart';
-import 'package:agents_app/views/clients/controllers/client_controller.dart';
+import 'package:agents_app/views/branches/controller/branch_controller.dart';
 import 'package:agents_app/widgets/commons/generic_modal.dart';
 import 'package:agents_app/widgets/inputs/custom_checkBox_widget.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
@@ -12,7 +12,7 @@ void showScheduleModal({
   required BuildContext context,
   VoidCallback? onAccept,
   VoidCallback? onCancel,
-  required ManageClientController controller,
+  required BranchController controller,
   String description = "",
   String title = "Turnos",
   bool isEdit = true,

@@ -40,7 +40,6 @@ class _BranchesScreenState extends State<BranchesScreen> {
     120,
     120,
     120,
-    120,
     150,
     150,
   ];
@@ -90,7 +89,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
                           //controller.groups.value = data;
                         },
                         isLoading: false,
-                        hint: "Buscar sucursales",
+                        hint: "Buscar sucursal",
                         label: "Buscar sucursal",
                       ),
                     ),

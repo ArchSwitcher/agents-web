@@ -1,5 +1,6 @@
 import 'package:agents_app/models/address/address_model.dart';
 import 'package:agents_app/models/common/simple_entity_model.dart';
+import 'package:agents_app/models/schedule/schedule_days_model.dart';
 
 class BranchModel {
   String id = '';
@@ -26,6 +27,8 @@ class BranchModel {
 
   Address businessAddress;
 
+  final List<Turn> turns;
+
 
   BranchModel({
     this.id = '',
@@ -45,6 +48,7 @@ class BranchModel {
     required this.adviserId,
     this.adviser,
     required this.businessAddress,
+    required this.turns,
   });
 
   factory BranchModel.fromJson(Map<String, dynamic> data) {
@@ -68,6 +72,9 @@ class BranchModel {
       adviserId: data['adviser']['id'] != null ? data['adviser']['id'].toString() : '',
       adviser: SimpleEntity.fromJson(data['adviser']),
       businessAddress: Address.fromNestedJson(data['businessAddress']),
+      turns: (data['turns'] as List<dynamic>)
+          .map((item) => Turn.fromJson(item as Map<String, dynamic>))
+          .toList(),
     );
   }
 
@@ -85,9 +92,39 @@ class BranchModel {
       "accountBossId": accountBossId,
       "adviserId": adviserId,
       "businessAddress": businessAddress.toJson(),
+      "turns": turns.map((item) => item.toJson()).toList(),
     };
   }
 }
 
 
 
+class Turn {
+   String? id;
+   String name;
+   List<DailySchedule> schedule;
+
+  Turn({
+    this.id,
+    required this.name,
+    required this.schedule,
+  });
+
+  factory Turn.fromJson(Map<String, dynamic> json) {
+    return Turn(
+      id: json['id'].toString(),
+      name: json['Name'].toString(),
+      schedule: (json['schedule'] as List<dynamic>)
+          .map((item) => DailySchedule.fromJson(item as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'schedule': schedule.map((item) => item.toJson()).toList(),
+    };
+  }
+}

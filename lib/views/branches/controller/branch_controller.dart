@@ -2,6 +2,7 @@ import 'package:agents_app/controllers/generic_list_controller.dart';
 import 'package:agents_app/models/address/address_model.dart';
 import 'package:agents_app/models/branch/branch_index_model.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
+import 'package:agents_app/models/schedule/schedule_days_model.dart';
 import 'package:agents_app/services/employee_dropdown_service.dart';
 import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/views/branches/services/branch_service.dart';
@@ -117,20 +118,13 @@ class BranchController extends GetxController {
       factoryId: factory.value.id,
       accountBossId: accountBoss.value.id,
       adviserId: adviser.value.id,
-      // territoryBossId: territoryManager.value.id,
       businessAddress: Address(
         countryId: physicalCountry.value.id,
         departmentId: physicalDepartment.value.id,
         zone: physicalZone.value.id,
         address: physicalAddress.text,
       ),
-      // billInfo: BillInfoBranch(
-      //   billCollectorId: billPerson.value.id,
-      //   billingType: SimpleEntity(
-      //       id: billingType.value.id, name: billingType.value.label),
-      //   generationType: SimpleEntity(
-      //       id: generationType.value.id, name: generationType.value.label),
-      // ),
+      turns: turns.toList(),
     );
   }
 
@@ -255,5 +249,123 @@ class BranchController extends GetxController {
     latitudeController.dispose();
     longitudeController.dispose();
     super.onClose();
+  }
+
+
+  //shcedule 
+  // assign days
+
+  final TextEditingController turnName = TextEditingController(text: "");
+
+  final weekDays = <WeekDay>[
+    WeekDay(
+        id: 1,
+        name: "Lunes",
+        startTimeController: TextEditingController(text: "00:00"),
+        endTimeController: TextEditingController(text: "00:00"),
+        isSelected: false.obs),
+    WeekDay(
+        id: 2,
+        name: "Martes",
+        startTimeController: TextEditingController(text: "00:00"),
+        endTimeController: TextEditingController(text: "00:00"),
+        isSelected: false.obs),
+    WeekDay(
+        id: 3,
+        name: "Miércoles",
+        startTimeController: TextEditingController(text: "00:00"),
+        endTimeController: TextEditingController(text: "00:00"),
+        isSelected: false.obs),
+    WeekDay(
+        id: 4,
+        name: "Jueves",
+        startTimeController: TextEditingController(text: "00:00"),
+        endTimeController: TextEditingController(text: "00:00"),
+        isSelected: false.obs),
+    WeekDay(
+        id: 5,
+        name: "Viernes",
+        startTimeController: TextEditingController(text: "00:00"),
+        endTimeController: TextEditingController(text: "00:00"),
+        isSelected: false.obs),
+    WeekDay(
+        id: 6,
+        name: "Sábado",
+        startTimeController: TextEditingController(text: "00:00"),
+        endTimeController: TextEditingController(text: "00:00"),
+        isSelected: false.obs),
+    WeekDay(
+        id: 7,
+        name: "Domingo",
+        startTimeController: TextEditingController(text: "00:00"),
+        endTimeController: TextEditingController(text: "00:00"),
+        isSelected: false.obs),
+  ].obs;
+  final turns = <Turn>[].obs;
+
+  void toggleWeekDay(WeekDay day) {
+    day.isSelected.value = !day.isSelected.value;
+    if (!day.isSelected.value) {
+      day.startTimeController.text = "00:00";
+      day.endTimeController.text = "00:00";
+    }
+  }
+
+  List<DailySchedule> getSelectedDays() {
+    return weekDays
+        .where((day) => day.isSelected.value == true)
+        .map((day) => DailySchedule(
+            daysId: day.id,
+            initTime: day.startTimeController.text,
+            endTime: day.endTimeController.text))
+        .toList();
+  }
+
+  // add turn
+  void addTurn() {
+    turns.add(Turn(name: turnName.text, schedule: getSelectedDays()));
+    clearTurn();
+    ToastService.success(
+        title: "Turno agregado", subTitle: "Turno agregado correctamente");
+  }
+
+  void clearTurn() {
+    turnName.clear();
+    for (var day in weekDays) {
+      day.isSelected.value = false;
+      day.startTimeController.text = "00:00";
+      day.endTimeController.text = "00:00";
+    }
+  }
+
+  void editTurn(int index) {
+    if (index < 0 || index >= turns.length) return;
+    final turn = turns[index];
+    turn.name = turnName.text;
+    turn.schedule = getSelectedDays();
+    ToastService.success(
+        title: "Turno editado", subTitle: "Turno editado correctamente");
+    clearTurn();
+  }
+
+  void deleteTurn(int index) {
+    if (index < 0 || index >= turns.length) return;
+    turns.removeAt(index);
+    ToastService.success(
+        title: "Turno eliminado", subTitle: "Turno eliminado correctamente");
+    clearTurn();
+  }
+
+  void selectTurn(int index) {
+    if (index < 0 || index >= turns.length) return;
+    clearTurn();
+    final turn = turns[index];
+    turnName.text = turn.name;
+    for (var schedule in turn.schedule) {
+      final day = weekDays.firstWhere((d) => d.id == schedule.daysId);
+      day.isSelected.value = true;
+      day.startTimeController.text = schedule.initTime;
+      day.endTimeController.text = schedule.endTime;
+    }
   }
 }

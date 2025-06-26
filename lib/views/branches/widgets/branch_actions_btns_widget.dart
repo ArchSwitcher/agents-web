@@ -20,7 +20,7 @@ Widget addBranchButton(BuildContext context) {
             width: 6,
           ),
           Text(
-            "Nuevo cliente",
+            "Nueva sucursal",
             style: CustomStyle.textStyleWhite(context),
           )
         ],
