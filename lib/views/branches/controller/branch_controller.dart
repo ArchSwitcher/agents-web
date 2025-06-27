@@ -34,42 +34,32 @@ class BranchController extends GetxController {
   final socialReasonController = TextEditingController();
   final TextEditingController latitudeController = TextEditingController();
   final TextEditingController longitudeController = TextEditingController();
-  Rx<DropDownOption> groupId =
-      DropDownOption(id: '', label: '').obs;
+  final TextEditingController radiusController = TextEditingController();
+  Rx<DropDownOption> groupId = DropDownOption(id: '', label: '').obs;
 
-  Rx<DropDownOption> client =
-      DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> client = DropDownOption(id: '', label: '').obs;
 
   RxBool isLoadingAdviser = true.obs;
   RxBool isLoadingAccountBoss = true.obs;
   RxBool isLoadingBillPerson = true.obs;
+
   RxList<DropDownOption> advisers = <DropDownOption>[].obs;
   RxList<DropDownOption> accountBosses = <DropDownOption>[].obs;
   RxList<DropDownOption> billPersons = <DropDownOption>[].obs;
 
-  Rx<DropDownOption> adviser =
-      DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> adviser = DropDownOption(id: '', label: '').obs;
   // Rx<DropDownOption> territoryManager =
   //     DropDownOption(id: '', label: 'Seleccione un gerente de territorio').obs; //! se debe de quitar
-  Rx<DropDownOption> accountBoss =
-      DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> accountBoss = DropDownOption(id: '', label: '').obs;
 
-  Rx<DropDownOption> employee =
-      DropDownOption(id: '', label: '').obs;
-  Rx<DropDownOption> classification =
-      DropDownOption(id: '', label: '').obs;
-  Rx<DropDownOption> city =
-      DropDownOption(id: '', label: '').obs;
-  Rx<DropDownOption> country =
-      DropDownOption(id: '', label: '').obs;
-  Rx<DropDownOption> zone =
-      DropDownOption(id: '', label: '').obs;
-  Rx<DropDownOption> billingType =
-      DropDownOption(id: '', label: '').obs;
-  Rx<DropDownOption> generationType =
-      DropDownOption(id: '', label: '').obs;
-  Rx<DropDownOption> factory =
-      DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> employee = DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> classification = DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> city = DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> country = DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> zone = DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> billingType = DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> generationType = DropDownOption(id: '', label: '').obs;
+  Rx<DropDownOption> factory = DropDownOption(id: '', label: '').obs;
 
   // Rx<DropDownOption> fiscalCountry =
   //     DropDownOption(id: '', label: 'Seleccione un país fiscal').obs;
@@ -85,6 +75,7 @@ class BranchController extends GetxController {
       DropDownOption(id: '', label: 'Seleccione un departamento').obs;
   Rx<DropDownOption> physicalZone =
       DropDownOption(id: '', label: 'Seleccione una zona').obs;
+  Rx<DropDownOption> municipality = DropDownOption(id: '', label: '').obs;
   final TextEditingController physicalAddress = TextEditingController();
 
   // Rx<DropDownOption> paymentCountry =

@@ -24,7 +24,7 @@ BranchController controller = Get.put(BranchController());
       content: Column(
         children: [
           Text(
-            "¿Está seguro de que desea eliminar la sucursal ${branch.branchName}?",
+            "¿Está seguro de  eliminar la sucursal ${branch.branchName}?",
             style: CustomStyle.defaultStyle(context),
           ),
           Text("esta acción no se puede deshacer.",
