@@ -81,12 +81,15 @@ class ClientService extends BaseService implements CrudService<ClientModel> {
       body: jsonEncode(client.toJson()),
     );
 
+    print("Response status: ${jsonEncode(client.toJson())}");
+
     if (response.statusCode == 200) {
       ToastService.success(
           title: "Actualizado", subTitle: "Cliente actualizado");
       return true;
     } else {
       ToastService.error(title: "Error", subTitle: "No se pudo actualizar");
+      print("Error updating client: ${response.body}");
       return false;
     }
   }

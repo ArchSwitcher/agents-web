@@ -18,7 +18,7 @@ class ManageGroupController extends GetxController {
     } catch (e) {
       print(e);
     } finally {
-      print("objects ============ ${groups.length}");
+      print("objects groups ${groups.length}");
       isLoading.value = false;
       update();
     }

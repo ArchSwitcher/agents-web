@@ -36,10 +36,13 @@ Widget addClientButton(
 Widget editClient(BuildContext context, ClientModel element) {
   return IconButton(
     onPressed: () {
+      print("Edit client: ${element.group.id}");
       Navigator.pushNamed(context, RouteConstants.manageClient, arguments: {
         'title': "Editar cliente",
         'isEdit': true,
-        'subtitle': "Edita los detalles del cliente"
+        'subtitle': "Edita los detalles del cliente",
+        'client': element,
+        'clientId': element.id
       });
     },
     icon: Icon(

@@ -36,7 +36,7 @@ class ManageClientScreenState extends State<ManageClientScreen> {
   final ManageClientController controller = Get.put(ManageClientController());
   final LoaderController loaderController = Get.put(LoaderController());
 
-  final bool isEnabled = Get.arguments?['isEdit'] ?? true;
+  final bool? isEdit = Get.arguments?['isEdit'];
   final String title = Get.arguments?['title'] ?? "Agregar cliente";
   final String subtitle =
       Get.arguments?['subtitle'] ?? "Agrega un nuevo cliente";
@@ -51,10 +51,33 @@ class ManageClientScreenState extends State<ManageClientScreen> {
     await controller.genericListController.fetchZones();
   }
 
+  startEdit() async {
+    controller.loadClientData(Get.arguments?['client']);
+
+    controller.fiscalMunicipalities.value = await controller
+        .genericListController
+        .fetchMunicipalitiesOnly(controller.fiscalDepartment.value.id);
+
+    controller.paymentMunicipalities.value = await controller
+        .genericListController
+        .fetchMunicipalitiesOnly(controller.paymentDepartment.value.id);
+  }
+
   @override
   void initState() {
     super.initState();
-    start();
+    if (isEdit == true) {
+      startEdit();
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      start();
+    });
+  }
+
+  @override
+  void dispose() {
+    Get.delete<ManageClientController>();
+    super.dispose();
   }
 
   @override
@@ -82,7 +105,7 @@ class ManageClientScreenState extends State<ManageClientScreen> {
                   return Obx(() {
                     return _basicInfo(
                       controller,
-                      isEnabled,
+                      isEdit ?? true,
                       _groupController,
                       width,
                     );
@@ -121,17 +144,21 @@ class ManageClientScreenState extends State<ManageClientScreen> {
                         isLoading: false,
                         onPress: () async {
                           if (!formKey.currentState!.validate()) {
-                            ToastService.warning(title: "Validación", subTitle: "Por favor, rellene todos los campos obligatorios.");
+                            ToastService.warning(
+                                title: "Validación",
+                                subTitle:
+                                    "Por favor, rellene todos los campos obligatorios.");
                             return;
                           }
-                            loaderController.show();
+                          loaderController.show();
+                          if (isEdit == true) {
+                            await controller.editClient();
+                          } else {
                             await controller.newClient();
-                            loaderController.hide();
-                            Get.back(result: true);
-                          
-                        }
-                        
-                        )
+                          }
+                          loaderController.hide();
+                          Get.back(result: true);
+                        })
                   ],
                 ),
               ),
@@ -223,15 +250,12 @@ Widget _basicInfo(ManageClientController controller, bool isEnabled,
       LoadingAutocompleteDropdown(
         width: width,
         resetValue: controller.groupId,
-        isLoading: controller.isLoading,
+        isLoading: groupController.isLoading,
         listItems: groupController.dropdownOptions,
         onSelected: (DropDownOption option) {
           controller.groupId.value = option;
         },
-        initialValue: DropDownOption(
-          id: controller.groupId.value.id,
-          label: controller.groupId.value.label,
-        ),
+        initialValue: controller.groupId.value,
         validator: (DropDownOption? value) {
           if (value == null || value.id.isEmpty) {
             return 'Debe seleccionar un grupo válido';
@@ -315,6 +339,7 @@ Widget _fiscalAddressSection(ManageClientController controller) {
       direction: isWideScreen ? Axis.horizontal : Axis.vertical,
       children: [
         LoadingAutocompleteDropdown(
+          initialValue: controller.fiscalCountry.value,
           prefixIcon: Icons.public,
           validator: (value) => notEmptyDropdownOption(value, "País requerido"),
           enabled: true,
@@ -339,11 +364,13 @@ Widget _fiscalAddressSection(ManageClientController controller) {
 
         // LoadingAutocompleteDropdown for Department
         LoadingAutocompleteDropdown(
+          initialValue: controller.fiscalDepartment.value,
           prefixIcon: Icons.map,
           enabled: true,
           isLoading: controller.genericListController.isLoadingCity,
           listItems: controller.genericListController.departments,
-          validator: (value) => notEmptyDropdownOption(value, "Departamento requerido"), 
+          validator: (value) =>
+              notEmptyDropdownOption(value, "Departamento requerido"),
           onSelected: (DropDownOption option) async {
             controller.fiscalDepartment.value = option;
             controller.fiscalMunicipality.value =
@@ -370,7 +397,9 @@ Widget _fiscalAddressSection(ManageClientController controller) {
           },
         ),
         LoadingAutocompleteDropdown(
-          validator: (value) => notEmptyDropdownOption(value, "Municipio requerido"),
+          initialValue: controller.fiscalMunicipality.value,
+          validator: (value) =>
+              notEmptyDropdownOption(value, "Municipio requerido"),
           prefixIcon: Icons.apartment,
           enabled: true,
           isLoading: controller.isLoadingFiscalMunicipalities,
@@ -394,6 +423,7 @@ Widget _fiscalAddressSection(ManageClientController controller) {
 
         // LoadingAutocompleteDropdown for Zone
         LoadingAutocompleteDropdown(
+          initialValue: controller.fiscalZone.value,
           validator: (value) => notEmptyDropdownOption(value, "Zona requerida"),
           prefixIcon: Icons.location_on,
           enabled: true,
@@ -446,6 +476,7 @@ Widget _paymentAddressSection(ManageClientController controller) {
       direction: isWideScreen ? Axis.horizontal : Axis.vertical,
       children: [
         LoadingAutocompleteDropdown(
+          initialValue: controller.paymentCountry.value,
           validator: (value) => notEmptyDropdownOption(value, "País requerido"),
           prefixIcon: Icons.public,
           enabled: true,
@@ -470,17 +501,21 @@ Widget _paymentAddressSection(ManageClientController controller) {
 
         // LoadingAutocompleteDropdown for Department
         LoadingAutocompleteDropdown(
-          validator: (value) => notEmptyDropdownOption(value, "Departamento requerido"),
+          initialValue: controller.paymentDepartment.value,
+          validator: (value) =>
+              notEmptyDropdownOption(value, "Departamento requerido"),
           prefixIcon: Icons.map,
           enabled: true,
           isLoading: controller.genericListController.isLoadingCity,
           listItems: controller.genericListController.departments,
-          onSelected: (DropDownOption option) async{
+          onSelected: (DropDownOption option) async {
             controller.paymentDepartment.value = option;
             controller.paymentMunicipality.value =
                 DropDownOption(id: '', label: '');
             controller.isLoadingPaymentMunicipalities.value = true;
-            controller.paymentMunicipalities.value = await controller.genericListController.fetchMunicipalitiesOnly(option.id);
+            controller.paymentMunicipalities.value = await controller
+                .genericListController
+                .fetchMunicipalitiesOnly(option.id);
             controller.isLoadingPaymentMunicipalities.value = false;
           },
           label: "",
@@ -498,7 +533,9 @@ Widget _paymentAddressSection(ManageClientController controller) {
         ),
 
         LoadingAutocompleteDropdown(
-          validator: (value) => notEmptyDropdownOption(value, "Municipio requerido"),
+          initialValue: controller.paymentMunicipality.value,
+          validator: (value) =>
+              notEmptyDropdownOption(value, "Municipio requerido"),
           prefixIcon: Icons.apartment,
           enabled: true,
           isLoading: controller.isLoadingPaymentMunicipalities,
@@ -522,6 +559,7 @@ Widget _paymentAddressSection(ManageClientController controller) {
 
         // LoadingAutocompleteDropdown for Zone
         LoadingAutocompleteDropdown(
+          initialValue: controller.paymentZone.value,
           validator: (value) => notEmptyDropdownOption(value, "Zona requerida"),
           prefixIcon: Icons.location_on,
           enabled: true,
@@ -584,7 +622,9 @@ Widget _billInfo(ManageClientController controller) {
                 ? (constraints.maxWidth / 3) - 40
                 : constraints.maxWidth - 40,
             child: AutocompleteDropdownWidget(
-              validator: (value) => notEmptyDropdownOption(value, "Cobrador requerido"),
+              initialValue: controller.billPerson.value,
+              validator: (value) =>
+                  notEmptyDropdownOption(value, "Cobrador requerido"),
               enabled: true,
               // initialValue: DropDownOption(
               //     id: controller.clientId.value.id,
@@ -628,7 +668,9 @@ Widget _billInfo(ManageClientController controller) {
                 ? (constraints.maxWidth / 3) - 40
                 : constraints.maxWidth - 40,
             child: AutocompleteDropdownWidget(
-              validator: (value) => notEmptyDropdownOption(value, "Tipo de facturación requerido"),
+              initialValue: controller.billingType.value,
+              validator: (value) => notEmptyDropdownOption(
+                  value, "Tipo de facturación requerido"),
               enabled: true,
               listItems: controller.genericListController.billingTypes,
               onSelected: (DropDownOption option) {
@@ -670,7 +712,9 @@ Widget _billInfo(ManageClientController controller) {
                 ? (constraints.maxWidth / 3) - 40
                 : constraints.maxWidth - 40,
             child: AutocompleteDropdownWidget(
-              validator: (value) => notEmptyDropdownOption(value, "Tipo de generación requerido"),
+              initialValue: controller.generationType.value,
+              validator: (value) =>
+                  notEmptyDropdownOption(value, "Tipo de generación requerido"),
               enabled: true,
               listItems: controller.genericListController.generationTypes,
               onSelected: (DropDownOption option) {

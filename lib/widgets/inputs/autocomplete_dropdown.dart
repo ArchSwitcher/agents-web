@@ -48,22 +48,37 @@ class _AutocompleteDropdownWidgetState
   DropDownOption? selectedOption;
   late TextEditingController textEditingController;
 
+  updateSelectedOption() {
+    print("Initial value: ${widget.initialValue!.label}");
+    print("Initial value ID: ${widget.initialValue!.id}");
+    widget.listItems.firstWhere(
+        (option) => option.id == widget.initialValue!.id,
+        orElse: () => DropDownOption(id: '', label: ''));
+    selectedOption = widget.initialValue;
+  }
+
   @override
   void initState() {
-    if(widget.initialValue != null) {
-      // selectedOption = widget.initialValue;
-      widget.listItems
-          .firstWhere((option) => option.id == widget.initialValue!.id, orElse: () => DropDownOption(id: '', label: ''));
-      selectedOption = widget.initialValue;
+    if (widget.initialValue != null) {
+      updateSelectedOption();
     }
     super.initState();
   }
 
+  @override
+  void didUpdateWidget(covariant AutocompleteDropdownWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialValue != oldWidget.initialValue &&
+        widget.listItems.isNotEmpty) {
+      updateSelectedOption();
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return FormField<DropDownOption>(
-      initialValue: widget.initialValue,
+      initialValue: widget.initialValue ?? selectedOption,
       validator: widget.validator,
       enabled: widget.enabled,
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -72,7 +87,6 @@ class _AutocompleteDropdownWidgetState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Autocomplete<DropDownOption>(
-              
               initialValue: TextEditingValue(text: widget.initialValue?.label ?? ''),
               optionsBuilder: (TextEditingValue textEditingValue) {
                 if (fieldState.value == null && selectedOption != null) {
