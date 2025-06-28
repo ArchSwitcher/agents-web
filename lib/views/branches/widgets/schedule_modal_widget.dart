@@ -1,10 +1,12 @@
 import 'package:agents_app/services/toast_service.dart';
+import 'package:agents_app/shared/helpers/validations/end_time_validator.dart';
 import 'package:agents_app/shared/helpers/validations/not_empty.dart';
 import 'package:agents_app/shared/helpers/validations/time_validatot.dart';
 import 'package:agents_app/views/branches/controller/branch_controller.dart';
 import 'package:agents_app/widgets/commons/generic_modal.dart';
 import 'package:agents_app/widgets/inputs/custom_checkBox_widget.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
+import 'package:agents_app/widgets/inputs/time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
@@ -49,6 +51,25 @@ void showScheduleModal({
                       if (isEdit == false) return;
                       controller.toggleWeekDay(day);
                     },
+                    startTimeValidator: (value) {
+                      if (day.isSelected.value == false) return null;
+                      if (value == null || value.isEmpty) {
+                        return 'Hora de inicio es requerida';
+                      }
+                      final timeError = validateTime(value);
+                      if (timeError != null) {
+                        return timeError;
+                      }
+                      if (value == "23:59") {
+                        return "Hora no valida";
+                      }
+                      return null;
+                    },
+                    endTimeValidator: (value) {
+                      if (day.isSelected.value == false) return null;
+                      return endTimeValidator(day.startTimeController.text,
+                          day.endTimeController.text);
+                    },
                   );
                 }).toList(),
               ),
@@ -66,7 +87,9 @@ void showScheduleModal({
               subTitle: "Por favor, complete todos los campos requeridos.");
         }
       },
-      onCancel: onCancel,
+      onCancel: () {
+        controller.clearTurn();
+      },
       title: title,
       subtitle: description,
       acceptText: "Aceptar",
@@ -82,6 +105,9 @@ class WeekDayTime extends StatefulWidget {
   final void Function(bool?)? onChanged;
   final TextEditingController startTimeController;
   final TextEditingController endTimeController;
+  // validator for start time and end time
+  final String? Function(String?)? startTimeValidator;
+  final String? Function(String?)? endTimeValidator;
   final bool enabled;
   const WeekDayTime(
       {super.key,
@@ -90,6 +116,8 @@ class WeekDayTime extends StatefulWidget {
       required this.onChanged,
       required this.startTimeController,
       required this.endTimeController,
+      required this.startTimeValidator,
+      required this.endTimeValidator,
       required this.enabled});
 
   @override
@@ -113,49 +141,45 @@ class _WeekDayTimeState extends State<WeekDayTime> {
             checkColor: Theme.of(context).colorScheme.surface,
           ),
           const SizedBox(width: 12),
-          Expanded(
-            child: CustomInputWidget(
+          // CustomTimePicker
+
+          SizedBox(
+            width: 100,
+            child: CustomTimePicker(
+              initialTime: widget.startTimeController.text.isNotEmpty
+                  ? TimeOfDay(
+                      hour: int.parse(
+                          widget.startTimeController.text.split(':')[0]),
+                      minute: int.parse(
+                          widget.startTimeController.text.split(':')[1]),
+                    )
+                  : const TimeOfDay(hour: 0, minute: 0),
               enabled: widget.enabled,
               controller: widget.startTimeController,
-              label: "Hora de inicio",
-              validator: (v) {
-                if(widget.isSelected == false) return null;
-                final timeError = validateTime(v);
-                if (timeError != null) {
-                  return timeError;
-                }
-                if(v == "23:59") {
-                  return "Hora no valida";
-                }
-                return null;
-              },
-              keyboardType: TextInputType.datetime,
-              hintText: "HH:mm",
+              label: 'Hora de inicio',
+              hintText: 'Seleccione la hora',
               prefixIcon: Icons.access_time,
+              validator: widget.startTimeValidator,
             ),
           ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: CustomInputWidget(
-              enabled: widget.enabled,
-              controller: widget.endTimeController,
-              label: "Hora de fin",
-              validator: (v) {
-                if(widget.isSelected == false) return null;
-                final timeError = validateTime(v);
-                if (timeError != null) {
-                  return timeError;
-                }
-                if(v == "00:00") {
-                  return "Hora no valida";
-                }
-                return null;
-              },
-              keyboardType: TextInputType.datetime,
-              hintText: "HH:mm",
-              prefixIcon: Icons.access_time,
-            ),
-          ),
+          const SizedBox(width: 12),
+          SizedBox(
+              width: 100,
+              child: CustomTimePicker(
+                  initialTime: widget.endTimeController.text.isNotEmpty
+                      ? TimeOfDay(
+                          hour: int.parse(
+                              widget.endTimeController.text.split(':')[0]),
+                          minute: int.parse(
+                              widget.endTimeController.text.split(':')[1]),
+                        )
+                      : const TimeOfDay(hour: 0, minute: 0),
+                  enabled: widget.enabled,
+                  controller: widget.endTimeController,
+                  label: 'Hora de fin',
+                  hintText: 'Seleccione la hora',
+                  prefixIcon: Icons.access_time,
+                  validator: widget.endTimeValidator)),
         ],
       ),
     );

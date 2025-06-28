@@ -1,5 +1,7 @@
 import 'package:agents_app/models/address/address_model.dart';
 import 'package:agents_app/models/common/simple_entity_model.dart';
+import 'package:agents_app/models/document/document_model.dart';
+import 'package:agents_app/models/geofence/geofence_model.dart';
 import 'package:agents_app/models/schedule/schedule_days_model.dart';
 
 class BranchModel {
@@ -26,9 +28,19 @@ class BranchModel {
   SimpleEntity? adviser;
 
   Address businessAddress;
+  List<Turn> turns;
 
-  final List<Turn> turns;
+  // Campos nuevos del JSON
+  String initTime;
+  String endTime;
+  
+  Geofence? geofence;
+  
+  bool isEnabled;
+  int status;
 
+  List<Document> documents;
+  // Aquí puedes luego implementar contactos y nombres comerciales si es necesario
 
   BranchModel({
     this.id = '',
@@ -49,60 +61,88 @@ class BranchModel {
     this.adviser,
     required this.businessAddress,
     required this.turns,
+    required this.initTime,
+    required this.endTime,
+    
+    this.geofence,
+    
+    required this.isEnabled,
+    required this.status,
+    required this.documents,
   });
 
   factory BranchModel.fromJson(Map<String, dynamic> data) {
-    // final data = json['data'];
-
     return BranchModel(
-      id: data['id'].toString(),
-      codeGp: data['codeGp'],
-      branchName: data['branchName'],
-      nit: data['nit'],
-      latitude: double.parse(data['latitude']),
-      longitude: double.parse(data['longitude']),
-      clientId: data['client']['id'] != null ? data['client']['id'].toString() : '',
-      client: SimpleEntity.fromJson(data['client']),
-      classificationId: data['classification']['id'] != null ? data['classification']['id'].toString() : '',
-      classification: SimpleEntity.fromJson(data['classification']),
-      factoryId: data['factory']['id'] != null ? data['factory']['id'].toString() : '',
-      factory: SimpleEntity.fromJson(data['factory']),
-      accountBossId: data['accountBoss']['id'] != null ? data['accountBoss']['id'].toString() : '',
-      accountBoss: SimpleEntity.fromJson(data['accountBoss']),
-      adviserId: data['adviser']['id'] != null ? data['adviser']['id'].toString() : '',
-      adviser: SimpleEntity.fromJson(data['adviser']),
-      businessAddress: Address.fromNestedJson(data['businessAddress']),
-      turns: (data['turns'] as List<dynamic>)
-          .map((item) => Turn.fromJson(item as Map<String, dynamic>))
-          .toList(),
+      id: data['Id'].toString(),
+      codeGp: data['Code_gp'] ?? '',
+      branchName: data['Branch_name'] ?? '',
+      nit: data['Nit'] ?? '',
+      latitude: double.tryParse(data['latitude'].toString()) ?? 0.0,
+      longitude: double.tryParse(data['longitude'].toString()) ?? 0.0,
+      clientId: data['CLIENT_Id']?.toString() ?? '',
+      client:
+          data['CLIENT'] != null ? SimpleEntity.fromJson(data['CLIENT']) : null,
+      classificationId: data['CLASSIFICATION_Id']?.toString() ?? '',
+      classification: data['CLASSIFICATION'] != null
+          ? SimpleEntity.fromJson(data['CLASSIFICATION'])
+          : null,
+      factoryId: data['FACTORY_ID']?.toString() ?? '',
+      factory: data['FACTORY'] != null
+          ? SimpleEntity.fromJson(data['FACTORY'])
+          : null,
+      accountBossId: data['ACCOUNT_BOSS_Id']?.toString() ?? '',
+      accountBoss: data['ACCOUNT_BOSS'] != null
+          ? SimpleEntity.fromJson(data['ACCOUNT_BOSS'])
+          : null,
+      adviserId: data['ADVISER_Id']?.toString() ?? '',
+      adviser: data['ADVISER'] != null
+          ? SimpleEntity.fromJson(data['ADVISER'])
+          : null,
+      businessAddress: Address.fromNestedJson(data['ADDRESS']),
+      turns: (data['BRANCH_TURNs'] as List<dynamic>?)
+              ?.map((item) => Turn.fromJson(item))
+              .toList() ??
+          [],
+      initTime: data['init_time'] ?? '',
+      endTime: data['end_time'] ?? '',
+
+      geofence:
+          data['GEOFENCE'] != null ? Geofence.fromJson(data['GEOFENCE']) : null,
+
+      isEnabled: data['Is_enabled'] == 1,
+      status: data['Status'] ?? 1,
+      documents: (data['DOCUMENTs'] as List<dynamic>?)
+              ?.map((item) => Document.fromJson(item))
+              .toList() ??
+          [],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "id": id,
-      "codeGp": codeGp,
       "branchName": branchName,
       "nit": nit,
-      "latitude": latitude,
-      "longitude": longitude,
+      "codeGp": codeGp,
       "clientId": clientId,
       "classificationId": classificationId,
       "factoryId": factoryId,
-      "accountBossId": accountBossId,
-      "adviserId": adviserId,
-      "businessAddress": businessAddress.toJson(),
-      "turns": turns.map((item) => item.toJson()).toList(),
+      "latitude": latitude,
+      "longitude": longitude,
+      "isEnabled": isEnabled,
+      "initTime": initTime,
+      "endTime": endTime,
+      "paymentAddress": businessAddress.toJson(),
+      "geofence": geofence?.toJson(),
+      "documentBranch": documents.map((doc) => doc.toJson()).toList(),
+      "assignationDays": turns.map((turn) => turn.toJson()).toList(),
     };
   }
 }
 
-
-
 class Turn {
-   String? id;
-   String name;
-   List<DailySchedule> schedule;
+  String? id;
+  String name;
+  List<DailySchedule> schedule;
 
   Turn({
     this.id,
@@ -123,8 +163,9 @@ class Turn {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'name': name,
-      'schedule': schedule.map((item) => item.toJson()).toList(),
+      'turn': name,
+      'days': schedule.map((item) => item.toJson()).toList(),
     };
   }
 }
+

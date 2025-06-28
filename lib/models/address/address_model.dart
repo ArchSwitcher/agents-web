@@ -19,16 +19,24 @@ class Address {
     return Address(
       address: json['address'],
       department: json['department'] != null
-          ? SimpleEntity.fromJson({"id": json['department']['id'], "name": json['department']['name']})
+          ? SimpleEntity.fromJson({
+              "id": json['department']['id'],
+              "name": json['department']['name']
+            })
           : null,
       country: json['country'] != null
-          ? SimpleEntity.fromJson({"id": json['country']['id'], "name": json['country']['name']})
+          ? SimpleEntity.fromJson(
+              {"id": json['country']['id'], "name": json['country']['name']})
           : null,
       zone: json['zone'] != null
-          ? SimpleEntity.fromJson({"id": json['zone']['id'], "name": json['zone']['name']})
+          ? SimpleEntity.fromJson(
+              {"id": json['zone']['id'], "name": json['zone']['name']})
           : null,
       municipality: json['municipality'] != null
-          ? SimpleEntity.fromJson({"id": json['municipality']['id'], "name": json['municipality']['name']})
+          ? SimpleEntity.fromJson({
+              "id": json['municipality']['id'],
+              "name": json['municipality']['name']
+            })
           : null,
     );
   }

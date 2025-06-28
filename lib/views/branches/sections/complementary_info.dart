@@ -7,6 +7,7 @@ import 'package:agents_app/views/branches/controller/branch_controller.dart';
 import 'package:agents_app/widgets/commons/loading.dart';
 import 'package:agents_app/widgets/inputs/autocomplete_dropdown.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
+import 'package:agents_app/widgets/inputs/time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,7 +18,7 @@ Widget complementaryInfo(BranchController controller) {
       LayoutBuilder(builder: (context, constraints) {
         final isWideScreen = constraints.maxWidth > 700;
         final width = isWideScreen
-            ? (constraints.maxWidth / 5) - 40
+            ? (constraints.maxWidth / 4) - 40
             : constraints.maxWidth - 40;
         return Wrap(
           spacing: 30,
@@ -37,8 +38,8 @@ Widget complementaryInfo(BranchController controller) {
               return SizedBox(
                 width: width,
                 child: AutocompleteDropdownWidget(
-                  validator: (value) => notEmptyDropdownOption(
-                      value, "Clasificación requerida"),
+                  validator: (value) =>
+                      notEmptyDropdownOption(value, "Clasificación requerida"),
                   enabled: true,
                   listItems: controller.genericListController.classification,
                   onSelected: (DropDownOption option) {
@@ -140,6 +141,39 @@ Widget complementaryInfo(BranchController controller) {
                 prefixIcon: Icons.location_on,
               ),
             ),
+            SizedBox(
+              width: width,
+              child: CustomTimePicker(
+                initialTime: const TimeOfDay(hour: 0, minute: 0),
+                controller: controller.initTimeController,
+                label: 'Hora de inicio',
+                hintText: 'Seleccione la hora',
+                prefixIcon: Icons.access_time,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Hora de inicio es requerida';
+                  }
+                  return null;
+                },
+              ),
+            ),
+            //endtimecontroller
+            SizedBox(
+              width: width,
+              child: CustomTimePicker(
+                initialTime: const TimeOfDay(hour: 0, minute: 0),
+                controller: controller.endTimeController,
+                label: 'Hora de fin',
+                hintText: 'Seleccione la hora',
+                prefixIcon: Icons.access_time,
+                // validator: (value) =>
+                //     endTimeValidator(value, controller.endTimeController.text),
+              ),
+            ),
+
+            SizedBox(
+              width: width,
+            )
           ],
         );
       }),

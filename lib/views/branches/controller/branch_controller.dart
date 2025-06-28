@@ -3,6 +3,7 @@ import 'package:agents_app/models/address/address_model.dart';
 import 'package:agents_app/models/branch/branch_index_model.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/models/common/simple_entity_model.dart';
+import 'package:agents_app/models/geofence/geofence_model.dart';
 import 'package:agents_app/models/schedule/schedule_days_model.dart';
 import 'package:agents_app/services/employee_dropdown_service.dart';
 import 'package:agents_app/services/toast_service.dart';
@@ -26,6 +27,9 @@ class BranchController extends GetxController {
       Get.put(EmployeeDropdownService());
 
   final BranchService _branchService = BranchService();
+
+  final initTimeController = TextEditingController();
+  final endTimeController = TextEditingController();
 
   // Controllers for form fields
   final codeGpController = TextEditingController();
@@ -123,8 +127,24 @@ class BranchController extends GetxController {
             ? SimpleEntity(
                 id: physicalZone.value.id, name: physicalZone.value.label)
             : null,
+        municipality: municipality.value.id.isNotEmpty
+            ? SimpleEntity(
+                id: municipality.value.id, name: municipality.value.label)
+            : null,
         address: physicalAddress.text,
       ),
+      geofence: Geofence(
+          id: "",
+          latitude: latitudeController.text,
+          longitude: longitudeController.text,
+          radius: radiusController.text,
+          status: true),
+// campos restantes
+      initTime: initTimeController.text,
+      endTime: endTimeController.text,
+      isEnabled: true,
+      status: 1,
+      documents: [],
       turns: turns.toList(),
     );
   }
@@ -203,18 +223,10 @@ class BranchController extends GetxController {
       print("objects: branch values ---- ${branchValues}");
       final success = await _branchService.create(branchValues);
       if (success) {
-        ToastService.success(
-          title: "Sucursal",
-          subTitle: "Sucursal creada correctamente",
-        );
         return true;
       }
       return false;
     } catch (e) {
-      ToastService.error(
-        title: "Sucursal",
-        subTitle: "Error al crear sucursal: $e",
-      );
       return false;
     }
   }
