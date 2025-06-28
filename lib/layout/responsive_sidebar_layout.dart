@@ -96,7 +96,9 @@ class ResponsiveSidebarLayout extends StatelessWidget {
             // Contenido general debajo del header
             Padding(
               padding: EdgeInsets.only(top: constraints.maxHeight * 0.09),
-              child: content,
+              child: SizedBox(
+                width: double.infinity,
+                child: content),
             ),
           ],
         );

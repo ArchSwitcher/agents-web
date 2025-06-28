@@ -14,16 +14,16 @@ import 'package:agents_app/widgets/buttons/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ManageBranchScreen extends StatefulWidget {
+class ManageBranchTab extends StatefulWidget {
   final BranchModel? branch;
 
-  const ManageBranchScreen({super.key, this.branch});
+  const ManageBranchTab({super.key, this.branch});
 
   @override
-  ManageBranchScreenState createState() => ManageBranchScreenState();
+  ManageBranchTabState createState() => ManageBranchTabState();
 }
 
-class ManageBranchScreenState extends State<ManageBranchScreen> {
+class ManageBranchTabState extends State<ManageBranchTab> {
   final BranchController controller = Get.put(BranchController());
 
   final formKey = GlobalKey<FormState>();

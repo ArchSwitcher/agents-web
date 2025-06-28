@@ -3,8 +3,6 @@
 import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/layout/contect_card_space.dart';
 import 'package:agents_app/layout/content_card.dart';
-import 'package:agents_app/layout/responsive_sidebar_layout.dart';
-import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/helpers/table/index.dart';
 import 'package:agents_app/views/branches/controller/branch_controller.dart';
 import 'package:agents_app/views/branches/widgets/branch_actions_btns_widget.dart';
@@ -44,7 +42,6 @@ class _BranchesScreenState extends State<BranchesScreen> {
     null,
   ];
 
-
   start() async {
     loader.show();
     await Future.delayed(const Duration(seconds: 1));
@@ -63,56 +60,52 @@ class _BranchesScreenState extends State<BranchesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveSidebarLayout(
-        title: "Sucursales",
-        description: "Administración de sucursales por cliente",
-        currentRoute: RouteConstants.branches,
-        userRole: "admin",
-        content: SingleChildScrollView(
-          child: Column(
-            children: [
-              // add new group
-              ContentCard(
-                child: Wrap(
-                  spacing: 30,
-                  runSpacing: 20,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  alignment: WrapAlignment.spaceBetween,
-                  children: [
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        minWidth: 300,
-                        maxWidth: 600,
-                      ),
-                      child: FilterBox(
-                        elements: [],
-                        handleFilteredData: (List<dynamic> data) {
-                          //controller.groups.value = data;
-                        },
-                        isLoading: false,
-                        hint: "Buscar sucursal",
-                        label: "Buscar sucursal",
-                      ),
-                    ),
-                    SizedBox(width: 160, child: addBranchButton(context, controller)),
-                  ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          // add new group
+          ContentCard(
+            child: Wrap(
+              spacing: 30,
+              runSpacing: 20,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              alignment: WrapAlignment.spaceBetween,
+              children: [
+                ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    minWidth: 300,
+                    maxWidth: 600,
+                  ),
+                  child: FilterBox(
+                    elements: [],
+                    handleFilteredData: (List<dynamic> data) {
+                      //controller.groups.value = data;
+                    },
+                    isLoading: false,
+                    hint: "Buscar sucursal",
+                    label: "Buscar sucursal",
+                  ),
                 ),
-              ),
-
-              // table content, edit delete elements
-              cardContentSpace(),
-              ContentCard(child: Obx(() {
-                return CustomDataTableWidgetV2(
-                    // minWidth: 2000,
-                    dynamicHeight: false,
-                    tableHeight: TableHelper.getTableHeight(controller.branches),
-                    fixedColumnWidths: fixedColumnWidths,
-                    //columnSizes: columnSizes,
-                    tableHeaders: headers,
-                    tableRows: buildTableRowsBranches(controller, context));
-              }))
-            ],
+                SizedBox(
+                    width: 160, child: addBranchButton(context, controller)),
+              ],
+            ),
           ),
-        ));
+
+          // table content, edit delete elements
+          cardContentSpace(),
+          ContentCard(child: Obx(() {
+            return CustomDataTableWidgetV2(
+                // minWidth: 2000,
+                dynamicHeight: false,
+                tableHeight: TableHelper.getTableHeight(controller.branches),
+                fixedColumnWidths: fixedColumnWidths,
+                //columnSizes: columnSizes,
+                tableHeaders: headers,
+                tableRows: buildTableRowsBranches(controller, context));
+          }))
+        ],
+      ),
+    );
   }
 }
