@@ -37,14 +37,17 @@ Widget addBranchButton(BuildContext context, BranchController controller) {
       });
 }
 
-Widget editBranchButton(BuildContext context, String branchId) {
+Widget editBranchButton(BuildContext context, BranchModel branch) {
   final colorScheme = Theme.of(context).colorScheme;
 
   return IconButton(
       onPressed: () {
         Navigator.pushNamed(context, RouteConstants.manageBranch, arguments: {
           'title': "Editar sucursal",
-          'branchId': branchId,
+          'subtitle': "Editar sucursal",
+          'branchId': branch.id,
+          'branch': branch,
+          'isEditing': true,
         });
       },
       icon: Icon(

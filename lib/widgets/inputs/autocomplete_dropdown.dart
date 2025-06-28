@@ -49,8 +49,6 @@ class _AutocompleteDropdownWidgetState
   late TextEditingController textEditingController;
 
   updateSelectedOption() {
-    print("Initial value: ${widget.initialValue!.label}");
-    print("Initial value ID: ${widget.initialValue!.id}");
     widget.listItems.firstWhere(
         (option) => option.id == widget.initialValue!.id,
         orElse: () => DropDownOption(id: '', label: ''));

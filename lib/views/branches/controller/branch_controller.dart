@@ -27,7 +27,7 @@ class BranchController extends GetxController {
   final EmployeeDropdownService employeeDropdownService =
       Get.put(EmployeeDropdownService());
 
-  final LoaderController loaderController = Get.put(LoaderController());
+  LoaderController loaderController = Get.put(LoaderController());
 
   final BranchService _branchService = BranchService();
 
@@ -46,15 +46,15 @@ class BranchController extends GetxController {
 
   Rx<DropDownOption> client = DropDownOption(id: '', label: '').obs;
 
-  RxBool isLoadingAdviser = true.obs;
+  
   RxBool isLoadingAccountBoss = true.obs;
   RxBool isLoadingBillPerson = true.obs;
 
-  RxList<DropDownOption> advisers = <DropDownOption>[].obs;
+  
   RxList<DropDownOption> accountBosses = <DropDownOption>[].obs;
   RxList<DropDownOption> billPersons = <DropDownOption>[].obs;
 
-  Rx<DropDownOption> adviser = DropDownOption(id: '', label: '').obs;
+  
   // Rx<DropDownOption> territoryManager =
   //     DropDownOption(id: '', label: 'Seleccione un gerente de territorio').obs; //! se debe de quitar
   Rx<DropDownOption> accountBoss = DropDownOption(id: '', label: '').obs;
@@ -102,6 +102,7 @@ class BranchController extends GetxController {
 
   get branchValues {
     return BranchModel(
+      id: Get.arguments['branchId'] ?? '',
       codeGp: codeGpController.text,
       branchName: nameController.text,
       nit: nitController.text,
@@ -115,7 +116,6 @@ class BranchController extends GetxController {
       classificationId: classification.value.id,
       factoryId: factory.value.id,
       accountBossId: accountBoss.value.id,
-      adviserId: adviser.value.id,
       businessAddress: Address(
         country: physicalCountry.value.id.isNotEmpty
             ? SimpleEntity(
@@ -238,9 +238,11 @@ class BranchController extends GetxController {
   }
 
   // update branch
-  Future<bool> updateBranch(String id, BranchModel branch) async {
+  Future<bool> updateBranch(
+    String id,
+  ) async {
     try {
-      final success = await _branchService.update(id, branch);
+      final success = await _branchService.update(id, branchValues);
       if (success) {
         ToastService.success(
           title: "Sucursal",
@@ -387,13 +389,17 @@ class BranchController extends GetxController {
     }
   }
 
-
   void loadDataFromBranch(BranchModel branch) {
     codeGpController.text = branch.codeGp;
     nameController.text = branch.branchName;
     nitController.text = branch.nit;
     latitudeController.text = branch.latitude.toString();
     longitudeController.text = branch.longitude.toString();
+
+    groupId.value = DropDownOption(
+      id: branch.group?.id ?? '',
+      label: branch.group?.name ?? '',
+    );
     client.value = DropDownOption(
       id: branch.clientId,
       label: branch.client?.name ?? '',
@@ -410,27 +416,22 @@ class BranchController extends GetxController {
       id: branch.accountBossId,
       label: branch.accountBoss?.name ?? '',
     );
-    adviser.value = DropDownOption(
-      id: branch.adviserId,
-      label: branch.adviser?.name ?? '',
-    );
+
     physicalCountry.value = DropDownOption(
       id: branch.businessAddress?.country?.id ?? '',
-      label: branch.businessAddress?.country?.name ?? 'Seleccione un país',
+      label: branch.businessAddress?.country?.name ?? '',
     );
     physicalDepartment.value = DropDownOption(
       id: branch.businessAddress?.department?.id ?? '',
-      label: branch.businessAddress?.department?.name ??
-          'Seleccione un departamento',
+      label: branch.businessAddress?.department?.name ?? '',
     );
     physicalZone.value = DropDownOption(
       id: branch.businessAddress?.zone?.id ?? '',
-      label: branch.businessAddress?.zone?.name ?? 'Seleccione una zona',
+      label: branch.businessAddress?.zone?.name ?? '',
     );
     municipality.value = DropDownOption(
       id: branch.businessAddress?.municipality?.id ?? '',
-      label:
-          branch.businessAddress?.municipality?.name ?? 'Seleccione una zona',
+      label: branch.businessAddress?.municipality?.name ?? '',
     );
     physicalAddress.text = branch.businessAddress?.address ?? '';
     latitudeController.text = branch.geofence?.latitude.toString() ?? '';
@@ -441,5 +442,8 @@ class BranchController extends GetxController {
 
     turns.clear();
     turns.addAll(branch.turns);
+
+    genericListController.isLoadingMunicipality.value = false;
+    genericListController.isLoadingClientsByGroup.value = false;
   }
 }

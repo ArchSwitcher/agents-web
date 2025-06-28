@@ -20,6 +20,7 @@ Widget physicalAddressSection(BranchController controller) {
       direction: isWideScreen ? Axis.horizontal : Axis.vertical,
       children: [
         LoadingAutocompleteDropdown(
+          initialValue: controller.physicalCountry.value,
           prefixIcon: Icons.public,
           validator: (value) =>
               notEmptyDropdownOption(value, "País requerido"),
@@ -47,6 +48,7 @@ Widget physicalAddressSection(BranchController controller) {
 
         // LoadingAutocompleteDropdown for Department
         LoadingAutocompleteDropdown(
+          initialValue: controller.physicalDepartment.value,
           prefixIcon: Icons.business,
           enabled: true,
           isLoading: controller.genericListController.isLoadingCity,
@@ -101,6 +103,7 @@ Widget physicalAddressSection(BranchController controller) {
 
         // LoadingAutocompleteDropdown for Zone
         LoadingAutocompleteDropdown(
+          initialValue: controller.physicalZone.value,
           prefixIcon: Icons.map,
           validator: (value) =>
               notEmptyDropdownOption(value, "Zona requerida"),

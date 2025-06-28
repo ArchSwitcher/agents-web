@@ -3,13 +3,10 @@ import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/shared/helpers/validations/dropdown_validator.dart';
 import 'package:agents_app/shared/helpers/validations/not_empty.dart';
 import 'package:agents_app/views/branches/controller/branch_controller.dart';
-import 'package:agents_app/widgets/commons/loading.dart';
-import 'package:agents_app/widgets/inputs/autocomplete_dropdown.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:agents_app/widgets/inputs/custom_label_widget.dart';
 import 'package:agents_app/widgets/inputs/dropdown_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 Widget basicInfo(BranchController controller) {
   return ContentCard(
@@ -134,12 +131,6 @@ Widget basicInfo(BranchController controller) {
                   ),
                 ),
                 SizedBox(
-                    width: width,
-                    child: CustomLabelWidget(
-                        title: "País",
-                        label: "Guatemala",
-                        prefixIcon: Icons.public)),
-                SizedBox(
                   width: width,
                   child: CustomInputWidget(
                     validator: (value) => notEmptyFieldValidator(value),
@@ -149,50 +140,12 @@ Widget basicInfo(BranchController controller) {
                     prefixIcon: Icons.business_sharp,
                   ),
                 ),
-                Obx(() {
-                  if (controller.isLoadingAdviser.value == true) {
-                    return SizedBox(
-                        width: width,
-                        child: const Align(
-                            alignment: Alignment.centerLeft, child: Loading()));
-                  }
-                  return SizedBox(
+                SizedBox(
                     width: width,
-                    child: AutocompleteDropdownWidget(
-                      enabled: true,
-                      initialValue: DropDownOption(
-                          id: controller.adviser.value.id,
-                          label: controller.adviser.value.label),
-                      listItems: controller.advisers,
-                      onSelected: (DropDownOption option) {
-                        controller.adviser.value = option;
-                      },
-                      label: "Asesor",
-                      hintText: "Asesor",
-                      onFocusChange: (hasFocus) {},
-                      resetClean: (clean) {
-                        controller.adviser.value = DropDownOption(
-                          id: '',
-                          label: 'Seleccione un asesor',
-                        );
-                      },
-                      onTextChange: (text) async {
-                        List<DropDownOption> filteredOptions = controller
-                            .advisers
-                            .where((option) => option.label
-                                .toLowerCase()
-                                .contains(text.toLowerCase()))
-                            .toList();
-                        return filteredOptions.isEmpty
-                            ? [
-                                DropDownOption(
-                                    id: '', label: 'No hay resultados')
-                              ]
-                            : filteredOptions;
-                      },
-                    ),
-                  );
-                }),
+                    child: CustomLabelWidget(
+                        title: "País",
+                        label: "Guatemala",
+                        prefixIcon: Icons.public)),
                 SizedBox(
                   width: width,
                   child: CustomLabelWidget(
@@ -201,6 +154,7 @@ Widget basicInfo(BranchController controller) {
                     prefixIcon: Icons.check_circle_outline,
                   ),
                 ),
+                SizedBox(width: width)
               ],
             );
           },

@@ -14,7 +14,7 @@ List<DataRow> buildTableRowsBranches(
         cells: [
           DataCell(Row(
             children: [
-              editBranchButton(context, element.id),
+              editBranchButton(context, element),
               deleteBranchButton(context, element)
             ],
           )),

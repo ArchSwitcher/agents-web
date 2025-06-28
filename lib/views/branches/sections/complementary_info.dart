@@ -45,6 +45,7 @@ Widget complementaryInfo(BranchController controller) {
                   onSelected: (DropDownOption option) {
                     controller.classification.value = option;
                   },
+                  initialValue: controller.classification.value,
                   label: "Clasificación",
                   hintText: "Clasificación",
                   onFocusChange: (hasFocus) {},
@@ -62,7 +63,7 @@ Widget complementaryInfo(BranchController controller) {
                             .contains(text.toLowerCase()))
                         .toList();
                     return filteredOptions.isEmpty
-                        ? [DropDownOption(id: '', label: 'No hay resultados')]
+                        ? []
                         : filteredOptions;
                   },
                 ),
@@ -85,6 +86,7 @@ Widget complementaryInfo(BranchController controller) {
                   onSelected: (DropDownOption option) {
                     controller.factory.value = option;
                   },
+                  initialValue: controller.factory.value,
                   label: "Fábrica",
                   hintText: "Fábrica",
                   onFocusChange: (hasFocus) {},
@@ -102,7 +104,7 @@ Widget complementaryInfo(BranchController controller) {
                             .contains(text.toLowerCase()))
                         .toList();
                     return filteredOptions.isEmpty
-                        ? [DropDownOption(id: '', label: 'No hay resultados')]
+                        ? []
                         : filteredOptions;
                   },
                 ),
@@ -144,7 +146,12 @@ Widget complementaryInfo(BranchController controller) {
             SizedBox(
               width: width,
               child: CustomTimePicker(
-                initialTime: const TimeOfDay(hour: 0, minute: 0),
+                initialTime: controller.initTimeController.text.isNotEmpty
+                  ? TimeOfDay(
+                    hour: int.parse(controller.initTimeController.text.split(":")[0]),
+                    minute: int.parse(controller.initTimeController.text.split(":")[1]),
+                    )
+                  : const TimeOfDay(hour: 0, minute: 0),
                 controller: controller.initTimeController,
                 label: 'Hora de inicio',
                 hintText: 'Seleccione la hora',
@@ -161,7 +168,12 @@ Widget complementaryInfo(BranchController controller) {
             SizedBox(
               width: width,
               child: CustomTimePicker(
-                initialTime: const TimeOfDay(hour: 0, minute: 0),
+                initialTime: controller.endTimeController.text.isNotEmpty
+                  ? TimeOfDay(
+                    hour: int.parse(controller.endTimeController.text.split(":")[0]),
+                    minute: int.parse(controller.endTimeController.text.split(":")[1]),
+                    )
+                  : const TimeOfDay(hour: 0, minute: 0),
                 controller: controller.endTimeController,
                 label: 'Hora de fin',
                 hintText: 'Seleccione la hora',

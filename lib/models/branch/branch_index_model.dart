@@ -14,6 +14,7 @@ class BranchModel {
 
   String clientId;
   SimpleEntity? client;
+  SimpleEntity? group;
 
   String classificationId;
   SimpleEntity? classification;
@@ -24,8 +25,7 @@ class BranchModel {
   String accountBossId;
   SimpleEntity? accountBoss;
 
-  String adviserId;
-  SimpleEntity? adviser;
+
 
   Address? businessAddress;
   List<Turn> turns;
@@ -57,15 +57,12 @@ class BranchModel {
     this.factory,
     required this.accountBossId,
     this.accountBoss,
-    required this.adviserId,
-    this.adviser,
     required this.businessAddress,
     required this.turns,
     required this.initTime,
     required this.endTime,
-    
     this.geofence,
-    
+    this.group,
     required this.isEnabled,
     required this.status,
     required this.documents,
@@ -94,10 +91,7 @@ class BranchModel {
       accountBoss: data['ACCOUNT_BOSS'] != null
           ? SimpleEntity.fromJson(data['ACCOUNT_BOSS'])
           : null,
-      adviserId: data['ADVISER_Id']?.toString() ?? '',
-      adviser: data['ADVISER'] != null
-          ? SimpleEntity.fromJson(data['ADVISER'])
-          : null,
+
       businessAddress: data['ADDRESS'] != null ? Address.fromNestedJson(data['ADDRESS']) : null,
       turns: (data['BRANCH_TURNs'] as List<dynamic>?)
               ?.map((item) => Turn.fromJson(item))
@@ -115,6 +109,9 @@ class BranchModel {
               ?.map((item) => Document.fromJson(item))
               .toList() ??
           [],
+      group: data['GROUP'] != null
+          ? SimpleEntity.fromJson(data['GROUP'])
+          : null,
     );
   }
 

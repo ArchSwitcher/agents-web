@@ -1,10 +1,8 @@
-import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/layout/contect_card_space.dart';
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
 import 'package:agents_app/models/branch/branch_index_model.dart';
 import 'package:agents_app/services/toast_service.dart';
-import 'package:agents_app/shared/constants/database_constants.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/views/branches/controller/branch_controller.dart';
@@ -27,10 +25,19 @@ class ManageBranchScreen extends StatefulWidget {
 
 class ManageBranchScreenState extends State<ManageBranchScreen> {
   final BranchController controller = Get.put(BranchController());
-  final loader = Get.find<LoaderController>();
+
   final formKey = GlobalKey<FormState>();
 
-  void start() async {
+  // get arguments from the route for editing branch, title subtitle
+  bool? isEditing = Get.arguments['isEditing'];
+  String? title = Get.arguments['title'];
+  String? subtitle = Get.arguments['subtitle'];
+  BranchModel? branch = Get.arguments['branch'];
+
+  Future<void> start() async {
+    if (isEditing == true) {
+      controller.loaderController.show();
+    }
     await controller.groupController.fetchGroups();
     await controller.clientController.fetchClients();
     await controller.genericListController.fetchClassification();
@@ -39,18 +46,20 @@ class ManageBranchScreenState extends State<ManageBranchScreen> {
     await controller.genericListController.fetchZones();
     await controller.genericListController.fetchFactories();
 
-    controller.isLoadingAdviser.value = true;
-    controller.advisers.value = await controller.employeeDropdownService
-        .fetchEmployees(EmployeeTypeDatabaseConstants.adviser);
-    controller.isLoadingAdviser.value = false;
+    if (isEditing == true) {
+      controller.loaderController.hide();
+    }
   }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      start();
+        start();
     });
+    if (isEditing == true) {
+      controller.loadDataFromBranch(branch!);
+    }
   }
 
   @override
@@ -113,9 +122,9 @@ class ManageBranchScreenState extends State<ManageBranchScreen> {
                             return;
                           }
 
-                          loader.show();
+                          controller.loaderController.show();
                           await controller.createBranch();
-                          loader.hide();
+                          controller.loaderController.hide();
                           Navigator.pop(context);
                         })
                   ],
