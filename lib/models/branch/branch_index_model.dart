@@ -27,7 +27,7 @@ class BranchModel {
   String adviserId;
   SimpleEntity? adviser;
 
-  Address businessAddress;
+  Address? businessAddress;
   List<Turn> turns;
 
   // Campos nuevos del JSON
@@ -98,7 +98,7 @@ class BranchModel {
       adviser: data['ADVISER'] != null
           ? SimpleEntity.fromJson(data['ADVISER'])
           : null,
-      businessAddress: Address.fromNestedJson(data['ADDRESS']),
+      businessAddress: data['ADDRESS'] != null ? Address.fromNestedJson(data['ADDRESS']) : null,
       turns: (data['BRANCH_TURNs'] as List<dynamic>?)
               ?.map((item) => Turn.fromJson(item))
               .toList() ??
@@ -131,7 +131,7 @@ class BranchModel {
       "isEnabled": isEnabled,
       "initTime": initTime,
       "endTime": endTime,
-      "paymentAddress": businessAddress.toJson(),
+      "paymentAddress": businessAddress?.toJson(),
       "geofence": geofence?.toJson(),
       "documentBranch": documents.map((doc) => doc.toJson()).toList(),
       "assignationDays": turns.map((turn) => turn.toJson()).toList(),
@@ -154,7 +154,7 @@ class Turn {
     return Turn(
       id: json['id'].toString(),
       name: json['Name'].toString(),
-      schedule: (json['schedule'] as List<dynamic>)
+      schedule: (json['ASIGN_DAYs'] as List<dynamic>)
           .map((item) => DailySchedule.fromJson(item as Map<String, dynamic>))
           .toList(),
     );

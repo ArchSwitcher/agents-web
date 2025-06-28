@@ -17,7 +17,7 @@ class BranchService extends BaseService implements CrudService<BranchModel> {
     try {
       if (response.statusCode == 200) {
       final decoded = json.decode(response.body);
-      final List data = decoded['data'];
+      final List data = decoded['branches'];
       return data.map((json) => BranchModel.fromJson(json)).toList();
     } else {
       throw Exception('Error al cargar sucursales');

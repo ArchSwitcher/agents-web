@@ -36,12 +36,12 @@ class _BranchesScreenState extends State<BranchesScreen> {
   ];
   final List<double?> fixedColumnWidths = [
     100,
-    120,
-    120,
-    120,
-    120,
-    150,
-    150,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
   ];
 
 
@@ -93,7 +93,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
                         label: "Buscar sucursal",
                       ),
                     ),
-                    SizedBox(width: 160, child: addBranchButton(context)),
+                    SizedBox(width: 160, child: addBranchButton(context, controller)),
                   ],
                 ),
               ),
@@ -102,7 +102,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
               cardContentSpace(),
               ContentCard(child: Obx(() {
                 return CustomDataTableWidgetV2(
-                    minWidth: 1680,
+                    // minWidth: 2000,
                     dynamicHeight: false,
                     tableHeight: TableHelper.getTableHeight(controller.branches),
                     fixedColumnWidths: fixedColumnWidths,

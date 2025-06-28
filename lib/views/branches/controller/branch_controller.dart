@@ -1,4 +1,5 @@
 import 'package:agents_app/controllers/generic_list_controller.dart';
+import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/models/address/address_model.dart';
 import 'package:agents_app/models/branch/branch_index_model.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
@@ -25,6 +26,8 @@ class BranchController extends GetxController {
 
   final EmployeeDropdownService employeeDropdownService =
       Get.put(EmployeeDropdownService());
+
+  final LoaderController loaderController = Get.put(LoaderController());
 
   final BranchService _branchService = BranchService();
 
@@ -201,7 +204,9 @@ class BranchController extends GetxController {
 
   Future<void> fetchBranches() async {
     try {
+      branches.clear();
       isLoading.value = true;
+      loaderController.show();
 
       final data = await _branchService.getAll(null);
       branches.value = data;
@@ -213,6 +218,7 @@ class BranchController extends GetxController {
       print("Error fetching branches: $e");
       //Get.snackbar("Error", "No se pudieron cargar las sucursales");
     } finally {
+      loaderController.hide();
       isLoading.value = false;
     }
   }
@@ -379,5 +385,61 @@ class BranchController extends GetxController {
       day.startTimeController.text = schedule.initTime;
       day.endTimeController.text = schedule.endTime;
     }
+  }
+
+
+  void loadDataFromBranch(BranchModel branch) {
+    codeGpController.text = branch.codeGp;
+    nameController.text = branch.branchName;
+    nitController.text = branch.nit;
+    latitudeController.text = branch.latitude.toString();
+    longitudeController.text = branch.longitude.toString();
+    client.value = DropDownOption(
+      id: branch.clientId,
+      label: branch.client?.name ?? '',
+    );
+    classification.value = DropDownOption(
+      id: branch.classificationId,
+      label: branch.classification?.name ?? '',
+    );
+    factory.value = DropDownOption(
+      id: branch.factoryId,
+      label: branch.factory?.name ?? '',
+    );
+    accountBoss.value = DropDownOption(
+      id: branch.accountBossId,
+      label: branch.accountBoss?.name ?? '',
+    );
+    adviser.value = DropDownOption(
+      id: branch.adviserId,
+      label: branch.adviser?.name ?? '',
+    );
+    physicalCountry.value = DropDownOption(
+      id: branch.businessAddress?.country?.id ?? '',
+      label: branch.businessAddress?.country?.name ?? 'Seleccione un país',
+    );
+    physicalDepartment.value = DropDownOption(
+      id: branch.businessAddress?.department?.id ?? '',
+      label: branch.businessAddress?.department?.name ??
+          'Seleccione un departamento',
+    );
+    physicalZone.value = DropDownOption(
+      id: branch.businessAddress?.zone?.id ?? '',
+      label: branch.businessAddress?.zone?.name ?? 'Seleccione una zona',
+    );
+    municipality.value = DropDownOption(
+      id: branch.businessAddress?.municipality?.id ?? '',
+      label:
+          branch.businessAddress?.municipality?.name ?? 'Seleccione una zona',
+    );
+    physicalAddress.text = branch.businessAddress?.address ?? '';
+    latitudeController.text = branch.geofence?.latitude.toString() ?? '';
+    longitudeController.text = branch.geofence?.longitude.toString() ?? '';
+    radiusController.text = branch.geofence?.radius.toString() ?? '';
+    initTimeController.text = branch.initTime;
+    endTimeController.text = branch.endTime;
+
+    turns.clear();
+    turns.addAll(branch.turns);
   }
 }
