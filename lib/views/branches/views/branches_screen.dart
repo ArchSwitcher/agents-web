@@ -65,6 +65,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
   Widget build(BuildContext context) {
     return ResponsiveSidebarLayout(
         title: "Sucursales",
+        description: "Administración de sucursales por cliente",
         currentRoute: RouteConstants.branches,
         userRole: "admin",
         content: SingleChildScrollView(
