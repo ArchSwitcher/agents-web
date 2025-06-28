@@ -33,6 +33,7 @@ class ManageBranchScreenState extends State<ManageBranchScreen> {
   String? title = Get.arguments['title'];
   String? subtitle = Get.arguments['subtitle'];
   BranchModel? branch = Get.arguments['branch'];
+  String? branchId = Get.arguments['branchId'];
 
   Future<void> start() async {
     if (isEditing == true) {
@@ -123,7 +124,11 @@ class ManageBranchScreenState extends State<ManageBranchScreen> {
                           }
 
                           controller.loaderController.show();
-                          await controller.createBranch();
+                          if (isEditing == true) {
+                            await controller.updateBranch(branchId!);
+                          } else {
+                            await controller.createBranch();
+                          }
                           controller.loaderController.hide();
                           Navigator.pop(context);
                         })

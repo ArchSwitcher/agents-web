@@ -1,12 +1,12 @@
 class Geofence {
-  final String id;
+  final String? id;
   final String latitude;
   final String longitude;
   final String radius;
   final bool status;
 
   Geofence({
-    required this.id,
+    this.id,
     required this.latitude,
     required this.longitude,
     required this.radius,
@@ -15,7 +15,7 @@ class Geofence {
 
   factory Geofence.fromJson(Map<String, dynamic> json) {
     return Geofence(
-      id: json['Id'].toString(),
+      id: json['Id']?.toString(),
       latitude: json['Latitude'].toString(),
       longitude: json['Longitude'].toString(),
       radius: json['Radius'].toString(),
@@ -25,7 +25,7 @@ class Geofence {
 
   Map<String, dynamic> toJson() {
     return {
-      "id": id,
+      "geofenceId": id,
       "latitude": latitude,
       "longitude": longitude,
       "radius": radius,

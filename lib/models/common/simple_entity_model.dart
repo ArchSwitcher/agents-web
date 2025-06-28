@@ -5,7 +5,6 @@ class SimpleEntity {
   SimpleEntity({required this.id, required this.name});
 
   factory SimpleEntity.fromJson(Map<String, dynamic> json) {
-    print("SimpleEntity.fromJson: ${json.toString()}");
 
     if (json.isEmpty) {
       return SimpleEntity(id: '', name: '');

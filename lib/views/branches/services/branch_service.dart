@@ -75,16 +75,14 @@ class BranchService extends BaseService implements CrudService<BranchModel> {
   @override
   Future<bool> update(String id, BranchModel item) async {
     final response = await http.put(
-      Uri.parse("$baseUrl/branch/updateBranch/$id"),
+      Uri.parse("$baseUrl/branch/$id"),
       headers: buildHeaders(),
       body: jsonEncode(item.toJson()),
     );
 
+    print("objects: response $id ---- ${item.toJson()}");
+
     if (response.statusCode == 200) {
-      ToastService.success(
-        title: "Sucursal",
-        subTitle: "Sucursal actualizada correctamente",
-      );
       return true;
     } else {
       ToastService.error(

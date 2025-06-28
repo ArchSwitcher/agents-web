@@ -100,6 +100,7 @@ class BranchController extends GetxController {
   final RxBool isLoadingClients = true.obs;
   final RxBool isLoadingGroups = true.obs;
 
+
   get branchValues {
     return BranchModel(
       id: Get.arguments['branchId'] ?? '',
@@ -117,6 +118,7 @@ class BranchController extends GetxController {
       factoryId: factory.value.id,
       accountBossId: accountBoss.value.id,
       businessAddress: Address(
+        addressId: addressId,
         country: physicalCountry.value.id.isNotEmpty
             ? SimpleEntity(
                 id: physicalCountry.value.id, name: physicalCountry.value.label)
@@ -137,7 +139,7 @@ class BranchController extends GetxController {
         address: physicalAddress.text,
       ),
       geofence: Geofence(
-          id: "",
+          id: geofenceId,
           latitude: latitudeController.text,
           longitude: longitudeController.text,
           radius: radiusController.text,
@@ -389,7 +391,13 @@ class BranchController extends GetxController {
     }
   }
 
+  String? geofenceId;
+  String? addressId;
+
   void loadDataFromBranch(BranchModel branch) {
+    addressId = branch.businessAddress?.addressId;
+    geofenceId = branch.geofence?.id;
+
     codeGpController.text = branch.codeGp;
     nameController.text = branch.branchName;
     nitController.text = branch.nit;

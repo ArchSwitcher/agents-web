@@ -6,6 +6,7 @@ class Address {
   SimpleEntity? country;
   SimpleEntity? zone;
   SimpleEntity? municipality;
+  String? addressId;
 
   Address({
     required this.address,
@@ -13,6 +14,7 @@ class Address {
     required this.country,
     required this.zone,
     this.municipality,
+    this.addressId,
   });
 
   factory Address.fromNestedJson(Map<String, dynamic> json) {
@@ -46,6 +48,7 @@ class Address {
         '';
 
     return Address(
+      addressId: json['Id']?.toString(),
       address: json['address'],
       department: departmentId.isNotEmpty
           ? SimpleEntity.fromJson({"Id": departmentId, "name": departmentName})
@@ -65,6 +68,7 @@ class Address {
 
   Map<String, dynamic> toJson() {
     return {
+      "addressId": addressId,
       "address": address,
       "departmentId": department?.id.toString(),
       "countryId": country?.id.toString(),
