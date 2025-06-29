@@ -6,23 +6,23 @@ import 'package:agents_app/services/crud_service.dart';
 import 'package:agents_app/services/toast_service.dart';
 import 'package:http/http.dart' as http;
 
-
-class BranchContactService extends BaseService implements CrudService<BranchContactModel> { 
+class BranchContactService extends BaseService
+    implements CrudService<BranchContactModel> {
   @override
   Future<List<BranchContactModel>> getAll(dynamic value) async {
-       final response = await http.get(
+    final response = await http.get(
       Uri.parse('$baseUrl/branch-contact/getBranchContact'),
       headers: buildHeaders(),
     );
 
     try {
       if (response.statusCode == 200) {
-      final decoded = json.decode(response.body);
-      final List data = decoded['data'];
-      return data.map((json) => BranchContactModel.fromJson(json)).toList();
-    } else {
-      throw Exception('Error al cargar contactos de sucursales');
-    }
+        final decoded = json.decode(response.body);
+        final List data = decoded['data'];
+        return data.map((json) => BranchContactModel.fromJson(json)).toList();
+      } else {
+        throw Exception('Error al cargar contactos de sucursales');
+      }
     } catch (e) {
       print("objects: error ---- $e");
       throw Exception('Error al cargar contactos de sucursales: $e');
@@ -37,7 +37,7 @@ class BranchContactService extends BaseService implements CrudService<BranchCont
 
   @override
   Future<bool> create(BranchContactModel item) async {
-     final response = await http.post(
+    final response = await http.post(
       Uri.parse("$baseUrl/branch-contact/createBranchContact"),
       headers: buildHeaders(),
       body: jsonEncode(item.toJson()),
@@ -46,7 +46,6 @@ class BranchContactService extends BaseService implements CrudService<BranchCont
     print("objects: response ---- ${item.toJson()}");
 
     if (response.statusCode == 200) {
-    
       return true;
     } else {
       ToastService.error(
@@ -58,15 +57,42 @@ class BranchContactService extends BaseService implements CrudService<BranchCont
   }
 
   @override
-  Future<bool> update(String id, dynamic item) async {
-    // Implement the logic to update an existing branch
-    throw UnimplementedError('update method not implemented');
+  Future<bool> update(String id, BranchContactModel item) async {
+    final response = await http.put(
+      Uri.parse("$baseUrl/branch-contact/updateBranchContact/$id"),
+      headers: buildHeaders(),
+      body: jsonEncode(item.toJson()),
+    );
+
+    print("objects: response $id ---- ${item.toJson()}");
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      ToastService.error(
+        title: "Sucursal",
+        subTitle: "Error al actualizar sucursal",
+      );
+      throw Exception('Error al actualizar sucursal');
+    }
   }
 
   @override
   Future<bool> delete(String id) async {
-    // Implement the logic to delete a branch by ID
-    throw UnimplementedError('delete method not implemented');
-  }
+    final response = await http.delete(
+      Uri.parse("$baseUrl/branch-contact/enabledBranchContact/$id"),
+      body: jsonEncode({"status": 0}),
+      headers: buildHeaders(),
+    );
 
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      ToastService.error(
+        title: "Sucursal",
+        subTitle: "Error al eliminar sucursal",
+      );
+      throw Exception('Error al eliminar sucursal');
+    }
+  }
 }

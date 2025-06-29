@@ -19,12 +19,19 @@ class ContactController extends GetxController {
 
   get contactValues {
     BranchContactModel contact = BranchContactModel(
-        id: "",
+        id: code!,
         name: name.text,
         phone: phone.text,
         branchId: branch.value.id,
         status: 1);
     return contact;
+  }
+
+  setContact(BranchContactModel contact) {
+    name.text = contact.name;
+    phone.text = contact.phone;
+    code = contact.id;
+    branch.value = DropDownOption(id: contact.branchId, label: contact.branch!.name);
   }
 
   Future<void> getContacts() async {
@@ -50,6 +57,31 @@ class ContactController extends GetxController {
       ToastService.error(
           title: "Error", subTitle: "No se pudo agregar el contacto");
       print("Error al agregar contacto: $e");
+    }
+  }
+
+  Future<void> updateContact() async {
+    try {
+     
+      await contactsService.update(contactValues.id, contactValues);
+      ToastService.success(
+          title: "Éxito", subTitle: "Contacto actualizado correctamente");
+    } catch (e) {
+      ToastService.error(
+          title: "Error", subTitle: "No se pudo actualizar el contacto");
+      print("Error al actualizar contacto: $e");
+    }
+  }
+
+  Future<void> deleteContact(String id) async {
+    try {
+      await contactsService.delete(id);
+      ToastService.success(
+          title: "Éxito", subTitle: "Contacto eliminado correctamente");
+    } catch (e) {
+      ToastService.error(
+          title: "Error", subTitle: "No se pudo eliminar el contacto");
+      print("Error al eliminar contacto: $e");
     }
   }
 

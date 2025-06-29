@@ -37,7 +37,7 @@ void showContactModal({
                     notEmptyDropdownOption(value, "Sucursal requerida"),
                 initialValue: controller.branch.value,
                 prefixIcon: Icons.group,
-                enabled: true,
+                enabled: isEdit,
                 isLoading: controller.genericListController.isLoadingBranchesDd,
                 listItems: controller.genericListController.branchesDd,
                 onSelected: (DropDownOption option) {

@@ -100,8 +100,8 @@ List<DataRow> buildTableRows(
         cells: [
           DataCell(Row(
             children: [
-              editContactButton(context, element),
-              deleteContactButton(context, element),
+              editContactButton(context, element,controller),
+              deleteContactButton(context, element,controller),
             ],
           )),
           cellDataTable(element.id, context: context),

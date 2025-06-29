@@ -42,11 +42,26 @@ Widget addContactButton(BuildContext context, ContactController controller) {
       });
 }
 
-Widget editContactButton(BuildContext context, BranchContactModel contact) {
+Widget editContactButton(BuildContext context, BranchContactModel contact,
+    ContactController controller) {
   final colorScheme = Theme.of(context).colorScheme;
 
   return IconButton(
-      onPressed: () {},
+      onPressed: () {
+        controller.setContact(contact);
+        showContactModal(
+          context: context,
+          onAccept: () async {
+            await controller.updateContact();
+            Navigator.of(context).pop();
+            controller.clear();
+            await controller.getContacts();
+          },
+          onCancel: () {},
+          controller: controller,
+          description: "Editar contacto",
+        );
+      },
       icon: Icon(
         Icons.edit,
         color: colorScheme.primary,
@@ -54,12 +69,26 @@ Widget editContactButton(BuildContext context, BranchContactModel contact) {
       ));
 }
 
-Widget deleteContactButton(BuildContext context, BranchContactModel contact) {
+Widget deleteContactButton(BuildContext context, BranchContactModel contact,
+    ContactController controller) {
   final colorScheme = Theme.of(context).colorScheme;
 
   return IconButton(
       onPressed: () {
-        // No action defined for delete contact
+        controller.setContact(contact);
+        showContactModal(
+          isEdit: false,
+          context: context,
+          onAccept: () async {
+            await controller.deleteContact(contact.id);
+            Navigator.of(context).pop();
+            controller.clear();
+            await controller.getContacts();
+          },
+          onCancel: () {},
+          controller: controller,
+          description: "¿Está seguro de eliminar el contacto?",
+        );
       },
       icon: Icon(
         Icons.delete,
