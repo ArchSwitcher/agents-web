@@ -21,6 +21,12 @@ class _BranchMainState extends State<BranchMain> {
   final BranchController controller = Get.put(BranchController());
   final loader = Get.find<LoaderController>();
 
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -42,8 +48,10 @@ class _BranchMainState extends State<BranchMain> {
                   child: SizedBox(
                     width: 600,
                     child: TabBar(
+                      physics: const NeverScrollableScrollPhysics(),
+                      // controller: _tabController,
                       dividerColor: Colors.transparent,
-                      isScrollable: true,
+                      isScrollable: false,
                       indicator: BoxDecoration(
                         color: colorScheme.primaryContainer,
                         borderRadius: BorderRadius.circular(8),
@@ -64,7 +72,7 @@ class _BranchMainState extends State<BranchMain> {
                             child: const Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                  Icon(Icons.gite, color: Colors.white),
+                                Icon(Icons.gite, color: Colors.white),
                                 SizedBox(width: 8),
                                 Text(
                                   "Sucursales",
@@ -74,49 +82,49 @@ class _BranchMainState extends State<BranchMain> {
                             ),
                           ),
                         ),
-                          Tab(
+                        Tab(
                           child: Container(
                             decoration: BoxDecoration(
-                            color: colorScheme.primaryContainer,
-                            borderRadius: BorderRadius.circular(8),
+                              color: colorScheme.primaryContainer,
+                              borderRadius: BorderRadius.circular(8),
                             ),
                             padding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 16),
+                                vertical: 8, horizontal: 16),
                             child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.contact_phone, color: Colors.white),
-                              SizedBox(width: 8),
-                              Text(
-                              "Contactos",
-                              style: TextStyle(color: Colors.white),
-                              ),
-                            ],
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.contact_phone,
+                                    color: Colors.white),
+                                SizedBox(width: 8),
+                                Text(
+                                  "Contactos",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                          Tab(
+                        Tab(
                           child: Container(
                             decoration: BoxDecoration(
-                            color: colorScheme.primaryContainer,
-                            borderRadius: BorderRadius.circular(8),
+                              color: colorScheme.primaryContainer,
+                              borderRadius: BorderRadius.circular(8),
                             ),
                             padding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 16),
+                                vertical: 8, horizontal: 16),
                             child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.business, color: Colors.white),
-                              SizedBox(width: 8),
-                              Text(
-                              "Razón social",
-                              style: TextStyle(color: Colors.white),
-                              ),
-                            ],
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.business, color: Colors.white),
+                                SizedBox(width: 8),
+                                Text(
+                                  "Razón social",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                       
                       ],
                     ),
                   ),

@@ -23,6 +23,7 @@ class GenericListController extends GetxController {
   final RxBool isLoadingEquipmentType = true.obs;
   final RxBool isLoadingStatusType = true.obs;
   final RxBool isLoadingMunicipality = true.obs;
+  final RxBool isLoadingBranchesDd = true.obs;
 
   final RxList<DropDownOption> employees = <DropDownOption>[].obs;
   final RxList<DropDownOption> classification = <DropDownOption>[].obs;
@@ -43,6 +44,7 @@ class GenericListController extends GetxController {
   final RxList<DropDownOption> equipmentTypes = <DropDownOption>[].obs;
   final RxList<DropDownOption> statusTypes = <DropDownOption>[].obs;
   final RxList<DropDownOption> municipalities = <DropDownOption>[].obs;
+  final RxList<DropDownOption> branchesDd = <DropDownOption>[].obs;
 
 
   Future<List<DropDownOption>> fetchClassification() async {
@@ -390,6 +392,26 @@ class GenericListController extends GetxController {
       isLoadingStatusType.value = false;
     }
   }
+   Future<List<DropDownOption>> getAllBranchesDd() async {
+    try {
+      isLoadingBranchesDd.value = true;
+      final data = await genericListService.getAll("branch/only");
+      branchesDd.value = data.map((item) {
+        return DropDownOption(
+          id: item.id.toString(),
+          label: item.name,
+        );
+      }).toList();
+      return branchesDd;
+    } catch (e) {
+      print("Error fetching branches: $e");
+      return [];
+    } finally {
+      isLoadingBranchesDd.value = false;
+    }
+  }
+
+
   
 
   //clean clientsByGroup

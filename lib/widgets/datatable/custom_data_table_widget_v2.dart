@@ -47,6 +47,7 @@ class CustomDataTableWidgetV2 extends StatelessWidget {
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return DataTable2(
+            isHorizontalScrollBarVisible: true,
             columnSpacing: 12,
             horizontalMargin: 12,
             minWidth: minWidth,
