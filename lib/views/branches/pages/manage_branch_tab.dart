@@ -56,7 +56,7 @@ class ManageBranchTabState extends State<ManageBranchTab> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-        start();
+      start();
     });
     if (isEditing == true) {
       controller.loadDataFromBranch(branch!);
@@ -94,7 +94,8 @@ class ManageBranchTabState extends State<ManageBranchTab> {
                 ),
               ),
               cardContentSpace(),
-              ContentCard(child: turnConfiguration(colorScheme, controller, false)),
+              ContentCard(
+                  child: turnConfiguration(colorScheme, controller, false)),
               Padding(
                 padding: const EdgeInsets.all(50.0),
                 child: Row(
@@ -110,12 +111,13 @@ class ManageBranchTabState extends State<ManageBranchTab> {
                         ),
                         isLoading: false,
                         onPress: () async {
-                          if (controller.turns.isEmpty) {
-                            ToastService.warning(
-                                title: "No se puede guardar",
-                                subTitle: "No hay turnos configurados.");
-                          }
-                          if (!formKey.currentState!.validate()) {
+                          if (!formKey.currentState!.validate() ||
+                              controller.turns.isEmpty) {
+                            if (controller.turns.isEmpty) {
+                              ToastService.warning(
+                                  title: "No se puede guardar",
+                                  subTitle: "No hay turnos configurados.");
+                            }
                             ToastService.warning(
                                 title: "Validación",
                                 subTitle:

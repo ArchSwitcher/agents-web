@@ -64,7 +64,7 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
       controller.branchController.turns.value =
           controller.genericListController.turns;
 
-      _currentStep = 4;
+      _currentStep = 3;
     }
     setState(() {});
   }
@@ -76,6 +76,12 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
       start();
       loadEdit();
     });
+  }
+
+  @override
+  void dispose() {
+    Get.delete<PositionController>();
+    super.dispose();
   }
 
   @override
@@ -194,11 +200,18 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
                                 .genericListController.branchesByClient.isEmpty
                             ? []
                             : controller.genericListController.branchesByClient,
-                        onSelected: (DropDownOption option) {
+                        onSelected: (DropDownOption option) async {
                           controller.branch.value = option;
-                          setState(() {
-                            _currentStep = 3;
-                          });
+                          await controller.genericListController
+                              .fetchTurnsByBranch(option.id);
+
+                          controller.branchController.turns.value =
+                              controller.genericListController.turns;
+
+                          print(
+                              "turns: ${controller.genericListController.turns.length}");
+                          _currentStep = 3;
+                          setState(() {});
                         },
                         label: "Sucursal",
                         hintText: "Sucursal",
@@ -304,9 +317,18 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
                     ],
                   );
                 })),
-                _currentStep == 4
+                _currentStep == 3 &&
+                        controller.genericListController.isLoadingTurns.value ==
+                            false
                     ? _formStepContent(controller, context, _formKey)
-                    : const SizedBox(),
+                    : Padding(
+                        padding: const EdgeInsets.only(top: 30),
+                        child: Text(
+                            _currentStep == 2
+                                ? "Seleccione una sucursal"
+                                : "La sucursal no tiene turnos disponibles",
+                            style: CustomStyle.tableHeader(context, 20)),
+                      ),
                 cardContentSpace(),
               ],
             ),
@@ -408,18 +430,17 @@ Widget _formStepContent(PositionController controller, BuildContext context,
                     hintText: "Fecha fin",
                     prefixIcon: Icons.calendar_today)),
             SizedBox(width: width),
-
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("Turnos disponibles de la sucursal",
                     style: CustomStyle.textStyleBlack(context)),
-                turnConfiguration(Theme.of(context).colorScheme,
-                    controller.branchController, true)
+                controller.genericListController.isLoadingTurns.value
+                    ? CircularProgressIndicator()
+                    : turnConfiguration(Theme.of(context).colorScheme,
+                        controller.branchController, true)
               ],
             )
-
-            // LoadingAutocompleteDropdown turns isLoadingTurns
           ],
         );
       })),

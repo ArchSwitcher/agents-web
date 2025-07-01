@@ -33,34 +33,33 @@ class PositionController extends GetxController {
   final RxBool isLoadingPositions = true.obs;
 
   final Rx<DropDownOption> group =
-      DropDownOption(id: '', label: 'Seleccione un grupo').obs;
+      DropDownOption(id: '', label: '').obs;
   final Rx<DropDownOption> client =
-      DropDownOption(id: '', label: 'Seleccione un cliente').obs;
+      DropDownOption(id: '', label: '').obs;
   final Rx<DropDownOption> branch =
-      DropDownOption(id: '', label: 'Seleccione una sucursal').obs;
-  final Rx<DropDownOption> adviser =
-      DropDownOption(id: '', label: 'Seleccione un asesor').obs;
+      DropDownOption(id: '', label: '').obs;
+  
   final Rx<DropDownOption> company =
-      DropDownOption(id: '', label: 'Seleccione una sucursal').obs;
+      DropDownOption(id: '', label: '').obs;
   final Rx<DropDownOption> agency =
-      DropDownOption(id: '', label: 'Seleccione un asesor').obs;
+      DropDownOption(id: '', label: '').obs;
   final Rx<DropDownOption> statusType =
-      DropDownOption(id: '', label: 'Seleccione un estado').obs; // statusType
+      DropDownOption(id: '', label: '').obs; // statusType
 
   final RxList<DropDownOption> advisers = <DropDownOption>[].obs;
 
   final Rx<DropDownOption> serviceType =
-      DropDownOption(id: '', label: 'Seleccione un tipo de servicio').obs;
+      DropDownOption(id: '', label: '').obs;
 
 // Equipment related fields
   final Rx<DropDownOption> equipmentType =
-      DropDownOption(id: '', label: 'Seleccione un tipo de equipo').obs;
+      DropDownOption(id: '', label: '').obs;
   final TextEditingController equipmentQuantity = TextEditingController();
 
   // Shift related fields
 
   final Rx<DropDownOption> shiftTime =
-      DropDownOption(id: '', label: 'Seleccione un turno').obs;
+      DropDownOption(id: '', label: '').obs;
 
   final TextEditingController startTime = TextEditingController();
   final TextEditingController endTime = TextEditingController();
@@ -161,7 +160,6 @@ class PositionController extends GetxController {
       PositionModel positionData = PositionModel(
         id: idPosition,
         branchId: branch.value.id,
-        adviserId: adviser.value.id,
         companyId: company.value.id,
         agencyId: agency.value.id,
         serviceTypeId: serviceType.value.id,

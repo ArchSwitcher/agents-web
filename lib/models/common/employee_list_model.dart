@@ -40,9 +40,9 @@ class Person {
     return Person(
       id: json['id'],
       firstName: json['firstName'],
-      lastName: json['lastName'],
-      contact: json['contact'],
-      sex: json['sex'],
+      lastName: json['lastName'].toString(),
+      contact: json['contact'].toString(),
+      sex: json['sex'].toString(),
     );
   }
 }
