@@ -75,15 +75,16 @@ Widget manageEquipmentButton(
   return SizedBox(
     width: width,
     child: CustomButton(
-        color: colorScheme.surface,
+      height: 21,
+        color: colorScheme.primary,
         text: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Icon(Icons.security, color: colorScheme.primary),
+            Icon(Icons.security, color: colorScheme.surface),
             Text(
               "Equipo",
               style: CustomStyle.textStyleBlack(context)
-                  .copyWith(color: colorScheme.primary),
+                  .copyWith(color: colorScheme.surface),
             ),
           ],
         ),

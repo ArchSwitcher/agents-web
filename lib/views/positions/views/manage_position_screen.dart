@@ -10,7 +10,6 @@ import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/views/positions/controllers/position_controller.dart';
 import 'package:agents_app/views/positions/widgets/actions_btns_widget.dart';
 import 'package:agents_app/widgets/buttons/custom_button.dart';
-import 'package:agents_app/widgets/commons/loading.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:agents_app/widgets/inputs/custom_label_widget.dart';
 import 'package:agents_app/widgets/inputs/date_picker.dart';
@@ -39,8 +38,7 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
   start() async {
     await controller.genericListController.getAllShiftTime();
     await controller.genericListController.getAllServiceType();
-    await controller.genericListController.fetchDepartments();
-    await controller.genericListController.fetchZones();
+
     await controller.genericListController.getAllCompany();
     await controller.genericListController.getAllAgency();
     await controller.groupController.fetchGroups();
@@ -55,6 +53,11 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
   loadEdit() {
     if (isEdit && position != null) {
       controller.loadPositionData(position!);
+      controller.genericListController
+          .fetchClientsByGroupId(position!.group?.id ?? "");
+      controller.genericListController
+          .fetchBranchByClientId(position!.client?.id ?? "");
+
       _currentStep = 4;
     }
     setState(() {});
@@ -86,7 +89,7 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
                     child: LayoutBuilder(builder: (context, constraints) {
                   final isWideScreen = constraints.maxWidth > 600;
                   final width = isWideScreen
-                      ? (constraints.maxWidth / 4) - 40
+                      ? (constraints.maxWidth / 3) - 40
                       : constraints.maxWidth - 40;
 
                   return Wrap(
@@ -206,46 +209,14 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
                         },
                       ),
 
-                      (_currentStep == 3 || _currentStep == 4)
-                          ? LoadingAutocompleteDropdown(
-                              initialValue: controller.adviser.value,
-                              prefixIcon: Icons.person,
-                              enabled: true,
-                              isLoading: controller.isLoadingEmployee,
-                              listItems: controller.advisers,
-                              onSelected: (DropDownOption option) {
-                                controller.adviser.value = option;
-                                setState(() {
-                                  _currentStep = 4;
-                                });
-                              },
-                              label: "Asesor",
-                              hintText: "Asesor",
-                              resetValue: controller.adviser,
-                              width: width,
-                              onTextChange: (text) async {
-                                List<DropDownOption> filteredOptions =
-                                    controller.advisers
-                                        .where((option) => option.label
-                                            .toLowerCase()
-                                            .contains(text.toLowerCase()))
-                                        .toList();
-                                return filteredOptions.isEmpty
-                                    ? [
-                                        DropDownOption(
-                                            id: '', label: 'No hay resultados')
-                                      ]
-                                    : filteredOptions;
-                              },
-                            )
-                          : const Loading(),
                       SizedBox(
                         width: width,
                         child: CustomDatePicker(
                             enabled: false,
-                            initialDate: DateTime(DateTime.now().year,
-                                DateTime.now().month, DateTime.now().day),
-                            controller: TextEditingController(),
+                            initialDate: DateTime.now(),
+                            controller: TextEditingController(
+                                text:
+                                    DateTime.now().toString().substring(0, 10)),
                             label: "Fecha",
                             hintText: "",
                             prefixIcon: Icons.calendar_today),
@@ -331,8 +302,6 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
                     ? _formStepContent(controller, context, _formKey)
                     : const SizedBox(),
                 cardContentSpace(),
-                cardContentSpace(),
-                cardContentSpace(),
               ],
             ),
           ),
@@ -406,49 +375,20 @@ Widget _formStepContent(PositionController controller, BuildContext context,
                     : filteredOptions;
               },
             ),
-            SizedBox(
-              width: width,
-            ),
-            manageEquipmentButton(context, width, controller),
-            SizedBox(width: width)
-          ],
-        );
-      })),
-      cardContentSpace(),
-      ContentCard(child: LayoutBuilder(builder: (context, constraints) {
-        final isWideScreen = constraints.maxWidth > 750;
-
-        final width = isWideScreen
-            ? (constraints.maxWidth / 4) - 40
-            : constraints.maxWidth - 40;
-
-        return Wrap(
-          spacing: 30, // espacio horizontal entre widgets
-          runSpacing: 20, // espacio vertical entre líneas si se hace wrap
-          crossAxisAlignment: WrapCrossAlignment.center,
-          alignment: WrapAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: width,
-              child: CustomInputWidget(
-                  controller: controller.startTime,
-                  label: "Hora inicio*",
-                  hintText: "Hora inicio",
-                  prefixIcon: Icons.access_time),
-            ),
-            SizedBox(
-              width: width,
-              child: CustomInputWidget(
-                  controller: controller.endTime,
-                  label: "Hora fin*",
-                  hintText: "Hora fin",
-                  prefixIcon: Icons.access_time),
-            ),
+            Padding(
+                padding: const EdgeInsets.only(top: 14),
+                child: manageEquipmentButton(context, width, controller)),
             SizedBox(
               width: width,
               child: CustomDatePicker(
                   initialDate: DateTime(2020),
                   controller: controller.startDate,
+                  validator: (value) {
+                    if (value == null) {
+                      return "Fecha de inicio es requerida";
+                    }
+                    return null;
+                  },
                   label: "Fecha inicio",
                   hintText: "Fecha inicio",
                   prefixIcon: Icons.calendar_today),
@@ -461,6 +401,7 @@ Widget _formStepContent(PositionController controller, BuildContext context,
                     label: "Fecha fin",
                     hintText: "Fecha fin",
                     prefixIcon: Icons.calendar_today)),
+            
           ],
         );
       })),
@@ -487,14 +428,6 @@ Widget _formStepContent(PositionController controller, BuildContext context,
                         label: "Cantidad de servicio",
                         hintText: "Cantidad de servicio",
                         prefixIcon: Icons.numbers),
-                  ),
-                  SizedBox(
-                    width: width,
-                    child: CustomInputWidget(
-                        controller: controller.serviceAgent,
-                        label: "Agente de servicio",
-                        hintText: "Agente de servicio",
-                        prefixIcon: Icons.person),
                   ),
                   SizedBox(
                     width: width,
@@ -544,27 +477,6 @@ Widget _formStepContent(PositionController controller, BuildContext context,
                         hintText: "Valor del turno",
                         prefixIcon: Icons.attach_money),
                   ),
-                ]);
-          }),
-          LayoutBuilder(builder: (context, constraints) {
-            final isWideScreen = constraints.maxWidth > 750;
-            final width = isWideScreen
-                ? (constraints.maxWidth / 2) - 40
-                : constraints.maxWidth - 40;
-
-            return Wrap(
-                spacing: 30,
-                runSpacing: 20,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                alignment: WrapAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: width,
-                    child: CustomLabelWidget(
-                        title: "Precio mínimo",
-                        label: controller.minimumPrice.text,
-                        prefixIcon: Icons.attach_money),
-                  ),
                   SizedBox(
                     width: width,
                     child: CustomInputWidget(
@@ -573,151 +485,77 @@ Widget _formStepContent(PositionController controller, BuildContext context,
                         hintText: "Precio del servicio",
                         prefixIcon: Icons.attach_money),
                   ),
+                  CustomInputWidget(
+                      controller: controller.observations,
+                      label: "Observaciones",
+                      hintText: "Observaciones",
+                      prefixIcon: Icons.notes),
                 ]);
           }),
         ],
       )),
-      cardContentSpace(),
-      ContentCard(child: LayoutBuilder(builder: (context, constraints) {
-        final isWideScreen = constraints.maxWidth > 750;
-        final width = isWideScreen
-            ? (constraints.maxWidth / 4) - 40
-            : constraints.maxWidth - 40;
-
-        return Wrap(
-            spacing: 30, // espacio horizontal entre widgets
-            runSpacing: 20, // espacio vertical entre líneas si se hace wrap
-            crossAxisAlignment: WrapCrossAlignment.center,
-            alignment: WrapAlignment.spaceBetween,
-            children: [
-              LoadingAutocompleteDropdown(
-                initialValue: controller.department.value,
-                prefixIcon: Icons.business,
-                enabled: true,
-                isLoading: controller.genericListController.isLoadingCity,
-                listItems: controller.genericListController.departments,
-                onSelected: (DropDownOption option) {
-                  controller.department.value = option;
-                  controller.genericListController
-                      .fetchMunicipalities(option.id);
-                  controller.municipality.value = DropDownOption(id: "", label: "");
-                  controller.genericListController.cleanMunicipalities();
-                },
-                label: "Departamento",
-                hintText: "Departamento",
-                resetValue: controller.department,
-                width: width,
-                onTextChange: (text) async {
-                  List<DropDownOption> filteredOptions = controller
-                      .genericListController.departments
-                      .where((option) => option.label
-                          .toLowerCase()
-                          .contains(text.toLowerCase()))
-                      .toList();
-                  return filteredOptions.isEmpty
-                      ? []
-                      : filteredOptions;
-                },
-              ),
-              LoadingAutocompleteDropdown(
-                initialValue: controller.municipality.value,
-                loadingText:
-                    controller.genericListController.isLoadingMunicipality.value
-                        ? "Seleccione un departamento para ver municipios"
-                        : "",
-                prefixIcon: Icons.location_city,
-                enabled: true,
-                isLoading:
-                    controller.genericListController.isLoadingMunicipality,
-                listItems:
-                    controller.genericListController.municipalities.isEmpty
-                        ? []
-                        : controller.genericListController.municipalities,
-                onSelected: (DropDownOption option) {
-                  controller.municipality.value = option;
-                },
-                label: "Municipio",
-                hintText: "Municipio",
-                resetValue: controller.municipality,
-                width: width,
-                onTextChange: (text) async {
-                  List<DropDownOption> filteredOptions = controller
-                      .genericListController.municipalities
-                      .where((option) => option.label
-                          .toLowerCase()
-                          .contains(text.toLowerCase()))
-                      .toList();
-                  return filteredOptions.isEmpty ? [] : filteredOptions;
-                },
-              ),
-              //loading dropdown zone
-              LoadingAutocompleteDropdown(
-                initialValue: controller.zone.value,
-                prefixIcon: Icons.location_on,
-                enabled: true,
-                isLoading: controller.genericListController.isLoadingZone,
-                listItems: controller.genericListController.zones,
-                onSelected: (DropDownOption option) {
-                  controller.zone.value = option;
-                },
-                label: "Zona",
-                hintText: "Zona",
-                resetValue: controller.zone,
-                width: width,
-                onTextChange: (text) async {
-                  List<DropDownOption> filteredOptions = controller
-                      .genericListController.zones
-                      .where((option) => option.label
-                          .toLowerCase()
-                          .contains(text.toLowerCase()))
-                      .toList();
-                  return filteredOptions.isEmpty
-                      ? [DropDownOption(id: '', label: 'No hay resultados')]
-                      : filteredOptions;
-                },
-              ),
-              SizedBox(
-                  width: width,
-                  child: CustomInputWidget(
-                      controller: controller.address,
-                      label: "Dirección",
-                      hintText: "Dirección",
-                      prefixIcon: Icons.home)),
-
-              CustomInputWidget(
-                  controller: controller.observations,
-                  label: "Observaciones",
-                  hintText: "Observaciones",
-                  prefixIcon: Icons.notes),
-              Obx(() {
-                return Align(
-                  alignment: Alignment.centerRight,
-                  child: CustomButton(
-                      color: Theme.of(context).colorScheme.primary,
-                      text: Text(
-                        "Guardar",
-                        style: CustomStyle.textStyleWhite(context),
-                      ),
-                      isLoading: controller.isLoadingPosition.value,
-                      onPress: () async {
-                        if (!formKey.currentState!.validate()) {
-                          ToastService.warning(
-                              title: "Validación",
-                              subTitle:
-                                  "por favor, complete todos los campos obligatorios.");
-                          return;
-                        }
-                        //validacion de dias y equipo
-
-                        controller.isLoadingPosition.value = true;
-                        const isNewPosition = null;
-                        await controller.newUpdatePosition(isNewPosition);
-                        controller.isLoadingPosition.value = false;
-                      }),
-                );
-              })
-            ]);
-      })),
+       Padding(
+            padding: const EdgeInsets.all(50.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CustomButton(
+                    width: 35,
+                    height: 25,
+                    color: Theme.of(context).colorScheme.primary,
+                    text: Text(
+                      "Guardar",
+                      style: CustomStyle.textStyleWhite(context),
+                    ),
+                    isLoading: false,
+                    onPress: () async {
+                      if (!formKey.currentState!.validate()) {
+                        ToastService.warning(
+                            title: "Validación",
+                            subTitle:
+                                "por favor, complete todos los campos obligatorios.");
+                        return;
+                      }
+                      controller.loader.show();
+                      controller.isLoadingPosition.value = true;
+                      const isNewPosition = null;
+                      await controller.newUpdatePosition(isNewPosition);
+                      controller.isLoadingPosition.value = false;
+                      controller.loader.hide();
+                      Navigator.pop(context);
+                    })
+              ],
+            ),
+          ),
     ],
   );
 }
+
+
+// Obx(() {
+//                     return Align(
+//                       alignment: Alignment.centerRight,
+//                       child: CustomButton(
+//                           color: Theme.of(context).colorScheme.primary,
+//                           text: Text(
+//                             "Guardar",
+//                             style: CustomStyle.textStyleWhite(context),
+//                           ),
+//                           isLoading: controller.isLoadingPosition.value,
+//                           onPress: () async {
+//                             if (!formKey.currentState!.validate()) {
+//                               ToastService.warning(
+//                                   title: "Validación",
+//                                   subTitle:
+//                                       "por favor, complete todos los campos obligatorios.");
+//                               return;
+//                             }
+//                             //validacion de dias y equipo
+
+//                             controller.isLoadingPosition.value = true;
+//                             const isNewPosition = null;
+//                             await controller.newUpdatePosition(isNewPosition);
+//                             controller.isLoadingPosition.value = false;
+//                           }),
+//                     );
+//                   })

@@ -1,4 +1,5 @@
 import 'package:agents_app/controllers/generic_list_controller.dart';
+import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/models/position/equipment_model.dart';
 import 'package:agents_app/models/position/position_model.dart';
@@ -19,6 +20,8 @@ class PositionController extends GetxController {
 
   final ManageGroupController groupController =
       Get.put(ManageGroupController());
+
+  LoaderController loader = Get.put(LoaderController());
 
   final positionServices = PositionServices();
 
@@ -79,7 +82,7 @@ class PositionController extends GetxController {
   TextEditingController subCity = TextEditingController();
   Rx<DropDownOption> zone =
       DropDownOption(id: '', label: 'Seleccione una zona').obs;
-  TextEditingController address = TextEditingController();
+  
   TextEditingController observations = TextEditingController();
 
   final RxList<EquipmentModel> equipmentList = <EquipmentModel>[].obs;
@@ -101,7 +104,7 @@ class PositionController extends GetxController {
     minimumPrice.clear();
     servicePrice.clear();
     subCity.clear();
-    address.clear();
+    
     observations.clear();
     equipmentList.clear();
   }
@@ -192,12 +195,8 @@ class PositionController extends GetxController {
         // foodQuantity: foodQuantity.text,
         //zoneId: zone.value.id,
         name: "posicion ${DateTime.now().toIso8601String()}",
-        addressId: "12",
         latitude: "0.0",
         longitude: "0.0",
-        physicalAddress: "Dirección física",
-        fiscalAddress: "Dirección fiscal",
-        billingAddress: "Dirección de facturación",
         positionName: "Posición de prueba",
         // groupId: group.value.id,
         // clientId: client.value.id,
@@ -272,7 +271,6 @@ class PositionController extends GetxController {
           id: '',
           label:
               'Seleccione una zona'); // Assuming zone is not provided in PositionModel
-      address.text = position.physicalAddress;
       observations.text = position.remarks ?? '';
 
       // Load equipment list

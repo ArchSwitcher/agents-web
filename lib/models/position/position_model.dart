@@ -1,4 +1,3 @@
-import 'package:agents_app/models/address/address_model.dart';
 import 'package:agents_app/models/branch/branch_index_model.dart';
 import 'package:agents_app/models/common/simple_entity_model.dart';
 import 'package:agents_app/models/position/equipment_model.dart';
@@ -9,9 +8,7 @@ class PositionModel {
   String location;
   String latitude;
   String longitude;
-  String physicalAddress;
-  String fiscalAddress;
-  String billingAddress;
+
   String initDate;
   String endDate;
   String serviceQuantity;
@@ -29,7 +26,7 @@ class PositionModel {
   String paymentFrequency;
   String agencyId;
   String? transportId;
-  String addressId;
+  
   String branchId;
   String companyId;
   String serviceTypeId;
@@ -48,11 +45,11 @@ class PositionModel {
   SimpleEntity? group;
   SimpleEntity? client;
   SimpleEntity? statusType;
-  
+
   TurnModel? turn;
   List<EquipmentModel> equipment;
   List<SupportDocumentModel>? supportDocuments;
-  AddressModel? address;
+  
 
   PositionModel({
     this.id,
@@ -60,9 +57,6 @@ class PositionModel {
     required this.location,
     required this.latitude,
     required this.longitude,
-    required this.physicalAddress,
-    required this.fiscalAddress,
-    required this.billingAddress,
     required this.initDate,
     required this.endDate,
     required this.serviceQuantity,
@@ -80,7 +74,6 @@ class PositionModel {
     required this.paymentFrequency,
     required this.agencyId,
     this.transportId,
-    required this.addressId,
     required this.branchId,
     required this.companyId,
     required this.serviceTypeId,
@@ -100,7 +93,6 @@ class PositionModel {
     this.client,
     this.turn,
     this.supportDocuments,
-    this.address,
   });
 
   factory PositionModel.fromJson(Map<String, dynamic> p) {
@@ -112,9 +104,6 @@ class PositionModel {
       location: str(p['Location']),
       latitude: str(p['Latitude']),
       longitude: str(p['Longitude']),
-      physicalAddress: str(p['Physical_address']),
-      fiscalAddress: str(p['Fiscal_address']),
-      billingAddress: str(p['BillingAddress']),
       initDate: str(p['Init_date']),
       endDate: str(p['End_date']),
       serviceQuantity: str(p['Service_quantity']),
@@ -134,7 +123,6 @@ class PositionModel {
       paymentFrequency: str(p['Payment_frequency']),
       agencyId: str(p['AGENCY_Id']),
       transportId: p['TRANSPORT_Id'] != null ? str(p['TRANSPORT_Id']) : null,
-      addressId: str(p['ADDRESS_Id']),
       branchId: str(p['BRANCH_Id']),
       companyId: str(p['COMPANY_Id']),
       serviceTypeId: str(p['SERVICE_TYPE_Id']),
@@ -193,9 +181,7 @@ class PositionModel {
             })
           : null,
       turn: p['TURN'] != null ? TurnModel.fromJson(p['TURN']) : null,
-      address: p['ADDRESS'] != null
-          ? AddressModel.fromNestedJson(p['ADDRESS'])
-          : null,
+
       supportDocuments: (p['SUPPORT_DOCUMENTs'] as List?)
               ?.map((e) => SupportDocumentModel.fromJson(e))
               .toList() ??
@@ -209,13 +195,16 @@ class PositionModel {
 
   Map<String, dynamic> toJson() {
     return {
+      //! quitar!!
+      "physicalAddress": "",
+      "fiscalAddress": "",
+      "billingAddress": "",
+      "addressId": null,
+
       "name": name,
       "location": location,
       "latitude": double.tryParse(latitude) ?? 0.0,
       "longitude": double.tryParse(longitude) ?? 0.0,
-      "physicalAddress": physicalAddress,
-      "fiscalAddress": fiscalAddress,
-      "billingAddress": billingAddress,
       "initDate": initDate,
       "endDate": endDate,
       "serviceQuantity": int.tryParse(serviceQuantity) ?? 0,
@@ -232,7 +221,6 @@ class PositionModel {
       "paymentFrequency": paymentFrequency,
       "agencyId": int.tryParse(agencyId) ?? 0,
       "transportId": transportId != null ? int.tryParse(transportId!) : null,
-      "addressId": int.tryParse(addressId) ?? 0,
       "branchId": int.tryParse(branchId) ?? 0,
       "companyId": int.tryParse(companyId) ?? 0,
       "serviceTypeId": int.tryParse(serviceTypeId) ?? 0,
@@ -249,7 +237,6 @@ class PositionModel {
     };
   }
 }
-
 
 class SupportDocumentModel {
   final String id;
