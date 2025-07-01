@@ -5,7 +5,7 @@ import 'package:agents_app/models/position/equipment_model.dart';
 class PositionModel {
   String? id;
   String name;
-  String location;
+
   String latitude;
   String longitude;
 
@@ -18,7 +18,7 @@ class PositionModel {
   String? meals;
   String? shiftValue;
   String? minimunPrice;
-  String departament;
+
   String? remarks;
   String? document;
   String? prosena;
@@ -26,7 +26,7 @@ class PositionModel {
   String paymentFrequency;
   String agencyId;
   String? transportId;
-  
+
   String branchId;
   String companyId;
   String serviceTypeId;
@@ -49,12 +49,10 @@ class PositionModel {
   TurnModel? turn;
   List<EquipmentModel> equipment;
   List<SupportDocumentModel>? supportDocuments;
-  
 
   PositionModel({
     this.id,
     required this.name,
-    required this.location,
     required this.latitude,
     required this.longitude,
     required this.initDate,
@@ -66,7 +64,6 @@ class PositionModel {
     this.meals,
     this.shiftValue,
     this.minimunPrice,
-    required this.departament,
     this.remarks,
     this.document,
     this.prosena,
@@ -101,7 +98,6 @@ class PositionModel {
     return PositionModel(
       id: str(p['Id']),
       name: str(p['Name']),
-      location: str(p['Location']),
       latitude: str(p['Latitude']),
       longitude: str(p['Longitude']),
       initDate: str(p['Init_date']),
@@ -115,7 +111,6 @@ class PositionModel {
           : null,
       shiftValue: p['ShiftValue'] != null ? str(p['ShiftValue']) : null,
       minimunPrice: p['Minimun_price'] != null ? str(p['Minimun_price']) : null,
-      departament: str(p['Departament']),
       remarks: p['Remarks'] != null ? str(p['Remarks']) : null,
       document: p['Document'] != null ? str(p['Document']) : "",
       prosena: str(p['Prosena']),
@@ -181,7 +176,6 @@ class PositionModel {
             })
           : null,
       turn: p['TURN'] != null ? TurnModel.fromJson(p['TURN']) : null,
-
       supportDocuments: (p['SUPPORT_DOCUMENTs'] as List?)
               ?.map((e) => SupportDocumentModel.fromJson(e))
               .toList() ??
@@ -202,7 +196,7 @@ class PositionModel {
       "addressId": null,
 
       "name": name,
-      "location": location,
+
       "latitude": double.tryParse(latitude) ?? 0.0,
       "longitude": double.tryParse(longitude) ?? 0.0,
       "initDate": initDate,
@@ -214,7 +208,6 @@ class PositionModel {
       "shiftValue": int.tryParse(shiftValue ?? "0") ?? 0,
       "minimunPrice": double.tryParse(minimunPrice ?? "0") ?? 0.0,
       "servicePrice": double.tryParse(servicePrice) ?? 0.0,
-      "departament": departament,
       "remarks": remarks,
       "document": document,
       "positionName": positionName,

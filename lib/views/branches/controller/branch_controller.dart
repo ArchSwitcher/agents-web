@@ -46,15 +46,12 @@ class BranchController extends GetxController {
 
   Rx<DropDownOption> client = DropDownOption(id: '', label: '').obs;
 
-  
   RxBool isLoadingAccountBoss = true.obs;
   RxBool isLoadingBillPerson = true.obs;
 
-  
   RxList<DropDownOption> accountBosses = <DropDownOption>[].obs;
   RxList<DropDownOption> billPersons = <DropDownOption>[].obs;
 
-  
   // Rx<DropDownOption> territoryManager =
   //     DropDownOption(id: '', label: 'Seleccione un gerente de territorio').obs; //! se debe de quitar
   Rx<DropDownOption> accountBoss = DropDownOption(id: '', label: '').obs;
@@ -99,7 +96,6 @@ class BranchController extends GetxController {
 
   final RxBool isLoadingClients = true.obs;
   final RxBool isLoadingGroups = true.obs;
-
 
   get branchValues {
     return BranchModel(
@@ -333,6 +329,15 @@ class BranchController extends GetxController {
     }
   }
 
+  void toggleTurnSelection(int index) {
+    if (index < 0 || index >= turns.length) return;
+    // set all turns to false
+    for (var turn in turns) {
+      turn.isSelected.value = false;
+    }
+    turns[index].isSelected.value = !turns[index].isSelected.value;
+  }
+
   List<DailySchedule> getSelectedDays() {
     return weekDays
         .where((day) => day.isSelected.value == true)
@@ -377,6 +382,7 @@ class BranchController extends GetxController {
         title: "Turno eliminado", subTitle: "Turno eliminado correctamente");
     clearTurn();
   }
+  RxBool selectedTurn = false.obs;
 
   void selectTurn(int index) {
     if (index < 0 || index >= turns.length) return;

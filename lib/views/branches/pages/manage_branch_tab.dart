@@ -94,7 +94,7 @@ class ManageBranchTabState extends State<ManageBranchTab> {
                 ),
               ),
               cardContentSpace(),
-              ContentCard(child: turnConfiguration(colorScheme, controller)),
+              ContentCard(child: turnConfiguration(colorScheme, controller, false)),
               Padding(
                 padding: const EdgeInsets.all(50.0),
                 child: Row(

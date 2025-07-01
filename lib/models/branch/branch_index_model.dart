@@ -3,6 +3,7 @@ import 'package:agents_app/models/common/simple_entity_model.dart';
 import 'package:agents_app/models/document/document_model.dart';
 import 'package:agents_app/models/geofence/geofence_model.dart';
 import 'package:agents_app/models/schedule/schedule_days_model.dart';
+import 'package:get/get.dart';
 
 class BranchModel {
   String id = '';
@@ -140,12 +141,14 @@ class TurnModel {
   String? id;
   String name;
   List<DailySchedule> schedule;
+     RxBool isSelected = true.obs;
 
   TurnModel({
     this.id,
     required this.name,
     required this.schedule,
-  });
+    RxBool? isSelected,
+  }) : isSelected = isSelected ?? true.obs;
 
   factory TurnModel.fromJson(Map<String, dynamic> json) {
     return TurnModel(
@@ -154,6 +157,7 @@ class TurnModel {
       schedule: (json['ASIGN_DAYs'] as List<dynamic>)
           .map((item) => DailySchedule.fromJson(item as Map<String, dynamic>))
           .toList(),
+      isSelected: RxBool(json['isSelected'] != null)
     );
   }
 

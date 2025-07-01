@@ -437,7 +437,7 @@ class GenericListController extends GetxController {
     }
   }
 
-  Future<List<TurnModel>> assignDays(String branchId) async {
+  Future<List<TurnModel>> fetchTurnsByBranch(String branchId) async {
     try {
       isLoadingTurns.value = true;
       final data = await genericListService.getAll(

@@ -18,6 +18,7 @@ void showScheduleModal({
   String description = "",
   String title = "Turnos",
   bool isEdit = true,
+  bool showAcceptButton = true,
 }) {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -94,6 +95,7 @@ void showScheduleModal({
       subtitle: description,
       acceptText: "Aceptar",
       cancelText: "Cerrar",
+      showAcceptButton: showAcceptButton,
     ),
   );
 }

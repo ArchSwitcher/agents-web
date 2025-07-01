@@ -7,6 +7,7 @@ import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/constants/database_constants.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
+import 'package:agents_app/views/branches/sections/turn_config.dart';
 import 'package:agents_app/views/positions/controllers/position_controller.dart';
 import 'package:agents_app/views/positions/widgets/actions_btns_widget.dart';
 import 'package:agents_app/widgets/buttons/custom_button.dart';
@@ -50,13 +51,18 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
     controller.isLoadingEmployee.value = false;
   }
 
-  loadEdit() {
+  loadEdit() async {
     if (isEdit && position != null) {
       controller.loadPositionData(position!);
       controller.genericListController
           .fetchClientsByGroupId(position!.group?.id ?? "");
       controller.genericListController
           .fetchBranchByClientId(position!.client?.id ?? "");
+      await controller.genericListController
+          .fetchTurnsByBranch(position!.branch?.id ?? "");
+      
+      controller.branchController.turns.value = controller.genericListController.turns;
+
 
       _currentStep = 4;
     }
@@ -401,7 +407,10 @@ Widget _formStepContent(PositionController controller, BuildContext context,
                     label: "Fecha fin",
                     hintText: "Fecha fin",
                     prefixIcon: Icons.calendar_today)),
-            
+            turnConfiguration(Theme.of(context).colorScheme, controller.branchController, true)
+
+            // LoadingAutocompleteDropdown turns isLoadingTurns
+
           ],
         );
       })),
@@ -494,39 +503,39 @@ Widget _formStepContent(PositionController controller, BuildContext context,
           }),
         ],
       )),
-       Padding(
-            padding: const EdgeInsets.all(50.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                CustomButton(
-                    width: 35,
-                    height: 25,
-                    color: Theme.of(context).colorScheme.primary,
-                    text: Text(
-                      "Guardar",
-                      style: CustomStyle.textStyleWhite(context),
-                    ),
-                    isLoading: false,
-                    onPress: () async {
-                      if (!formKey.currentState!.validate()) {
-                        ToastService.warning(
-                            title: "Validación",
-                            subTitle:
-                                "por favor, complete todos los campos obligatorios.");
-                        return;
-                      }
-                      controller.loader.show();
-                      controller.isLoadingPosition.value = true;
-                      const isNewPosition = null;
-                      await controller.newUpdatePosition(isNewPosition);
-                      controller.isLoadingPosition.value = false;
-                      controller.loader.hide();
-                      Navigator.pop(context);
-                    })
-              ],
-            ),
-          ),
+      Padding(
+        padding: const EdgeInsets.all(50.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            CustomButton(
+                width: 35,
+                height: 25,
+                color: Theme.of(context).colorScheme.primary,
+                text: Text(
+                  "Guardar",
+                  style: CustomStyle.textStyleWhite(context),
+                ),
+                isLoading: false,
+                onPress: () async {
+                  if (!formKey.currentState!.validate()) {
+                    ToastService.warning(
+                        title: "Validación",
+                        subTitle:
+                            "por favor, complete todos los campos obligatorios.");
+                    return;
+                  }
+                  controller.loader.show();
+                  controller.isLoadingPosition.value = true;
+                  const isNewPosition = null;
+                  await controller.newUpdatePosition(isNewPosition);
+                  controller.isLoadingPosition.value = false;
+                  controller.loader.hide();
+                  Navigator.pop(context);
+                })
+          ],
+        ),
+      ),
     ],
   );
 }

@@ -5,6 +5,7 @@ import 'package:agents_app/models/position/equipment_model.dart';
 import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/services/employee_dropdown_service.dart';
 import 'package:agents_app/services/toast_service.dart';
+import 'package:agents_app/views/branches/controller/branch_controller.dart';
 import 'package:agents_app/views/groups/controllers/manage_group_controller.dart';
 import 'package:agents_app/views/positions/services/position_services.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,9 @@ class PositionController extends GetxController {
 
   final ManageGroupController groupController =
       Get.put(ManageGroupController());
+
+  final BranchController branchController =
+      Get.put(BranchController());
 
   LoaderController loader = Get.put(LoaderController());
 
@@ -74,14 +78,7 @@ class PositionController extends GetxController {
   final TextEditingController minimumPrice = TextEditingController();
   final TextEditingController servicePrice = TextEditingController();
 
-  Rx<DropDownOption> department =
-      DropDownOption(id: '', label: 'Seleccione una departamento').obs;
-  Rx<DropDownOption> municipality =
-      DropDownOption(id: '', label: '').obs;
 
-  TextEditingController subCity = TextEditingController();
-  Rx<DropDownOption> zone =
-      DropDownOption(id: '', label: 'Seleccione una zona').obs;
   
   TextEditingController observations = TextEditingController();
 
@@ -103,7 +100,7 @@ class PositionController extends GetxController {
     shiftValue.clear();
     minimumPrice.clear();
     servicePrice.clear();
-    subCity.clear();
+    
     
     observations.clear();
     equipmentList.clear();
@@ -177,9 +174,9 @@ class PositionController extends GetxController {
         shiftValue: shiftValue.text,
         minimunPrice: minimumPrice.text,
         servicePrice: servicePrice.text,
-        departament: department.value.label,
+        
         countryService: "Guatemala",
-        location: subCity.text,
+        
         paymentFrequency: shiftTime.value.label,
         transportationCost: transport.text,
         initDate: startDate.text,
@@ -263,14 +260,6 @@ class PositionController extends GetxController {
       shiftValue.text = position.shiftValue.toString() ;
       minimumPrice.text = position.minimunPrice.toString() ;
       servicePrice.text = position.servicePrice.toString() ;
-
-      department.value = DropDownOption(
-          id: "", label: position.departament);
-      subCity.text = position.location;
-      zone.value = DropDownOption(
-          id: '',
-          label:
-              'Seleccione una zona'); // Assuming zone is not provided in PositionModel
       observations.text = position.remarks ?? '';
 
       // Load equipment list
