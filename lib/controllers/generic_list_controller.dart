@@ -1,3 +1,4 @@
+import 'package:agents_app/models/branch/branch_index_model.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/models/common/generic_list_model.dart';
 import 'package:agents_app/services/generic_list_service.dart';
@@ -25,6 +26,7 @@ class GenericListController extends GetxController {
   final RxBool isLoadingStatusType = true.obs;
   final RxBool isLoadingMunicipality = true.obs;
   final RxBool isLoadingBranchesDd = true.obs;
+  final RxBool isLoadingTurns = true.obs;
 
   final RxList<DropDownOption> employees = <DropDownOption>[].obs;
   final RxList<DropDownOption> classification = <DropDownOption>[].obs;
@@ -46,13 +48,14 @@ class GenericListController extends GetxController {
   final RxList<DropDownOption> statusTypes = <DropDownOption>[].obs;
   final RxList<DropDownOption> municipalities = <DropDownOption>[].obs;
   final RxList<DropDownOption> branchesDd = <DropDownOption>[].obs;
-
+  final RxList<TurnModel> turns = <TurnModel>[].obs;
 
   Future<List<DropDownOption>> fetchClassification() async {
     try {
       isLoadingClassification.value = true;
-      final data =
-          await genericListService.getAll("common/getAllClassification", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll(
+          "common/getAllClassification",
+          (json) => GenericListModel.fromJson(json));
       classification.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
@@ -71,7 +74,8 @@ class GenericListController extends GetxController {
   Future<List<DropDownOption>> fetchBillingTypes() async {
     try {
       isLoadingBilling.value = true;
-      final data = await genericListService.getAll("common/getAllBillingType", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll("common/getAllBillingType",
+          (json) => GenericListModel.fromJson(json));
       billingTypes.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
@@ -90,8 +94,9 @@ class GenericListController extends GetxController {
   Future<List<DropDownOption>> fetchGenerationTypes() async {
     try {
       isLoadingGeneration.value = true;
-      final data =
-          await genericListService.getAll("common/getAllGenerationType", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll(
+          "common/getAllGenerationType",
+          (json) => GenericListModel.fromJson(json));
       generationTypes.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
@@ -111,7 +116,8 @@ class GenericListController extends GetxController {
   Future<List<DropDownOption>> fetchCountries() async {
     try {
       isLoadingCountry.value = true;
-      final data = await genericListService.getAll("common/getCountries", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll(
+          "common/getCountries", (json) => GenericListModel.fromJson(json));
       countries.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
@@ -130,7 +136,8 @@ class GenericListController extends GetxController {
   Future<List<DropDownOption>> fetchDepartments() async {
     try {
       isLoadingCity.value = true;
-      final data = await genericListService.getAll("common/getDepartments", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll(
+          "common/getDepartments", (json) => GenericListModel.fromJson(json));
       departments.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
@@ -146,10 +153,12 @@ class GenericListController extends GetxController {
     }
   }
 
-    Future<List<DropDownOption>> fetchMunicipalities(String departmentId) async {
+  Future<List<DropDownOption>> fetchMunicipalities(String departmentId) async {
     try {
       isLoadingMunicipality.value = true;
-      final data = await genericListService.getAll("common/getMunicipalitiesByDepartment/$departmentId", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll(
+          "common/getMunicipalitiesByDepartment/$departmentId",
+          (json) => GenericListModel.fromJson(json));
       municipalities.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
@@ -164,10 +173,13 @@ class GenericListController extends GetxController {
       isLoadingMunicipality.value = false;
     }
   }
-    Future<List<DropDownOption>> fetchMunicipalitiesOnly(String departmentId) async {
+
+  Future<List<DropDownOption>> fetchMunicipalitiesOnly(
+      String departmentId) async {
     try {
-      
-      final data = await genericListService.getAll("common/getMunicipalitiesByDepartment/$departmentId", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll(
+          "common/getMunicipalitiesByDepartment/$departmentId",
+          (json) => GenericListModel.fromJson(json));
       final munis = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
@@ -177,13 +189,14 @@ class GenericListController extends GetxController {
       return munis;
     } catch (e) {
       return [];
-    } 
+    }
   }
 
   Future<List<DropDownOption>> fetchFactories() async {
     try {
       isLoadingFactory.value = true;
-      final data = await genericListService.getAll("common/getAllFactories", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll(
+          "common/getAllFactories", (json) => GenericListModel.fromJson(json));
       factories.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
@@ -202,7 +215,8 @@ class GenericListController extends GetxController {
   Future<List<DropDownOption>> fetchZones() async {
     try {
       isLoadingZone.value = true;
-      final data = await genericListService.getAll("common/getAllZones", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll(
+          "common/getAllZones", (json) => GenericListModel.fromJson(json));
       zones.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
@@ -221,7 +235,8 @@ class GenericListController extends GetxController {
   Future<List<DropDownOption>> getAllAgency() async {
     try {
       isLoadingAgency.value = true;
-      final data = await genericListService.getAll("common/getAllAgency", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll(
+          "common/getAllAgency", (json) => GenericListModel.fromJson(json));
       agencies.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
@@ -240,7 +255,8 @@ class GenericListController extends GetxController {
   Future<List<DropDownOption>> getAllCompany() async {
     try {
       isLoadingCompany.value = true;
-      final data = await genericListService.getAll("common/getAllCompany", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll(
+          "common/getAllCompany", (json) => GenericListModel.fromJson(json));
 
       companies.value = data.map((item) {
         return DropDownOption(
@@ -260,7 +276,8 @@ class GenericListController extends GetxController {
   Future<List<DropDownOption>> getAllServiceType() async {
     try {
       isLoadingServiceType.value = true;
-      final data = await genericListService.getAll("common/getAllServiceType", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll("common/getAllServiceType",
+          (json) => GenericListModel.fromJson(json));
       serviceTypes.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
@@ -279,7 +296,8 @@ class GenericListController extends GetxController {
   Future<List<DropDownOption>> getAllShiftTime() async {
     try {
       isLoadingShiftTime.value = true;
-      final data = await genericListService.getAll("common/getAllShiftTime", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll(
+          "common/getAllShiftTime", (json) => GenericListModel.fromJson(json));
       shiftTimes.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
@@ -298,7 +316,8 @@ class GenericListController extends GetxController {
   Future<List<DropDownOption>> getAllTransport() async {
     try {
       isLoadingTransport.value = true;
-      final data = await genericListService.getAll("common/getAllTransport", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll(
+          "common/getAllTransport", (json) => GenericListModel.fromJson(json));
       transports.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
@@ -317,8 +336,9 @@ class GenericListController extends GetxController {
   Future<List<DropDownOption>> fetchClientsByGroupId(String groupId) async {
     try {
       isLoadingClientsByGroup.value = true;
-      final data =
-          await genericListService.getAll("client/getClientsByGroup/$groupId", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll(
+          "client/getClientsByGroup/$groupId",
+          (json) => GenericListModel.fromJson(json));
 
       clientsByGroup.value = data.map((item) {
         return DropDownOption(
@@ -338,10 +358,11 @@ class GenericListController extends GetxController {
   Future<List<DropDownOption>> fetchBranchByClientId(String clientId) async {
     try {
       isLoadingBranchByClient.value = true;
-      final data =
-          await genericListService.getAll("branch/branchByClient/$clientId", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll(
+          "branch/branchByClient/$clientId",
+          (json) => GenericListModel.fromJson(json));
 
-       branchesByClient.value = data.map((item) {
+      branchesByClient.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
           label: item.name,
@@ -356,10 +377,11 @@ class GenericListController extends GetxController {
     }
   }
 
- Future<List<DropDownOption>> getAllEquipmentType() async {
+  Future<List<DropDownOption>> getAllEquipmentType() async {
     try {
       isLoadingEquipmentType.value = true;
-      final data = await genericListService.getAll("common/equipmentType", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll(
+          "common/equipmentType", (json) => GenericListModel.fromJson(json));
       equipmentTypes.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
@@ -375,10 +397,11 @@ class GenericListController extends GetxController {
     }
   }
 
-   Future<List<DropDownOption>> getAllStatusType() async {
+  Future<List<DropDownOption>> getAllStatusType() async {
     try {
       isLoadingStatusType.value = true;
-      final data = await genericListService.getAll("common/getAllStatusType", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll(
+          "common/getAllStatusType", (json) => GenericListModel.fromJson(json));
       statusTypes.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
@@ -393,10 +416,12 @@ class GenericListController extends GetxController {
       isLoadingStatusType.value = false;
     }
   }
-   Future<List<DropDownOption>> getAllBranchesDd() async {
+
+  Future<List<DropDownOption>> getAllBranchesDd() async {
     try {
       isLoadingBranchesDd.value = true;
-      final data = await genericListService.getAll("branch/only", (json) => GenericListModel.fromJson(json));
+      final data = await genericListService.getAll(
+          "branch/only", (json) => GenericListModel.fromJson(json));
       branchesDd.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
@@ -412,13 +437,27 @@ class GenericListController extends GetxController {
     }
   }
 
-
-  
+  Future<List<TurnModel>> assignDays(String branchId) async {
+    try {
+      isLoadingTurns.value = true;
+      final data = await genericListService.getAll(
+          "common/listTurnBranchId/$branchId",
+          (json) => TurnModel.fromJson(json));
+      turns.value = data;
+      return data;
+    } catch (e) {
+      print("Error fetching assign days: $e");
+      return [];
+    } finally {
+      isLoadingTurns.value = false;
+    }
+  }
 
   //clean clientsByGroup
   void cleanClientsByGroup() {
     clientsByGroup.value = [];
   }
+
   //clean branchesByClient
   void cleanBranchesByClient() {
     branchesByClient.value = [];
