@@ -11,8 +11,8 @@ class ClientModel {
   final SimpleEntity group;
   final SimpleEntity admin;
   final Billing billing;
-  final Address? fiscalAddress;
-  final Address? paymentAddress;
+  final AddressModel? fiscalAddress;
+  final AddressModel? paymentAddress;
   final Employee? adviser;
   final Employee? accountManager;
 
@@ -42,8 +42,8 @@ class ClientModel {
       group: SimpleEntity.fromJson({"id": json['group']["id"], "name": json['group']["Name"]}),
       admin: SimpleEntity.fromJson({"id": json['admin']["id"], "name": json['admin']["Name"]}),
       billing: Billing.fromNestedJson(json['billInfo']),
-      fiscalAddress: json['fiscalAddress'] != null ? Address.fromNestedJson(json['fiscalAddress']) : null,
-      paymentAddress: json['paymentAddress'] != null ? Address.fromNestedJson(json['paymentAddress']) : null,
+      fiscalAddress: json['fiscalAddress'] != null ? AddressModel.fromNestedJson(json['fiscalAddress']) : null,
+      paymentAddress: json['paymentAddress'] != null ? AddressModel.fromNestedJson(json['paymentAddress']) : null,
       adviser: json['ADVISER'] != null
           ? Employee.fromJson(json['ADVISER'])
           : null,

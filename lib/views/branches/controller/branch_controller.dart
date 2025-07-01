@@ -117,7 +117,7 @@ class BranchController extends GetxController {
       classificationId: classification.value.id,
       factoryId: factory.value.id,
       accountBossId: accountBoss.value.id,
-      businessAddress: Address(
+      businessAddress: AddressModel(
         addressId: addressId,
         country: physicalCountry.value.id.isNotEmpty
             ? SimpleEntity(
@@ -323,7 +323,7 @@ class BranchController extends GetxController {
         endTimeController: TextEditingController(text: "00:00"),
         isSelected: false.obs),
   ].obs;
-  final turns = <Turn>[].obs;
+  final turns = <TurnModel>[].obs;
 
   void toggleWeekDay(WeekDay day) {
     day.isSelected.value = !day.isSelected.value;
@@ -345,7 +345,7 @@ class BranchController extends GetxController {
 
   // add turn
   void addTurn() {
-    turns.add(Turn(name: turnName.text, schedule: getSelectedDays()));
+    turns.add(TurnModel(name: turnName.text, schedule: getSelectedDays()));
     clearTurn();
     ToastService.success(
         title: "Turno agregado", subTitle: "Turno agregado correctamente");

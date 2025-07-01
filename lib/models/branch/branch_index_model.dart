@@ -27,8 +27,8 @@ class BranchModel {
 
 
 
-  Address? businessAddress;
-  List<Turn> turns;
+  AddressModel? businessAddress;
+  List<TurnModel> turns;
 
   // Campos nuevos del JSON
   String initTime;
@@ -39,7 +39,7 @@ class BranchModel {
   bool isEnabled;
   int status;
 
-  List<Document> documents;
+  List<DocumentModel> documents;
   // Aquí puedes luego implementar contactos y nombres comerciales si es necesario
 
   BranchModel({
@@ -92,9 +92,9 @@ class BranchModel {
           ? SimpleEntity.fromJson(data['ACCOUNT_BOSS'])
           : null,
 
-      businessAddress: data['ADDRESS'] != null ? Address.fromNestedJson(data['ADDRESS']) : null,
+      businessAddress: data['ADDRESS'] != null ? AddressModel.fromNestedJson(data['ADDRESS']) : null,
       turns: (data['BRANCH_TURNs'] as List<dynamic>?)
-              ?.map((item) => Turn.fromJson(item))
+              ?.map((item) => TurnModel.fromJson(item))
               .toList() ??
           [],
       initTime: data['init_time'] ?? '',
@@ -106,7 +106,7 @@ class BranchModel {
       isEnabled: data['Is_enabled'] == 1,
       status: data['Status'] ?? 1,
       documents: (data['DOCUMENTs'] as List<dynamic>?)
-              ?.map((item) => Document.fromJson(item))
+              ?.map((item) => DocumentModel.fromJson(item))
               .toList() ??
           [],
       group: data['GROUP'] != null
@@ -136,19 +136,19 @@ class BranchModel {
   }
 }
 
-class Turn {
+class TurnModel {
   String? id;
   String name;
   List<DailySchedule> schedule;
 
-  Turn({
+  TurnModel({
     this.id,
     required this.name,
     required this.schedule,
   });
 
-  factory Turn.fromJson(Map<String, dynamic> json) {
-    return Turn(
+  factory TurnModel.fromJson(Map<String, dynamic> json) {
+    return TurnModel(
       id: json['id'].toString(),
       name: json['Name'].toString(),
       schedule: (json['ASIGN_DAYs'] as List<dynamic>)

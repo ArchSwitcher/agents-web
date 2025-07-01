@@ -116,7 +116,11 @@ class PositionsScreenState extends State<PositionsScreen> {
                     SizedBox(
                       width: 170,
                       child: addPositionButton(context),
-                    )
+                    ),
+                    ElevatedButton(onPressed: () async{
+                      await start();
+
+                    }, child: Text("actualizar")),
                   ],
                 ),
               ),

@@ -1,3 +1,5 @@
+import 'package:agents_app/models/address/address_model.dart';
+import 'package:agents_app/models/branch/branch_index_model.dart';
 import 'package:agents_app/models/common/simple_entity_model.dart';
 import 'package:agents_app/models/position/equipment_model.dart';
 
@@ -12,10 +14,7 @@ class PositionModel {
   String billingAddress;
   String initDate;
   String endDate;
-  String initTime;
-  String endTime;
   String serviceQuantity;
-  String serviceAgent;
   String scheduleQuantity;
   String servicePrice;
   String? bonus;
@@ -29,7 +28,7 @@ class PositionModel {
   String positionName;
   String paymentFrequency;
   String agencyId;
-  String transportId;
+  String? transportId;
   String addressId;
   String branchId;
   String companyId;
@@ -37,21 +36,23 @@ class PositionModel {
   String shiftTimeId;
   String countryService;
   String? transportationCost;
-  String adviserId;
+  String? adviserId;
   String? supportDocument;
 
   SimpleEntity? agency;
+  SimpleEntity? transport;
   SimpleEntity? branch;
   SimpleEntity? company;
   SimpleEntity? shiftTime;
   SimpleEntity? serviceType;
-  SimpleEntity? transport;
-  SimpleEntity? adviser;
   SimpleEntity? group;
   SimpleEntity? client;
-
-  // List<DayModel> days;
+  SimpleEntity? statusType;
+  
+  TurnModel? turn;
   List<EquipmentModel> equipment;
+  List<SupportDocumentModel>? supportDocuments;
+  AddressModel? address;
 
   PositionModel({
     this.id,
@@ -64,10 +65,7 @@ class PositionModel {
     required this.billingAddress,
     required this.initDate,
     required this.endDate,
-    required this.initTime,
-    required this.endTime,
     required this.serviceQuantity,
-    required this.serviceAgent,
     required this.scheduleQuantity,
     required this.servicePrice,
     this.bonus,
@@ -81,7 +79,7 @@ class PositionModel {
     required this.positionName,
     required this.paymentFrequency,
     required this.agencyId,
-    required this.transportId,
+    this.transportId,
     required this.addressId,
     required this.branchId,
     required this.companyId,
@@ -89,9 +87,8 @@ class PositionModel {
     required this.shiftTimeId,
     required this.countryService,
     this.transportationCost,
-    required this.adviserId,
+    this.adviserId,
     this.supportDocument,
-    // required this.days,
     required this.equipment,
     this.agency,
     this.branch,
@@ -99,14 +96,14 @@ class PositionModel {
     this.shiftTime,
     this.serviceType,
     this.transport,
-    this.adviser,
     this.group,
     this.client,
+    this.turn,
+    this.supportDocuments,
+    this.address,
   });
 
-  factory PositionModel.fromJson(Map<String, dynamic> json) {
-    final p = json;
-
+  factory PositionModel.fromJson(Map<String, dynamic> p) {
     String str(dynamic v) => v == null ? '' : v.toString();
 
     return PositionModel(
@@ -120,10 +117,7 @@ class PositionModel {
       billingAddress: str(p['BillingAddress']),
       initDate: str(p['Init_date']),
       endDate: str(p['End_date']),
-      initTime: str(p['Init_time']),
-      endTime: str(p['End_time']),
       serviceQuantity: str(p['Service_quantity']),
-      serviceAgent: str(p['Service_agent']), //QUITAR 
       scheduleQuantity: str(p['Schedule_quantity']),
       servicePrice: str(p['Service_price']),
       bonus: p['Bonus'] != null ? str(p['Bonus']) : null,
@@ -139,7 +133,7 @@ class PositionModel {
       positionName: str(p['Position_name']),
       paymentFrequency: str(p['Payment_frequency']),
       agencyId: str(p['AGENCY_Id']),
-      transportId: str(p['TRANSPORT_Id']),
+      transportId: p['TRANSPORT_Id'] != null ? str(p['TRANSPORT_Id']) : null,
       addressId: str(p['ADDRESS_Id']),
       branchId: str(p['BRANCH_Id']),
       companyId: str(p['COMPANY_Id']),
@@ -150,16 +144,6 @@ class PositionModel {
           ? str(p['Transportation_cost'])
           : null,
       adviserId: str(p['BOSS_POSITIONs']?[0]?['EMPLOYEE']?['Id']),
-      adviser: p['BOSS_POSITIONs']?[0]?['EMPLOYEE'] != null
-          ? SimpleEntity.fromJson({
-              "id": p['BOSS_POSITIONs']?[0]?['EMPLOYEE']?['Id'],
-              "name": p['BOSS_POSITIONs']?[0]?['EMPLOYEE']?['PERSON']
-                      ?['First_name'] +
-                  // ignore: prefer_interpolation_to_compose_strings
-                  " " +
-                  p['BOSS_POSITIONs']?[0]?['EMPLOYEE']?['PERSON']?['Last_name'],
-            })
-          : null,
       agency: p['AGENCY'] != null
           ? SimpleEntity.fromJson({
               "id": p['AGENCY']['Id'],
@@ -208,10 +192,14 @@ class PositionModel {
               "name": p['CLIENT']['Name'],
             })
           : null,
-      // days: (p['ASIGN_DAYs'] as List?)
-      //         ?.map((d) => DayModel.fromJson(d))
-      //         .toList() ??
-      //     [],
+      turn: p['TURN'] != null ? TurnModel.fromJson(p['TURN']) : null,
+      address: p['ADDRESS'] != null
+          ? AddressModel.fromNestedJson(p['ADDRESS'])
+          : null,
+      supportDocuments: (p['SUPPORT_DOCUMENTs'] as List?)
+              ?.map((e) => SupportDocumentModel.fromJson(e))
+              .toList() ??
+          [],
       equipment: (p['EQUIPMENTs'] as List?)
               ?.map((e) => EquipmentModel.fromJson(e))
               .toList() ??
@@ -223,46 +211,66 @@ class PositionModel {
     return {
       "name": name,
       "location": location,
-      "latitude": latitude,
-      "longitude": longitude,
-      "physical_address": physicalAddress,
-      "fiscal_address": fiscalAddress,
+      "latitude": double.tryParse(latitude) ?? 0.0,
+      "longitude": double.tryParse(longitude) ?? 0.0,
+      "physicalAddress": physicalAddress,
+      "fiscalAddress": fiscalAddress,
       "billingAddress": billingAddress,
-      "init_date": initDate,
-      "end_date": endDate,
-      "init_time": initTime,
-      "end_time": endTime,
-      "service_quantity": serviceQuantity,
-      "service_agent": serviceAgent,
-      "schedule_quantity": scheduleQuantity,
-      "service_price": servicePrice,
-      "bonus": bonus,
-      "meals": meals == null
-          ? false
-          : meals == "true"
-              ? true
-              : false,
-      "shiftValue": shiftValue,
-      "minimun_price": double.tryParse(minimunPrice ?? "") ?? 0.0,
+      "initDate": initDate,
+      "endDate": endDate,
+      "serviceQuantity": int.tryParse(serviceQuantity) ?? 0,
+      "scheduleQuantity": int.tryParse(scheduleQuantity) ?? 0,
+      "bonus": double.tryParse(bonus ?? "0") ?? 0.0,
+      "meals": meals ?? "",
+      "shiftValue": int.tryParse(shiftValue ?? "0") ?? 0,
+      "minimunPrice": double.tryParse(minimunPrice ?? "0") ?? 0.0,
+      "servicePrice": double.tryParse(servicePrice) ?? 0.0,
       "departament": departament,
       "remarks": remarks,
-      "document": document ?? "-",
-      "prosena": prosena ?? "-",
-      "position_name": positionName,
-      "payment_frequency": paymentFrequency,
-      "AGENCY_Id": agencyId,
-      "TRANSPORT_Id": transportId,
-      "ADDRESS_Id": addressId,
-      "BRANCH_Id": branchId,
-      "COMPANY_Id": companyId,
-      "SERVICE_TYPE_Id": serviceTypeId,
-      "SHIFT_TIME_Id": shiftTimeId,
-      "country_service": countryService,
-      "transportation_cost": transportationCost,
-      "adviser_id": adviserId,
-      "support_document": supportDocument ?? "-",
-      // "days": days.map((e) => e.toJson()).toList(),
+      "document": document,
+      "positionName": positionName,
+      "paymentFrequency": paymentFrequency,
+      "agencyId": int.tryParse(agencyId) ?? 0,
+      "transportId": transportId != null ? int.tryParse(transportId!) : null,
+      "addressId": int.tryParse(addressId) ?? 0,
+      "branchId": int.tryParse(branchId) ?? 0,
+      "companyId": int.tryParse(companyId) ?? 0,
+      "serviceTypeId": int.tryParse(serviceTypeId) ?? 0,
+      "shiftTimeId": int.tryParse(shiftTimeId) ?? 0,
+      "countryService": countryService,
+      "transportationCost": double.tryParse(transportationCost ?? "0") ?? 0.0,
+      "turnId": turn?.id != null ? int.tryParse(turn!.id!) : null,
+      "request": {
+        "dataTime":
+            DateTime.now().toString().split('.').first.replaceFirst('T', ' '),
+      },
       "equipment": equipment.map((e) => e.toJson()).toList(),
+      "supportDocument": supportDocument ?? "-",
+    };
+  }
+}
+
+
+class SupportDocumentModel {
+  final String id;
+  final String url;
+
+  SupportDocumentModel({
+    required this.id,
+    required this.url,
+  });
+
+  factory SupportDocumentModel.fromJson(Map<String, dynamic> json) {
+    return SupportDocumentModel(
+      id: json['Id']?.toString() ?? json['id']?.toString() ?? '',
+      url: json['Url']?.toString() ?? json['url']?.toString() ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": int.tryParse(id) ?? 0,
+      "url": url,
     };
   }
 }

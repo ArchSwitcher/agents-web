@@ -114,7 +114,7 @@ class ManageClientController extends GetxController {
                     name: generationType.value.label)
                 : SimpleEntity(id: '', name: ''),
             billCollectorId: billPerson.value.id),
-        fiscalAddress: Address(
+        fiscalAddress: AddressModel(
             country: fiscalCountry.value.id.isNotEmpty
                 ? SimpleEntity(
                     id: fiscalCountry.value.id, name: fiscalCountry.value.label)
@@ -134,7 +134,7 @@ class ManageClientController extends GetxController {
                     id: fiscalZone.value.id, name: fiscalZone.value.label)
                 : SimpleEntity(id: '', name: ''),
             address: fiscalAddress.text),
-        paymentAddress: Address(
+        paymentAddress: AddressModel(
             country: paymentCountry.value.id.isNotEmpty
                 ? SimpleEntity(
                     id: paymentCountry.value.id,

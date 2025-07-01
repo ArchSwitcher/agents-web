@@ -1,6 +1,6 @@
 import 'package:agents_app/models/common/simple_entity_model.dart';
 
-class Address {
+class AddressModel {
   String? address;
   SimpleEntity? department;
   SimpleEntity? country;
@@ -8,7 +8,7 @@ class Address {
   SimpleEntity? municipality;
   String? addressId;
 
-  Address({
+  AddressModel({
     required this.address,
     required this.department,
     required this.country,
@@ -17,7 +17,7 @@ class Address {
     this.addressId,
   });
 
-  factory Address.fromNestedJson(Map<String, dynamic> json) {
+  factory AddressModel.fromNestedJson(Map<String, dynamic> json) {
     //conditional for retrieve country sometimes came lowercase or uppercase
 
     String? countryName = json['country']?.toString() ??
@@ -47,7 +47,7 @@ class Address {
         json['ZONE']?['Id']?.toString() ??
         '';
 
-    return Address(
+    return AddressModel(
       addressId: json['Id']?.toString(),
       address: json['address'],
       department: departmentId.isNotEmpty

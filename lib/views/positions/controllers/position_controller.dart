@@ -157,14 +157,6 @@ class PositionController extends GetxController {
   Future<bool> newUpdatePosition(String? idPosition) async {
     try {
       isLoadingPosition.value = true;
- 
-
-      // final List<DayModel> days = weekDays
-      //     .map((day) => DayModel(
-      //         initTime: day.startTimeController.text,
-      //         endTime: day.endTimeController.text,
-      //         daysId: day.id))
-      //     .toList();
 
       PositionModel positionData = PositionModel(
         id: idPosition,
@@ -174,12 +166,10 @@ class PositionController extends GetxController {
         agencyId: agency.value.id,
         serviceTypeId: serviceType.value.id,
         shiftTimeId: shiftTime.value.id,
-        endTime: endTime.text,
         endDate: endDate.text,
         serviceQuantity: serviceQuantity.text,
         scheduleQuantity: scheduleQuantity.text,
         bonus: bonus.text, //should be nullable
-        serviceAgent: serviceAgent.text,
         transportId: "1",
         shiftValue: shiftValue.text,
         minimunPrice: minimumPrice.text,
@@ -190,8 +180,6 @@ class PositionController extends GetxController {
         paymentFrequency: shiftTime.value.label,
         transportationCost: transport.text,
         initDate: startDate.text,
-        initTime: startTime.text,
-        // days: days,
         equipment: equipmentList,
         remarks: observations.text, //should be nullable
 
@@ -252,9 +240,7 @@ class PositionController extends GetxController {
       branch.value = DropDownOption(
           id: position.branchId,
           label: position.branch!.name);
-      adviser.value = DropDownOption(
-          id: position.adviserId,
-          label: position.adviser!.name);
+      
       company.value = DropDownOption(
           id: position.companyId ,
           label: position.company!.name );
@@ -268,15 +254,11 @@ class PositionController extends GetxController {
           id: position.shiftTimeId,
           label: position.shiftTime!.name);
 
-      // Load other fields
-      startTime.text = position.initTime ;
-      endTime.text = position.endTime ;
       startDate.text = position.initDate;
       endDate.text = position.endDate ;
       serviceQuantity.text = position.serviceQuantity.toString() ;
       scheduleQuantity.text = position.scheduleQuantity.toString() ;
       bonus.text = position.bonus.toString() ;
-      serviceAgent.text = position.serviceAgent.toString() ;
       transport.text = position.transportationCost.toString() ;
       foodQuantity.text = position.meals.toString() ;
       shiftValue.text = position.shiftValue.toString() ;
@@ -296,23 +278,6 @@ class PositionController extends GetxController {
       // Load equipment list
       equipmentList.clear();
       equipmentList.addAll(position.equipment);
-
-      // Load week days
-      // for (var day in position.days) {
-      //   final weekDay = weekDays.firstWhere(
-      //     (d) => d.id == day.daysId,
-      //     orElse: () => WeekDay(
-      //       id: day.daysId,
-      //       name: 'Día ${day.daysId}',
-      //       startTimeController: TextEditingController(text: day.initTime),
-      //       endTimeController: TextEditingController(text: day.endTime),
-      //       isSelected: false.obs,
-      //     ),
-      //   );
-      //   weekDay.startTimeController.text = day.initTime;
-      //   weekDay.endTimeController.text = day.endTime;
-      //   weekDay.isSelected.value = true;
-      // }
     } catch (e) {
       ToastService.error(
           title: 'Error',
