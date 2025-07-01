@@ -74,7 +74,7 @@ class ManageBranchTabState extends State<ManageBranchTab> {
     final colorScheme = Theme.of(context).colorScheme;
     return ResponsiveSidebarLayout(
       title: "Administrar Sucursal",
-      currentRoute: RouteConstants.branches,
+      currentRoute: RouteConstants.branch,
       userRole: "admin",
       showBackButton: true,
       content: SingleChildScrollView(

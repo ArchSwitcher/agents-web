@@ -16,9 +16,9 @@ Widget turnConfiguration(
         : constraints.maxWidth - 40;
     return Obx(() {
       return Wrap(
-        spacing: 30,
+        spacing: 00,
         runSpacing: 20,
-        crossAxisAlignment: WrapCrossAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.start,
         alignment: WrapAlignment.start,
         children: [
           selectMode
@@ -116,11 +116,6 @@ Widget turnCard(double width, ColorScheme colorScheme, BuildContext context,
                               checkColor: Theme.of(context).colorScheme.surface,
                               onChanged: (bool? value) {
                                   controller.toggleTurnSelection(index);
-                                // if (value == true) {
-                                  
-                                // } else {
-                                //   controller.turns[index].isSelected.value = false;
-                                // }
                               },
                             )
                       ],

@@ -60,9 +60,9 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
           .fetchBranchByClientId(position!.client?.id ?? "");
       await controller.genericListController
           .fetchTurnsByBranch(position!.branch?.id ?? "");
-      
-      controller.branchController.turns.value = controller.genericListController.turns;
 
+      controller.branchController.turns.value =
+          controller.genericListController.turns;
 
       _currentStep = 4;
     }
@@ -342,7 +342,7 @@ Widget _formStepContent(PositionController controller, BuildContext context,
               onSelected: (DropDownOption option) {
                 controller.serviceType.value = option;
               },
-              label: "",
+              label: "Tipo de servicio",
               hintText: "Tipo de servicio",
               resetValue: controller.serviceType,
               width: width,
@@ -366,7 +366,7 @@ Widget _formStepContent(PositionController controller, BuildContext context,
               onSelected: (DropDownOption option) {
                 controller.shiftTime.value = option;
               },
-              label: "",
+              label: "Horario",
               hintText: "Horario",
               resetValue: controller.shiftTime,
               width: width,
@@ -407,10 +407,19 @@ Widget _formStepContent(PositionController controller, BuildContext context,
                     label: "Fecha fin",
                     hintText: "Fecha fin",
                     prefixIcon: Icons.calendar_today)),
-            turnConfiguration(Theme.of(context).colorScheme, controller.branchController, true)
+            SizedBox(width: width),
+
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Turnos disponibles de la sucursal",
+                    style: CustomStyle.textStyleBlack(context)),
+                turnConfiguration(Theme.of(context).colorScheme,
+                    controller.branchController, true)
+              ],
+            )
 
             // LoadingAutocompleteDropdown turns isLoadingTurns
-
           ],
         );
       })),
