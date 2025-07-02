@@ -18,8 +18,8 @@ class MenuSidebarController extends GetxController {
           MenuItemModel(label: "Sucursales", route: RouteConstants.branch, icon: Icons.business_sharp),
           MenuItemModel(label: "Posiciones", route: RouteConstants.positions, icon: Icons.location_on_outlined),
         ]),
-        MenuGroupModel(label: "Configuración", children: [
-          MenuItemModel(label: "Parámetros", route: "/parametros", icon: Icons.settings),
+        MenuGroupModel(label: "Recursos humanos", children: [
+          MenuItemModel(label: "Empleados", route: RouteConstants.employees, icon: Icons.group),
         ]),
       ];
     } else if (role == 'usuario') {

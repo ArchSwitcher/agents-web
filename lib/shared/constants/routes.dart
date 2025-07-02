@@ -12,5 +12,7 @@ static const manageBranch =  "/branch/manage-branch";
 static const positions =  "/positions";
 static const managePosition =  "/manage-position";
 
+static const employees =  "/employees";
+
 
 }

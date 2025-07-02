@@ -137,7 +137,7 @@ class PositionsScreenState extends State<PositionsScreen> {
                     // fixedColumnWidths: fixedColumnWidths,
                     // columnSizes: columnSizes,
                     tableHeaders: headers,
-                    tableRows: buildTableRows(controller, context));
+                    tableRows: buildTablePositionRows(controller, context, null));
               }))
             ],
           ),

@@ -144,10 +144,7 @@ class PositionController extends GetxController {
     try {
       positions.value = await positionServices.getAll("3");
     } catch (e) {
-      ToastService.error(
-        title: "Posiciones",
-        subTitle: "Error al cargar posiciones: $e",
-      );
+      print("object: $e");
     } finally {
       isLoadingPositions.value = false;
     }
