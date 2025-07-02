@@ -11,7 +11,7 @@ class CustomDropdownWidget<T> extends StatelessWidget {
   final String selectedValue;
   final List<DropdownMenuItem<String>> items;
   final String? Function(String?)? validator;
-  final Icon prefixIcon;
+  final IconData prefixIcon;
   final ValueChanged<String?> onValueChanged;
 
   // final T selectedValue;
@@ -23,7 +23,7 @@ class CustomDropdownWidget<T> extends StatelessWidget {
     required this.selectedValue,
     required this.items,
     required this.validator,
-    required this.prefixIcon,
+    this.prefixIcon = Icons.person,
     // required this.selectedValue,
     required this.onValueChanged,
   }) : super(key: key);
@@ -62,7 +62,7 @@ class CustomDropdownWidget<T> extends StatelessWidget {
             enabledBorder: CustomStyle.focusErrorBorder(context),
             focusedErrorBorder: CustomStyle.focusErrorBorder(context),
             errorBorder: CustomStyle.focusErrorBorder(context),
-            prefixIcon: const Icon(Icons.person_outline),
+            prefixIcon: Icon(prefixIcon),
           ),
         ),
         const SizedBox(

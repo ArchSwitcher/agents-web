@@ -10,7 +10,7 @@ Widget birthAddressInfo(BuildContext context, EmployeeController controller) {
     child: LayoutBuilder(builder: (context, constraints) {
     final isWideScreen = constraints.maxWidth > 750;
     final width = isWideScreen
-        ? (constraints.maxWidth / 4) - 40
+        ? (constraints.maxWidth / 3) - 40
         : constraints.maxWidth - 40;
     
     return Wrap(

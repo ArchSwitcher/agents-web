@@ -12,11 +12,11 @@ class EmployeeController extends GetxController {
   final secondLastNameController = TextEditingController();
   final genderController = TextEditingController();
   final birthDateController = TextEditingController();
-  final idTypeController = TextEditingController();
+  final idTypeController = TextEditingController(text: "DPI");
   final identificationController = TextEditingController();
-  final nationalityController = TextEditingController();
-  final bloodTypeController = TextEditingController();
-  final maritalStatusController = TextEditingController();
+  final nationalityController = TextEditingController(text: "Guatemalteca");
+  final bloodTypeController = TextEditingController(text: "");
+  final maritalStatusController = TextEditingController(text: "");
   final educationController = TextEditingController();
   final languageController = TextEditingController();
   final ethnicityController = TextEditingController();

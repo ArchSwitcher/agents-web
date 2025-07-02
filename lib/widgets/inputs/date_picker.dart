@@ -8,7 +8,7 @@ class CustomDatePicker extends StatefulWidget {
   final DateTime initialDate;
   final DateTime? firstDate;
   final DateTime? lastDate;
-  final FormFieldValidator<Object>? validator;
+  final FormFieldValidator<String>? validator;
   final TextEditingController controller;
   final String label;
   final String hintText;

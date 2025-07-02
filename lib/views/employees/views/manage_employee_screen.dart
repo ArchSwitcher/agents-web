@@ -31,6 +31,8 @@ class ManageEmployeeScreenState extends State<ManageEmployeeScreen> {
   // Controller for managing employee data
   final controller = Get.put(EmployeeController());
   final PositionModel? position = Get.arguments?['position'];
+  // formkey
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -41,57 +43,68 @@ class ManageEmployeeScreenState extends State<ManageEmployeeScreen> {
         userRole: 'admin',
         showBackButton: true,
         content: SingleChildScrollView(
-          child: Column(
-            children: [
-              ContentCard(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      CustomButton(
-                        width: 30,
-                          color: Theme.of(context).colorScheme.primary,
-                          text: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.work_outline,
-                                  color: Theme.of(context).colorScheme.surface),
-                              const SizedBox(width: 8),
-                              Text(
-                                'Información de la posición',
-                                style: CustomStyle.textStyleWhite(context),
-                              ),
-                            ],
-                          ),
-                          isLoading: false,
-                          onPress: () {
-                            showPositionModal(context: context, position: position);
-                          }),
-                    ],
-                  )),
-              cardContentSpace(),
-              personalInformation(context, controller),
-              cardContentSpace(),
-              birthAddressInfo(context, controller),
-              cardContentSpace(),
-              contactInfo(context, controller),
-              cardContentSpace(),
-              buildEmergencyContact(context, controller),
-              cardContentSpace(),
-              jobInformation(context, controller),
-              cardContentSpace(),
-              licenceWeapon(context, controller),
-              cardContentSpace(),
-              financialMITInformation(context, controller),
-              cardContentSpace(),
-              additionalInfo(context, controller),
-              cardContentSpace(),
-              systemAccessStatus(context, controller),
-              cardContentSpace(),
-              cardContentSpace(),
-              FormButton(onPress: () {
-                print("Guardar empleado");
-              })
-            ],
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                ContentCard(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        CustomButton(
+                          width: 30,
+                            color: Theme.of(context).colorScheme.primary,
+                            text: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.work_outline,
+                                    color: Theme.of(context).colorScheme.surface),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Información de la posición',
+                                  style: CustomStyle.textStyleWhite(context),
+                                ),
+                              ],
+                            ),
+                            isLoading: false,
+                            onPress: () {
+                              showPositionModal(context: context, position: position);
+                            }),
+                      ],
+                    )),
+                cardContentSpace(),
+                personalInformation(context, controller),
+                cardContentSpace(),
+                birthAddressInfo(context, controller),
+                cardContentSpace(),
+                contactInfo(context, controller),
+                cardContentSpace(),
+                buildEmergencyContact(context, controller),
+                cardContentSpace(),
+                jobInformation(context, controller),
+                cardContentSpace(),
+                licenceWeapon(context, controller),
+                cardContentSpace(),
+                financialMITInformation(context, controller),
+                cardContentSpace(),
+                additionalInfo(context, controller),
+                cardContentSpace(),
+                systemAccessStatus(context, controller),
+                cardContentSpace(),
+                cardContentSpace(),
+                FormButton(onPress: () {
+                  print("Guardar empleado");
+                  if (formKey.currentState!.validate()) {
+                    // controller.saveEmployee();
+                  } else {
+                    // Get.snackbar("Error", "Por favor, complete todos los campos requeridos.",
+                    //     snackPosition: SnackPosition.BOTTOM,
+                    //     backgroundColor: Colors.red.withOpacity(0.8),
+                    //     colorText: Colors.white);
+                  }
+                })
+              ],
+            ),
           ),
         ));
   }
