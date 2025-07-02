@@ -1,6 +1,9 @@
 import 'package:agents_app/layout/contect_card_space.dart';
+import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
+import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/shared/constants/routes.dart';
+import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/views/employees/controllers/employee_controller.dart';
 import 'package:agents_app/views/employees/sections/additional_info.dart';
 import 'package:agents_app/views/employees/sections/birth_address_info.dart';
@@ -11,13 +14,14 @@ import 'package:agents_app/views/employees/sections/job_information.dart';
 import 'package:agents_app/views/employees/sections/licence_weapon.dart';
 import 'package:agents_app/views/employees/sections/personal_information.dart';
 import 'package:agents_app/views/employees/sections/system_access_status.dart';
+import 'package:agents_app/views/employees/widgets/position_modal.dart';
+import 'package:agents_app/widgets/buttons/custom_button.dart';
 import 'package:agents_app/widgets/buttons/form_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 class ManageEmployeeScreen extends StatefulWidget {
-  const ManageEmployeeScreen({ super.key });
+  const ManageEmployeeScreen({super.key});
 
   @override
   ManageEmployeeScreenState createState() => ManageEmployeeScreenState();
@@ -26,6 +30,7 @@ class ManageEmployeeScreen extends StatefulWidget {
 class ManageEmployeeScreenState extends State<ManageEmployeeScreen> {
   // Controller for managing employee data
   final controller = Get.put(EmployeeController());
+  final PositionModel? position = Get.arguments?['position'];
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +39,35 @@ class ManageEmployeeScreenState extends State<ManageEmployeeScreen> {
         description: "Gestión de empleados",
         currentRoute: RouteConstants.employees,
         userRole: 'admin',
+        showBackButton: true,
         content: SingleChildScrollView(
           child: Column(
             children: [
+              ContentCard(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      CustomButton(
+                        width: 30,
+                          color: Theme.of(context).colorScheme.primary,
+                          text: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.work_outline,
+                                  color: Theme.of(context).colorScheme.surface),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Información de la posición',
+                                style: CustomStyle.textStyleWhite(context),
+                              ),
+                            ],
+                          ),
+                          isLoading: false,
+                          onPress: () {
+                            showPositionModal(context: context, position: position);
+                          }),
+                    ],
+                  )),
               cardContentSpace(),
               personalInformation(context, controller),
               cardContentSpace(),

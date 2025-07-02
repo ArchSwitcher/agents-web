@@ -27,10 +27,11 @@ List<DataRow> buildTablePositionRows(PositionController controller,
                 IconButton(
                   icon: const Icon(Icons.person),
                   onPressed: () {
+                    // print("object ${element.positionName}");
                     Navigator.pushNamed(context, RouteConstants.manageEmployee,
                         arguments: {
-                          'employeeId': element.id,
-                          'positionName': element.positionName,
+                          'position': element,
+                          'employeeType': "Permanente",
                         });
                   },
                 ),

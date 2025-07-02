@@ -69,7 +69,7 @@ Widget deletePositionButton(BuildContext context, String positionId) {
 
 
 Widget manageEquipmentButton(
-    BuildContext context, double width, PositionController controller) {
+    BuildContext context, double width, PositionController controller, bool? isEnabled) {
   final colorScheme = Theme.of(context).colorScheme;
 
   return SizedBox(
@@ -90,7 +90,7 @@ Widget manageEquipmentButton(
         ),
         isLoading: false,
         onPress: () {
-          showEquipmentModal(context: context, controller: controller);
+          showEquipmentModal(context: context, controller: controller, isEnabled: isEnabled);
         }),
   );
 }

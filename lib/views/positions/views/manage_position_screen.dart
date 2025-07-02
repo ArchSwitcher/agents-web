@@ -32,9 +32,49 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
   final PositionModel? position = Get.arguments?['position'];
   final bool isEdit = Get.arguments?['isEdit'] ?? true;
 
-  final _formKey = GlobalKey<FormState>();
+  // final _formKey = GlobalKey<FormState>();
   final controller = Get.put(PositionController());
   int _currentStep = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return ResponsiveSidebarLayout(
+        title: "Posición",
+        description: title,
+        currentRoute: RouteConstants.positions,
+        userRole: "admin",
+        showBackButton: true,
+        content: ManagePositionSection(
+            currentS: _currentStep,
+            position: position,
+            isEdit: isEdit,
+            isEnabled: true));
+  }
+}
+
+class ManagePositionSection extends StatefulWidget {
+  final int currentS;
+  final PositionModel? position;
+  final bool isEdit;
+  final bool isEnabled;
+
+  const ManagePositionSection(
+      {super.key,
+      required this.currentS,
+      this.position,
+      this.isEdit = true,
+      this.isEnabled = true});
+
+  @override
+  State<ManagePositionSection> createState() => _ManagePositionSectionState();
+}
+
+class _ManagePositionSectionState extends State<ManagePositionSection> {
+  final formKey = GlobalKey<FormState>();
+  int currentStep = 0;
+
+  // final _formKey = GlobalKey<FormState>();
+  final controller = Get.put(PositionController());
 
   start() async {
     await controller.genericListController.getAllShiftTime();
@@ -52,19 +92,19 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
   }
 
   loadEdit() async {
-    if (isEdit && position != null) {
-      controller.loadPositionData(position!);
+    if (widget.isEdit && widget.position != null) {
+      controller.loadPositionData(widget.position!);
       controller.genericListController
-          .fetchClientsByGroupId(position!.group?.id ?? "");
+          .fetchClientsByGroupId(widget.position!.group?.id ?? "");
       controller.genericListController
-          .fetchBranchByClientId(position!.client?.id ?? "");
+          .fetchBranchByClientId(widget.position!.client?.id ?? "");
       await controller.genericListController
-          .fetchTurnsByBranch(position!.branch?.id ?? "");
+          .fetchTurnsByBranch(widget.position!.branch?.id ?? "");
 
       controller.branchController.turns.value =
           controller.genericListController.turns;
 
-      _currentStep = 3;
+      currentStep = 3;
     }
     setState(() {});
   }
@@ -72,6 +112,7 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
   @override
   void initState() {
     super.initState();
+    currentStep = widget.currentS;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       start();
       loadEdit();
@@ -86,259 +127,241 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveSidebarLayout(
-        title: "Posición",
-        description: title,
-        currentRoute: RouteConstants.positions,
-        userRole: "admin",
-        showBackButton: true,
-        content: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                ContentCard(
-                    child: LayoutBuilder(builder: (context, constraints) {
-                  final isWideScreen = constraints.maxWidth > 600;
-                  final width = isWideScreen
-                      ? (constraints.maxWidth / 3) - 40
-                      : constraints.maxWidth - 40;
+    return SingleChildScrollView(
+      child: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            ContentCard(child: LayoutBuilder(builder: (context, constraints) {
+              final isWideScreen = constraints.maxWidth > 600;
+              final width = isWideScreen
+                  ? (constraints.maxWidth / 3) - 40
+                  : constraints.maxWidth - 40;
 
-                  return Wrap(
-                    spacing: 30, // espacio horizontal entre widgets
-                    runSpacing:
-                        20, // espacio vertical entre líneas si se hace wrap
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    alignment: WrapAlignment.spaceBetween,
-                    children: [
-                      LoadingAutocompleteDropdown(
-                        initialValue: controller.group.value,
-                        prefixIcon: Icons.group,
-                        enabled: true,
-                        isLoading: controller.groupController.isLoading,
-                        listItems: controller.groupController.dropdownOptions,
-                        onSelected: (DropDownOption option) {
-                          controller.group.value = option;
-                          controller.genericListController
-                              .fetchClientsByGroupId(option.id);
-                          controller.client.value =
-                              DropDownOption(id: "", label: "");
-                          controller.genericListController
-                              .cleanClientsByGroup();
-                          setState(() {
-                            _currentStep = 1;
-                          });
-                        },
-                        label: "Grupo",
-                        hintText: "Grupo",
-                        resetValue: controller.group,
-                        width: width,
-                        onTextChange: (text) async {
-                          List<DropDownOption> filteredOptions = controller
-                              .groupController.dropdownOptions
-                              .where((option) => option.label
-                                  .toLowerCase()
-                                  .contains(text.toLowerCase()))
-                              .toList();
-                          return filteredOptions.isEmpty ? [] : filteredOptions;
-                        },
-                      ),
-                      //loading dropdown client
-                      LoadingAutocompleteDropdown(
-                        initialValue: controller.client.value,
-                        loadingText: controller.genericListController
-                                .isLoadingClientsByGroup.value
-                            ? "Seleccione un grupo para ver clientes"
-                            : "",
-                        prefixIcon: Icons.business,
-                        enabled: true,
-                        isLoading: controller
-                            .genericListController.isLoadingClientsByGroup,
-                        listItems: controller
-                                .genericListController.clientsByGroup.isEmpty
+              return Wrap(
+                spacing: 30, // espacio horizontal entre widgets
+                runSpacing: 20, // espacio vertical entre líneas si se hace wrap
+                crossAxisAlignment: WrapCrossAlignment.center,
+                alignment: WrapAlignment.spaceBetween,
+                children: [
+                  LoadingAutocompleteDropdown(
+                    initialValue: controller.group.value,
+                    prefixIcon: Icons.group,
+                    enabled: widget.isEnabled,
+                    isLoading: controller.groupController.isLoading,
+                    listItems: controller.groupController.dropdownOptions,
+                    onSelected: (DropDownOption option) {
+                      controller.group.value = option;
+                      controller.genericListController
+                          .fetchClientsByGroupId(option.id);
+                      controller.client.value =
+                          DropDownOption(id: "", label: "");
+                      controller.genericListController.cleanClientsByGroup();
+                      setState(() {
+                        currentStep = 1;
+                      });
+                    },
+                    label: "Grupo",
+                    hintText: "Grupo",
+                    resetValue: controller.group,
+                    width: width,
+                    onTextChange: (text) async {
+                      List<DropDownOption> filteredOptions = controller
+                          .groupController.dropdownOptions
+                          .where((option) => option.label
+                              .toLowerCase()
+                              .contains(text.toLowerCase()))
+                          .toList();
+                      return filteredOptions.isEmpty ? [] : filteredOptions;
+                    },
+                  ),
+                  //loading dropdown client
+                  LoadingAutocompleteDropdown(
+                    initialValue: controller.client.value,
+                    loadingText: controller
+                            .genericListController.isLoadingClientsByGroup.value
+                        ? "Seleccione un grupo para ver clientes"
+                        : "",
+                    prefixIcon: Icons.business,
+                    enabled: widget.isEnabled,
+                    isLoading: controller
+                        .genericListController.isLoadingClientsByGroup,
+                    listItems:
+                        controller.genericListController.clientsByGroup.isEmpty
                             ? []
                             : controller.genericListController.clientsByGroup,
-                        onSelected: (DropDownOption option) {
-                          controller.client.value = option;
-                          controller.genericListController
-                              .fetchBranchByClientId(option.id);
-                          controller.branch.value =
-                              DropDownOption(id: "", label: "");
-                          controller.genericListController
-                              .cleanBranchesByClient();
-                          setState(() {
-                            _currentStep = 2;
-                          });
-                        },
-                        label: "Cliente",
-                        hintText: "Cliente",
-                        resetValue: controller.client,
-                        width: width,
-                        onTextChange: (text) async {
-                          List<DropDownOption> filteredOptions = controller
-                              .genericListController.clientsByGroup
-                              .where((option) => option.label
-                                  .toLowerCase()
-                                  .contains(text.toLowerCase()))
-                              .toList();
-                          return filteredOptions.isEmpty ? [] : filteredOptions;
-                        },
-                      ),
+                    onSelected: (DropDownOption option) {
+                      controller.client.value = option;
+                      controller.genericListController
+                          .fetchBranchByClientId(option.id);
+                      controller.branch.value =
+                          DropDownOption(id: "", label: "");
+                      controller.genericListController.cleanBranchesByClient();
+                      setState(() {
+                        currentStep = 2;
+                      });
+                    },
+                    label: "Cliente",
+                    hintText: "Cliente",
+                    resetValue: controller.client,
+                    width: width,
+                    onTextChange: (text) async {
+                      List<DropDownOption> filteredOptions = controller
+                          .genericListController.clientsByGroup
+                          .where((option) => option.label
+                              .toLowerCase()
+                              .contains(text.toLowerCase()))
+                          .toList();
+                      return filteredOptions.isEmpty ? [] : filteredOptions;
+                    },
+                  ),
 
-                      //loading dropdown branch
-                      LoadingAutocompleteDropdown(
-                        initialValue: controller.branch.value,
-                        loadingText: controller.genericListController
-                                .isLoadingBranchByClient.value
-                            ? "Seleccione un cliente para ver sucursales"
-                            : "",
-                        prefixIcon: Icons.store,
-                        enabled: true,
-                        isLoading: controller
-                            .genericListController.isLoadingBranchByClient,
-                        listItems: controller
-                                .genericListController.branchesByClient.isEmpty
+                  //loading dropdown branch
+                  LoadingAutocompleteDropdown(
+                    initialValue: controller.branch.value,
+                    loadingText: controller
+                            .genericListController.isLoadingBranchByClient.value
+                        ? "Seleccione un cliente para ver sucursales"
+                        : "",
+                    prefixIcon: Icons.store,
+                    enabled: widget.isEnabled,
+                    isLoading: controller
+                        .genericListController.isLoadingBranchByClient,
+                    listItems: controller
+                            .genericListController.branchesByClient.isEmpty
+                        ? []
+                        : controller.genericListController.branchesByClient,
+                    onSelected: (DropDownOption option) async {
+                      controller.branch.value = option;
+                      await controller.genericListController
+                          .fetchTurnsByBranch(option.id);
+
+                      controller.branchController.turns.value =
+                          controller.genericListController.turns;
+
+                      print(
+                          "turns: ${controller.genericListController.turns.length}");
+                      currentStep = 3;
+                      setState(() {});
+                    },
+                    label: "Sucursal",
+                    hintText: "Sucursal",
+                    resetValue: controller.branch,
+                    width: width,
+                    onTextChange: (text) async {
+                      List<DropDownOption> filteredOptions = controller
+                          .genericListController.branchesByClient
+                          .where((option) => option.label
+                              .toLowerCase()
+                              .contains(text.toLowerCase()))
+                          .toList();
+                      return filteredOptions.isEmpty ? [] : filteredOptions;
+                    },
+                  ),
+
+                  SizedBox(
+                    width: width,
+                    child: CustomDatePicker(
+                        enabled: false,
+                        initialDate: DateTime.now(),
+                        controller: TextEditingController(
+                            text: DateTime.now().toString().substring(0, 10)),
+                        label: "Fecha",
+                        hintText: "",
+                        prefixIcon: Icons.calendar_today),
+                  ),
+
+                  LoadingAutocompleteDropdown(
+                    initialValue: controller.company.value,
+                    prefixIcon: Icons.business,
+                    enabled: widget.isEnabled,
+                    isLoading:
+                        controller.genericListController.isLoadingCompany,
+                    listItems:
+                        controller.genericListController.companies.isEmpty
                             ? []
-                            : controller.genericListController.branchesByClient,
-                        onSelected: (DropDownOption option) async {
-                          controller.branch.value = option;
-                          await controller.genericListController
-                              .fetchTurnsByBranch(option.id);
+                            : controller.genericListController.companies,
+                    onSelected: (DropDownOption option) {
+                      controller.company.value = option;
+                    },
+                    label: "Empresa",
+                    hintText: "Empresa",
+                    resetValue: controller.company,
+                    width: width,
+                    onTextChange: (text) async {
+                      List<DropDownOption> filteredOptions = controller
+                          .genericListController.companies
+                          .where((option) => option.label
+                              .toLowerCase()
+                              .contains(text.toLowerCase()))
+                          .toList();
+                      return filteredOptions.isEmpty
+                          ? [DropDownOption(id: '', label: 'No hay resultados')]
+                          : filteredOptions;
+                    },
+                  ),
 
-                          controller.branchController.turns.value =
-                              controller.genericListController.turns;
+                  // dropdown for agency
+                  LoadingAutocompleteDropdown(
+                    initialValue: controller.agency.value,
+                    prefixIcon: Icons.business,
+                    enabled: widget.isEnabled,
+                    isLoading: controller.genericListController.isLoadingAgency,
+                    listItems: controller.genericListController.agencies.isEmpty
+                        ? []
+                        : controller.genericListController.agencies,
+                    onSelected: (DropDownOption option) {
+                      controller.agency.value = option;
+                    },
+                    label: "Agencia",
+                    hintText: "Agencia",
+                    resetValue: controller.agency,
+                    width: width,
+                    onTextChange: (text) async {
+                      List<DropDownOption> filteredOptions = controller
+                          .genericListController.agencies
+                          .where((option) => option.label
+                              .toLowerCase()
+                              .contains(text.toLowerCase()))
+                          .toList();
+                      return filteredOptions.isEmpty
+                          ? [DropDownOption(id: '', label: 'No hay resultados')]
+                          : filteredOptions;
+                    },
+                  ),
 
-                          print(
-                              "turns: ${controller.genericListController.turns.length}");
-                          _currentStep = 3;
-                          setState(() {});
-                        },
-                        label: "Sucursal",
-                        hintText: "Sucursal",
-                        resetValue: controller.branch,
-                        width: width,
-                        onTextChange: (text) async {
-                          List<DropDownOption> filteredOptions = controller
-                              .genericListController.branchesByClient
-                              .where((option) => option.label
-                                  .toLowerCase()
-                                  .contains(text.toLowerCase()))
-                              .toList();
-                          return filteredOptions.isEmpty ? [] : filteredOptions;
-                        },
-                      ),
-
-                      SizedBox(
-                        width: width,
-                        child: CustomDatePicker(
-                            enabled: false,
-                            initialDate: DateTime.now(),
-                            controller: TextEditingController(
-                                text:
-                                    DateTime.now().toString().substring(0, 10)),
-                            label: "Fecha",
-                            hintText: "",
-                            prefixIcon: Icons.calendar_today),
-                      ),
-
-                      LoadingAutocompleteDropdown(
-                        initialValue: controller.company.value,
-                        prefixIcon: Icons.business,
-                        enabled: true,
-                        isLoading:
-                            controller.genericListController.isLoadingCompany,
-                        listItems:
-                            controller.genericListController.companies.isEmpty
-                                ? []
-                                : controller.genericListController.companies,
-                        onSelected: (DropDownOption option) {
-                          controller.company.value = option;
-                        },
-                        label: "Empresa",
-                        hintText: "Empresa",
-                        resetValue: controller.company,
-                        width: width,
-                        onTextChange: (text) async {
-                          List<DropDownOption> filteredOptions = controller
-                              .genericListController.companies
-                              .where((option) => option.label
-                                  .toLowerCase()
-                                  .contains(text.toLowerCase()))
-                              .toList();
-                          return filteredOptions.isEmpty
-                              ? [
-                                  DropDownOption(
-                                      id: '', label: 'No hay resultados')
-                                ]
-                              : filteredOptions;
-                        },
-                      ),
-
-                      // dropdown for agency
-                      LoadingAutocompleteDropdown(
-                        initialValue: controller.agency.value,
-                        prefixIcon: Icons.business,
-                        enabled: true,
-                        isLoading:
-                            controller.genericListController.isLoadingAgency,
-                        listItems:
-                            controller.genericListController.agencies.isEmpty
-                                ? []
-                                : controller.genericListController.agencies,
-                        onSelected: (DropDownOption option) {
-                          controller.agency.value = option;
-                        },
-                        label: "Agencia",
-                        hintText: "Agencia",
-                        resetValue: controller.agency,
-                        width: width,
-                        onTextChange: (text) async {
-                          List<DropDownOption> filteredOptions = controller
-                              .genericListController.agencies
-                              .where((option) => option.label
-                                  .toLowerCase()
-                                  .contains(text.toLowerCase()))
-                              .toList();
-                          return filteredOptions.isEmpty
-                              ? [
-                                  DropDownOption(
-                                      id: '', label: 'No hay resultados')
-                                ]
-                              : filteredOptions;
-                        },
-                      ),
-
-                      SizedBox(
-                          width: width,
-                          child: CustomLabelWidget(
-                              title: "Moneda",
-                              label: "Quetzal",
-                              prefixIcon: Icons.attach_money)),
-                    ],
-                  );
-                })),
-                _currentStep == 3 &&
-                        controller.genericListController.isLoadingTurns.value ==
-                            false
-                    ? _formStepContent(controller, context, _formKey)
-                    : Padding(
-                        padding: const EdgeInsets.only(top: 30),
-                        child: Text(
-                            _currentStep == 2
-                                ? "Seleccione una sucursal"
-                                : "La sucursal no tiene turnos disponibles",
-                            style: CustomStyle.tableHeader(context, 20)),
-                      ),
-                cardContentSpace(),
-              ],
-            ),
-          ),
-        ));
+                  SizedBox(
+                      width: width,
+                      child: CustomLabelWidget(
+                          title: "Moneda",
+                          label: "Quetzal",
+                          prefixIcon: Icons.attach_money)),
+                ],
+              );
+            })),
+            currentStep == 3 &&
+                    controller.genericListController.isLoadingTurns.value ==
+                        false
+                ? _formStepContent(
+                    controller, context, formKey, widget.isEnabled)
+                : Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: Text(
+                        currentStep == 2
+                            ? "Seleccione una sucursal"
+                            : "La sucursal no tiene turnos disponibles",
+                        style: CustomStyle.tableHeader(context, 20)),
+                  ),
+            cardContentSpace(),
+          ],
+        ),
+      ),
+    );
   }
 }
 
 Widget _formStepContent(PositionController controller, BuildContext context,
-    GlobalKey<FormState> formKey) {
+    GlobalKey<FormState> formKey, bool isEnabled) {
   return Column(
     children: [
       cardContentSpace(),
@@ -358,7 +381,7 @@ Widget _formStepContent(PositionController controller, BuildContext context,
             LoadingAutocompleteDropdown(
               initialValue: controller.serviceType.value,
               prefixIcon: Icons.work,
-              enabled: true,
+              enabled: isEnabled,
               isLoading: controller.genericListController.isLoadingServiceType,
               listItems: controller.genericListController.serviceTypes,
               onSelected: (DropDownOption option) {
@@ -382,7 +405,7 @@ Widget _formStepContent(PositionController controller, BuildContext context,
             LoadingAutocompleteDropdown(
               initialValue: controller.shiftTime.value,
               prefixIcon: Icons.access_time,
-              enabled: true,
+              enabled: isEnabled,
               isLoading: controller.genericListController.isLoadingShiftTime,
               listItems: controller.genericListController.shiftTimes,
               onSelected: (DropDownOption option) {
@@ -405,12 +428,13 @@ Widget _formStepContent(PositionController controller, BuildContext context,
             ),
             Padding(
                 padding: const EdgeInsets.only(top: 14),
-                child: manageEquipmentButton(context, width, controller)),
+                child: manageEquipmentButton(context, width, controller, isEnabled)),
             SizedBox(
               width: width,
               child: CustomDatePicker(
                   initialDate: DateTime(2020),
                   controller: controller.startDate,
+                  enabled: isEnabled,
                   validator: (value) {
                     if (value == null) {
                       return "Fecha de inicio es requerida";
@@ -424,6 +448,7 @@ Widget _formStepContent(PositionController controller, BuildContext context,
             SizedBox(
                 width: width,
                 child: CustomDatePicker(
+                    enabled: isEnabled,
                     initialDate: DateTime(2020),
                     controller: controller.endDate,
                     label: "Fecha fin",
@@ -463,6 +488,7 @@ Widget _formStepContent(PositionController controller, BuildContext context,
                   SizedBox(
                     width: width,
                     child: CustomInputWidget(
+                        enabled: isEnabled,
                         controller: controller.serviceQuantity,
                         label: "Cantidad de servicio",
                         hintText: "Cantidad de servicio",
@@ -471,6 +497,7 @@ Widget _formStepContent(PositionController controller, BuildContext context,
                   SizedBox(
                     width: width,
                     child: CustomInputWidget(
+                        enabled: isEnabled,
                         controller: controller.scheduleQuantity,
                         label: "Cantidad de horarios",
                         hintText: "Cantidad de horarios",
@@ -487,6 +514,7 @@ Widget _formStepContent(PositionController controller, BuildContext context,
                   SizedBox(
                     width: width,
                     child: CustomInputWidget(
+                        enabled: isEnabled,
                         controller: controller.bonus,
                         label: "Bono",
                         hintText: "Bono",
@@ -495,6 +523,7 @@ Widget _formStepContent(PositionController controller, BuildContext context,
                   SizedBox(
                     width: width,
                     child: CustomInputWidget(
+                        enabled: isEnabled,
                         controller: controller.transport,
                         label: "Transporte",
                         hintText: "Transporte",
@@ -503,6 +532,7 @@ Widget _formStepContent(PositionController controller, BuildContext context,
                   SizedBox(
                     width: width,
                     child: CustomInputWidget(
+                        enabled: isEnabled,
                         controller: controller.foodQuantity,
                         label: "Alimentación",
                         hintText: "Alimentación",
@@ -511,6 +541,7 @@ Widget _formStepContent(PositionController controller, BuildContext context,
                   SizedBox(
                     width: width,
                     child: CustomInputWidget(
+                        enabled: isEnabled,
                         controller: controller.shiftValue,
                         label: "Valor del turno",
                         hintText: "Valor del turno",
@@ -519,12 +550,14 @@ Widget _formStepContent(PositionController controller, BuildContext context,
                   SizedBox(
                     width: width,
                     child: CustomInputWidget(
+                        enabled: isEnabled,
                         controller: controller.servicePrice,
                         label: "Precio del servicio",
                         hintText: "Precio del servicio",
                         prefixIcon: Icons.attach_money),
                   ),
                   CustomInputWidget(
+                      enabled: isEnabled,
                       controller: controller.observations,
                       label: "Observaciones",
                       hintText: "Observaciones",
@@ -533,39 +566,40 @@ Widget _formStepContent(PositionController controller, BuildContext context,
           }),
         ],
       )),
-      Padding(
-        padding: const EdgeInsets.all(50.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            CustomButton(
-                width: 35,
-                height: 25,
-                color: Theme.of(context).colorScheme.primary,
-                text: Text(
-                  "Guardar",
-                  style: CustomStyle.textStyleWhite(context),
-                ),
-                isLoading: false,
-                onPress: () async {
-                  if (!formKey.currentState!.validate()) {
-                    ToastService.warning(
-                        title: "Validación",
-                        subTitle:
-                            "por favor, complete todos los campos obligatorios.");
-                    return;
-                  }
-                  controller.loader.show();
-                  controller.isLoadingPosition.value = true;
-                  const isNewPosition = null;
-                  await controller.newUpdatePosition(isNewPosition);
-                  controller.isLoadingPosition.value = false;
-                  controller.loader.hide();
-                  Navigator.pop(context);
-                })
-          ],
+      if (isEnabled == true)
+        Padding(
+          padding: const EdgeInsets.all(50.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              CustomButton(
+                  width: 35,
+                  height: 25,
+                  color: Theme.of(context).colorScheme.primary,
+                  text: Text(
+                    "Guardar",
+                    style: CustomStyle.textStyleWhite(context),
+                  ),
+                  isLoading: false,
+                  onPress: () async {
+                    if (!formKey.currentState!.validate()) {
+                      ToastService.warning(
+                          title: "Validación",
+                          subTitle:
+                              "por favor, complete todos los campos obligatorios.");
+                      return;
+                    }
+                    controller.loader.show();
+                    controller.isLoadingPosition.value = true;
+                    const isNewPosition = null;
+                    await controller.newUpdatePosition(isNewPosition);
+                    controller.isLoadingPosition.value = false;
+                    controller.loader.hide();
+                    Navigator.pop(context);
+                  })
+            ],
+          ),
         ),
-      ),
     ],
   );
 }

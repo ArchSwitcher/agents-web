@@ -10,6 +10,7 @@ void showEquipmentModal({
   required BuildContext context,
   VoidCallback? onAccept,
   VoidCallback? onCancel,
+  bool? isEnabled,
   required PositionController controller,
 }) {
   showDialog(
@@ -58,7 +59,7 @@ void showEquipmentModal({
                             hintText: "Cantidad",
                             prefixIcon: Icons.numbers)),
                     const SizedBox(width: 30),
-                    controller.equipmentType.value.id.isNotEmpty
+                    controller.equipmentType.value.id.isNotEmpty && isEnabled == true
                         ? IconButton(
                             onPressed: () {
                               controller.addEquipment(

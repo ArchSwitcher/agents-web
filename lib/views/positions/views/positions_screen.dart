@@ -2,7 +2,6 @@ import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/layout/contect_card_space.dart';
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
-import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/helpers/table/index.dart';
 import 'package:agents_app/views/positions/controllers/position_controller.dart';
@@ -10,7 +9,6 @@ import 'package:agents_app/views/positions/widgets/actions_btns_widget.dart';
 import 'package:agents_app/views/positions/widgets/table_rows_widget.dart';
 import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
 import 'package:agents_app/widgets/datatable/filter_box.dart';
-import 'package:agents_app/widgets/inputs/dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -86,41 +84,10 @@ class PositionsScreenState extends State<PositionsScreen> {
                         label: "Buscar",
                       ),
                     ),
-
-                    // Dropdown for filtering by status type
-                    LoadingAutocompleteDropdown(
-                      prefixIcon: Icons.filter_alt,
-                      enabled: true,
-                      isLoading:
-                          controller.genericListController.isLoadingStatusType,
-                      listItems: controller.genericListController.statusTypes,
-                      onSelected: (DropDownOption option) {
-                        controller.statusType.value = option;
-                        
-                      },
-                      label: "Filtrar por estado",
-                      hintText: "seleccione un estado",
-                      resetValue: controller.statusType,
-                      width: 300,
-                      onTextChange: (text) async {
-                        List<DropDownOption> filteredOptions = controller
-                            .genericListController.statusTypes
-                            .where((option) => option.label
-                                .toLowerCase()
-                                .contains(text.toLowerCase()))
-                            .toList();
-                        return filteredOptions.isEmpty ? [] : filteredOptions;
-                      },
-                    ),
-
                     SizedBox(
                       width: 170,
                       child: addPositionButton(context),
                     ),
-                    ElevatedButton(onPressed: () async{
-                      await start();
-
-                    }, child: Text("actualizar")),
                   ],
                 ),
               ),
@@ -137,7 +104,8 @@ class PositionsScreenState extends State<PositionsScreen> {
                     // fixedColumnWidths: fixedColumnWidths,
                     // columnSizes: columnSizes,
                     tableHeaders: headers,
-                    tableRows: buildTablePositionRows(controller, context, null));
+                    tableRows:
+                        buildTablePositionRows(controller, context, null));
               }))
             ],
           ),
