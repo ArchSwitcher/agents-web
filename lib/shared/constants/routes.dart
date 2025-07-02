@@ -13,6 +13,7 @@ static const positions =  "/positions";
 static const managePosition =  "/manage-position";
 
 static const employees =  "/employees";
+static const manageEmployee =  "/manage-employee";
 
 
 }

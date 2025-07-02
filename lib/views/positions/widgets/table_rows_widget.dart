@@ -1,4 +1,5 @@
 import 'package:agents_app/models/position/position_model.dart';
+import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/views/employees/controllers/employee_controller.dart';
 import 'package:agents_app/views/positions/controllers/position_controller.dart';
 import 'package:agents_app/views/positions/widgets/actions_btns_widget.dart';
@@ -26,7 +27,11 @@ List<DataRow> buildTablePositionRows(PositionController controller,
                 IconButton(
                   icon: const Icon(Icons.person),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/employees');
+                    Navigator.pushNamed(context, RouteConstants.manageEmployee,
+                        arguments: {
+                          'employeeId': element.id,
+                          'positionName': element.positionName,
+                        });
                   },
                 ),
               ],
