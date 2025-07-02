@@ -34,6 +34,20 @@ class ManageEmployeeScreenState extends State<ManageEmployeeScreen> {
   // formkey
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  start() async {
+    await controller.genericListController.fetchCountries();
+    await controller.genericListController.fetchDepartments();
+    await controller.genericListController.fetchZones();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      start();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ResponsiveSidebarLayout(

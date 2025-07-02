@@ -1,9 +1,13 @@
+import 'package:agents_app/controllers/generic_list_controller.dart';
+import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/views/positions/controllers/position_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class EmployeeController extends GetxController {
  PositionController positionController = Get.put(PositionController());
+ GenericListController genericListController = Get.put(GenericListController());
+
  
   // 🧍 Personal Information
   final firstNameController = TextEditingController();
@@ -21,13 +25,18 @@ class EmployeeController extends GetxController {
   final languageController = TextEditingController();
   final ethnicityController = TextEditingController();
 
-  // 🏠 Birth and Address Info
-  final birthCountryController = TextEditingController();
-  final birthDepartmentController = TextEditingController();
-  final birthMunicipalityController = TextEditingController();
-  final addressDepartmentController = TextEditingController();
-  final addressMunicipalityController = TextEditingController();
+  // 🏠 Birth and Address Info DropDownOption
+  Rx<DropDownOption> birthCountryController = DropDownOption(id: "", label: "").obs;
+  Rx<DropDownOption> birthDepartmentController = DropDownOption(id: "", label: "").obs;
+  Rx<DropDownOption> birthMunicipalityController = DropDownOption(id: "", label: "").obs;
+  Rx<DropDownOption> addressDepartmentController = DropDownOption(id: "", label: "").obs;
+  Rx<DropDownOption> addressMunicipalityController = DropDownOption(id: "", label: "").obs;
   final addressController = TextEditingController();
+  // 🏠 Birth and Address Info Observables
+  RxBool isLoadingBirthMunicipalities = false.obs;
+  RxList<DropDownOption> birthMunicipalities = <DropDownOption>[].obs;
+  RxBool isLoadingAddressMunicipalities = false.obs;
+  RxList<DropDownOption> addressMunicipalities = <DropDownOption>[].obs;
 
   // ☎️ Contact Info
   final phoneController = TextEditingController();
@@ -56,7 +65,7 @@ class EmployeeController extends GetxController {
   final payrollController = TextEditingController();
   final professionController = TextEditingController();
   final workplaceController = TextEditingController();
-  final contractTypeController = TextEditingController();
+  final contractTypeController = TextEditingController(text: "TEMPORAL");
   final hiringMethodController = TextEditingController();
   final workCountryController = TextEditingController();
   final workShiftController = TextEditingController();
@@ -105,11 +114,11 @@ class EmployeeController extends GetxController {
     languageController.dispose();
     ethnicityController.dispose();
 
-    birthCountryController.dispose();
-    birthDepartmentController.dispose();
-    birthMunicipalityController.dispose();
-    addressDepartmentController.dispose();
-    addressMunicipalityController.dispose();
+    birthCountryController.value = DropDownOption(id: "", label: "");
+    birthDepartmentController.value = DropDownOption(id: "", label: "");
+    birthMunicipalityController.value = DropDownOption(id: "", label: "");
+    addressDepartmentController.value = DropDownOption(id: "", label: "");
+    addressMunicipalityController.value = DropDownOption(id: "", label: "");
     addressController.dispose();
 
     phoneController.dispose();
