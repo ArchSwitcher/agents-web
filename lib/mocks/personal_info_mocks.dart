@@ -110,3 +110,9 @@ List<DropDownOption> positionMock = [
   DropDownOption(id: "3", label: "Jefe de cuentas clave"),
   DropDownOption(id: "4", label: "Cobrador")
 ];
+
+List<DropDownOption> statusTypePositionMock = [
+  DropDownOption(id: "1", label: "Activo"),
+  DropDownOption(id: "2", label: "Rechazado"),
+  DropDownOption(id: "3", label: "En proceso"),
+];

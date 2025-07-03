@@ -2,6 +2,7 @@ import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/layout/contect_card_space.dart';
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
+import 'package:agents_app/mocks/personal_info_mocks.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/helpers/table/index.dart';
 import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
@@ -9,6 +10,7 @@ import 'package:agents_app/views/manage-agent-employees/widgets/action_btns.dart
 import 'package:agents_app/views/positions/widgets/table_rows_widget.dart';
 import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
 import 'package:agents_app/widgets/datatable/filter_box.dart';
+import 'package:agents_app/widgets/inputs/custom_dropdownv2_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -51,6 +53,14 @@ class EmployeesAgentScreenState extends State<EmployeesAgentScreen> {
     });
   }
 
+  reloadPositions(String statusTypeId) async {
+    loaderController.show();
+    print("controller.selectedPosition.text ${controller.selectedPosition.text} $statusTypeId");
+    await controller.positionController.fetchPositions(statusType: statusTypeId);
+    loaderController.hide();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return ResponsiveSidebarLayout(
@@ -73,7 +83,7 @@ class EmployeesAgentScreenState extends State<EmployeesAgentScreen> {
                       ConstrainedBox(
                         constraints: const BoxConstraints(
                           minWidth: 300,
-                          maxWidth: 600,
+                          maxWidth: 400,
                         ),
                         child: FilterBox(
                           elements: [],
@@ -82,6 +92,23 @@ class EmployeesAgentScreenState extends State<EmployeesAgentScreen> {
                           hint: "Buscar",
                           label: "Buscar",
                         ),
+                      ),
+                      SizedBox(
+                        width: 250,
+                        child: CustomDropdownV2Widget(
+                          initialValue: statusTypePositionMock.last,
+                            labelText: "Status de posición",
+                            hintText: "",
+                            items: statusTypePositionMock,
+                            validator: (p0) => null,
+                            prefixIcon: const Icon(Icons.location_on),
+                            textEditingController: controller.selectedPosition,
+                            onValueChanged: (v) async {
+                              controller.selectedPosition.text =
+                                  v!.label.toString();
+                              // controller.positionController.clearPositions();
+                              await reloadPositions(v.id);
+                            }),
                       ),
                       SizedBox(
                         width: 230,

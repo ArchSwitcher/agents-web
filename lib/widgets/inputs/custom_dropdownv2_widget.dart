@@ -1,4 +1,3 @@
-
 import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/shared/resources/dimensions.dart';
@@ -12,6 +11,7 @@ class CustomDropdownV2Widget extends StatefulWidget {
   final Icon prefixIcon;
   final TextEditingController textEditingController;
   final ValueChanged<DropDownOption?> onValueChanged;
+  final DropDownOption? initialValue;
 
   CustomDropdownV2Widget({
     Key? key,
@@ -22,6 +22,7 @@ class CustomDropdownV2Widget extends StatefulWidget {
     required this.prefixIcon,
     required this.textEditingController,
     required this.onValueChanged,
+    this.initialValue,
   }) : super(key: key);
 
   @override
@@ -30,6 +31,15 @@ class CustomDropdownV2Widget extends StatefulWidget {
 
 class _CustomDropdownV2WidgetState extends State<CustomDropdownV2Widget> {
   DropDownOption? _selectedValue; // Internal selected value
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedValue = widget.initialValue;
+    if (_selectedValue != null) {
+      widget.textEditingController.text = _selectedValue!.id;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

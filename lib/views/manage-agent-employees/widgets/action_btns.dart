@@ -19,7 +19,7 @@ Widget addTemporalEmployeeButton(BuildContext context, EmployeeAgentController c
             width: 6,
           ),
           Text(
-            "Nuevo Empleado Temporal",
+            "Nuevo Agente Temporal",
             style: CustomStyle.textStyleWhite(context),
           )
         ],

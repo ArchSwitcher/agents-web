@@ -85,6 +85,10 @@ class PositionController extends GetxController {
 
   final RxList<PositionModel> positions = <PositionModel>[].obs;
 
+  void clearPositions() {
+    positions.clear();
+  }
+
   void clearFields() {
     startTime.clear();
     endTime.clear();
@@ -139,10 +143,10 @@ class PositionController extends GetxController {
         title: "Equipo", subTitle: "Equipo eliminado correctamente.");
   }
 
-  fetchPositions() async {
+  fetchPositions({String statusType = "3"}) async {
     isLoadingPositions.value = true;
     try {
-      positions.value = await positionServices.getAll("3");
+      positions.value = await positionServices.getAll(statusType);
     } catch (e) {
       print("object: $e");
     } finally {
