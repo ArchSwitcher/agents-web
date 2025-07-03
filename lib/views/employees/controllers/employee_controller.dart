@@ -13,6 +13,7 @@ class EmployeeController extends GetxController {
   GenericListController genericListController =
       Get.put(GenericListController());
   EmployeeService employeeService = EmployeeService();
+  
 
   // 🧍 Personal Information
   final firstNameController = TextEditingController();
@@ -66,12 +67,14 @@ class EmployeeController extends GetxController {
   final joinDateController = TextEditingController();
   Rx<DropDownOption> operationalProfileController =
       DropDownOption(id: "", label: "").obs;
-  Rx<DropDownOption> hrProfileController =
+  Rx<DropDownOption>  positionEmployeeController =
       DropDownOption(id: "", label: "").obs;
   RxBool blueCardController = false.obs;
   final typeController = TextEditingController();
   final administrativeDepartmentController = TextEditingController();
-  final positionEmployeeController = TextEditingController();
+  
+  final hrProfileController = TextEditingController();
+
   final socialSecurityCodeController = TextEditingController();
   final paymentTypeController = TextEditingController();
   final companyController = TextEditingController(text: "EBANO");
@@ -79,7 +82,7 @@ class EmployeeController extends GetxController {
   final payrollController = TextEditingController();
   final professionController = TextEditingController();
   final workplaceController = TextEditingController();
-  final contractTypeController = TextEditingController(text: "TEMPORAL");
+  final contractTypeController = TextEditingController();
   final hiringMethodController = TextEditingController();
   final workCountryController = TextEditingController();
   final workShiftController = TextEditingController();
@@ -147,7 +150,7 @@ class EmployeeController extends GetxController {
     internalCodeController.dispose();
     joinDateController.dispose();
     operationalProfileController.value = DropDownOption(id: "", label: "");
-    hrProfileController.value = DropDownOption(id: "", label: "");
+    hrProfileController.dispose();
     blueCardController.value = false;
     typeController.dispose();
     administrativeDepartmentController.dispose();
@@ -196,7 +199,7 @@ class EmployeeController extends GetxController {
       lastName: lastNameController.text,
       contact: phoneController.text,
       sex: genderController.text,
-      employeeTypeId: int.parse(hrProfileController.value.id),
+      employeeTypeId: int.parse(positionEmployeeController.value.id),
       internalCode: internalCodeController.text,
       gender: genderController.text,
       birthDate: birthDateController.text,
@@ -205,7 +208,7 @@ class EmployeeController extends GetxController {
       identificationNumber: identificationController.text,
       nationality: nationalityController.text,
       operationalProfile: operationalProfileController.value.label,
-      rrhhProfile: hrProfileController.value.label,
+      rrhhProfile: hrProfileController.text,
       blueCard: blueCardController.value,
       type: typeController.text,
       driverLicenseType: driverLicenseTypeController.text,
@@ -253,7 +256,7 @@ class EmployeeController extends GetxController {
       residenceMunicipality: addressMunicipalityController.value.label,
       payroll: payrollController.text,
       profession: professionController.text,
-      positionSlot: positionEmployeeController.text,
+      positionSlot: positionEmployeeController.value.label,
       contractType: contractTypeController.text,
       howHired: hiringMethodController.text,
       workCountry: workCountryController.text,

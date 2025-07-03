@@ -38,6 +38,8 @@ class ManageEmployeeScreenState extends State<ManageEmployeeScreen> {
     await controller.genericListController.fetchCountries();
     await controller.genericListController.fetchDepartments();
     await controller.genericListController.fetchZones();
+    controller.contractTypeController.text =
+        position == null ? "TEMPORAL" : "PERMANENTE";
   }
 
   @override
@@ -112,11 +114,7 @@ class ManageEmployeeScreenState extends State<ManageEmployeeScreen> {
                   print("Guardar empleado");
                   if (formKey.currentState!.validate()) {
                     controller.createEmployee();
-                  } else {
-                    // Get.snackbar("Error", "Por favor, complete todos los campos requeridos.",
-                    //     snackPosition: SnackPosition.BOTTOM,
-                    //     backgroundColor: Colors.red.withOpacity(0.8),
-                    //     colorText: Colors.white);
+                    Navigator.pop(context);
                   }
                 })
               ],

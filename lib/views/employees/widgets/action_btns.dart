@@ -1,0 +1,34 @@
+import 'package:agents_app/shared/constants/routes.dart';
+import 'package:agents_app/shared/resources/custom_style.dart';
+import 'package:agents_app/views/employees/controllers/employee_controller.dart';
+import 'package:agents_app/widgets/buttons/custom_button.dart';
+import 'package:flutter/material.dart';
+
+Widget addTemporalEmployeeButton(BuildContext context, EmployeeController controller) {
+  final colorScheme = Theme.of(context).colorScheme;
+
+  return CustomButton(
+      color: colorScheme.primary,
+      text: Row(
+        children: [
+          Icon(
+            Icons.group_add,
+            color: colorScheme.surface,
+          ),
+          const SizedBox(
+            width: 6,
+          ),
+          Text(
+            "Nuevo Empleado Temporal",
+            style: CustomStyle.textStyleWhite(context),
+          )
+        ],
+      ),
+      isLoading: false,
+      onPress: () async {
+        Navigator.pushNamed(context, RouteConstants.manageEmployee, arguments: {
+          'position': null,
+          'employeeType': "Temporal",
+        });
+      });
+}

@@ -103,7 +103,7 @@ List<DropDownOption> agenciesMock = [
   DropDownOption(id: "5", label: "Agencia Oeste"),
 ];
 
-List<DropDownOption> rhProfiles = [
+List<DropDownOption> positionMock = [
   DropDownOption(id: "1", label: "Asesor"),
   DropDownOption(id: "5", label: "Agente"),
   DropDownOption(id: "2", label: "Jefe de territorio"),

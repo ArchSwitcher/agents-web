@@ -71,19 +71,20 @@ Widget jobInformation(BuildContext context, EmployeeController controller) {
               },
             ),
           ),
+
           SizedBox(
             width: width,
             child: AutocompleteDropdownWidget(
-              listItems: rhProfiles,
-              label: "Perfil RH",
-              hintText: "Seleccione un perfil",
-              prefixIcon: Icons.people,
+              listItems: positionMock,
+              label: "Cargo Empleado",
+              hintText: "Seleccione un cargo",
+              prefixIcon: Icons.work,
               onSelected: (selected) {
-                controller.hrProfileController.value = selected;
+                controller.positionEmployeeController.value = selected;
               },
               onFocusChange: (p0) {},
               onTextChange: (p0) async {
-                List<DropDownOption> filteredOptions = rhProfiles
+                List<DropDownOption> filteredOptions = positionMock
                     .toList()
                     .where((option) =>
                         option.label.toLowerCase().contains(p0.toLowerCase()))
@@ -124,13 +125,16 @@ Widget jobInformation(BuildContext context, EmployeeController controller) {
                   label: "Departamento Administrativo",
                   hintText: "",
                   prefixIcon: Icons.business)), // should be a dropdown
+
+                  //rrhh profile
+          
           SizedBox(
               width: width,
               child: CustomInputWidget(
-                  controller: controller.positionEmployeeController,
-                  label: "Cargo Empleado",
+                  controller: controller.hrProfileController,
+                  label: "Perfil RRHH",
                   hintText: "",
-                  prefixIcon: Icons.work)),
+                  prefixIcon: Icons.people)),
           SizedBox(
               width: width,
               child: CustomInputWidget(

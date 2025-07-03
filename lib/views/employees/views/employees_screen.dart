@@ -5,6 +5,7 @@ import 'package:agents_app/layout/responsive_sidebar_layout.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/helpers/table/index.dart';
 import 'package:agents_app/views/employees/controllers/employee_controller.dart';
+import 'package:agents_app/views/employees/widgets/action_btns.dart';
 import 'package:agents_app/views/positions/widgets/table_rows_widget.dart';
 import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
 import 'package:agents_app/widgets/datatable/filter_box.dart';
@@ -83,8 +84,8 @@ class EmployeesScreenState extends State<EmployeesScreen> {
                         ),
                       ),
                       SizedBox(
-                        width: 170,
-                        child: Text("nuevo Empleado t"),
+                        width: 230,
+                        child: addTemporalEmployeeButton(context, controller),
                       )
                     ]),
               ),
