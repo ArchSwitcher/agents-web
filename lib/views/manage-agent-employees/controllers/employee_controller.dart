@@ -3,16 +3,16 @@ import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/models/employee/employee_model.dart';
 import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/services/toast_service.dart';
-import 'package:agents_app/views/employees/services/employee_service.dart';
+import 'package:agents_app/views/manage-agent-employees/services/employee_agent_service.dart';
 import 'package:agents_app/views/positions/controllers/position_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EmployeeController extends GetxController {
+class EmployeeAgentController extends GetxController {
   PositionController positionController = Get.put(PositionController());
   GenericListController genericListController =
       Get.put(GenericListController());
-  EmployeeService employeeService = EmployeeService();
+  EmployeeAgentService employeeService = EmployeeAgentService();
   
 
   // 🧍 Personal Information

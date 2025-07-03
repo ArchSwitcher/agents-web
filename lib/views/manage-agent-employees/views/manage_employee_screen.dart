@@ -4,32 +4,32 @@ import 'package:agents_app/layout/responsive_sidebar_layout.dart';
 import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
-import 'package:agents_app/views/employees/controllers/employee_controller.dart';
-import 'package:agents_app/views/employees/sections/additional_info.dart';
-import 'package:agents_app/views/employees/sections/birth_address_info.dart';
-import 'package:agents_app/views/employees/sections/contact_info.dart';
-import 'package:agents_app/views/employees/sections/emergency_contact.dart';
-import 'package:agents_app/views/employees/sections/finance_information.dart';
-import 'package:agents_app/views/employees/sections/job_information.dart';
-import 'package:agents_app/views/employees/sections/licence_weapon.dart';
-import 'package:agents_app/views/employees/sections/personal_information.dart';
-import 'package:agents_app/views/employees/sections/system_access_status.dart';
-import 'package:agents_app/views/employees/widgets/position_modal.dart';
+import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
+import 'package:agents_app/views/manage-agent-employees/sections/additional_info.dart';
+import 'package:agents_app/views/manage-agent-employees/sections/birth_address_info.dart';
+import 'package:agents_app/views/manage-agent-employees/sections/contact_info.dart';
+import 'package:agents_app/views/manage-agent-employees/sections/emergency_contact.dart';
+import 'package:agents_app/views/manage-agent-employees/sections/finance_information.dart';
+import 'package:agents_app/views/manage-agent-employees/sections/job_information.dart';
+import 'package:agents_app/views/manage-agent-employees/sections/licence_weapon.dart';
+import 'package:agents_app/views/manage-agent-employees/sections/personal_information.dart';
+import 'package:agents_app/views/manage-agent-employees/sections/system_access_status.dart';
+import 'package:agents_app/views/manage-agent-employees/widgets/position_modal.dart';
 import 'package:agents_app/widgets/buttons/custom_button.dart';
 import 'package:agents_app/widgets/buttons/form_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ManageEmployeeScreen extends StatefulWidget {
-  const ManageEmployeeScreen({super.key});
+class ManageEmployeeAgentScreen extends StatefulWidget {
+  const ManageEmployeeAgentScreen({super.key});
 
   @override
-  ManageEmployeeScreenState createState() => ManageEmployeeScreenState();
+  ManageEmployeeAgentScreenState createState() => ManageEmployeeAgentScreenState();
 }
 
-class ManageEmployeeScreenState extends State<ManageEmployeeScreen> {
+class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen> {
   // Controller for managing employee data
-  final controller = Get.put(EmployeeController());
+  final controller = Get.put(EmployeeAgentController());
   final PositionModel? position = Get.arguments?['position'];
   // formkey
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -55,7 +55,7 @@ class ManageEmployeeScreenState extends State<ManageEmployeeScreen> {
     return ResponsiveSidebarLayout(
         title: 'Empleados',
         description: "Gestión de empleados",
-        currentRoute: RouteConstants.employees,
+        currentRoute: RouteConstants.manageAgent,
         userRole: 'admin',
         showBackButton: true,
         content: SingleChildScrollView(

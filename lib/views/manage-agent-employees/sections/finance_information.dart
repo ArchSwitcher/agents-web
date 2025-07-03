@@ -1,13 +1,13 @@
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/mocks/personal_info_mocks.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
-import 'package:agents_app/views/employees/controllers/employee_controller.dart';
+import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
 import 'package:agents_app/widgets/inputs/autocomplete_dropdown.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:flutter/material.dart';
 
 Widget financialMITInformation(
-    BuildContext context, EmployeeController controller) {
+    BuildContext context, EmployeeAgentController controller) {
   return ContentCard(
     child: LayoutBuilder(builder: (context, constraints) {
       final isWideScreen = constraints.maxWidth > 750;

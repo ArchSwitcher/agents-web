@@ -1,11 +1,11 @@
 import 'package:agents_app/layout/content_card.dart';
-import 'package:agents_app/views/employees/controllers/employee_controller.dart';
+import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
 import 'package:agents_app/widgets/inputs/custom_checkBox_widget.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-Widget licenceWeapon(BuildContext context, EmployeeController controller) {
+Widget licenceWeapon(BuildContext context, EmployeeAgentController controller) {
   return ContentCard(
     child: LayoutBuilder(builder: (context, constraints) {
       final isWideScreen = constraints.maxWidth > 750;

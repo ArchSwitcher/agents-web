@@ -19,7 +19,8 @@ class MenuSidebarController extends GetxController {
           MenuItemModel(label: "Posiciones", route: RouteConstants.positions, icon: Icons.location_on_outlined),
         ]),
         MenuGroupModel(label: "Recursos humanos", children: [
-          MenuItemModel(label: "agentes", route: RouteConstants.employees, icon: Icons.group),
+          MenuItemModel(label: "Agentes", route: RouteConstants.manageAgent, icon: Icons.people_alt_outlined),
+          MenuItemModel(label: "Empleados", route: RouteConstants.employees, icon: Icons.people_outline),
         ]),
       ];
     } else if (role == 'usuario') {

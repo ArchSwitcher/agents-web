@@ -2,11 +2,11 @@
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/shared/helpers/validations/email_validator.dart';
 import 'package:agents_app/shared/helpers/validations/phone_validator.dart';
-import 'package:agents_app/views/employees/controllers/employee_controller.dart';
+import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:flutter/material.dart';
 
-Widget contactInfo(BuildContext context, EmployeeController controller) {
+Widget contactInfo(BuildContext context, EmployeeAgentController controller) {
   return ContentCard(
     child: LayoutBuilder(builder: (context, constraints) {
       final isWideScreen = constraints.maxWidth > 750;

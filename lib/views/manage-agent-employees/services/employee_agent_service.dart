@@ -5,7 +5,7 @@ import 'package:agents_app/services/crud_service.dart';
 import 'package:agents_app/services/toast_service.dart';
 import 'package:http/http.dart' as http;
 
-class EmployeeService extends BaseService implements CrudService<dynamic> {
+class EmployeeAgentService extends BaseService implements CrudService<dynamic> {
   @override
   Future<bool> create(dynamic model) async {
     final response = await http.post(

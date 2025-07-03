@@ -1,10 +1,10 @@
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
-import 'package:agents_app/views/employees/controllers/employee_controller.dart';
+import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
 import 'package:agents_app/widgets/buttons/custom_button.dart';
 import 'package:flutter/material.dart';
 
-Widget addTemporalEmployeeButton(BuildContext context, EmployeeController controller) {
+Widget addTemporalEmployeeButton(BuildContext context, EmployeeAgentController controller) {
   final colorScheme = Theme.of(context).colorScheme;
 
   return CustomButton(
