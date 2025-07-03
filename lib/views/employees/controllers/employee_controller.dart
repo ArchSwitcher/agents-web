@@ -44,7 +44,8 @@ class EmployeeController extends GetxController {
   final emailController = TextEditingController();
 
   // 🚨 Emergency Contact
-  final emergencyRelationshipController = TextEditingController();
+  // final emergencyRelationshipController = TextEditingController();
+  Rx<DropDownOption> emergencyRelationshipController = DropDownOption(id: "", label: "").obs;
   final emergencyNameController = TextEditingController();
   final emergencyPhoneController = TextEditingController();
   final emergencyMobileController = TextEditingController();
@@ -52,7 +53,7 @@ class EmployeeController extends GetxController {
   // 🏢 Job Information
   final internalCodeController = TextEditingController();
   final joinDateController = TextEditingController();
-  final operationalProfileController = TextEditingController();
+  Rx<DropDownOption> operationalProfileController = DropDownOption(id: "", label: "").obs;
   final hrProfileController = TextEditingController();
   final blueCardController = TextEditingController();
   final typeController = TextEditingController();
@@ -60,7 +61,7 @@ class EmployeeController extends GetxController {
   final positionEmployeeController = TextEditingController();
   final socialSecurityCodeController = TextEditingController();
   final paymentTypeController = TextEditingController();
-  final companyController = TextEditingController();
+  final companyController = TextEditingController(text: "EBANO");
   final agencyController = TextEditingController();
   final payrollController = TextEditingController();
   final professionController = TextEditingController();
@@ -78,7 +79,7 @@ class EmployeeController extends GetxController {
   final gunPermitController = TextEditingController();
 
   // 💳 Financial Info
-  final bankController = TextEditingController();
+  Rx<DropDownOption> bankController = DropDownOption(id: "", label: "").obs;
   final accountNumberController = TextEditingController();
 
   // 🧾 Additional Info
@@ -88,7 +89,7 @@ class EmployeeController extends GetxController {
   final referredByController = TextEditingController();
 
   // ⚙️ System Access / Status
-  final stateController = TextEditingController();
+  final stateController = TextEditingController(text: "ALTA");
   final accessUserController = TextEditingController();
   final billableController = TextEditingController();
   final approvedByPaymentsController = TextEditingController();
@@ -125,14 +126,14 @@ class EmployeeController extends GetxController {
     mobileController.dispose();
     emailController.dispose();
 
-    emergencyRelationshipController.dispose();
+    emergencyRelationshipController.value = DropDownOption(id: "", label: "");
     emergencyNameController.dispose();
     emergencyPhoneController.dispose();
     emergencyMobileController.dispose();
 
     internalCodeController.dispose();
     joinDateController.dispose();
-    operationalProfileController.dispose();
+    operationalProfileController.value = DropDownOption(id: "", label: "");
     hrProfileController.dispose();
     blueCardController.dispose();
     typeController.dispose();
@@ -156,7 +157,7 @@ class EmployeeController extends GetxController {
     driverLicenseNumberController.dispose();
     gunPermitController.dispose();
 
-    bankController.dispose();
+    bankController.value = DropDownOption(id: "", label: "");
     accountNumberController.dispose();
 
     lifeInsuranceController.dispose();

@@ -1,5 +1,8 @@
 import 'package:agents_app/layout/content_card.dart';
+import 'package:agents_app/mocks/personal_info_mocks.dart';
+import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/views/employees/controllers/employee_controller.dart';
+import 'package:agents_app/widgets/inputs/autocomplete_dropdown.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:agents_app/widgets/inputs/date_picker.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +36,31 @@ Widget jobInformation(BuildContext context, EmployeeController controller) {
               prefixIcon: Icons.calendar_today,
             ),
             ),
-          SizedBox(width: width, child: CustomInputWidget(controller: controller.operationalProfileController, label: "Perfil Operacional", hintText: "", prefixIcon: Icons.person_outline)),
+            SizedBox(
+            width: width,
+            child: AutocompleteDropdownWidget(
+              listItems: operationalProfileMock
+                  .map((e) => DropDownOption(id: e, label: e))
+                  .toList(),
+              label: "Perfil Operacional",
+              hintText: "Seleccione un perfil",
+              prefixIcon: Icons.person_outline,
+              onSelected: (selected) {
+              controller.operationalProfileController.value = selected;
+              },
+              onFocusChange: (p0) {},
+              onTextChange: (p0) async{
+                List<DropDownOption> filteredOptions = operationalProfileMock
+                    .map((e) => DropDownOption(id: e, label: e))
+                    .toList()
+                    .where((option) => option.label
+                        .toLowerCase()
+                        .contains(p0.toLowerCase()))
+                    .toList();
+                return filteredOptions.isEmpty ? [] : filteredOptions;
+              },
+            ),
+            ),
           SizedBox(width: width, child: CustomInputWidget(controller: controller.hrProfileController, label: "Perfil RH", hintText: "", prefixIcon: Icons.people)),
           SizedBox(width: width, child: CustomInputWidget(controller: controller.blueCardController, label: "Tarjeta Azul", hintText: "", prefixIcon: Icons.card_membership)),
           SizedBox(width: width, child: CustomInputWidget(controller: controller.typeController, label: "Tipo", hintText: "", prefixIcon: Icons.category)),
@@ -41,12 +68,12 @@ Widget jobInformation(BuildContext context, EmployeeController controller) {
           SizedBox(width: width, child: CustomInputWidget(controller: controller.positionEmployeeController, label: "Cargo Empleado", hintText: "", prefixIcon: Icons.work)),
           SizedBox(width: width, child: CustomInputWidget(controller: controller.socialSecurityCodeController, label: "Código Seguridad Social", hintText: "", prefixIcon: Icons.security)),
           SizedBox(width: width, child: CustomInputWidget(controller: controller.paymentTypeController, label: "Tipo de Pago", hintText: "", prefixIcon: Icons.payment)),
-          SizedBox(width: width, child: CustomInputWidget(controller: controller.companyController, label: "Compañía", hintText: "", prefixIcon: Icons.apartment)),
+          SizedBox(width: width, child: CustomInputWidget(controller: controller.companyController, label: "Empresa", hintText: "", prefixIcon: Icons.apartment)),
           SizedBox(width: width, child: CustomInputWidget(controller: controller.agencyController, label: "Agencia", hintText: "", prefixIcon: Icons.location_city)),
           SizedBox(width: width, child: CustomInputWidget(controller: controller.payrollController, label: "Nómina", hintText: "", prefixIcon: Icons.receipt)),
-          SizedBox(width: width, child: CustomInputWidget(controller: controller.professionController, label: "Profesión", hintText: "", prefixIcon: Icons.school)),
+          SizedBox(width: width, child: CustomInputWidget(controller: controller.professionController, label: "Escolaridad", hintText: "", prefixIcon: Icons.school)),
           SizedBox(width: width, child: CustomInputWidget(controller: controller.workplaceController, label: "Lugar de Trabajo", hintText: "", prefixIcon: Icons.location_on)),
-          SizedBox(width: width, child: CustomInputWidget(controller: controller.contractTypeController, label: "Tipo de Contrato", hintText: "", prefixIcon: Icons.description)), // should be a dropdown
+          SizedBox(width: width, child: CustomInputWidget(controller: controller.contractTypeController, label: "Tipo de Contrato", hintText: "", prefixIcon: Icons.description, enabled: false,)), // should be a dropdown
           SizedBox(width: width, child: CustomInputWidget(controller: controller.hiringMethodController, label: "Método de Contratación", hintText: "", prefixIcon: Icons.how_to_reg)),
           SizedBox(width: width, child: CustomInputWidget(controller: controller.workCountryController, label: "País de Trabajo", hintText: "", prefixIcon: Icons.public)),
           SizedBox(width: width, child: CustomInputWidget(controller: controller.workShiftController, label: "Turno de Trabajo", hintText: "", prefixIcon: Icons.schedule)),
