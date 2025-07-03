@@ -11,17 +11,9 @@ List<String> bloodListMock = [
   "O-",
 ];
 
+List<String> civilStatusMock = ["Casado", "Soltero"];
 
-List<String> civilStatusMock = [
-  "Casado",
-  "Soltero"
-];
-
-List<String> genderMock = [
-  "Masculino",
-  "Femenino",
-  "Otro"
-];
+List<String> genderMock = ["Masculino", "Femenino", "Otro"];
 
 List<String> ethnicityMock = [
   "Mestizo",
@@ -31,10 +23,7 @@ List<String> ethnicityMock = [
   "Otro"
 ];
 
-List<String> languageMock = [
-  "Español",
-  "Inglés"
-];
+List<String> languageMock = ["Español", "Inglés"];
 
 List<String> relationshipsMock = [
   'Padre',
@@ -75,11 +64,11 @@ List<String> relationshipsMock = [
 ];
 
 List<String> operationalProfileMock = [
-"A-Oficial",
-"B-Coordinador de grupo",
-"C-Supervisor",
-"D-Patrullero",
-"E-Oficial para bancos"
+  "A-Oficial",
+  "B-Coordinador de grupo",
+  "C-Supervisor",
+  "D-Patrullero",
+  "E-Oficial para bancos"
 ];
 
 List<String> jobTypeMock = [
@@ -90,11 +79,7 @@ List<String> jobTypeMock = [
   "Prácticas"
 ];
 
-List<String> paymentTypeMock = [
-  "Efectivo",
-  "Transferencia",
-  "Cheque"
-];
+List<String> paymentTypeMock = ["Efectivo", "Transferencia", "Cheque"];
 
 List<DropDownOption> banksMock = [
   DropDownOption(id: "1", label: "Banco Industrial"),
@@ -109,4 +94,19 @@ List<DropDownOption> banksMock = [
   DropDownOption(id: "10", label: "Banco de los Trabajadores (BANTRAB)"),
   DropDownOption(id: "11", label: "Banco CHN (Crédito Hipotecario Nacional)"),
 ];
- 
+
+List<DropDownOption> agenciesMock = [
+  DropDownOption(id: "1", label: "Agencia Central"),
+  DropDownOption(id: "2", label: "Agencia Norte"),
+  DropDownOption(id: "3", label: "Agencia Sur"),
+  DropDownOption(id: "4", label: "Agencia Este"),
+  DropDownOption(id: "5", label: "Agencia Oeste"),
+];
+
+List<DropDownOption> rhProfiles = [
+  DropDownOption(id: "1", label: "Asesor"),
+  DropDownOption(id: "5", label: "Agente"),
+  DropDownOption(id: "2", label: "Jefe de territorio"),
+  DropDownOption(id: "3", label: "Jefe de cuentas clave"),
+  DropDownOption(id: "4", label: "Cobrador")
+];

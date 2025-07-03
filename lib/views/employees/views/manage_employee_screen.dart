@@ -61,31 +61,33 @@ class ManageEmployeeScreenState extends State<ManageEmployeeScreen> {
             key: formKey,
             child: Column(
               children: [
-                ContentCard(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        CustomButton(
+                if (position != null)
+                  ContentCard(
+                      child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      CustomButton(
                           width: 30,
-                            color: Theme.of(context).colorScheme.primary,
-                            text: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.work_outline,
-                                    color: Theme.of(context).colorScheme.surface),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Información de la posición',
-                                  style: CustomStyle.textStyleWhite(context),
-                                ),
-                              ],
-                            ),
-                            isLoading: false,
-                            onPress: () {
-                              showPositionModal(context: context, position: position);
-                            }),
-                      ],
-                    )),
+                          color: Theme.of(context).colorScheme.primary,
+                          text: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.work_outline,
+                                  color: Theme.of(context).colorScheme.surface),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Información de la posición',
+                                style: CustomStyle.textStyleWhite(context),
+                              ),
+                            ],
+                          ),
+                          isLoading: false,
+                          onPress: () {
+                            showPositionModal(
+                                context: context, position: position);
+                          }),
+                    ],
+                  )),
                 cardContentSpace(),
                 personalInformation(context, controller),
                 cardContentSpace(),
@@ -109,7 +111,7 @@ class ManageEmployeeScreenState extends State<ManageEmployeeScreen> {
                 FormButton(onPress: () {
                   print("Guardar empleado");
                   if (formKey.currentState!.validate()) {
-                    // controller.saveEmployee();
+                    controller.createEmployee();
                   } else {
                     // Get.snackbar("Error", "Por favor, complete todos los campos requeridos.",
                     //     snackPosition: SnackPosition.BOTTOM,

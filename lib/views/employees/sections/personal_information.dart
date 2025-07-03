@@ -71,6 +71,7 @@ Widget personalInformation(
           SizedBox(
               width: width,
               child: CustomDatePicker(
+                firstDate: DateTime(1900),
                   validator: (value) {
                     // Validate the date input and verify if the ages is greater than 18
                     if (value == null) {
