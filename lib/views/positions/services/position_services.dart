@@ -117,4 +117,23 @@ class PositionServices extends BaseService
       throw Exception('Error al eliminar posición');
     }
   }
+
+
+  Future<List<PositionModel>> getAllPositionsByBranchId(String branchId) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/position/getPositionsByBranch/$branchId'),
+      headers: buildHeaders(),
+    );
+
+    print("objects: response ---- ${response.body}");
+
+    if (response.statusCode == 200) {
+      final decoded = json.decode(response.body);
+      final List data = decoded['data'];
+      return data.map((json) => PositionModel.fromJson(json)).toList();
+    } else {
+      print("objects: error ---- ${response.statusCode}");
+      throw Exception('Error al cargar posiciones de la sucursal');
+    }
+  }
 }

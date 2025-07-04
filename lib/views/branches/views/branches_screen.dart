@@ -33,7 +33,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
     'Dirección física',
   ];
   final List<double?> fixedColumnWidths = [
-    100,
+    150,
     null,
     null,
     null,

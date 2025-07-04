@@ -296,24 +296,28 @@ class PositionEmployee {
   int positionId;
   bool isPrincipal;
   bool isActive;
+  String? motive;
 
   PositionEmployee({
     required this.positionId,
     required this.isPrincipal,
     required this.isActive,
+    this.motive,
   });
 
   factory PositionEmployee.fromJson(Map<String, dynamic> json) =>
       PositionEmployee(
-        positionId: json["positionId"] ?? 0,
-        isPrincipal: json["isPrincipal"] ?? false,
-        isActive: json["isActive"] ?? true,
+        positionId: json["POSITION_Id"] ?? 0,
+        isPrincipal: json["Is_principal"] == 1 ? true : false,
+        isActive: (json["Is_active"] == 1) ? true : true,
+        motive: json["Motive"],
       );
 
   Map<String, dynamic> toJson() => {
         "positionId": positionId,
         "isPrincipal": isPrincipal,
         "isActive": isActive,
+        "motive": motive,
       };
 }
 

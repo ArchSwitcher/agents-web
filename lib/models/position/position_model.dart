@@ -1,5 +1,6 @@
 import 'package:agents_app/models/branch/branch_index_model.dart';
 import 'package:agents_app/models/common/simple_entity_model.dart';
+import 'package:agents_app/models/employee/employee_model.dart';
 import 'package:agents_app/models/position/equipment_model.dart';
 
 class PositionModel {
@@ -49,6 +50,10 @@ class PositionModel {
   TurnModel? turn;
   List<EquipmentModel> equipment;
   List<SupportDocumentModel>? supportDocuments;
+  List<EmployeeModel>? employee;
+  // bool? isPrincipal = false;
+  // bool? isActive = false;
+  // String? motive;
 
   PositionModel({
     this.id,
@@ -90,6 +95,10 @@ class PositionModel {
     this.client,
     this.turn,
     this.supportDocuments,
+    this.employee,
+    // this.isPrincipal,
+    // this.isActive,
+    // this.motive
   });
 
   factory PositionModel.fromJson(Map<String, dynamic> p) {
@@ -184,6 +193,19 @@ class PositionModel {
               ?.map((e) => EquipmentModel.fromJson(e))
               .toList() ??
           [],
+      employee: p['POSITION_EMPLOYEEs'] != null
+          ? (p['POSITION_EMPLOYEEs'] as List)
+              .map((e) => EmployeeModel.fromJson({
+                    ...e['EMPLOYE'],
+                    "position": {
+                      "POSITION_Id": e['POSITION_Id'],
+                      "Is_principal": e['Is_principal'],
+                      "Is_active": e['Is_active'],
+                      "Motive": e['Motive'],
+                    }
+                  }))
+              .toList()
+          : [],
     );
   }
 

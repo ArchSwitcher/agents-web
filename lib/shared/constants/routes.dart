@@ -8,6 +8,7 @@ static const groups =  "/groups";
 static const branch =  "/branch/main";
 static const branches =  "/branch/branches";
 static const manageBranch =  "/branch/manage-branch";
+static const manageBranchPositions =  "/branch/manage-branch-positions";
 
 static const positions =  "/positions";
 static const managePosition =  "/manage-position";

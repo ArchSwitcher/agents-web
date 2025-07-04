@@ -23,7 +23,6 @@ class MenuSidebarController extends GetxController {
         ]),
         MenuGroupModel(label: "Agentes", children: [
           MenuItemModel(label: "Agentes", route: RouteConstants.manageAgent, icon: Icons.people_alt_outlined),
-          MenuItemModel(label: "Sucursales", route: RouteConstants.manageAgent, icon: Icons.people_alt_outlined),
           MenuItemModel(label: "Asistencias Generales", route: RouteConstants.employees, icon: Icons.people_outline),
         ]),
         MenuGroupModel(label: "Inventario", children: [

@@ -96,3 +96,21 @@ Widget openScheduleModalButton(
         }),
   );
 }
+
+Widget viewPositionButton(BuildContext context, BranchController controller) {
+  final colorScheme = Theme.of(context).colorScheme;
+
+  return IconButton(
+      onPressed: () async {
+        await Navigator.pushNamed(context, RouteConstants.manageBranchPositions,
+            arguments: {
+              'title': "Posiciones de sucursal",
+            });
+        controller.fetchBranches();
+      },
+      icon: Icon(
+        Icons.location_on,
+        color: colorScheme.primary,
+        size: 20,
+      ));
+}

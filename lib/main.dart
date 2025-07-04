@@ -5,6 +5,7 @@ import 'package:agents_app/controllers/sidebar/menu_sidebar_controller.dart';
 import 'package:agents_app/controllers/sidebar/sidebar_controller.dart';
 import 'package:agents_app/views/agents/agents_screen.dart';
 import 'package:agents_app/views/branches/pages/manage_branch_tab.dart';
+import 'package:agents_app/views/branches/views/branch_positions_screen.dart';
 import 'package:agents_app/views/branches/views/branches_screen.dart';
 import 'package:agents_app/views/branches/views/branch_main.dart';
 import 'package:agents_app/views/clients/views/clients_screen.dart';
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: RouteConstants.groups, page: () => const GroupsScreen()),
           GetPage(name: RouteConstants.branches, page: () => const BranchesScreen()),
           GetPage(name: RouteConstants.manageBranch, page: () => const ManageBranchTab()),
+          GetPage(name: RouteConstants.manageBranchPositions, page: () => const BranchPositionsScreen()),
           GetPage(name: RouteConstants.positions, page: () => const PositionsScreen()),
           GetPage(name: RouteConstants.branch, page: () => const BranchMain()),
           GetPage(name: RouteConstants.managePosition, page: () => const ManagePositionScreen()),
