@@ -15,6 +15,7 @@ static const managePosition =  "/manage-position";
 static const manageAgent =  "/manage-agent";
 static const employees =  "/employees";
 static const manageEmployee =  "/manage-employee";
+static const inventory =  "/inventory";
 
 
 }

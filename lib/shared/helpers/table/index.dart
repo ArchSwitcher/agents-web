@@ -1,6 +1,6 @@
 class TableHelper {
   static double getTableHeight(List elements) {
-    print("objects: ${elements.length}");
+    
       if (elements.isEmpty) {
         return 0.0;
       }

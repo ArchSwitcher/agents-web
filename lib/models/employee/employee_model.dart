@@ -1,4 +1,7 @@
+import 'package:agents_app/models/common/simple_entity_model.dart';
+
 class EmployeeModel {
+  String? id;
   String firstName;
   String lastName;
   String contact;
@@ -64,6 +67,8 @@ class EmployeeModel {
   bool isPermanent;
   List<NameItem> titles;
   List<NameItem> professions;
+
+  SimpleEntity? employeeType;
 
   EmployeeModel({
     required this.firstName,
@@ -131,81 +136,92 @@ class EmployeeModel {
     required this.isPermanent,
     required this.titles,
     required this.professions,
+    this.employeeType,
+    this.id,
   });
 
-  factory EmployeeModel.fromJson(Map<String, dynamic> json) => EmployeeModel(
-        firstName: json["firstName"] ?? '',
-        lastName: json["lastName"] ?? '',
-        contact: json["contact"] ?? '',
-        sex: json["sex"] ?? '',
-        employeeTypeId: json["employeeTypeId"] ?? 0,
-        internalCode: json["internalCode"] ?? '',
-        gender: json["gender"] ?? '',
-        birthDate: json["birthDate"] ?? '',
-        entryDate: json["entryDate"] ?? '',
-        identificationType: json["identificationType"] ?? '',
-        identificationNumber: json["identificationNumber"] ?? '',
-        nationality: json["nationality"] ?? '',
-        operationalProfile: json["operationalProfile"] ?? '',
-        rrhhProfile: json["rrhhProfile"] ?? '',
-        blueCard: json["blueCard"] ?? false,
-        type: json["type"] ?? '',
-        driverLicenseType: json["driverLicenseType"] ?? '',
-        driverLicenseNumber: json["driverLicenseNumber"] ?? '',
-        gunCarryPermit: json["gunCarryPermit"] ?? false,
-        administrativeDepartment: json["administrativeDepartment"] ?? '',
-        position: PositionEmployee.fromJson(json["position"] ?? {}),
-        socialSecurityCode: json["socialSecurityCode"] ?? '',
-        phone: json["phone"] ?? '',
-        address: json["address"] ?? '',
-        email: json["email"] ?? '',
-        paymentType: json["paymentType"] ?? '',
-        company: json["company"] ?? '',
-        agency: json["agency"] ?? '',
-        bloodType: json["bloodType"] ?? '',
-        maritalStatus: json["maritalStatus"] ?? '',
-        lifeInsurance: json["lifeInsurance"] ?? false,
-        educationLevel: json["educationLevel"] ?? '',
-        shootingPractice: json["shootingPractice"] ?? false,
-        graduationNote: json["graduationNote"] ?? 0,
-        referredBy: json["referredBy"] ?? '',
-        emergencyRelationship: json["emergencyRelationship"] ?? '',
-        emergencyName: json["emergencyName"] ?? '',
-        emergencyPhone: json["emergencyPhone"] ?? '',
-        emergencyMobile: json["emergencyMobile"] ?? '',
-        accessUser: json["accessUser"] ?? '',
-        availableForBilling: json["availableForBilling"] ?? false,
-        approvedByPayments: json["approvedByPayments"] ?? false,
-        mobile: json["mobile"] ?? '',
-        language: json["language"] ?? '',
-        ethnicity: json["ethnicity"] ?? '',
-        mtPosition: json["mtPosition"] ?? '',
-        birthCountry: json["birthCountry"] ?? '',
-        birthDepartment: json["birthDepartment"] ?? '',
-        birthMunicipality: json["birthMunicipality"] ?? '',
-        workSchedule: json["workSchedule"] ?? '',
-        baseSalary: json["baseSalary"] ?? 0,
-        decreeBonus: json["decreeBonus"] ?? 0,
-        residenceDepartment: json["residenceDepartment"] ?? '',
-        residenceMunicipality: json["residenceMunicipality"] ?? '',
-        payroll: json["payroll"] ?? '',
-        profession: json["profession"] ?? '',
-        positionSlot: json["positionSlot"] ?? '',
-        contractType: json["contractType"] ?? '',
-        howHired: json["howHired"] ?? '',
-        workCountry: json["workCountry"] ?? '',
-        bank: json["bank"] ?? '',
-        accountNumber: json["accountNumber"] ?? '',
-        isPermanent: json["isPermanent"] ?? false,
-        titles: (json["titles"] as List<dynamic>?)
-                ?.map((e) => NameItem.fromJson(e))
-                .toList() ??
-            [],
-        professions: (json["professions"] as List<dynamic>?)
-                ?.map((e) => NameItem.fromJson(e))
-                .toList() ??
-            [],
-      );
+  factory EmployeeModel.fromJson(Map<String, dynamic> json) {
+    final person = json["PERSON"] ?? {};
+
+    return EmployeeModel(
+      id: json["Id"]?.toString(),
+      firstName: person["First_name"] ?? '',
+      lastName: person["Last_name"] ?? '',
+      contact: person["Contact"] ?? '',
+      sex: person["sex"] ?? '',
+      employeeType: json["EMPLOYEE_TYPE"] != null
+          ? SimpleEntity.fromJson(json["EMPLOYEE_TYPE"])
+          : null,
+      employeeTypeId: json["EMPLOYEE_TYPE_Id"] ?? 0,
+      internalCode: json["Internal_code"] ?? '',
+      gender: json["Gender"] ?? '',
+      birthDate: json["Birth_date"] ?? '',
+      entryDate: json["Entry_date"] ?? '',
+      identificationType: json["Identification_type"] ?? '',
+      identificationNumber: json["Identification_number"] ?? '',
+      nationality: json["Nationality"] ?? '',
+      operationalProfile: json["Operational_profile"] ?? '',
+      rrhhProfile: json["RRHH_profile"] ?? '',
+      blueCard: json["Blue_card"] ?? false,
+      type: json["Type"] ?? '',
+      driverLicenseType: json["Driver_license_type"] ?? '',
+      driverLicenseNumber: json["Driver_license_number"] ?? '',
+      gunCarryPermit: json["Gun_carry_permit"] ?? false,
+      administrativeDepartment: json["Administrative_department"] ?? '',
+      // Si no existe "position" en el JSON, puedes asignar un objeto vacío o eliminarlo si no se usa
+      position: PositionEmployee.fromJson(json["position"] ?? {}),
+      socialSecurityCode: json["Social_security_code"] ?? '',
+      phone: json["Phone"] ?? '',
+      address: json["Address"] ?? '',
+      email: json["Email"] ?? '',
+      paymentType: json["Payment_type"] ?? '',
+      company: json["Company"] ?? '',
+      agency: json["Agency"] ?? '',
+      bloodType: json["Blood_type"] ?? '',
+      maritalStatus: json["Marital_status"] ?? '',
+      lifeInsurance: json["Life_insurance"] ?? false,
+      educationLevel: json["Education_level"] ?? '',
+      shootingPractice: json["Shooting_practice"] ?? '',
+      graduationNote: json["Graduation_note"] ?? '',
+      referredBy: json["Referred_by"] ?? '',
+      emergencyRelationship: json["Emergency_relationship"] ?? '',
+      emergencyName: json["Emergency_name"] ?? '',
+      emergencyPhone: json["Emergency_phone"] ?? '',
+      emergencyMobile: json["Emergency_mobile"] ?? '',
+      accessUser: json["Access_user"] ?? '',
+      availableForBilling: json["Available_for_billing"] ?? false,
+      approvedByPayments: json["Approved_by_payments"] ?? false,
+      mobile: json["Mobile"] ?? '',
+      language: json["Language"] ?? '',
+      ethnicity: json["Ethnicity"] ?? '',
+      mtPosition: json["Mt_position"] ?? '',
+      birthCountry: json["Birth_country"] ?? '',
+      birthDepartment: json["Birth_department"] ?? '',
+      birthMunicipality: json["Birth_municipality"] ?? '',
+      workSchedule: json["Work_schedule"] ?? '',
+      baseSalary: double.tryParse(json["Base_salary"] ?? '0') ?? 0,
+      decreeBonus: double.tryParse(json["Decree_bonus"] ?? '0') ?? 0,
+      residenceDepartment: json["Residence_department"] ?? '',
+      residenceMunicipality: json["Residence_municipality"] ?? '',
+      payroll: json["Payroll"] ?? '',
+      profession: json["Profession"] ?? '',
+      positionSlot: json["Position_slot"] ?? '',
+      contractType: json["Contract_type"] ?? '',
+      howHired: json["How_hired"] ?? '',
+      workCountry: json["Work_country"] ?? '',
+      bank: json["Bank"] ?? '',
+      accountNumber: json["Account_number"] ?? '',
+      isPermanent: (json["Is_permanent"] ?? 0) == 1,
+      titles: (person["TITLEs"] as List<dynamic>?)
+              ?.map((e) => NameItem.fromJson(e))
+              .toList() ??
+          [],
+      professions: (person["PROFESSIONs"] as List<dynamic>?)
+              ?.map((e) => NameItem.fromJson(e))
+              .toList() ??
+          [],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "firstName": firstName,
@@ -287,7 +303,8 @@ class PositionEmployee {
     required this.isActive,
   });
 
-  factory PositionEmployee.fromJson(Map<String, dynamic> json) => PositionEmployee(
+  factory PositionEmployee.fromJson(Map<String, dynamic> json) =>
+      PositionEmployee(
         positionId: json["positionId"] ?? 0,
         isPrincipal: json["isPrincipal"] ?? false,
         isActive: json["isActive"] ?? true,

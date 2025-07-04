@@ -13,6 +13,9 @@ class EmployeeAgentController extends GetxController {
   GenericListController genericListController =
       Get.put(GenericListController());
   EmployeeAgentService employeeService = EmployeeAgentService();
+
+  // manage-employees-screen
+  TextEditingController selectedPosition = TextEditingController(text: "En proceso");
   
 
   // 🧍 Personal Information
