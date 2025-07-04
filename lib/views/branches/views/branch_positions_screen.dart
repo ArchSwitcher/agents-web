@@ -4,6 +4,7 @@ import 'package:agents_app/models/employee/employee_model.dart';
 import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/views/branches/controller/branch_position_controller.dart';
+import 'package:agents_app/views/manage-agent-employees/widgets/position_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -194,7 +195,9 @@ Widget _buttonsActions(BuildContext context, PositionModel? position,
     mainAxisAlignment: MainAxisAlignment.start,
     children: [
       ElevatedButton.icon(
-          onPressed: () {},
+          onPressed: () {
+            showPositionModal(context: context, position: position);
+          },
           icon: const Icon(Icons.manage_accounts, size: 20),
           label: const Text("Posición",
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))),

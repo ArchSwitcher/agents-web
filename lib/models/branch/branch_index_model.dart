@@ -152,7 +152,7 @@ class TurnModel {
 
   factory TurnModel.fromJson(Map<String, dynamic> json) {
     return TurnModel(
-      id: json['id'].toString(),
+      id: json['Id'].toString(),
       name: json['Name'].toString(),
       schedule: (json['ASIGN_DAYs'] as List<dynamic>)
           .map((item) => DailySchedule.fromJson(item as Map<String, dynamic>))

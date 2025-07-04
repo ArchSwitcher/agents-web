@@ -17,7 +17,7 @@ List<DataRow> buildTablePositionRows(PositionController controller,
           if (employeeController == null)
             DataCell(Row(
               children: [
-                editPositionButton(context, element),
+                editPositionButton(context, element.id.toString()),
                 deletePositionButton(context, element.id.toString()),
               ],
             )),

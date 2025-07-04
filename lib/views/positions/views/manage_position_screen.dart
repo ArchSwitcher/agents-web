@@ -29,7 +29,7 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
 // get value of route arguments
   final String title =
       Get.arguments?['title'] ?? "Gestión de posiciones para clientes";
-  final PositionModel? position = Get.arguments?['position'];
+  final String? positionId = Get.arguments?['positionId'];
   final bool isEdit = Get.arguments?['isEdit'] ?? true;
 
   // final _formKey = GlobalKey<FormState>();
@@ -46,7 +46,7 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
         showBackButton: true,
         content: ManagePositionSection(
             currentS: _currentStep,
-            position: position,
+            positionId: positionId,
             isEdit: isEdit,
             isEnabled: true));
   }
@@ -54,14 +54,14 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
 
 class ManagePositionSection extends StatefulWidget {
   final int currentS;
-  final PositionModel? position;
+  final String? positionId;
   final bool isEdit;
   final bool isEnabled;
 
   const ManagePositionSection(
       {super.key,
       required this.currentS,
-      this.position,
+      this.positionId,
       this.isEdit = true,
       this.isEnabled = true});
 
@@ -92,18 +92,26 @@ class _ManagePositionSectionState extends State<ManagePositionSection> {
   }
 
   loadEdit() async {
-    if (widget.isEdit && widget.position != null) {
-      controller.loadPositionData(widget.position!);
+    if (widget.isEdit && widget.positionId != null) {
+
+      PositionModel? position = await controller.loadPositionData(widget.positionId!);
       controller.genericListController
-          .fetchClientsByGroupId(widget.position!.group?.id ?? "");
+          .fetchClientsByGroupId(position?.group?.id ?? "");
       controller.genericListController
-          .fetchBranchByClientId(widget.position!.client?.id ?? "");
+          .fetchBranchByClientId(position?.client?.id ?? "");
       await controller.genericListController
-          .fetchTurnsByBranch(widget.position!.branch?.id ?? "");
+          .fetchTurnsByBranch(position?.branch?.id ?? "");
 
       controller.branchController.turns.value =
           controller.genericListController.turns;
 
+      controller.branchController.turns.forEach((turn) {
+        if (turn.id == position?.turn?.id) {
+          turn.isSelected.value = true;
+        } else {
+          turn.isSelected.value = false;
+        }
+      });
       currentStep = 3;
     }
     setState(() {});

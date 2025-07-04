@@ -32,9 +32,11 @@ class PositionServices extends BaseService
   @override
   Future<PositionModel> getById(String id) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/position/$id'), //missing
+      Uri.parse('$baseUrl/position/getPositionStatusTypeById/$id'), //missing
       headers: buildHeaders(),
     );
+
+    print("getById position: response ---- ${response.body}");
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body)['data'];

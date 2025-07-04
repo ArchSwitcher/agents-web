@@ -221,14 +221,15 @@ class PositionController extends GetxController {
 
   // function to load all data for the position form should be recieve arguments PositionModel
 
-  Future<void> loadPositionData(PositionModel position) async {
+  Future<PositionModel?> loadPositionData(String positionId) async {
     try {
+      PositionModel position = await positionServices.getById(positionId);
+
       isLoadingPosition.value = true;
 
       group.value = DropDownOption(
           id: position.group?.id ?? '',
           label: position.group?.name ?? '');
-      print("position group: ${position.group?.name}");
       client.value = DropDownOption(
           id: position.client?.id ?? '',
           label: position.client?.name ?? '');
@@ -264,10 +265,18 @@ class PositionController extends GetxController {
       // Load equipment list
       equipmentList.clear();
       equipmentList.addAll(position.equipment);
+
+      // branchController.toggleTurnSelection(0);
+      // print("object: ${branchController.turns.length}");
+      // branchController.turns[0].isSelected.value = true;
+          
+
+      return position;
     } catch (e) {
       ToastService.error(
           title: 'Error',
           subTitle: 'Error al cargar los datos de la posición: $e');
+      return null;
     } finally {
       isLoadingPosition.value = false;
     }
@@ -276,6 +285,6 @@ class PositionController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchPositions();
+    // fetchPositions();
   }
 }

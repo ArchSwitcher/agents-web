@@ -16,7 +16,7 @@ void showPositionModal({
       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
     ),
     builder: (BuildContext context) {
-      return ManagePositionSection(currentS: 3, position: position, isEdit: true, isEnabled: false,);
+      return ManagePositionSection(currentS: 3, positionId: position?.id, isEdit: true, isEnabled: false,);
     },
   );
 }
