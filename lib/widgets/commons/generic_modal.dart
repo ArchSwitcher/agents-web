@@ -47,7 +47,7 @@ class GenericModal extends StatelessWidget {
       actions: [
         showCancelButton ?
         SizedBox(
-          width: 100,
+          width: 120,
           child: ElevatedButton(
             style: CustomStyle.confirmModalButton(context),
             onPressed: () {
@@ -59,7 +59,7 @@ class GenericModal extends StatelessWidget {
         ): const SizedBox.shrink(),
         showAcceptButton ?
         SizedBox(
-          width: 100,
+          width: 120,
           child: ElevatedButton(
             style: TextButton.styleFrom(
                 backgroundColor: colorScheme.primaryFixed,

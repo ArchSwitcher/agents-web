@@ -9,6 +9,7 @@ class CustomCheckbox extends StatefulWidget {
   final Color unSelectedColor;
   final Color checkColor;
   final String text;
+  final bool isEnabled;
 
   const CustomCheckbox(
       {super.key,
@@ -17,8 +18,8 @@ class CustomCheckbox extends StatefulWidget {
       required this.activeColor,
       required this.unSelectedColor,
       required this.checkColor,
-      this.text = ""
-      });
+      this.text = "",
+      this.isEnabled = true});
 
   @override
   CustomCheckboxState createState() => CustomCheckboxState();
@@ -39,8 +40,8 @@ class CustomCheckboxState extends State<CustomCheckbox> {
             width: 30,
             height: 30,
             child: Checkbox(
-              value: widget.value,
-              onChanged: widget.onChanged,
+              value:  widget.value,
+              onChanged: widget.isEnabled ? widget.onChanged : null,
               activeColor: widget.activeColor,
               checkColor: widget.checkColor,
             ),

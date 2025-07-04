@@ -4,6 +4,7 @@ import 'package:agents_app/models/employee/employee_model.dart';
 import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/views/branches/controller/branch_position_controller.dart';
+import 'package:agents_app/views/branches/widgets/presence_modal.dart';
 import 'package:agents_app/views/manage-agent-employees/widgets/position_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -74,7 +75,7 @@ Widget _positionCardBuild(BuildContext context, bool isWideScreen,
 
   return Container(
     width: isWideScreen ? 550 : constraints.maxWidth - 40,
-    height: isWideScreen ? 300 : constraints.maxHeight - 40,
+    height: isWideScreen ? 250 : constraints.maxHeight - 40,
     padding: const EdgeInsets.all(20),
     decoration: BoxDecoration(
       color: colorScheme.surface,
@@ -129,9 +130,10 @@ Widget _turn(BuildContext context, TurnModel? turn) {
                 ? Colors.black54
                 : Colors.red),
       ),
+      
       const SizedBox(height: 5),
       turn?.schedule == null
-          ? const SizedBox.shrink()
+          ? const SizedBox(height: 70,)
           : Row(
               children: [
                 ...turn!.schedule.map((schedule) {
@@ -168,9 +170,6 @@ Widget _turn(BuildContext context, TurnModel? turn) {
 }
 
 Widget _employeePosition(List<EmployeeModel>? employees) {
-  // This widget displays the number of employees assigned to a position.
-  // If there are no employees, it displays a message indicating that no employees are assigned.
-
   return Column(
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,7 +202,19 @@ Widget _buttonsActions(BuildContext context, PositionModel? position,
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))),
       const SizedBox(width: 10),
       ElevatedButton.icon(
-          onPressed: isEnabled ? () {} : null,
+          onPressed: isEnabled
+              ? () {
+                  showPresenceModal(
+                      context: context,
+                      title: "Asistencia",
+                      subtitle: "Asistencias de la posición",
+                      isEnabled: isEnabled,
+                      onAccept: () {
+                        // Handle acceptance logic here
+                        Navigator.of(context).pop();
+                      });
+                }
+              : null,
           icon: const Icon(Icons.access_time, size: 20),
           label: const Text("Asistencia",
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))),

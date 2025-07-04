@@ -471,7 +471,7 @@ Widget _formStepContent(PositionController controller, BuildContext context,
                 controller.genericListController.isLoadingTurns.value
                     ? CircularProgressIndicator()
                     : turnConfiguration(Theme.of(context).colorScheme,
-                        controller.branchController, true)
+                        controller.branchController, true, isEnabled)
               ],
             )
           ],

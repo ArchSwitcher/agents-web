@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 Widget turnConfiguration(
-    ColorScheme colorScheme, BranchController controller, bool selectMode) {
+    ColorScheme colorScheme, BranchController controller, bool selectMode, bool isEnabled) {
   return LayoutBuilder(builder: (context, constraints) {
     final isWideScreen = constraints.maxWidth > 750;
 
@@ -57,7 +57,7 @@ Widget turnConfiguration(
             int index = entry.key;
             var turn = entry.value;
             return turnCard(width, colorScheme, context, turn.name, controller,
-                index, selectMode);
+                index, selectMode, isEnabled);
           }),
         ],
       );
@@ -66,7 +66,7 @@ Widget turnConfiguration(
 }
 
 Widget turnCard(double width, ColorScheme colorScheme, BuildContext context,
-    String name, BranchController controller, int index, bool selectMode) {
+    String name, BranchController controller, int index, bool selectMode, bool isEnabled  ) {
   return SizedBox(
     width: width,
     child: Card(
@@ -108,6 +108,7 @@ Widget turnCard(double width, ColorScheme colorScheme, BuildContext context,
                           },
                         ),
                          CustomCheckbox(
+                              isEnabled: isEnabled,
                               value: controller.turns[index].isSelected.value,
                               activeColor:
                                   Theme.of(context).colorScheme.primary,
