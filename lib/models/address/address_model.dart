@@ -20,30 +20,30 @@ class AddressModel {
   factory AddressModel.fromNestedJson(Map<String, dynamic> json) {
     //conditional for retrieve country sometimes came lowercase or uppercase
 
-    String? countryName = json['country']?.toString() ??
+    String? countryName = json['country']['name']?.toString() ??
         json['COUNTRY']?['name'].toString() ??
         '';
-    String? countryId = json['country']?['Id']?.toString() ??
+    String? countryId = json['country']?['id']?.toString() ??
         json['COUNTRY']?['Id']?.toString() ??
         '';
 
-    String? departmentName = json['department']?.toString() ??
+    String? departmentName = json['department']['name']?.toString() ??
         json['DEPARTAMENT']?['name'].toString() ??
         '';
-    String? departmentId = json['department']?['Id']?.toString() ??
+    String? departmentId = json['department']?['id']?.toString() ??
         json['DEPARTAMENT']?['Id']?.toString() ??
         '';
 
-    String? municipalityName = json['municipality']?.toString() ??
+    String? municipalityName = json['municipality']?['name']?.toString() ??
         json['MUNICIPALITY']?['name'].toString() ??
         '';
-    String? municipalityId = json['municipality']?['Id']?.toString() ??
+    String? municipalityId = json['municipality']?['id']?.toString() ??
         json['MUNICIPALITY']?['Id']?.toString() ??
         '';
 
     String? zoneName =
-        json['zone']?.toString() ?? json['ZONE']?['name'].toString() ?? '';
-    String? zoneId = json['zone']?['Id']?.toString() ??
+        json['zone']['name']?.toString() ?? json['ZONE']?['name'].toString() ?? '';
+    String? zoneId = json['zone']?['id']?.toString() ??
         json['ZONE']?['Id']?.toString() ??
         '';
 
