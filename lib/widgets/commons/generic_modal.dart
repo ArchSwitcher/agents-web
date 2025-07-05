@@ -11,6 +11,7 @@ class GenericModal extends StatelessWidget {
   final String subtitle;
   final bool showAcceptButton;
   final bool showCancelButton;
+  final bool isLoading;
 
   const GenericModal({
     super.key,
@@ -23,6 +24,7 @@ class GenericModal extends StatelessWidget {
     this.subtitle = '',
     this.showAcceptButton = true,
     this.showCancelButton = true,
+    this.isLoading = false,
   });
 
   @override
@@ -64,7 +66,7 @@ class GenericModal extends StatelessWidget {
             style: TextButton.styleFrom(
                 backgroundColor: colorScheme.primaryFixed,
                 foregroundColor: colorScheme.surface),
-            onPressed: () {
+            onPressed: isLoading ? null : () {
               onAccept?.call();
               //Navigator.of(context).pop();
             },

@@ -5,6 +5,7 @@ import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/views/branches/controller/branch_position_controller.dart';
 import 'package:agents_app/views/branches/widgets/presence_modal.dart';
+import 'package:agents_app/views/branches/widgets/replace_employee_position.dart';
 import 'package:agents_app/views/manage-agent-employees/widgets/position_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -47,30 +48,35 @@ class BranchPositionsScreenState extends State<BranchPositionsScreen> {
               //     ? (constraints.maxWidth / 5) - 40
               //     : constraints.maxWidth - 40;
               return Obx(() {
-                return Wrap(
-                  spacing: 30,
-                  runSpacing: 20,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  alignment: WrapAlignment.spaceBetween,
-                  direction: isWideScreen ? Axis.horizontal : Axis.vertical,
-                  children: [
-                    // ContendCard box decoration
-                    ...controller.positions.map((position) {
-                      return _positionCardBuild(
-                          context, isWideScreen, constraints, position);
-                      // ignore: unnecessary_to_list_in_spreads
-                    }).toList(),
-                  ],
-                );
-              });
+                      return Wrap(
+                        spacing: 30,
+                        runSpacing: 20,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        alignment: WrapAlignment.spaceBetween,
+                        direction:
+                            isWideScreen ? Axis.horizontal : Axis.vertical,
+                        children: [
+                          // ContendCard box decoration
+                          ...controller.positions.map((position) {
+                            return _positionCardBuild(context, isWideScreen,
+                                constraints, position, controller);
+                            // ignore: unnecessary_to_list_in_spreads
+                          }).toList(),
+                        ],
+                      );
+                    });
             }),
           ),
         ));
   }
 }
 
-Widget _positionCardBuild(BuildContext context, bool isWideScreen,
-    BoxConstraints constraints, PositionModel? position) {
+Widget _positionCardBuild(
+    BuildContext context,
+    bool isWideScreen,
+    BoxConstraints constraints,
+    PositionModel? position,
+    BranchPositionController controller) {
   final colorScheme = Theme.of(context).colorScheme;
 
   return Container(
@@ -107,7 +113,8 @@ Widget _positionCardBuild(BuildContext context, bool isWideScreen,
         const SizedBox(height: 10),
         _turn(context, position?.turn),
         const SizedBox(height: 10),
-        _buttonsActions(context, position, isWideScreen, position?.turn),
+        _buttonsActions(
+            context, position, isWideScreen, position?.turn, controller),
       ],
     ),
   );
@@ -130,10 +137,11 @@ Widget _turn(BuildContext context, TurnModel? turn) {
                 ? Colors.black54
                 : Colors.red),
       ),
-      
       const SizedBox(height: 5),
       turn?.schedule == null
-          ? const SizedBox(height: 70,)
+          ? const SizedBox(
+              height: 70,
+            )
           : Row(
               children: [
                 ...turn!.schedule.map((schedule) {
@@ -175,7 +183,6 @@ Widget _employeePosition(List<EmployeeModel>? employees) {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       ...employees!.map((employee) {
-        print("Employee: ${employee.firstName} ${employee.lastName}");
         return Text(
           "${employee.firstName.toString().trim()} ${employee.lastName.toString().trim()} - ${employee.position!.isPrincipal ? 'Principal' : 'Temporal'}",
           style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
@@ -186,7 +193,7 @@ Widget _employeePosition(List<EmployeeModel>? employees) {
 }
 
 Widget _buttonsActions(BuildContext context, PositionModel? position,
-    bool isWideScreen, TurnModel? turn) {
+    bool isWideScreen, TurnModel? turn, BranchPositionController controller) {
   // final colorScheme = Theme.of(context).colorScheme;
   bool isEnabled = !(turn == null);
 
@@ -204,6 +211,7 @@ Widget _buttonsActions(BuildContext context, PositionModel? position,
       ElevatedButton.icon(
           onPressed: isEnabled
               ? () {
+                  // TODO: deberia de mostrar las inasistencias de la posición
                   showPresenceModal(
                       context: context,
                       title: "Asistencia",
@@ -211,7 +219,7 @@ Widget _buttonsActions(BuildContext context, PositionModel? position,
                       isEnabled: isEnabled,
                       onAccept: () {
                         // Handle acceptance logic here
-                        Navigator.of(context).pop();
+                        // Navigator.of(context).pop();
                       });
                 }
               : null,
@@ -220,7 +228,19 @@ Widget _buttonsActions(BuildContext context, PositionModel? position,
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))),
       const SizedBox(width: 10),
       ElevatedButton.icon(
-          onPressed: isEnabled ? () {} : null,
+          onPressed: isEnabled
+              ? () {
+                  showReplaceModal(
+                    title: "Reemplazo de empleado",
+                    context: context,
+                    subtitle: "Reemplazo temporal de empleado en la posición",
+                    positionId: position!.id!,
+                    onAccept: () async {
+                      await controller.fetchPositions();
+                    },
+                  );
+                }
+              : null,
           icon: const Icon(Icons.published_with_changes_rounded, size: 20),
           label: const Text("Remplazo",
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))),

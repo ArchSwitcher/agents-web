@@ -28,6 +28,73 @@ class EmployeeService extends BaseService
     }
   }
 
+  
+  Future<List<EmployeeModel>> getInactiveEmployees(dynamic value) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/employee/getInactiveEmployee'),
+      headers: buildHeaders(),
+    );
+
+    try {
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        final List data = decoded['data'];
+        return data.map((json) => EmployeeModel.fromJson(json)).toList();
+      } else {
+        throw Exception('Error al cargar sucursales');
+      }
+    } catch (e) {
+      print("objects: error ---- $e");
+      throw Exception('Error al cargar sucursales: $e');
+    }
+  }
+
+  Future<List<EmployeeModel>> getEmployeesWithPosition(dynamic value) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/employee/getEmployeePosition'),
+      headers: buildHeaders(),
+    );
+
+    try {
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        final List data = decoded['data'];
+        return data.map((json) => EmployeeModel.fromJson(json)).toList();
+      } else {
+        throw Exception('Error al cargar sucursales');
+      }
+    } catch (e) {
+      print("objects: error ---- $e");
+      throw Exception('Error al cargar sucursales: $e');
+    }
+  }
+
+
+  Future<bool> replaceTempEmployeePosition(String positionId, String employeeId) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/employee/replaceEmployee'),
+      headers: buildHeaders(),
+      body: json.encode({
+        'employeeId': employeeId,
+        'positionId': positionId,
+      }),
+    );
+
+    try {
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        return decoded['success'] ?? false;
+      } else {
+        throw Exception('Error al reemplazar empleado temporal');
+      }
+    } catch (e) {
+      print("objects: error ---- $e");
+      throw Exception('Error al reemplazar empleado temporal: $e');
+    }
+
+  }
+
+
   @override
   Future<EmployeeModel> getById(String id) async {
     // Implement logic to fetch an employee by ID

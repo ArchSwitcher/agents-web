@@ -169,6 +169,7 @@ void showPresenceModal({
   String acceptText = 'Aceptar',
   // String cancelText = 'Cancelar',
 }) {
+  // TODO: should be repalce with correct values
   showDialog(
     context: context,
     builder: (context) => GenericModal(

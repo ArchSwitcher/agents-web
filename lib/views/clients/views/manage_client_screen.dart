@@ -54,13 +54,13 @@ class ManageClientScreenState extends State<ManageClientScreen> {
   startEdit() async {
     controller.loadClientData(Get.arguments?['client']);
 
-    controller.fiscalMunicipalities.value = await controller
-        .genericListController
-        .fetchMunicipalitiesOnly(controller.fiscalDepartment.value.id);
+    // controller.fiscalMunicipalities.value = await controller
+    //     .genericListController
+    //     .fetchMunicipalitiesOnly(controller.fiscalDepartment.value.id);
 
-    controller.paymentMunicipalities.value = await controller
-        .genericListController
-        .fetchMunicipalitiesOnly(controller.paymentDepartment.value.id);
+    // controller.paymentMunicipalities.value = await controller
+    //     .genericListController
+    //     .fetchMunicipalitiesOnly(controller.paymentDepartment.value.id);
   }
 
   @override
