@@ -20,14 +20,14 @@ class AddressModel {
   factory AddressModel.fromNestedJson(Map<String, dynamic> json) {
     //conditional for retrieve country sometimes came lowercase or uppercase
 
-    String? countryName = json['country']['name']?.toString() ??
+    String? countryName = json['country']?['name']?.toString() ??
         json['COUNTRY']?['name'].toString() ??
         '';
     String? countryId = json['country']?['id']?.toString() ??
         json['COUNTRY']?['Id']?.toString() ??
         '';
 
-    String? departmentName = json['department']['name']?.toString() ??
+    String? departmentName = json['department']?['name']?.toString() ??
         json['DEPARTAMENT']?['name'].toString() ??
         '';
     String? departmentId = json['department']?['id']?.toString() ??
@@ -42,7 +42,7 @@ class AddressModel {
         '';
 
     String? zoneName =
-        json['zone']['name']?.toString() ?? json['ZONE']?['name'].toString() ?? '';
+        json['zone']?['name']?.toString() ?? json['ZONE']?['name'].toString() ?? '';
     String? zoneId = json['zone']?['id']?.toString() ??
         json['ZONE']?['Id']?.toString() ??
         '';

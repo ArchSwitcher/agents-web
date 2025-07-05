@@ -127,7 +127,7 @@ List<DataRow> _buildTableRows(
         cells: [
           DataCell(Row(
             children: [
-              Text("${element.firstName}"),
+              // Text("${element.firstName}"),
               // editEmployeeButton(context, element),
               // deleteEmployeeButton(context, element.id.toString()),
             ],

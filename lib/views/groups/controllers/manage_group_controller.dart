@@ -77,7 +77,7 @@ class ManageGroupController extends GetxController {
 
   @override
   void onClose() {
-    nameController.dispose();
+    nameController.clear();
     super.onClose();
   }
 }

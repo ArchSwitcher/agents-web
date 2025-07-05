@@ -40,7 +40,7 @@ class PositionsScreenState extends State<PositionsScreen> {
     loaderController.show();
     await controller.fetchPositions();
     loaderController.hide();
-    await controller.genericListController.getAllStatusType();
+    // await controller.genericListController.getAllStatusType();
     setState(() {});
   }
 

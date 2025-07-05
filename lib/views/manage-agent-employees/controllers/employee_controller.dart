@@ -196,6 +196,7 @@ class EmployeeAgentController extends GetxController {
 
   get employeeValues {
     final PositionModel? position = Get.arguments?['position'];
+    print("Position: ${position == null ? 'null' : position.id}");
 
     return EmployeeModel(
       firstName: firstNameController.text,
@@ -279,7 +280,6 @@ class EmployeeAgentController extends GetxController {
       if (result) {
         ToastService.success(
             title: "Empleado", subTitle: "Empleado creado exitosamente");
-        // Optionally, you can reset the form or navigate to another screen
       }
     } catch (e) {
       print("Error creating employee: $e");

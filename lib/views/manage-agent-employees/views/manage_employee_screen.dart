@@ -2,6 +2,7 @@ import 'package:agents_app/layout/contect_card_space.dart';
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
 import 'package:agents_app/models/position/position_model.dart';
+import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
@@ -40,6 +41,8 @@ class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen> {
     await controller.genericListController.fetchZones();
     controller.contractTypeController.text =
         position == null ? "TEMPORAL" : "PERMANENTE";
+    
+    print("Position---: ${position?.id}");
   }
 
   @override
@@ -112,10 +115,12 @@ class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen> {
                 cardContentSpace(),
                 FormButton(onPress: () {
                   print("Guardar empleado");
-                  if (formKey.currentState!.validate()) {
+                  if (!formKey.currentState!.validate()) {
+                    ToastService.warning(title: "validación", subTitle: "Verifica los campos");
+                    return;
+                  }
                     controller.createEmployee();
                     Navigator.pop(context);
-                  }
                 })
               ],
             ),
