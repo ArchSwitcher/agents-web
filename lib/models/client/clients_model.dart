@@ -33,6 +33,7 @@ class ClientModel {
 });
 
   factory ClientModel.fromJson(Map<String, dynamic> json) {
+    print("objects ============ ${json['paymentAddress'] != null}");
     return ClientModel(
       id: json['id'].toString(),
       name: json['Name'].toString(),

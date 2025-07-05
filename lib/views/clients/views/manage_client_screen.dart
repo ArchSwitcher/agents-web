@@ -2,6 +2,7 @@ import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/layout/contect_card_space.dart';
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
+import 'package:agents_app/models/client/clients_model.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/constants/routes.dart';
@@ -42,6 +43,8 @@ class ManageClientScreenState extends State<ManageClientScreen> {
       Get.arguments?['subtitle'] ?? "Agrega un nuevo cliente";
 
   start() async {
+    try {
+      
     await _groupController.fetchGroups();
     await controller.fetchEmployees();
     await controller.genericListController.fetchBillingTypes();
@@ -49,18 +52,29 @@ class ManageClientScreenState extends State<ManageClientScreen> {
     await controller.genericListController.fetchCountries();
     await controller.genericListController.fetchDepartments();
     await controller.genericListController.fetchZones();
+    } catch (e) {
+      print("objects ============ CLIENT MANAGE $e");
+    }
   }
 
   startEdit() async {
-    controller.loadClientData(Get.arguments?['client']);
+    try {
+      final client = Get.arguments?['client'] as ClientModel;
+      controller.loadClientData(Get.arguments?['client']);
+      print("Client data loaded: ${client.fiscalAddress!.address}");
+      print("Client data name: ${client.fiscalAddress!.country!.name}");
+      // print("Client data loaded: ${client.fiscalAddress!.country!.id}");
 
-    // controller.fiscalMunicipalities.value = await controller
-    //     .genericListController
-    //     .fetchMunicipalitiesOnly(controller.fiscalDepartment.value.id);
+      controller.fiscalMunicipalities.value = await controller
+          .genericListController
+          .fetchMunicipalitiesOnly(controller.fiscalDepartment.value.id);
 
-    // controller.paymentMunicipalities.value = await controller
-    //     .genericListController
-    //     .fetchMunicipalitiesOnly(controller.paymentDepartment.value.id);
+      controller.paymentMunicipalities.value = await controller
+          .genericListController
+          .fetchMunicipalitiesOnly(controller.paymentDepartment.value.id);
+    } catch (e) {
+      print("Error loading client data: $e");
+    }
   }
 
   @override

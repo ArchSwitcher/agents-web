@@ -7,7 +7,8 @@ import 'package:http/http.dart' as http;
 
 class EmployeeDropdownService extends BaseService {
   Future<List<DropDownOption>> fetchEmployees(String type) async {
-    final response =
+   try {
+      final response =
         await http.get(Uri.parse('$baseUrl/common/getEmployeeByType?type=$type'));
 
     if (response.statusCode == 200) {
@@ -21,7 +22,11 @@ class EmployeeDropdownService extends BaseService {
               label: '${e.person.firstName} ${e.person.lastName}'))
           .toList();
     } else {
-      throw Exception('Failed to load employees');
+      return [];
     }
+   } catch (e) {
+     print("Error fetching employees: $e");
+     return [];
+   }
   }
 }
