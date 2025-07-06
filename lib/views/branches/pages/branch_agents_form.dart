@@ -56,6 +56,7 @@ class BranchAgentsFormState extends State<BranchAgentsForm> {
 
 Widget _agentsInfo(
     BuildContext context, BranchPositionFormController controller) {
+  final colorscheme = Theme.of(context).colorScheme;
   return ContentCard(
     child: LayoutBuilder(builder: (context, constraints) {
       final isWideScreen = constraints.maxWidth > 700;
@@ -70,13 +71,16 @@ Widget _agentsInfo(
         direction: isWideScreen ? Axis.horizontal : Axis.vertical,
         children: [
           SizedBox(
-            width: width,
-            child: CustomInputWidget(
-                controller: controller.agencyController,
-                label: "Agencia",
-                hintText: "",
-                prefixIcon: Icons.business),
-          ),
+              width: width,
+              child: buildImageWidget(
+                  "1",
+                  controller.letterController.value,
+                  Icon(
+                    Icons.security,
+                    color: colorscheme.surface,
+                  ),
+                  "Agente",
+                  null))
         ],
       );
     }),
@@ -159,11 +163,7 @@ Widget _basicInfo(
                   onChanged: (value) {},
                   label:
                       'Requiere Evacuación \n (Aplica únicamente a la Ciudad Capital)'),
-            ),
-            SizedBox(
-                width: width,
-                child: buildImageWidget("1", controller.letterController.value,
-                    Icon(Icons.abc_rounded), "placeholder", null))
+            )
           ]);
     }),
   );

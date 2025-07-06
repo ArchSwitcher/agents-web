@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:agents_app/models/common/image_model.dart';
 import 'package:flutter/material.dart';
@@ -54,145 +54,161 @@ class _LogoUploadWidgetState extends State<LogoUploadWidget> {
   final RxString controllerImage = "".obs;
 
   @override
+  @override
   Widget build(BuildContext context) {
     final String? linkImage = widget.uploadImageController.link;
     final colorscheme = Theme.of(context).colorScheme;
 
+    final showImageButton = (widget.uploadImageController.needUpdate == false &&
+            linkImage != null) ||
+        controllerImage.value.isNotEmpty;
+
     return FormField(
-        validator: (value) => widget.validator!(controllerImage.value.isEmpty
-            ? null
-            : controllerImage.value.isEmpty),
-        builder: (state) {
-          return Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
+      validator: (value) => widget.validator!(
+          controllerImage.value.isEmpty ? null : controllerImage.value.isEmpty),
+      builder: (state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 50,
+              decoration: BoxDecoration(
+                border: Border.all(color: colorscheme.primary),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
                 children: [
-                  GestureDetector(
-                    child: Container(
-                      height: 50.0,
-                      // width: Get.width,
-                      decoration: BoxDecoration(
-                          color: colorscheme.primary,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10))),
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              widget.text,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
+                  // Botón 70%
+                  Expanded(
+                    flex: 7,
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () async {
+                          if (!widget.enabled) return;
+                      
+                          final picker = ImagePicker();
+                          final pickedFile =
+                              await picker.pickImage(source: ImageSource.gallery);
+                      
+                          if (pickedFile != null) {
+                            String fileExtension =
+                                path.extension(pickedFile.path);
+                            controllerImage.value = pickedFile.path;
+                            final imageBytes = await pickedFile.readAsBytes();
+                      
+                            List<int> compressedBytes =
+                                await FlutterImageCompress.compressWithList(
+                              imageBytes,
+                              minHeight: 400,
+                              minWidth: 600,
+                              quality: 50,
+                            );
+                      
+                            String base64Image = base64Encode(compressedBytes);
+                            setState(() {
+                              widget.uploadImageController
+                                  .updateExtensionFile(fileExtension);
+                              widget.uploadImageController
+                                  .updateBase64String(base64Image);
+                            });
+                          }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: colorscheme.primary,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(12),
+                              bottomLeft: Radius.circular(12),
                             ),
-                            const SizedBox(
-                              width: 5,
+                          ),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                widget.icon,
+                                const SizedBox(width: 6),
+                                Text(
+                                  widget.text,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                              ],
                             ),
-                            widget.icon,
-                          ],
+                          ),
                         ),
                       ),
                     ),
-                    onTap: () async {
-                      if (!widget.enabled) return;
-
-                      final picker = ImagePicker();
-                      final pickedFile =
-                          await picker.pickImage(source: ImageSource.gallery);
-
-                      if (pickedFile != null) {
-                        String fileExtension = path.extension(pickedFile.path);
-                        controllerImage.value = pickedFile.path;
-                        final imageBytes = await pickedFile.readAsBytes();
-
-                        List<int> compressedBytes =
-                            await FlutterImageCompress.compressWithList(
-                          imageBytes,
-                          minHeight: 400,
-                          minWidth: 600,
-                          quality: 50,
-                        );
-
-                        String base64Image = base64Encode(compressedBytes);
-                        setState(() {
-                          widget.uploadImageController
-                              .updateExtensionFile(fileExtension);
-                          widget.uploadImageController
-                              .updateBase64String(base64Image);
-                        });
-                      } else {
-                        // No image selected.
-                      }
-                    },
                   ),
-                  (widget.uploadImageController.needUpdate == false &&
-                              linkImage != null ||
-                          controllerImage.value.isNotEmpty)
-                      ? IconButton(
-                          onPressed: () {
-                            showImageWidget(
-                                context,
-                                widget.uploadImageController,
-                                controllerImage,
-                                linkImage);
-                          },
-                          icon: Icon(Icons.image,
-                              color: colorscheme.primary))  
-                      : const SizedBox.shrink()
+
+                  // Icono modal 30%
+                  Expanded(
+                      flex: 3,
+                      child: IconButton(
+                        icon: Icon(Icons.image, color: !showImageButton ? colorscheme.onSurfaceVariant : colorscheme.primary),
+                        onPressed: !showImageButton
+                            ? null
+                            : () {
+                                showImageWidget(
+                                    context,
+                                    widget.uploadImageController,
+                                    controllerImage,
+                                    linkImage);
+                              },
+                      )),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(
-                    state.errorText ?? "",
-                    style: TextStyle(color: colorscheme.error, fontSize: 10),
-                  ),
-                ),
+            ),
+            const SizedBox(height: 4),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Text(
+                state.errorText ?? "",
+                style: TextStyle(color: colorscheme.error, fontSize: 10),
               ),
-              // const SizedBox(height: 14),
-            ],
-          );
-        });
-  }
-}
-
-void showImageWidget(BuildContext context, ImageToUpload imageController,
-    RxString imageBase64, String? linkImage) {
-  showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            imageController.needUpdate == false && linkImage != null
-                ? Image.network(linkImage)
-                : Obx(
-                    () => Center(
-                        child: imageBase64.value.isNotEmpty
-                            ? Image.memory(
-                                base64Decode(imageController.base64!),
-                                fit: BoxFit.cover,
-                                height: 600,
-                                width: 600,
-                              )
-                            : null),
-                  )
+            ),
           ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text("Cerrar"),
+        );
+      },
+    );
+  }
+
+  void showImageWidget(BuildContext context, ImageToUpload imageController,
+      RxString imageBase64, String? linkImage) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              imageController.needUpdate == false && linkImage != null
+                  ? Image.network(linkImage)
+                  : Obx(
+                      () => Center(
+                          child: imageBase64.value.isNotEmpty
+                              ? Image.memory(
+                                  base64Decode(imageController.base64!),
+                                  fit: BoxFit.cover,
+                                  height: 600,
+                                  width: 600,
+                                )
+                              : null),
+                    )
+            ],
           ),
-        ],
-      );
-    },
-  );
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("Cerrar"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

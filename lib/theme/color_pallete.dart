@@ -12,7 +12,7 @@ final ThemeData appTheme = ThemeData(
     onPrimaryFixed: Color(0xFF76C893),
     secondary: Color(0xFF34A0A4),
     onSecondary: Colors.black,
-    // onSurfaceVariant: Colors.grey[200],
+    onSurfaceVariant: Colors.grey[200],
     //background: Color(0xFFF5FAFF),
     //onBackground: Color(0xFF212121),
     onSecondaryFixed: Color(0xFFF2F8FD), //BASE 184E77
