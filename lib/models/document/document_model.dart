@@ -1,26 +1,36 @@
-  import 'package:agents_app/models/common/simple_entity_model.dart';
+  import 'package:agents_app/models/common/image_model.dart';
+import 'package:agents_app/models/common/simple_entity_model.dart';
 
-class DocumentModel {
+class DocumentModel extends ImageToUpload {
   final String? id;
   final String name;
-  final String documentTypeId;
   final SimpleEntity? documentType;
+  // final String url;
+  final String? description;
 
   DocumentModel({
     required this.id,
     required this.name,
-    required this.documentTypeId,
     this.documentType,
+    // this.url = '',
+    this.description,
+    required bool needUpdate,
+    required String base64,
+    required String link,
   });
 
   factory DocumentModel.fromJson(Map<String, dynamic> json) {
     return DocumentModel(
       id: json['Id']?.toString(),
       name: json['Name'],
-      documentTypeId: json['DOCUMENT_TYPE_Id'].toString(),
       documentType: json['DOCUMENT_TYPE'] != null
           ? SimpleEntity.fromJson(json['DOCUMENT_TYPE'])
           : null,
+      // url: json['url'] ?? '',
+      link: json['url'] ?? '',
+      description: json['description'],
+      needUpdate: true,
+      base64: ""
     );
   }
 
@@ -28,7 +38,8 @@ class DocumentModel {
     return {
       "id": id,
       "name": name,
-      "documentTypeId": documentTypeId,
+      "description": description,
+      "url": link,
     };
   }
 }

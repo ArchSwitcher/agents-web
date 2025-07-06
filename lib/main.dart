@@ -4,6 +4,7 @@ import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/controllers/sidebar/menu_sidebar_controller.dart';
 import 'package:agents_app/controllers/sidebar/sidebar_controller.dart';
 import 'package:agents_app/views/agents/agents_screen.dart';
+import 'package:agents_app/views/branches/pages/branch_agents_form.dart';
 import 'package:agents_app/views/branches/pages/manage_branch_tab.dart';
 import 'package:agents_app/views/branches/views/branch_positions_screen.dart';
 import 'package:agents_app/views/branches/views/branches_screen.dart';
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: RouteConstants.manageAgent, page: () => const EmployeesAgentScreen()),
           GetPage(name: RouteConstants.manageEmployee, page: () => const ManageEmployeeAgentScreen()),
           GetPage(name: RouteConstants.employees, page: () => const EmployeesScreen()),
+          GetPage(name: RouteConstants.branchPositionStay, page: () => const BranchAgentsForm()),
           
           
         ],

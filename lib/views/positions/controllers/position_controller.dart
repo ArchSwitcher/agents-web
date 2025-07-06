@@ -22,8 +22,7 @@ class PositionController extends GetxController {
   final ManageGroupController groupController =
       Get.put(ManageGroupController());
 
-  final BranchController branchController =
-      Get.put(BranchController());
+  final BranchController branchController = Get.put(BranchController());
 
   LoaderController loader = Get.put(LoaderController());
 
@@ -32,24 +31,18 @@ class PositionController extends GetxController {
   final RxBool isLoadingPosition = false.obs;
   final RxBool isLoadingPositions = true.obs;
 
-  final Rx<DropDownOption> group =
-      DropDownOption(id: '', label: '').obs;
-  final Rx<DropDownOption> client =
-      DropDownOption(id: '', label: '').obs;
-  final Rx<DropDownOption> branch =
-      DropDownOption(id: '', label: '').obs;
-  
-  final Rx<DropDownOption> company =
-      DropDownOption(id: '', label: '').obs;
-  final Rx<DropDownOption> agency =
-      DropDownOption(id: '', label: '').obs;
+  final Rx<DropDownOption> group = DropDownOption(id: '', label: '').obs;
+  final Rx<DropDownOption> client = DropDownOption(id: '', label: '').obs;
+  final Rx<DropDownOption> branch = DropDownOption(id: '', label: '').obs;
+
+  final Rx<DropDownOption> company = DropDownOption(id: '', label: '').obs;
+  final Rx<DropDownOption> agency = DropDownOption(id: '', label: '').obs;
   final Rx<DropDownOption> statusType =
       DropDownOption(id: '', label: '').obs; // statusType
 
   final RxList<DropDownOption> advisers = <DropDownOption>[].obs;
 
-  final Rx<DropDownOption> serviceType =
-      DropDownOption(id: '', label: '').obs;
+  final Rx<DropDownOption> serviceType = DropDownOption(id: '', label: '').obs;
 
 // Equipment related fields
   final Rx<DropDownOption> equipmentType =
@@ -58,8 +51,7 @@ class PositionController extends GetxController {
 
   // Shift related fields
 
-  final Rx<DropDownOption> shiftTime =
-      DropDownOption(id: '', label: '').obs;
+  final Rx<DropDownOption> shiftTime = DropDownOption(id: '', label: '').obs;
 
   final TextEditingController startTime = TextEditingController();
   final TextEditingController endTime = TextEditingController();
@@ -77,8 +69,6 @@ class PositionController extends GetxController {
   final TextEditingController minimumPrice = TextEditingController();
   final TextEditingController servicePrice = TextEditingController();
 
-
-  
   TextEditingController observations = TextEditingController();
 
   final RxList<EquipmentModel> equipmentList = <EquipmentModel>[].obs;
@@ -103,13 +93,10 @@ class PositionController extends GetxController {
     shiftValue.clear();
     minimumPrice.clear();
     servicePrice.clear();
-    
-    
+
     observations.clear();
     equipmentList.clear();
   }
-
- 
 
   addEquipment(DropDownOption equipment, String quantity) {
     if (equipment.id.isEmpty || quantity.isEmpty) {
@@ -173,9 +160,9 @@ class PositionController extends GetxController {
         shiftValue: shiftValue.text,
         minimunPrice: minimumPrice.text,
         servicePrice: servicePrice.text,
-        
+
         countryService: "Guatemala",
-        
+
         paymentFrequency: shiftTime.value.label,
         transportationCost: transport.text,
         initDate: startDate.text,
@@ -199,12 +186,18 @@ class PositionController extends GetxController {
       );
 
       // PositionModel positionDataData = PositionModel.fromJson(positionData);
-
-      final position = await positionServices.create(positionData);
+      bool position = false;
+      if (idPosition == null) {
+        position = await positionServices.create(positionData);
+      } else {
+        position = await positionServices.update(idPosition, positionData);
+      }
 
       if (position) {
         ToastService.success(
-            title: 'Éxito', subTitle: 'Posición creada correctamente.');
+            title: 'Éxito',
+            subTitle:
+                'Posición ${idPosition == null ? 'creada' : 'actualizada'} correctamente.');
       } else {
         ToastService.error(
             title: 'Error', subTitle: 'No se pudo crear la posición.');
@@ -228,38 +221,31 @@ class PositionController extends GetxController {
       isLoadingPosition.value = true;
 
       group.value = DropDownOption(
-          id: position.group?.id ?? '',
-          label: position.group?.name ?? '');
+          id: position.group?.id ?? '', label: position.group?.name ?? '');
       client.value = DropDownOption(
-          id: position.client?.id ?? '',
-          label: position.client?.name ?? '');
-      branch.value = DropDownOption(
-          id: position.branchId,
-          label: position.branch!.name);
-      
-      company.value = DropDownOption(
-          id: position.companyId ,
-          label: position.company!.name );
-      agency.value = DropDownOption(
-          id: position.agencyId ,
-          label: position.agency!.name);
+          id: position.client?.id ?? '', label: position.client?.name ?? '');
+      branch.value =
+          DropDownOption(id: position.branchId, label: position.branch!.name);
+
+      company.value =
+          DropDownOption(id: position.companyId, label: position.company!.name);
+      agency.value =
+          DropDownOption(id: position.agencyId, label: position.agency!.name);
       serviceType.value = DropDownOption(
-          id: position.serviceTypeId,
-          label: position.serviceType!.name);
+          id: position.serviceTypeId, label: position.serviceType!.name);
       shiftTime.value = DropDownOption(
-          id: position.shiftTimeId,
-          label: position.shiftTime!.name);
+          id: position.shiftTimeId, label: position.shiftTime!.name);
 
       startDate.text = position.initDate;
-      endDate.text = position.endDate ;
-      serviceQuantity.text = position.serviceQuantity.toString() ;
-      scheduleQuantity.text = position.scheduleQuantity.toString() ;
-      bonus.text = position.bonus.toString() ;
-      transport.text = position.transportationCost.toString() ;
-      foodQuantity.text = position.meals.toString() ;
-      shiftValue.text = position.shiftValue.toString() ;
-      minimumPrice.text = position.minimunPrice.toString() ;
-      servicePrice.text = position.servicePrice.toString() ;
+      endDate.text = position.endDate;
+      serviceQuantity.text = position.serviceQuantity.toString();
+      scheduleQuantity.text = position.scheduleQuantity.toString();
+      bonus.text = position.bonus.toString();
+      transport.text = position.transportationCost.toString();
+      foodQuantity.text = position.meals.toString();
+      shiftValue.text = position.shiftValue.toString();
+      minimumPrice.text = position.minimunPrice.toString();
+      servicePrice.text = position.servicePrice.toString();
       observations.text = position.remarks ?? '';
 
       // Load equipment list
@@ -269,7 +255,6 @@ class PositionController extends GetxController {
       // branchController.toggleTurnSelection(0);
       // print("object: ${branchController.turns.length}");
       // branchController.turns[0].isSelected.value = true;
-          
 
       return position;
     } catch (e) {

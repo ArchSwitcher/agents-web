@@ -25,6 +25,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
 
   final List<String> headers = [
     "",
+    "Código",
     'Cliente',
     'Sucursal',
     'Latitud',
@@ -33,7 +34,8 @@ class _BranchesScreenState extends State<BranchesScreen> {
     'Dirección física',
   ];
   final List<double?> fixedColumnWidths = [
-    150,
+    180,
+    100,
     null,
     null,
     null,

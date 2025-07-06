@@ -18,10 +18,12 @@ class BranchPositionController extends GetxController {
 
   Future<void> fetchPositions() async {
     try {
+      //get arguments
+      final branchId = Get.arguments['branchId'];
       positions.clear();
       loaderController.show();
       isLoading.value = true;
-      final response = await positionService.getAllPositionsByBranchId("19");
+      final response = await positionService.getAllPositionsByBranchId(branchId);
     
       positions.assignAll(response);
     } catch (e) {

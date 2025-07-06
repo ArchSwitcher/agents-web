@@ -97,7 +97,7 @@ Widget openScheduleModalButton(
   );
 }
 
-Widget viewPositionButton(BuildContext context, BranchController controller) {
+Widget viewPositionButton(BuildContext context, BranchController controller, String branchId) {
   final colorScheme = Theme.of(context).colorScheme;
 
   return IconButton(
@@ -105,11 +105,31 @@ Widget viewPositionButton(BuildContext context, BranchController controller) {
         await Navigator.pushNamed(context, RouteConstants.manageBranchPositions,
             arguments: {
               'title': "Posiciones de sucursal",
+              'branchId': branchId,
             });
         controller.fetchBranches();
       },
       icon: Icon(
         Icons.location_on,
+        color: colorScheme.primary,
+        size: 20,
+      ));
+}
+
+// viewStayButton
+Widget viewStayButton(BuildContext context, String branchId) {
+  final colorScheme = Theme.of(context).colorScheme;
+
+  return IconButton(
+      onPressed: () async {
+        await Navigator.pushNamed(context, RouteConstants.branchPositionStay,
+            arguments: {
+              'title': "Estancia de sucursal",
+              'branchId': branchId,
+            });
+      },
+      icon: Icon(
+        Icons.document_scanner_rounded,
         color: colorScheme.primary,
         size: 20,
       ));

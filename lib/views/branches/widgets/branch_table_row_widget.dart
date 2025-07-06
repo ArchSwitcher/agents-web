@@ -16,9 +16,11 @@ List<DataRow> buildTableRowsBranches(
             children: [
               editBranchButton(context, element),
               deleteBranchButton(context, element),
-              viewPositionButton(context, controller),
+              viewPositionButton(context, controller, element.id),
+              viewStayButton(context, element.id),
             ],
           )),
+          cellDataTable(element.id, context: context),
           cellDataTable(element.client?.name, context: context),
           cellDataTable(element.branchName, context: context),
           cellDataTable(element.latitude, context: context),
