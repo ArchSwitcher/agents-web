@@ -249,7 +249,7 @@ Widget _agentsInfo(
               SizedBox(
                 width: width,
                 child: buildImageWidget(
-                    "3",
+                    "21",
                     controller.groupAgentsController.value,
                     Icon(
                       Icons.group,
@@ -257,6 +257,23 @@ Widget _agentsInfo(
                     ),
                     "Foto grupal de agentes",
                     controller.groupAgentsController.value.link, (value) {
+                  if (value == null) {
+                    return 'Fotografía grupal de agentes es requerida';
+                  }
+                  return null;
+                }),
+              ),
+              SizedBox(
+                width: width,
+                child: buildImageWidget(
+                    "22",
+                    controller.letterController.value,
+                    Icon(
+                      Icons.group,
+                      color: colorscheme.surface,
+                    ),
+                    "Fotografía de Carta Entrega de Equipo (Firmada por todos los Agentes)",
+                    controller.letterController.value.link, (value) {
                   if (value == null) {
                     return 'Fotografía grupal de agentes es requerida';
                   }

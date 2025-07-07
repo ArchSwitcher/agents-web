@@ -1,8 +1,11 @@
 // import 'package:agents_app/models/branch/receive_request.dart';
+// import 'dart:convert';
+
 import 'dart:convert';
 
 import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/models/branch/receive_request.dart';
+// import 'package:agents_app/models/branch/receive_request.dart';
 import 'package:agents_app/models/document/document_model.dart';
 import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/services/upload_file.dart';
@@ -55,7 +58,6 @@ class BranchPositionFormController extends GetxController {
   RxList<String> checkListEquipment = <String>[].obs;
   TextEditingController responsibleController = TextEditingController();
   TextEditingController receiverControllerText = TextEditingController();
-  TextEditingController servicePointsController = TextEditingController();
   RxInt currentRating = 0.obs;
 
   final SignatureController signatureController = SignatureController(
@@ -64,7 +66,7 @@ class BranchPositionFormController extends GetxController {
     exportBackgroundColor: Colors.blue,
   );
 
-  get signature => signatureController.toPngBytes();
+  // get signature async => await signatureController.toPngBytes();
 
   final List<String> equipmentItems = [
     'Uniforme completo (Camisa y Pantalón)',
@@ -128,7 +130,7 @@ class BranchPositionFormController extends GetxController {
     signatureController.clear();
     responsibleController.clear();
     receiverControllerText.clear();
-    servicePointsController.clear();
+    currentRating.value = 0;
     isCheckedList.forEach((item) => item.value = false);
   }
 
@@ -157,48 +159,103 @@ class BranchPositionFormController extends GetxController {
 
   Future<void> saveBranchPosition() async {
     final branchId = Get.arguments['branchId'];
-    // final file = await uploadFileService.base64ToFile(
-    //     equipmentController.value.base64!, 'letter.png');
+    print("branchid: $branchId");
 
-    // print("equipmentController value: ${equipmentController.value.base64}");
+    print("int.parse(servicePointsController.text) ${currentRating.value}");
+    print("int.parse(branchId) ${int.parse(branchId)}");
 
-    final file = await uploadFileService.uploadPhotoWebFromBase64(
-      base64String: equipmentController.value.base64!,
-      fileName: 'equipment.png',
-      mimeType: 'image/png',
-      folder: 'position/$branchId'
-    );
 
+    final equipment = await uploadFileService.uploadPhotoWebFromBase64(
+        base64String: equipmentController.value.base64!,
+        fileName: 'equipment.png',
+        mimeType: 'image/png',
+        folder: 'position/$branchId');
+
+    print("Equipment photo link: $equipment");
+
+    final letter = await uploadFileService.uploadPhotoWebFromBase64(
+        base64String: letterController.value.base64!,
+        fileName: 'letter.png',
+        mimeType: 'image/png',
+        folder: 'position/$branchId');
     
+    print("Letter photo link: $letter");
 
-    // final photoUrl =
-    //     await uploadFileService.uploadPhotoWeb(equipmentController.value.base64!, 'position/$branchId');
-    // print("Photo URL: $photoUrl");
+    final groupAgents = await uploadFileService.uploadPhotoWebFromBase64(
+        base64String: groupAgentsController.value.base64!,
+        fileName: 'group_agents.png',
+        mimeType: 'image/png',
+        folder: 'position/$branchId');
 
-    // try {
-    //   final position = BranchReceiveRequestModel(
-    //     startTime: startTimeController.text,
-    //     endTime: endTimeController.text,
-    //     agency: agencyController.text,
-    //     requiresEvacuation: requiresEvacuation.value,
-    //     translationLand: lugarPlaceController.text,
-    //     agentsPhotos: agentsController.map((e) => e.value).toList(),
-    //     letterPhoto: letterController.value,
-    //     equipmentPhoto: equipmentController.value,
-    //     groupAgentsPhoto: groupAgentsController.value,
-    //     receiverPhoto: signature,
-    //     responsible: responsibleController.text,
-    //     receiver: receiverControllerText.text,
-    //     servicePoints: servicePointsController.text,
-    //     branchId: branchId,
-    //   );
+    print("Group agents photo link: $groupAgents");
 
-    //   await branchPositionFormService.create(position);
-    //   clearControllers();
-    //   Get.back(result: true);
-    // } catch (e) {
-    //   print("Error saving branch position: $e");
-    // }
+    // signature
+    final signature = await signatureController.toPngBytes();
+    String base64SignatureString = base64Encode(signature!);
+    final receiver = await uploadFileService.uploadPhotoWebFromBase64(
+        base64String: base64SignatureString,
+        fileName: 'receiver.png',
+        mimeType: 'image/png',
+        folder: 'position/$branchId');
+
+    print("Receiver photo link: $receiver");
+    // agents photos
+
+    equipmentController.value.updateLink(equipment!);
+    letterController.value.updateLink(letter!);
+    groupAgentsController.value.updateLink(groupAgents!);
+    receiverController.value.updateLink(receiver!);
+    // update with agents photos
+
+    await Future.forEach<Rx<DocumentModel>>(agentsController, (e) async {
+      final link = await uploadFileService.uploadPhotoWebFromBase64(
+        base64String: e.value.base64!,
+        fileName: '${e.value.name}.png',
+        mimeType: 'image/png',
+        folder: 'position/$branchId',
+      );
+      e.value.updateLink(link!);
+    });
+    agentsController.forEach((e) {
+      print("Agent photo link: ${e.value.link}");
+    });
+    print("Letter photo link: ${letterController.value.link}");
+    print("Equipment photo link: ${equipmentController.value.link}");
+    print("Group agents photo link: ${groupAgentsController.value.link}");
+    print("Signature photo link: ${receiverController.value.link}");
+
+    final selectedEquipment = <String>[];
+    for (int i = 0; i < isCheckedList.length; i++) {
+      if (isCheckedList[i].value) {
+        selectedEquipment.add(equipmentItems[i]);
+      }
+    }
+
+    try {
+      final position = BranchReceiveRequestModel(
+        startTime: startTimeController.text,
+        endTime: endTimeController.text,
+        agency: agencyController.text,
+        requiresEvacuation: requiresEvacuation.value,
+        translationLand: lugarPlaceController.text,
+        agentsPhotos: agentsController.map((e) => e.value).toList(),
+        letterPhoto: letterController.value,
+        equipmentPhoto: equipmentController.value,
+        groupAgentsPhoto: groupAgentsController.value,
+        receiverPhoto: receiverController.value,
+        responsible: responsibleController.text,
+        receiver: receiverControllerText.text,
+        servicePoints: currentRating.value,
+        branchId: int.parse(branchId),
+        checklistEquipment: selectedEquipment.join(', '),
+      );
+
+      await branchPositionFormService.create(position);
+      // clearControllers();
+      // Get.back(result: true);
+    } catch (e) {
+      print("Error saving branch position: $e");
+    }
   }
 
   @override

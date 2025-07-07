@@ -21,26 +21,31 @@ class BranchPositionFormService extends BaseService
 
   @override
   Future<bool> create(BranchReceiveRequestModel item) async {
-    final response = await http.post(
-      Uri.parse("$baseUrl/branch/documents"),
-      headers: buildHeaders(),
-      body: jsonEncode(item.toJson()),
-    );
-
-    print("Response status: ${response.body}");
-
-    if (response.statusCode == 200) {
-      ToastService.success(
-        title: "Sucursal",
-        subTitle: "Sucursal creada correctamente",
+    try {
+      final response = await http.post(
+        Uri.parse("$baseUrl/branch/documents"),
+        headers: buildHeaders(),
+        body: jsonEncode(item.toJson()),
       );
-      return true;
-    } else {
-      ToastService.error(
-        title: "Sucursal",
-        subTitle: "Error al crear sucursal",
-      );
-      throw Exception('Error al crear sucursal');
+
+      print("Response status create of branch: ${response.body}");
+
+      if (response.statusCode == 200) {
+        ToastService.success(
+          title: "Sucursal",
+          subTitle: "Sucursal creada correctamente",
+        );
+        return true;
+      } else {
+        ToastService.error(
+          title: "Sucursal",
+          subTitle: "Error al crear sucursal",
+        );
+        throw Exception('Error al crear sucursal');
+      }
+    } catch (e) {
+      print("Error creating branch service ^^^&: $e");
+      throw Exception('Error creating branch service: $e');
     }
   }
 
