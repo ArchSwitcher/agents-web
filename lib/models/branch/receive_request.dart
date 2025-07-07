@@ -14,6 +14,8 @@ class BranchReceiveRequestModel {
   final int branchId;
   final String responsible;
   final String receiver;
+  // servicePoints
+  final String servicePoints;
 
   BranchReceiveRequestModel({
     required this.agentsPhotos,
@@ -29,6 +31,7 @@ class BranchReceiveRequestModel {
     required this.branchId,
     required this.responsible,
     required this.receiver,
+    this.servicePoints = '',
   });
 
   factory BranchReceiveRequestModel.fromJson(Map<String, dynamic> json) {
@@ -48,6 +51,7 @@ class BranchReceiveRequestModel {
       branchId: json['branchId'] ?? 0,
       responsible: json['responsible'] ?? '',
       receiver: json['receiver'] ?? '',
+      servicePoints: json['servicePoints'] ?? '',
     );
   }
 
@@ -66,6 +70,7 @@ class BranchReceiveRequestModel {
       'branchId': branchId,
       'responsible': responsible,
       'receiver': receiver,
+      'servicePoints': servicePoints,
     };
   }
 }

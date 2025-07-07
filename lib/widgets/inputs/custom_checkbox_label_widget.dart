@@ -19,6 +19,14 @@ class CustomCheckboxLabelWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment
           .start, // Para alinear el texto arriba si se expande
       children: [
+        CustomCheckbox(
+          value: isChecked,
+          onChanged: onChanged,
+          activeColor: Theme.of(context).colorScheme.primary,
+          unSelectedColor: Theme.of(context).colorScheme.surface,
+          checkColor: Theme.of(context).colorScheme.surface,
+        ),
+        const SizedBox(width: 10),
         icon != null ? Icon(icon) : const Icon(Icons.security),
         const SizedBox(width: 10),
         Flexible(
@@ -27,14 +35,6 @@ class CustomCheckboxLabelWidget extends StatelessWidget {
             softWrap: true,
             overflow: TextOverflow.visible,
           ),
-        ),
-        const SizedBox(width: 10),
-        CustomCheckbox(
-          value: isChecked,
-          onChanged: onChanged,
-          activeColor: Theme.of(context).colorScheme.primary,
-          unSelectedColor: Theme.of(context).colorScheme.surface,
-          checkColor: Theme.of(context).colorScheme.surface,
         ),
       ],
     );

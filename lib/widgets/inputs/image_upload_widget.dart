@@ -9,12 +9,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 
 Widget buildImageWidget(String id, ImageToUpload imageController, Icon icon,
-    String placeholder, String? initUrl) {
-  ImageToUpload imageController = ImageToUpload(
-    base64: null,
-    needUpdate: true,
-    link: "",
-  );
+    String placeholder, String? initUrl, String? Function(Object?)? validator) {
+  // ImageToUpload imageController = ImageToUpload(
+  //   base64: null,
+  //   needUpdate: true,
+  //   link: "",
+  // );
 
   if (initUrl != null && initUrl.isNotEmpty) {
     imageController.updateLink(initUrl);
@@ -25,7 +25,7 @@ Widget buildImageWidget(String id, ImageToUpload imageController, Icon icon,
       uploadImageController: imageController,
       text: placeholder,
       icon: icon,
-      validator: (value) => null);
+      validator: validator);
 }
 
 class LogoUploadWidget extends StatefulWidget {
@@ -86,17 +86,17 @@ class _LogoUploadWidgetState extends State<LogoUploadWidget> {
                       child: GestureDetector(
                         onTap: () async {
                           if (!widget.enabled) return;
-                      
+
                           final picker = ImagePicker();
-                          final pickedFile =
-                              await picker.pickImage(source: ImageSource.gallery);
-                      
+                          final pickedFile = await picker.pickImage(
+                              source: ImageSource.gallery);
+
                           if (pickedFile != null) {
                             String fileExtension =
                                 path.extension(pickedFile.path);
                             controllerImage.value = pickedFile.path;
                             final imageBytes = await pickedFile.readAsBytes();
-                      
+
                             List<int> compressedBytes =
                                 await FlutterImageCompress.compressWithList(
                               imageBytes,
@@ -104,7 +104,7 @@ class _LogoUploadWidgetState extends State<LogoUploadWidget> {
                               minWidth: 600,
                               quality: 50,
                             );
-                      
+
                             String base64Image = base64Encode(compressedBytes);
                             setState(() {
                               widget.uploadImageController
@@ -128,12 +128,16 @@ class _LogoUploadWidgetState extends State<LogoUploadWidget> {
                               children: [
                                 widget.icon,
                                 const SizedBox(width: 6),
-                                Text(
-                                  widget.text,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
+                                Flexible(
+                                  child: Text(
+                                    widget.text,
+                                    softWrap: true,
+                                    overflow: TextOverflow.visible,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(width: 6),
@@ -149,7 +153,10 @@ class _LogoUploadWidgetState extends State<LogoUploadWidget> {
                   Expanded(
                       flex: 3,
                       child: IconButton(
-                        icon: Icon(Icons.image, color: !showImageButton ? colorscheme.onSurfaceVariant : colorscheme.primary),
+                        icon: Icon(Icons.image,
+                            color: !showImageButton
+                                ? colorscheme.onSurfaceVariant
+                                : colorscheme.primary),
                         onPressed: !showImageButton
                             ? null
                             : () {
