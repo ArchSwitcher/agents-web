@@ -19,5 +19,7 @@ static const employees =  "/employees";
 static const manageEmployee =  "/manage-employee";
 static const inventory =  "/inventory";
 
+static const myPresence =  "/presence";
+
 
 }
