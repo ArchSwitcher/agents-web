@@ -101,8 +101,8 @@ Widget _presenceCardBuild(BuildContext context, PresenceModel presence) {
   );
 }
 
-Widget _cardTimeInfo(BuildContext context, String title, String time,
-    String date, String latitude, String longitude, IconData? icon) {
+Widget _cardTimeInfo(BuildContext context, String title, String? time,
+    String? date, String? latitude, String? longitude, IconData? icon) {
   final colorScheme = Theme.of(context).colorScheme;
 
   return Container(

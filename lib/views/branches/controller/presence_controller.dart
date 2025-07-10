@@ -24,7 +24,8 @@ class PresenceController extends GetxController {
   Future<void> fetchPresenceData(String positionId, String employeeId) async {
     try {
       loaderController.show();
-      final presenceData = await presenceService.getAll("$employeeId/$positionId");
+      // final presenceData = await presenceService.getAll("11/18");
+      final presenceData = await presenceService.getAll("18/17");
       presenceList.value = presenceData;
     } catch (e) {
       print('Error fetching presence data: $e');
