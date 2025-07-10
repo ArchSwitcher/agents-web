@@ -20,7 +20,7 @@ class _PresenceWidgetState extends State<PresenceWidget> {
       Get.put<PresenceController>(PresenceController());
 
   start() async {
-    await controller.fetchPresenceData();
+    await controller.fetchPresenceData(widget.positionId, widget.employeeId);
   }
 
   @override
@@ -167,15 +167,18 @@ void showPresenceModal({
   VoidCallback? onCancel,
   String title = 'Sucursal',
   String acceptText = 'Aceptar',
+  String positionId = '11',
+  String employeeId = '18',
   // String cancelText = 'Cancelar',
 }) {
   // TODO: should be repalce with correct values
+  
   showDialog(
     context: context,
     builder: (context) => GenericModal(
       content: PresenceWidget(
-        employeeId: "18",
-        positionId: "11",
+        employeeId: positionId,
+        positionId: employeeId,
       ),
       onAccept: onAccept,
       subtitle: subtitle,

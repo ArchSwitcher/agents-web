@@ -13,6 +13,7 @@ class PresenceService extends BaseService
     
     print("Fetching presence data for: $value");
     final response = await http.get(
+      // employeeId/positionId
       Uri.parse('$baseUrl/employee/presence/$value'),
       headers: buildHeaders(),
     );

@@ -48,23 +48,22 @@ class BranchPositionsScreenState extends State<BranchPositionsScreen> {
               //     ? (constraints.maxWidth / 5) - 40
               //     : constraints.maxWidth - 40;
               return Obx(() {
-                      return Wrap(
-                        spacing: 30,
-                        runSpacing: 20,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        alignment: WrapAlignment.spaceBetween,
-                        direction:
-                            isWideScreen ? Axis.horizontal : Axis.vertical,
-                        children: [
-                          // ContendCard box decoration
-                          ...controller.positions.map((position) {
-                            return _positionCardBuild(context, isWideScreen,
-                                constraints, position, controller);
-                            // ignore: unnecessary_to_list_in_spreads
-                          }).toList(),
-                        ],
-                      );
-                    });
+                return Wrap(
+                  spacing: 30,
+                  runSpacing: 20,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  alignment: WrapAlignment.spaceBetween,
+                  direction: isWideScreen ? Axis.horizontal : Axis.vertical,
+                  children: [
+                    // ContendCard box decoration
+                    ...controller.positions.map((position) {
+                      return _positionCardBuild(context, isWideScreen,
+                          constraints, position, controller);
+                      // ignore: unnecessary_to_list_in_spreads
+                    }).toList(),
+                  ],
+                );
+              });
             }),
           ),
         ));
@@ -81,7 +80,7 @@ Widget _positionCardBuild(
 
   return Container(
     width: isWideScreen ? 550 : constraints.maxWidth - 40,
-    height: isWideScreen ? 300 : constraints.maxHeight - 40,
+    // height: isWideScreen ? 300 : constraints.maxHeight - 40,
     padding: const EdgeInsets.all(20),
     decoration: BoxDecoration(
       color: colorScheme.surface,
@@ -184,7 +183,7 @@ Widget _employeePosition(List<EmployeeModel>? employees) {
     children: [
       ...employees!.map((employee) {
         return Text(
-          "${employee.firstName.toString().trim()} ${employee.lastName.toString().trim()} - ${employee.position!.isPrincipal ? 'Principal' : 'Temporal'}",
+          "${employee.firstName.toString().trim()} ${employee.lastName.toString().trim()} - ${employee.position!.isPrincipal ? 'Principal' : 'Temporal'} ${employee.position!.isActive ? "Activo" : "Inactivo"} ",
           style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
         );
       }).toList(),
@@ -211,12 +210,21 @@ Widget _buttonsActions(BuildContext context, PositionModel? position,
       ElevatedButton.icon(
           onPressed: isEnabled
               ? () {
+                  final employeeId = position?.employee?[0].id;
+                  final employeeMap =
+                      position?.employee?.map((e) => e.id).toList();
+                  print("Employee IDs: $employeeMap");
+                  final positionId = position?.id;
+                  print(
+                      "objects: employeeId: $employeeId, positionId: $positionId ------------------");
                   // TODO: deberia de mostrar las inasistencias de la posición
                   showPresenceModal(
                       context: context,
                       title: "Asistencia",
                       subtitle: "Asistencias de la posición",
                       isEnabled: isEnabled,
+                      positionId: positionId!,
+                      employeeId: employeeId!,
                       onAccept: () {
                         // Handle acceptance logic here
                         // Navigator.of(context).pop();
