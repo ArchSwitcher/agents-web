@@ -119,77 +119,77 @@ class EmployeeAgentController extends GetxController {
   @override
   void onClose() {
     // Dispose each controller here
-    firstNameController.dispose();
-    middleNameController.dispose();
-    lastNameController.dispose();
-    secondLastNameController.dispose();
-    genderController.dispose();
-    birthDateController.dispose();
-    idTypeController.dispose();
-    identificationController.dispose();
-    nationalityController.dispose();
-    bloodTypeController.dispose();
-    maritalStatusController.dispose();
-    educationController.dispose();
-    languageController.dispose();
-    ethnicityController.dispose();
+    firstNameController.clear();
+    middleNameController.clear();
+    lastNameController.clear();
+    secondLastNameController.clear();
+    genderController.clear();
+    birthDateController.clear();
+    idTypeController.clear();
+    identificationController.clear();
+    nationalityController.clear();
+    bloodTypeController.clear();
+    maritalStatusController.clear();
+    educationController.clear();
+    languageController.clear();
+    ethnicityController.clear();
 
     birthCountryController.value = DropDownOption(id: "", label: "");
     birthDepartmentController.value = DropDownOption(id: "", label: "");
     birthMunicipalityController.value = DropDownOption(id: "", label: "");
     addressDepartmentController.value = DropDownOption(id: "", label: "");
     addressMunicipalityController.value = DropDownOption(id: "", label: "");
-    addressController.dispose();
+    addressController.clear();
 
-    phoneController.dispose();
-    mobileController.dispose();
-    emailController.dispose();
+    phoneController.clear();
+    mobileController.clear();
+    emailController.clear();
 
     emergencyRelationshipController.value = DropDownOption(id: "", label: "");
-    emergencyNameController.dispose();
-    emergencyPhoneController.dispose();
-    emergencyMobileController.dispose();
+    emergencyNameController.clear();
+    emergencyPhoneController.clear();
+    emergencyMobileController.clear();
 
-    internalCodeController.dispose();
-    joinDateController.dispose();
+    internalCodeController.clear();
+    joinDateController.clear();
     operationalProfileController.value = DropDownOption(id: "", label: "");
-    hrProfileController.dispose();
+    hrProfileController.clear();
     blueCardController.value = false;
-    typeController.dispose();
-    administrativeDepartmentController.dispose();
-    positionController.dispose();
-    socialSecurityCodeController.dispose();
-    paymentTypeController.dispose();
-    companyController.dispose();
-    agencyController.dispose();
-    payrollController.dispose();
-    professionController.dispose();
-    workplaceController.dispose();
-    contractTypeController.dispose();
-    hiringMethodController.dispose();
-    workCountryController.dispose();
-    workShiftController.dispose();
-    baseSalaryController.dispose();
-    decreeBonusController.dispose();
+    typeController.clear();
+    administrativeDepartmentController.clear();
+    // positionController.dispose();
+    socialSecurityCodeController.clear();
+    paymentTypeController.clear();
+    companyController.clear();
+    agencyController.clear();
+    payrollController.clear();
+    professionController.clear();
+    workplaceController.clear();
+    contractTypeController.clear();
+    hiringMethodController.clear();
+    workCountryController.clear();
+    workShiftController.clear();
+    baseSalaryController.clear();
+    decreeBonusController.clear();
 
-    driverLicenseTypeController.dispose();
-    driverLicenseNumberController.dispose();
+    driverLicenseTypeController.clear();
+    driverLicenseNumberController.clear();
     gunPermitController.value = false;
 
     bankController.value = DropDownOption(id: "", label: "");
-    accountNumberController.dispose();
+    accountNumberController.clear();
 
     lifeInsuranceController.value = false;
-    shootingPracticeController.dispose();
-    graduationScoreController.dispose();
-    referredByController.dispose();
+    shootingPracticeController.clear();
+    graduationScoreController.clear();
+    referredByController.clear();
 
-    stateController.dispose();
-    accessUserController.dispose();
+    stateController.clear();
+    accessUserController.clear();
     billableController.value = false;
     approvedByPaymentsController.value = false;
 
-    mtPositionController.dispose();
+    mtPositionController.clear();
 
     super.onClose();
   }

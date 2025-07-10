@@ -81,7 +81,7 @@ Widget _positionCardBuild(
 
   return Container(
     width: isWideScreen ? 550 : constraints.maxWidth - 40,
-    height: isWideScreen ? 250 : constraints.maxHeight - 40,
+    height: isWideScreen ? 300 : constraints.maxHeight - 40,
     padding: const EdgeInsets.all(20),
     decoration: BoxDecoration(
       color: colorScheme.surface,

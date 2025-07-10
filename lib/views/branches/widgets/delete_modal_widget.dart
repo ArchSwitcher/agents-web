@@ -22,6 +22,8 @@ BranchController controller = Get.put(BranchController());
     context: context,
     builder: (context) => GenericModal(
       content: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
             "¿Está seguro de eliminar la sucursal ${branch.branchName}?",

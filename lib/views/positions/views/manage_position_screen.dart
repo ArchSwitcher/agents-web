@@ -6,6 +6,7 @@ import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/constants/database_constants.dart';
 import 'package:agents_app/shared/constants/routes.dart';
+import 'package:agents_app/shared/helpers/validations/not_empty.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/views/branches/sections/turn_config.dart';
 import 'package:agents_app/views/positions/controllers/position_controller.dart';
@@ -386,6 +387,17 @@ Widget _formStepContent(PositionController controller, BuildContext context,
           crossAxisAlignment: WrapCrossAlignment.center,
           alignment: WrapAlignment.spaceBetween,
           children: [
+            SizedBox(
+              width: width,
+              child: CustomInputWidget(
+                  enabled: isEnabled,
+                  controller: controller.positionName,
+                  label: "Nombre de la posición",
+                  hintText: "Nombre de la posición",
+                  validator: (value) => notEmptyFieldValidator(value),
+                  prefixIcon: Icons.location_on_rounded),
+            ),
+
             LoadingAutocompleteDropdown(
               initialValue: controller.serviceType.value,
               prefixIcon: Icons.work,
@@ -462,9 +474,9 @@ Widget _formStepContent(PositionController controller, BuildContext context,
                     label: "Fecha fin",
                     hintText: "Fecha fin",
                     prefixIcon: Icons.calendar_today)),
-            SizedBox(width: width),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
               children: [
                 Text("Turnos disponibles de la sucursal",
                     style: CustomStyle.textStyleBlack(context)),
@@ -473,7 +485,7 @@ Widget _formStepContent(PositionController controller, BuildContext context,
                     : turnConfiguration(Theme.of(context).colorScheme,
                         controller.branchController, true, isEnabled)
               ],
-            )
+            ),
           ],
         );
       })),

@@ -120,7 +120,6 @@ class PositionServices extends BaseService
     }
   }
 
-
   Future<List<PositionModel>> getAllPositionsByBranchId(String branchId) async {
     final response = await http.get(
       Uri.parse('$baseUrl/position/getPositionsByBranch/$branchId'),
@@ -136,6 +135,26 @@ class PositionServices extends BaseService
     } else {
       print("objects: error ---- ${response.statusCode}");
       throw Exception('Error al cargar posiciones de la sucursal');
+    }
+  }
+
+  Future<List<PositionModel>> getAllPositionsByAgentId(String agentId) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/position/getPositionsByEmployeeId/$agentId'),
+      headers: buildHeaders(),
+    );
+
+    try {
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        final List data = decoded['data'];
+        return data.map((json) => PositionModel.fromJson(json)).toList();
+      } else {
+        throw Exception('Error al cargar posiciones--: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("objects: error ---- $e");
+      throw Exception('Error al cargar posiciones: $e');
     }
   }
 }

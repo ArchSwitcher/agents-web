@@ -1,3 +1,4 @@
+import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
@@ -5,9 +6,12 @@ import 'package:agents_app/views/positions/controllers/position_controller.dart'
 import 'package:agents_app/views/positions/widgets/actions_btns_widget.dart';
 import 'package:agents_app/widgets/datatable/common_data_table.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 List<DataRow> buildTablePositionRows(PositionController controller,
     BuildContext context, EmployeeAgentController? employeeController) {
+  LoaderController loaderController = Get.put<LoaderController>(LoaderController());
+
   return List.generate(
     controller.positions.length,
     (index) {
@@ -26,19 +30,26 @@ List<DataRow> buildTablePositionRows(PositionController controller,
               children: [
                 IconButton(
                   icon: const Icon(Icons.person),
-                  onPressed: () {
+                  onPressed: () async {
                     // print("object ${element.positionName}");
-                    Navigator.pushNamed(context, RouteConstants.manageEmployee,
+                    await Navigator.pushNamed(
+                        context, RouteConstants.manageEmployee,
                         arguments: {
                           'position': element,
                           'employeeType': "Permanente",
                         });
+                    print("object ${element.positionName}");
+                    loaderController.show();
+                    controller.positions.clear();
+                    await Future.delayed(const Duration(seconds: 1));
+                    await controller.fetchPositions();
+                    loaderController.hide();
                   },
                 ),
               ],
             )),
           cellDataTable(element.id, context: context),
-          cellDataTable(element.positionName, context: context),
+          cellDataTable(element.name, context: context),
           cellDataTable(element.latitude, context: context),
           cellDataTable(element.longitude, context: context),
           cellDataTable(element.prosena, context: context),

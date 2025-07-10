@@ -237,14 +237,6 @@ Widget _agentsInfo(
                   return null;
                 }),
               ),
-              ElevatedButton(
-                onPressed: () {
-
-                  controller.saveBranchPosition();
-                  print("Submit button pressed");
-                },
-                child: Text('Submit'),
-              ),
 
               SizedBox(
                 width: width,

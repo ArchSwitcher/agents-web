@@ -14,10 +14,10 @@ List<DataRow> buildTableRowsBranches(
         cells: [
           DataCell(Row(
             children: [
-              editBranchButton(context, element),
+              editBranchButton(context, element, controller),
               deleteBranchButton(context, element),
               viewPositionButton(context, controller, element.id),
-              viewStayButton(context, element.id),
+              viewStayButton(context, element.id, element),
             ],
           )),
           cellDataTable(element.id, context: context),

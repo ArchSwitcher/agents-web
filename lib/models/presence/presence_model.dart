@@ -33,52 +33,65 @@ class PresenceModel {
     this.endDatetime,
     this.createdAt,
     this.employee,
-    this.endDate,
-    this.startDate,
     this.startTime,
     this.endTime,
-    this.day
+    this.endDate,
+    this.startDate,
+    this.day,
   });
 
   factory PresenceModel.fromJson(Map<String, dynamic> json) {
+    DateTime? parseDate(String? dateStr) {
+      try {
+        if (dateStr == null) return null;
+        return DateTime.parse(dateStr).toLocal();
+      } catch (_) {
+        return null;
+      }
+    }
+
+    final DateTime? startDt = parseDate(json['Start_datetime']);
+    final DateTime? endDt = parseDate(json['End_datetime']);
+
     return PresenceModel(
-      id: json['Id'],
-      dayId: json['DAY_Id'],
+      id: json['Id'] as int?,
+      dayId: json['DAY_Id'] as int?,
       day: json['DAY'] != null
           ? SimpleEntity.fromJson({
-              "Id": json['DAY']['Id'],
-              "Name": json['DAY']['Name'],
+              "Id": json['DAY']?['Id'],
+              "Name": json['DAY']?['Name'],
             })
           : null,
-      startLatitude: json['Start_latitude'],
-      startLongitude: json['Start_longitude'],
-      startTime: DateTime.parse(json['Start_datetime']).toLocal().toIso8601String().split('T')[1].replaceAll('.000', ''),
-      endTime: DateTime.parse(json['End_datetime']).toLocal().toIso8601String().split('T')[1].replaceAll('.000', ''),
-      startDatetime: json['Start_datetime'] != null
-          ? DateTime.parse(json['Start_datetime'])
+      startLatitude: json['Start_latitude'] as String?,
+      startLongitude: json['Start_longitude'] as String?,
+      startDatetime: startDt,
+      endLatitude: json['End_latitude'] as String?,
+      endLongitude: json['End_longitude'] as String?,
+      positionEmployeId: json['POSITION_EMPLOYE_Id'] as int?,
+      motive: json['Motive'] as String?,
+      endDatetime: endDt,
+      createdAt: parseDate(json['Created_at']),
+      startTime: startDt != null
+          ? startDt.toIso8601String().split('T')[1].replaceAll('.000', '')
           : null,
-      endDatetime: json['End_datetime'] != null
-          ? DateTime.parse(json['End_datetime'])
+      endTime: endDt != null
+          ? endDt.toIso8601String().split('T')[1].replaceAll('.000', '')
           : null,
-      endDate: json['End_datetime'] != null
-            ? DateTime.parse(json['End_datetime']).toLocal().toIso8601String().split('T')[0]
+      startDate: startDt != null
+          ? startDt.toIso8601String().split('T')[0]
           : null,
-      startDate: json['Start_datetime'] != null
-          ? DateTime.parse(json['Start_datetime']).toLocal().toIso8601String().split('T')[0]
+      endDate: endDt != null
+          ? endDt.toIso8601String().split('T')[0]
           : null,
-      endLatitude: json['End_latitude'],
-      endLongitude: json['End_longitude'],
-      positionEmployeId: json['POSITION_EMPLOYE_Id'],
-      motive: json['Motive'],
-      createdAt: DateTime.parse(json['Created_at']),
-      employee: json['POSITION_EMPLOYE'] != null
+      employee: json['POSITION_EMPLOYE'] != null &&
+              json['POSITION_EMPLOYE']['EMPLOYE'] != null
           ? EmployeeModel.fromJson({
-              ...json['POSITION_EMPLOYE']['EMPLOYE'],
+              ...?json['POSITION_EMPLOYE']?['EMPLOYE'],
               "position": {
-                "POSITION_Id": json['POSITION_EMPLOYE']['POSITION_Id'],
-                "Is_principal": json['POSITION_EMPLOYE']['Is_principal'],
-                "Is_active": json['POSITION_EMPLOYE']['Is_active'],
-                "Motive": json['POSITION_EMPLOYE']['Motive'],
+                "POSITION_Id": json['POSITION_EMPLOYE']?['POSITION_Id'],
+                "Is_principal": json['POSITION_EMPLOYE']?['Is_principal'],
+                "Is_active": json['POSITION_EMPLOYE']?['Is_active'],
+                "Motive": json['POSITION_EMPLOYE']?['Motive'],
               }
             })
           : null,
@@ -101,5 +114,5 @@ class PresenceModel {
       "POSITION_EMPLOYE": employee?.toJson(),
     };
   }
-
 }
+

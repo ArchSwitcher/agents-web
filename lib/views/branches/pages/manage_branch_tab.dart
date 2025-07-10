@@ -65,7 +65,7 @@ class ManageBranchTabState extends State<ManageBranchTab> {
 
   @override
   void dispose() {
-    Get.delete<BranchController>();
+    // Get.delete<BranchController>();
     super.dispose();
   }
 
@@ -127,8 +127,10 @@ class ManageBranchTabState extends State<ManageBranchTab> {
 
                           controller.loaderController.show();
                           if (isEditing == true) {
+                            print("Updating branch with ID: $branchId");
                             await controller.updateBranch(branchId!);
                           } else {
+                            print("Creating new branch");
                             await controller.createBranch();
                           }
                           controller.loaderController.hide();

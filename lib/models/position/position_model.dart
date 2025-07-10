@@ -2,6 +2,7 @@ import 'package:agents_app/models/branch/branch_index_model.dart';
 import 'package:agents_app/models/common/simple_entity_model.dart';
 import 'package:agents_app/models/employee/employee_model.dart';
 import 'package:agents_app/models/position/equipment_model.dart';
+import 'package:agents_app/models/presence/presence_model.dart';
 
 class PositionModel {
   String? id;
@@ -51,6 +52,7 @@ class PositionModel {
   List<EquipmentModel> equipment;
   List<SupportDocumentModel>? supportDocuments;
   List<EmployeeModel>? employee;
+  List<PresenceModel>? presence;
   // bool? isPrincipal = false;
   // bool? isActive = false;
   // String? motive;
@@ -96,6 +98,7 @@ class PositionModel {
     this.turn,
     this.supportDocuments,
     this.employee,
+    this.presence,
     // this.isPrincipal,
     // this.isActive,
     // this.motive
@@ -206,6 +209,13 @@ class PositionModel {
                   }))
               .toList()
           : [],
+      presence: p['POSITION_EMPLOYEEs'] == null || p['POSITION_EMPLOYEEs']?.isEmpty
+          ? []
+          : p['POSITION_EMPLOYEEs']?[0]?['PRESENCEs'] != null
+              ? (p['POSITION_EMPLOYEEs']?[0]?['PRESENCEs'] as List)
+                  .map((e) => PresenceModel.fromJson(e))
+                  .toList()
+              : null,
     );
   }
 

@@ -202,10 +202,10 @@ class BranchController extends GetxController {
 
   Future<void> fetchBranches() async {
     try {
-      branches.clear();
-      isLoading.value = true;
       loaderController.show();
-
+      branches.value = [];
+      isLoading.value = true;
+      await Future.delayed(const Duration(seconds: 1));
       final data = await _branchService.getAll(null);
       branches.value = data;
     } catch (e) {
@@ -261,12 +261,12 @@ class BranchController extends GetxController {
   @override
   void onClose() {
     // clean all controller
-    codeGpController.dispose();
-    nameController.dispose();
-    nitController.dispose();
-    socialReasonController.dispose();
-    latitudeController.dispose();
-    longitudeController.dispose();
+    codeGpController.clear();
+    nameController.clear();
+    nitController.clear();
+    socialReasonController.clear();
+    latitudeController.clear();
+    longitudeController.clear();
     super.onClose();
   }
 

@@ -45,11 +45,11 @@ class _BranchesScreenState extends State<BranchesScreen> {
   ];
 
   start() async {
-    loader.show();
-    await Future.delayed(const Duration(seconds: 1));
+    
+    
     await controller.fetchBranches();
-    loader.hide();
-    setState(() {});
+    
+    // setState(() {});
   }
 
   @override

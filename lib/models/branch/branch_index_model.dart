@@ -41,6 +41,8 @@ class BranchModel {
   int status;
 
   List<DocumentModel> documents;
+  int positions;
+
   // Aquí puedes luego implementar contactos y nombres comerciales si es necesario
 
   BranchModel({
@@ -67,6 +69,7 @@ class BranchModel {
     required this.isEnabled,
     required this.status,
     required this.documents,
+    this.positions = 0,
   });
 
   factory BranchModel.fromJson(Map<String, dynamic> data) {
@@ -113,6 +116,7 @@ class BranchModel {
       group: data['GROUP'] != null
           ? SimpleEntity.fromJson(data['GROUP'])
           : null,
+      positions: data['POSITIONS'] ?? 0,
     );
   }
 

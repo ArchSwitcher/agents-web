@@ -1,4 +1,5 @@
 import 'package:agents_app/models/branch/branch_index_model.dart';
+import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/views/branches/widgets/delete_modal_widget.dart';
@@ -37,11 +38,12 @@ Widget addBranchButton(BuildContext context, BranchController controller) {
       });
 }
 
-Widget editBranchButton(BuildContext context, BranchModel branch) {
+Widget editBranchButton(
+    BuildContext context, BranchModel branch, BranchController controller) {
   final colorScheme = Theme.of(context).colorScheme;
 
   return IconButton(
-      onPressed: () {
+      onPressed: () async {
         Navigator.pushNamed(context, RouteConstants.manageBranch, arguments: {
           'title': "Editar sucursal",
           'subtitle': "Editar sucursal",
@@ -49,6 +51,8 @@ Widget editBranchButton(BuildContext context, BranchModel branch) {
           'branch': branch,
           'isEditing': true,
         });
+
+        await controller.fetchBranches();
       },
       icon: Icon(
         Icons.edit,
@@ -97,7 +101,8 @@ Widget openScheduleModalButton(
   );
 }
 
-Widget viewPositionButton(BuildContext context, BranchController controller, String branchId) {
+Widget viewPositionButton(
+    BuildContext context, BranchController controller, String branchId) {
   final colorScheme = Theme.of(context).colorScheme;
 
   return IconButton(
@@ -117,11 +122,16 @@ Widget viewPositionButton(BuildContext context, BranchController controller, Str
 }
 
 // viewStayButton
-Widget viewStayButton(BuildContext context, String branchId) {
+Widget viewStayButton(
+    BuildContext context, String branchId, BranchModel branch) {
   final colorScheme = Theme.of(context).colorScheme;
 
   return IconButton(
       onPressed: () async {
+        if (branch.positions == 0) {
+          ToastService.warning(title: "No hay posiciones", subTitle: "La sucursal no tiene posiciones registradas para ser entregada.");
+          return;
+        }
         await Navigator.pushNamed(context, RouteConstants.branchPositionStay,
             arguments: {
               'title': "Estancia de sucursal",

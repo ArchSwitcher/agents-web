@@ -1,7 +1,5 @@
 import 'package:agents_app/services/toast_service.dart';
-import 'package:agents_app/shared/helpers/validations/end_time_validator.dart';
 import 'package:agents_app/shared/helpers/validations/not_empty.dart';
-import 'package:agents_app/shared/helpers/validations/time_validatot.dart';
 import 'package:agents_app/views/branches/controller/branch_controller.dart';
 import 'package:agents_app/widgets/commons/generic_modal.dart';
 import 'package:agents_app/widgets/inputs/custom_checkBox_widget.dart';
@@ -51,26 +49,7 @@ void showScheduleModal({
                     onChanged: (value) {
                       if (isEdit == false) return;
                       controller.toggleWeekDay(day);
-                    },
-                    startTimeValidator: (value) {
-                      if (day.isSelected.value == false) return null;
-                      if (value == null || value.isEmpty) {
-                        return 'Hora de inicio es requerida';
-                      }
-                      final timeError = validateTime(value);
-                      if (timeError != null) {
-                        return timeError;
-                      }
-                      if (value == "23:59") {
-                        return "Hora no valida";
-                      }
-                      return null;
-                    },
-                    endTimeValidator: (value) {
-                      if (day.isSelected.value == false) return null;
-                      return endTimeValidator(day.startTimeController.text,
-                          day.endTimeController.text);
-                    },
+                    }
                   );
                 }).toList(),
               ),
@@ -108,8 +87,7 @@ class WeekDayTime extends StatefulWidget {
   final TextEditingController startTimeController;
   final TextEditingController endTimeController;
   // validator for start time and end time
-  final String? Function(String?)? startTimeValidator;
-  final String? Function(String?)? endTimeValidator;
+  
   final bool enabled;
   const WeekDayTime(
       {super.key,
@@ -118,8 +96,7 @@ class WeekDayTime extends StatefulWidget {
       required this.onChanged,
       required this.startTimeController,
       required this.endTimeController,
-      required this.startTimeValidator,
-      required this.endTimeValidator,
+      
       required this.enabled});
 
   @override
@@ -161,7 +138,7 @@ class _WeekDayTimeState extends State<WeekDayTime> {
               label: 'Hora de inicio',
               hintText: 'Seleccione la hora',
               prefixIcon: Icons.access_time,
-              validator: widget.startTimeValidator,
+              // validator: widget.startTimeValidator,
             ),
           ),
           const SizedBox(width: 12),
@@ -181,7 +158,8 @@ class _WeekDayTimeState extends State<WeekDayTime> {
                   label: 'Hora de fin',
                   hintText: 'Seleccione la hora',
                   prefixIcon: Icons.access_time,
-                  validator: widget.endTimeValidator)),
+                  // validator: widget.endTimeValidator
+                  )),
         ],
       ),
     );

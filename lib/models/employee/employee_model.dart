@@ -309,7 +309,7 @@ class PositionEmployee {
       PositionEmployee(
         positionId: json["POSITION_Id"] ?? 0,
         isPrincipal: json["Is_principal"] == 1 ? true : false,
-        isActive: (json["Is_active"] == 1) ? true : true,
+        isActive: (json["Is_active"] == 1) ? true : false,
         motive: json["Motive"],
       );
 

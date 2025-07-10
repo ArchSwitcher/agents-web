@@ -68,6 +68,7 @@ class PositionController extends GetxController {
   final TextEditingController shiftValue = TextEditingController();
   final TextEditingController minimumPrice = TextEditingController();
   final TextEditingController servicePrice = TextEditingController();
+  final TextEditingController positionName = TextEditingController();
 
   TextEditingController observations = TextEditingController();
 
@@ -180,7 +181,7 @@ class PositionController extends GetxController {
         name: "posicion ${DateTime.now().toIso8601String()}",
         latitude: "0.0",
         longitude: "0.0",
-        positionName: "Posición de prueba",
+        positionName: positionName.text,
         // groupId: group.value.id,
         // clientId: client.value.id,
       );
@@ -247,6 +248,7 @@ class PositionController extends GetxController {
       minimumPrice.text = position.minimunPrice.toString();
       servicePrice.text = position.servicePrice.toString();
       observations.text = position.remarks ?? '';
+      positionName.text = position.positionName;
 
       // Load equipment list
       equipmentList.clear();

@@ -35,10 +35,10 @@ class ManageClientController extends GetxController {
 
   @override
   void onClose() {
-    nameController.dispose();
-    emailController.dispose();
-    phoneController.dispose();
-    urlController.dispose();
+    nameController.clear();
+    emailController.clear();
+    phoneController.clear();
+    urlController.clear();
     super.onClose();
   }
 
