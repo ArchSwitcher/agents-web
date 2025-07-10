@@ -29,6 +29,8 @@ class _LoginPageState extends State<LoginPage> {
         username: user.username,
         token: user.token,
         userId: user.id,
+        role: user.role!,
+        person: user.person!,
       );
       Navigator.pushReplacementNamed(context, RouteConstants.dashboard);
     } else {

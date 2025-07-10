@@ -1,7 +1,8 @@
+import 'package:agents_app/controllers/globals.dart';
 import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
-import 'package:agents_app/services/toast_service.dart';
+// import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/views/agent/controller/agent_presence_controller.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +19,12 @@ class PresencesScreenState extends State<PresencesScreen> {
   final AgentPresenceController controller = Get.put(AgentPresenceController());
 
   final LoaderController loaderController = Get.put(LoaderController());
+  final SessionController sessionController = Get.find<SessionController>();
 
   start() async {
     loaderController.show();
-    await controller.fetchMyPositions();
+    final employeeId = sessionController.person.value.employeeId;
+    await controller.fetchMyPositions(employeeId);
     loaderController.hide();
     controller.update();
   }
@@ -105,7 +108,7 @@ class PresencesScreenState extends State<PresencesScreen> {
                             //       minimumSize: const Size(190, 40),
                             //     )),
                             // !(isActivePosition && presence != null)
-                                // ? const SizedBox.shrink()
+                            //     ? const SizedBox.shrink() :
                                  Column(
                                     children: [
                                       const SizedBox(height: 10),

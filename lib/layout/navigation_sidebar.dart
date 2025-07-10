@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class NavigationSidebar extends StatelessWidget {
-  final String userRole;
+  final String userRole; //! remove this if not needed
   final String? currentRoute;
 
   const NavigationSidebar({
@@ -19,14 +19,18 @@ class NavigationSidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MenuSidebarController menuController = Get.find();
-    final userInfo = Get.find<SessionController>();
+    final userInfo = Get.put<SessionController>(SessionController());
     final SidebarController sidebarController = Get.find();
     final colorScheme = Theme.of(context).colorScheme;
 
+    print('userInfo: ${userInfo.username.value}, role: ${userInfo.role.value.name}');
+
     // Cargar menú si está vacío
+    print("Verificando si el menú está vacío: ${menuController.menu.isEmpty}");
     if (menuController.menu.isEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        menuController.loadMenu(userRole);
+        print("Cargando menú desde el controlador");
+        menuController.loadMenu(userInfo.role.value.name);
       });
     }
     return Container(
@@ -80,7 +84,7 @@ class NavigationSidebar extends StatelessWidget {
                         ),
                         const SizedBox(height: 5),
                         Text(
-                          userInfo.getUsername,
+                          '${userInfo.getPerson.firstName} ${userInfo.getPerson.lastName}',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -88,7 +92,7 @@ class NavigationSidebar extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          "Administrador",
+                          userInfo.getRole.name,
                           style: TextStyle(
                             fontSize: 14,
                             color: colorScheme.onSurface.withAlpha(250),
@@ -179,11 +183,9 @@ class NavigationSidebar extends StatelessWidget {
                       title: const Text("Cerrar sesión"),
                       onTap: () {
                         // lógica logout
-                        Navigator.of(context).pushReplacement(PageRouteBuilder(
-                          pageBuilder: (_, __, ___) => getPageForRoute("/"),
-                          transitionDuration: Duration.zero,
-                          reverseTransitionDuration: Duration.zero,
-                        ));
+                        Get.find<SessionController>().logOut();
+                        Get.offAllNamed('/');
+                        
                       },
                     ),
                   ],

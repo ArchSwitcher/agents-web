@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:html' as html;
+// import 'dart:html' as html;
 
 class UploadFileService extends BaseService {
   Future<String?> uploadPhotoMobile(File file, String folder) async {

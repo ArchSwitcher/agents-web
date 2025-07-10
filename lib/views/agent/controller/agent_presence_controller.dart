@@ -23,11 +23,11 @@ class AgentPresenceController extends GetxController {
     // fetchPresences();
   }
 
-  fetchMyPositions() async {
+  fetchMyPositions(String? employeeId) async {
     try {
       isLoading.value = true;
       //! retrieve positions by agent ID with get
-      final response = await positionServices.getAllPositionsByAgentId("13");
+      final response = await positionServices.getAllPositionsByAgentId(employeeId!);
       if (response.isNotEmpty) {
         positions.value = response;
       } else {
@@ -61,7 +61,7 @@ class AgentPresenceController extends GetxController {
       final dayId = findDayOfTurn(position);
 
       final presence =
-          position.presence?.firstWhere((presence) => presence.dayId == null);
+          position.presence?.firstWhere((presence) => presence.dayId == null, orElse: () => PresenceModel(id: null, dayId: null, startTime: null, endTime: null));
       final currentPosition = await determinePosition();
 
       isLoading.value = true;
