@@ -181,7 +181,7 @@ Widget _employeePosition(List<EmployeeModel>? employees) {
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      ...employees!.map((employee) {
+      ...employees!.where((employee) => employee.position!.isPrincipal == true).map((employee) {
         return Text(
           "${employee.firstName.toString().trim()} ${employee.lastName.toString().trim()} - ${employee.position!.isPrincipal ? 'Principal' : 'Temporal'} ${employee.position!.isActive ? "Activo" : "Inactivo"} ",
           style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
@@ -210,13 +210,13 @@ Widget _buttonsActions(BuildContext context, PositionModel? position,
       ElevatedButton.icon(
           onPressed: isEnabled
               ? () {
-                  final employeeId = position?.employee?[0].id;
+                  // final employeeId = position?.employee?[0].id;
                   final employeeMap =
                       position?.employee?.map((e) => e.id).toList();
                   print("Employee IDs: $employeeMap");
                   final positionId = position?.id;
-                  print(
-                      "objects: employeeId: $employeeId, positionId: $positionId ------------------");
+                  // print(
+                  //     "objects: employeeId: $employeeId, positionId: $positionId ------------------");
                   // TODO: deberia de mostrar las inasistencias de la posición
                   showPresenceModal(
                       context: context,
@@ -224,7 +224,7 @@ Widget _buttonsActions(BuildContext context, PositionModel? position,
                       subtitle: "Asistencias de la posición",
                       isEnabled: isEnabled,
                       positionId: positionId!,
-                      employeeId: employeeId!,
+                      employeeIds: employeeMap!.whereType<String>().toList(),
                       onAccept: () {
                         // Handle acceptance logic here
                         // Navigator.of(context).pop();

@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PresenceWidget extends StatefulWidget {
-  final String employeeId;
+  final List<String> employeeIds;
   final String positionId;
 
   const PresenceWidget(
-      {super.key, required this.employeeId, required this.positionId});
+      {super.key, required this.employeeIds, required this.positionId});
 
   @override
   State<PresenceWidget> createState() => _PresenceWidgetState();
@@ -20,7 +20,7 @@ class _PresenceWidgetState extends State<PresenceWidget> {
       Get.put<PresenceController>(PresenceController());
 
   start() async {
-    await controller.fetchPresenceData(widget.positionId, widget.employeeId);
+    await controller.fetchPresenceData(widget.positionId, widget.employeeIds);
   }
 
   @override
@@ -34,15 +34,17 @@ class _PresenceWidgetState extends State<PresenceWidget> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return Column(
-        children: [
-          ...controller.presenceList.map((presence) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: _presenceCardBuild(context, presence),
-            );
-          }).toList(),
-        ],
+      return SingleChildScrollView(
+        child: Column(
+          children: [
+            ...controller.presenceList.map((presence) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: _presenceCardBuild(context, presence),
+              );
+            }).toList(),
+          ],
+        ),
       );
     });
   }
@@ -77,10 +79,10 @@ Widget _presenceCardBuild(BuildContext context, PresenceModel presence) {
           _cardTimeInfo(
               context,
               "Información de entrada",
-              presence.startTime!,
-              presence.startDate!,
-              presence.startLatitude!,
-              presence.startLongitude!,
+              presence.startTime,
+              presence.startDate,
+              presence.startLatitude,
+              presence.startLongitude,
               Icons.directions_walk),
           Divider(
             color: colorScheme.primary.withAlpha(80),
@@ -89,10 +91,10 @@ Widget _presenceCardBuild(BuildContext context, PresenceModel presence) {
           _cardTimeInfo(
             context,
             "Información de salida",
-            presence.endTime!,
-            presence.endDate!,
-            presence.startLatitude!,
-            presence.startLongitude!,
+            presence.endTime,
+            presence.endDate,
+            presence.startLatitude,
+            presence.startLongitude,
             Icons.exit_to_app,
           ),
         ],
@@ -168,17 +170,17 @@ void showPresenceModal({
   String title = 'Sucursal',
   String acceptText = 'Aceptar',
   String positionId = '11',
-  String employeeId = '18',
+  List<String> employeeIds = const ['18'],
   // String cancelText = 'Cancelar',
 }) {
   // TODO: should be repalce with correct values
-  
+
   showDialog(
     context: context,
     builder: (context) => GenericModal(
       content: PresenceWidget(
-        employeeId: positionId,
-        positionId: employeeId,
+        employeeIds: employeeIds,
+        positionId: positionId,
       ),
       onAccept: onAccept,
       subtitle: subtitle,
