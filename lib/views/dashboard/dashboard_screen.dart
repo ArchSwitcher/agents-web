@@ -55,21 +55,21 @@ class _InfoCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 32, color: colorScheme.surfaceContainer),
+              Icon(icon, size: 32, color: colorScheme.onPrimary),
               const SizedBox(height: 8),
               Text(
                 value,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: colorScheme.surfaceContainer,
+                  color: colorScheme.onPrimary,
                 ),
               ),
               Text(
                 label,
                 style: TextStyle(
                   fontSize: 14,
-                  color: colorScheme.surfaceContainer,
+                  color: colorScheme.onPrimary,
                 ),
               ),
             ],
@@ -91,56 +91,68 @@ class _ActivityItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return ListTile(
-      leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
-      title: Text(text),
+      leading: Icon(icon, color: colorScheme.onPrimary),
+      title: Text(
+        text,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: colorScheme.onSurface,
+            ),
+      ),
     );
   }
 }
 
 Widget resumeCards(BuildContext context) {
+  final textTheme = Theme.of(context).textTheme;
+  final colorScheme = Theme.of(context).colorScheme;
+
   return ContentCard(
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Text(
+        Text(
           'Bienvenido de nuevo 👋',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
         ),
         const SizedBox(height: 8),
         Text(
           'Aquí tienes un resumen del sistema.',
-          style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+          style: textTheme.bodyMedium?.copyWith(
+            color: colorScheme.onSurface.withOpacity(0.8),
+            fontSize: 16,
+          ),
         ),
         const SizedBox(height: 24),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            return const Wrap(
-              spacing: 16,
-              runSpacing: 16,
-              children: [
-                _InfoCard(
-                  icon: Icons.people,
-                  label: 'Clientes',
-                  value: '215',
-                ),
-                _InfoCard(
-                  icon: Icons.person,
-                  label: 'Usuarios',
-                  value: '130',
-                ),
-                _InfoCard(
-                  icon: Icons.shield,
-                  label: 'Agentes',
-                  value: '34',
-                ),
-                _InfoCard(
-                  icon: Icons.settings,
-                  label: 'Parámetros',
-                  value: '12',
-                ),
-              ],
-            );
-          },
+        const Wrap(
+          spacing: 16,
+          runSpacing: 16,
+          children: [
+            _InfoCard(
+              icon: Icons.people,
+              label: 'Clientes',
+              value: '215',
+            ),
+            _InfoCard(
+              icon: Icons.person,
+              label: 'Usuarios',
+              value: '130',
+            ),
+            _InfoCard(
+              icon: Icons.shield,
+              label: 'Agentes',
+              value: '34',
+            ),
+            _InfoCard(
+              icon: Icons.settings,
+              label: 'Parámetros',
+              value: '12',
+            ),
+          ],
         ),
       ],
     ),
@@ -148,14 +160,19 @@ Widget resumeCards(BuildContext context) {
 }
 
 Widget userReport(BuildContext context) {
-  return const ContentCard(
+  final textTheme = Theme.of(context).textTheme;
+  // final colorScheme = Theme.of(context).colorScheme;
+
+  return ContentCard(
     child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Actividades recientes',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
         ),
         const SizedBox(height: 12),
         const _ActivityItem(

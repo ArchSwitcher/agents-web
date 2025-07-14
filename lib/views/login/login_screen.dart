@@ -112,11 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: Text(
-                          'Entrar',
-                          style: TextStyle(
-                              fontSize: 16, color: colorScheme.surface),
-                        ),
+                        child: const Text('Entrar'),
                       ),
                     ),
                   ],
