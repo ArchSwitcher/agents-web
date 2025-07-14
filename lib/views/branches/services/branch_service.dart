@@ -16,12 +16,12 @@ class BranchService extends BaseService implements CrudService<BranchModel> {
 
     try {
       if (response.statusCode == 200) {
-      final decoded = json.decode(response.body);
-      final List data = decoded['branches'];
-      return data.map((json) => BranchModel.fromJson(json)).toList();
-    } else {
-      throw Exception('Error al cargar sucursales');
-    }
+        final decoded = json.decode(response.body);
+        final List data = decoded['branches'];
+        return data.map((json) => BranchModel.fromJson(json)).toList();
+      } else {
+        throw Exception('Error al cargar sucursales');
+      }
     } catch (e) {
       print("objects: error ---- $e");
       throw Exception('Error al cargar sucursales: $e');
@@ -74,22 +74,38 @@ class BranchService extends BaseService implements CrudService<BranchModel> {
 
   @override
   Future<bool> update(String id, BranchModel item) async {
-    final response = await http.put(
-      Uri.parse("$baseUrl/branch/$id"),
-      headers: buildHeaders(),
-      body: jsonEncode(item.toJson()),
-    );
-
-    print("objects: response $id ---- ${item.toJson()}");
-
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      ToastService.error(
-        title: "Sucursal",
-        subTitle: "Error al actualizar sucursal",
+    try {
+      print("objects: response $id ---- ${jsonEncode(item.toJson())}");
+      final response = await http.put(
+        Uri.parse("$baseUrl/branch/$id"),
+        headers: buildHeaders(),
+        body: jsonEncode(item.toJson()),
       );
-      throw Exception('Error al actualizar sucursal');
+      print("objects: response ${response.statusCode} ");
+
+      if (response.statusCode == 200) {
+        ToastService.success(
+          title: "Sucursal",
+          subTitle: "Sucursal actualizada correctamente",
+        );
+        return true;
+      } else if (response.statusCode == 409) {
+        ToastService.error(
+          title: "Turnos",
+          subTitle: "El turno ya esta asociado a un agente",
+        );
+        throw Exception(
+            "Verifique que el turno no esta asociado a un agente para poder eliminarlo");
+      } else {
+        ToastService.error(
+          title: "Sucursal",
+          subTitle: "Error al actualizar sucursal",
+        );
+        throw Exception('Error al actualizar sucursal');
+      }
+    } catch (e) {
+      print("objects: error ---- $e");
+      return false;
     }
   }
 

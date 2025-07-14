@@ -44,7 +44,7 @@ Widget editBranchButton(
 
   return IconButton(
       onPressed: () async {
-        Navigator.pushNamed(context, RouteConstants.manageBranch, arguments: {
+        await Navigator.pushNamed(context, RouteConstants.manageBranch, arguments: {
           'title': "Editar sucursal",
           'subtitle': "Editar sucursal",
           'branchId': branch.id,
@@ -52,7 +52,7 @@ Widget editBranchButton(
           'isEditing': true,
         });
 
-        await controller.fetchBranches();
+        controller.fetchBranches();
       },
       icon: Icon(
         Icons.edit,

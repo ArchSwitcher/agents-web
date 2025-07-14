@@ -47,32 +47,44 @@ class GenericModal extends StatelessWidget {
 
       content: content,
       actions: [
-        showCancelButton ?
-        SizedBox(
-          width: 120,
-          child: ElevatedButton(
-            style: CustomStyle.confirmModalButton(context),
-            onPressed: () {
-              onCancel?.call();
-              Navigator.of(context).pop();
-            },
-            child: Text(cancelText),
-          ),
-        ): const SizedBox.shrink(),
-        showAcceptButton ?
-        SizedBox(
-          width: 120,
-          child: ElevatedButton(
-            style: TextButton.styleFrom(
-                backgroundColor: colorScheme.primaryFixed,
-                foregroundColor: colorScheme.surface),
-            onPressed: isLoading ? null : () {
-              onAccept?.call();
-              //Navigator.of(context).pop();
-            },
-            child: Text(acceptText),
-          ),
-        ): const SizedBox.shrink(),
+        showCancelButton
+            ? SizedBox(
+                width: 120,
+                child: ElevatedButton(
+                  style: CustomStyle.confirmModalButton(context),
+                  onPressed: () {
+                    onCancel?.call();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    cancelText,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary),
+                  ),
+                ),
+              )
+            : const SizedBox.shrink(),
+        showAcceptButton
+            ? SizedBox(
+                width: 120,
+                child: ElevatedButton(
+                  style: TextButton.styleFrom(
+                      backgroundColor: colorScheme.primaryFixed,
+                      foregroundColor: colorScheme.surface),
+                  onPressed: isLoading
+                      ? null
+                      : () {
+                          onAccept?.call();
+                          //Navigator.of(context).pop();
+                        },
+                  child: Text(
+                    acceptText,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary),
+                  ),
+                ),
+              )
+            : const SizedBox.shrink(),
       ],
     );
   }

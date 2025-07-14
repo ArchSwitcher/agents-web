@@ -27,7 +27,7 @@ class BranchController extends GetxController {
   final EmployeeDropdownService employeeDropdownService =
       Get.put(EmployeeDropdownService());
 
-  LoaderController loaderController = Get.put(LoaderController());
+  LoaderController loaderController = Get.find<LoaderController>();
 
   final BranchService _branchService = BranchService();
 
@@ -236,24 +236,24 @@ class BranchController extends GetxController {
   }
 
   // update branch
-  Future<bool> updateBranch(
-    String id,
-  ) async {
+  Future<bool> updateBranch(String id) async {
     try {
+      print("Updating branch with values: ${branchValues}");
       final success = await _branchService.update(id, branchValues);
-      if (success) {
-        ToastService.success(
-          title: "Sucursal",
-          subTitle: "Sucursal actualizada correctamente",
-        );
-        return true;
-      }
-      return false;
+      // if (success) {
+      //   ToastService.success(
+      //     title: "Sucursal",
+      //     subTitle: "Sucursal actualizada correctamente",
+      //   );
+      //   return true;
+      // }
+      // return false;
+      return success;
     } catch (e) {
-      ToastService.error(
-        title: "Sucursal",
-        subTitle: "Error al actualizar sucursal: $e",
-      );
+      // ToastService.error(
+      //   title: "Sucursal",
+      //   subTitle: e.toString(),
+      // );
       return false;
     }
   }
@@ -382,6 +382,7 @@ class BranchController extends GetxController {
         title: "Turno eliminado", subTitle: "Turno eliminado correctamente");
     clearTurn();
   }
+
   RxBool selectedTurn = false.obs;
 
   void selectTurn(int index) {
