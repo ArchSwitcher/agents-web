@@ -132,11 +132,13 @@ DataCell _longString(String element, bool? hasError, BuildContext context) {
 
 TextStyle _fontStyleError(BuildContext context, bool? hasError) =>
   TextStyle(
-      color: hasError == true ? Theme.of(context).colorScheme.error : null);
+      color: hasError == true ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.onSurface,
+      fontWeight: FontWeight.w400
+      );
 
   WidgetStateProperty<Color> colorRowDataTable(int index, BuildContext context) {
     return WidgetStateProperty.all<Color>(
-      index % 2 == 0 ? Theme.of(context).colorScheme.onSecondaryFixed : Theme.of(context).colorScheme.onSecondaryFixedVariant,
+      index % 2 == 0 ? Theme.of(context).colorScheme.surfaceContainerHighest : Theme.of(context).colorScheme.onSecondaryFixedVariant,
     );
   }
 

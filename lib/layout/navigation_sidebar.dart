@@ -23,7 +23,8 @@ class NavigationSidebar extends StatelessWidget {
     final SidebarController sidebarController = Get.find();
     final colorScheme = Theme.of(context).colorScheme;
 
-    print('userInfo: ${userInfo.username.value}, role: ${userInfo.role.value.name}');
+    print(
+        'userInfo: ${userInfo.username.value}, role: ${userInfo.role.value.name}');
 
     // Cargar menú si está vacío
     print("Verificando si el menú está vacío: ${menuController.menu.isEmpty}");
@@ -47,7 +48,7 @@ class NavigationSidebar extends StatelessWidget {
             child: Text(
               "ElEbano",
               style: TextStyle(
-                color: colorScheme.surface,
+                color: colorScheme.onPrimary,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -121,11 +122,20 @@ class NavigationSidebar extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   children: [
                     ListTile(
-                      leading:
-                          Icon(Icons.dashboard, color: colorScheme.primary),
-                      title: const Text("Tablero"),
+                      leading: Icon(Icons.dashboard,
+                          color: currentRoute == RouteConstants.dashboard
+                              ? Theme.of(context).colorScheme.secondary
+                              : Theme.of(context).colorScheme.onPrimary),
+                      title: Text(
+                        "Tablero",
+                        style: TextStyle(
+                            color: currentRoute == RouteConstants.dashboard
+                                ? Theme.of(context).colorScheme.secondary
+                                : Theme.of(context).colorScheme.onPrimary),
+                      ),
                       selected: currentRoute == RouteConstants.dashboard,
-                      selectedTileColor: colorScheme.primary.withOpacity(0.1),
+                      selectedTileColor:
+                          colorScheme.secondary.withAlpha((0.1 * 255).toInt()),
                       onTap: () {
                         sidebarController.setExpandedGroup(null);
                         if (currentRoute != null) {
@@ -161,13 +171,16 @@ class NavigationSidebar extends StatelessWidget {
                                 leading: Icon(
                                   item.icon,
                                   color: currentRoute == item.route
-                                      ? colorScheme.primary
+                                      ? colorScheme.secondary
                                       : null,
                                 ),
-                                title: Text(item.label),
+                                title: Text(item.label,
+                                    style: currentRoute == item.route
+                                        ? TextStyle(
+                                            color: colorScheme.secondary)
+                                        : null),
                                 selected: currentRoute == item.route,
-                                selectedTileColor:
-                                    colorScheme.primary.withOpacity(0.1),
+                                // selectedTileColor: colorScheme.secondary,
                                 onTap: () {
                                   if (currentRoute != item.route) {
                                     Get.offNamed(item.route);
@@ -185,7 +198,6 @@ class NavigationSidebar extends StatelessWidget {
                         // lógica logout
                         Get.find<SessionController>().logOut();
                         Get.offAllNamed('/');
-                        
                       },
                     ),
                   ],

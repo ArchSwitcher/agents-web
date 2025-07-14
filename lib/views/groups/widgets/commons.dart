@@ -40,7 +40,7 @@ Widget addGroup(BuildContext context, ManageGroupController controller) {
         children: [
           Icon(
             Icons.group_add,
-            color: colorScheme.surface,
+            color: colorScheme.onSurface,
           ),
           const SizedBox(
             width: 6,

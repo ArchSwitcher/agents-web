@@ -42,6 +42,8 @@ class CustomDataTableWidgetV2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    final colorScheme = Theme.of(context).colorScheme;
+
     return SizedBox(
       height: dynamicHeight ? double.infinity : size.height * tableHeight,
       child: LayoutBuilder(
@@ -53,18 +55,26 @@ class CustomDataTableWidgetV2 extends StatelessWidget {
             minWidth: minWidth,
             dividerThickness: 0,
             showCheckboxColumn: showCheckboxColumn,
-            headingRowHeight: size.height * (0.06),
+            headingRowHeight: size.height * 0.06,
+
+            /// ✅ Usamos `surfaceContainerHighest` para encabezados
             headingRowColor:
-                WidgetStateProperty.all(Theme.of(context).colorScheme.surface),
+                WidgetStateProperty.all(colorScheme.surfaceContainerHighest),
+
+            /// ✅ `surface` para fondo de tabla
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
+              color: colorScheme.surface,
               border: Border.all(
-                color: Theme.of(context).colorScheme.surface,
+                color: colorScheme.outline.withOpacity(0.2), // línea sutil
               ),
             ),
+            dataRowColor: WidgetStateProperty.all(
+              colorScheme.surfaceVariant,
+            ),
+
             lmRatio: 1.5,
             columns: _buildColumns(constraints, context),
-            rows: _buildRows(),
+            rows: _buildRows(context),
           );
         },
       ),
@@ -72,7 +82,9 @@ class CustomDataTableWidgetV2 extends StatelessWidget {
   }
 
   List<DataColumn> _buildColumns(BoxConstraints size, BuildContext context) {
+    // final colorScheme = Theme.of(context).colorScheme;
     double fontSize = (size.maxWidth * 0.02).clamp(13, 18);
+
     return List.generate(tableHeaders.length, (index) {
       ColumnSize columnSize = columnSizes != null && index < columnSizes!.length
           ? columnSizes![index]
@@ -97,16 +109,25 @@ class CustomDataTableWidgetV2 extends StatelessWidget {
     });
   }
 
-  List<DataRow> _buildRows() {
+  List<DataRow> _buildRows(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     if (tableRows.isNotEmpty) {
       return tableRows;
     }
+
     return [
       DataRow(
+        color: WidgetStateProperty.all(colorScheme.surfaceVariant),
         cells: List.generate(
           tableHeaders.length,
           (index) => DataCell(
-            Text(index == 0 ? 'No hay información disponible' : ''),
+            Text(
+              index == 0 ? 'No hay información disponible' : '',
+              style: TextStyle(
+                color: colorScheme.onSurface.withOpacity(0.6),
+              ),
+            ),
           ),
         ),
       ),

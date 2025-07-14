@@ -4,18 +4,18 @@ import 'package:agents_app/shared/resources/dimensions.dart';
 class CustomStyle {
   static TextStyle layoutTitleText(BuildContext context) => TextStyle(
         fontSize: Dimensions.titleTextSize,
-        color: Theme.of(context).colorScheme.surface,
+        color: Theme.of(context).colorScheme.onSurface,
       );
 
   static TextStyle layoutDescriptionText(BuildContext context) => TextStyle(
         fontSize: Dimensions.descriptionTextSize,
-        color: Theme.of(context).colorScheme.surface.withAlpha(204),
+        color: Theme.of(context).colorScheme.onSurface.withAlpha(204),
         fontStyle: FontStyle.italic,
       );
 
   static TextStyle textStyleWhite(BuildContext context) => TextStyle(
         fontSize: Dimensions.defaultTextSize,
-        color: Theme.of(context).colorScheme.surface,
+        color: Theme.of(context).colorScheme.onSurface,
       );
 
   static TextStyle textStyleBlack(BuildContext context) => TextStyle(
