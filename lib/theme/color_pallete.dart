@@ -8,36 +8,53 @@ final ThemeData appTheme = ThemeData(
   colorScheme: const ColorScheme(
     brightness: Brightness.dark,
 
-    primary: Color(0xFF2E3A59),           // Color principal: botones primarios, AppBar, íconos activos
-    onPrimary: Color(0xFFF0F0F0),         // Texto o íconos sobre el color primario
+    primary: Color(
+        0xFF2E3A59), // Color principal: botones primarios, AppBar, íconos activos
+    onPrimary: Color(0xFFF0F0F0), // Texto o íconos sobre el color primario
 
-    secondary: Color(0xFFF2B5D4),         // Color complementario: botones secundarios, etiquetas o acentos
-    onSecondary: Color(0xFF1A1C1E),       // Texto sobre el color secundario
+    secondary: Color(
+        0xFFF2B5D4), // Color complementario: botones secundarios, etiquetas o acentos
+    onSecondary: Color(0xFF1A1C1E), // Texto sobre el color secundario
 
-    background: Color(0xFF1A1C1E),        // Fondo general de la aplicación
-    onBackground: Color(0xFFF0F0F0),      // Texto principal sobre el fondo
+    background: Color(0xFF1A1C1E), // Fondo general de la aplicación
+    onBackground: Color(0xFFF0F0F0), // Texto principal sobre el fondo
 
-    surface: Color(0xFF2C2E33),           // Fondo de superficies como tarjetas, paneles, menús
-    onSurface: Color(0xFFF0F0F0),         // Texto o íconos sobre las superficies
+    surface:
+        Color(0xFF2C2E33), // Fondo de superficies como tarjetas, paneles, menús
+    onSurface: Color(0xFFF0F0F0), // Texto o íconos sobre las superficies
 
-    error: Color(0xFFD77A61),             // Colores de error o advertencia
-    onError: Color(0xFFFFFFFF),           // Texto sobre el color de error
+    error: Color(0xFFD77A61), // Colores de error o advertencia
+    onError: Color(0xFFFFFFFF), // Texto sobre el color de error
   ),
 
-  scaffoldBackgroundColor: const Color(0xFF1A1C1E), // Fondo del Scaffold (pantalla principal)
+  scaffoldBackgroundColor:
+      const Color(0xFF1A1C1E), // Fondo del Scaffold (pantalla principal)
 
   appBarTheme: const AppBarTheme(
-    backgroundColor: Color(0xFF2E3A59),   // Color de fondo del AppBar
-    foregroundColor: Color(0xFFF0F0F0),   // Color del texto y los íconos en el AppBar
+    backgroundColor: Color(0xFF2E3A59), // Color de fondo del AppBar
+    foregroundColor:
+        Color(0xFFF0F0F0), // Color del texto y los íconos en el AppBar
     elevation: 0,
   ),
 
   textTheme: const TextTheme(
     headlineSmall: TextStyle(color: Color(0xFFF0F0F0)), // Títulos principales
-    bodyMedium: TextStyle(color: Color(0xFFA1A1AA)),    // Texto secundario o de cuerpo
+    bodyMedium:
+        TextStyle(color: Color(0xFFA1A1AA)), // Texto secundario o de cuerpo
   ),
 
   useMaterial3: true,
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFF2E3A59), // Fondo del botón
+      foregroundColor: const Color(0xFFF0F0F0), // Texto e íconos en blanco
+      textStyle: const TextStyle(
+        fontSize: 16,
+        // fontWeight: FontWeight.w500,
+        color: Color(0xFFF0F0F0), // Texto del botón
+      ),
+    ),
+  ),
 );
 
 

@@ -41,6 +41,7 @@ class PresencesScreenState extends State<PresencesScreen> {
   Widget build(BuildContext context) {
     return ResponsiveSidebarLayout(
       title: "Mis posiciones",
+      description: "Registro de asistencia a mis posiciones",
       currentRoute: RouteConstants.myPresence,
       userRole: "agente",
       content: Column(
@@ -53,7 +54,7 @@ class PresencesScreenState extends State<PresencesScreen> {
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSecondary),
+                    color: Theme.of(context).colorScheme.onPrimary),
               ),
             ),
             Obx(() => controller.positions.isEmpty
@@ -109,85 +110,57 @@ class PresencesScreenState extends State<PresencesScreen> {
                             //     )),
                             // !(isActivePosition && presence != null)
                             //     ? const SizedBox.shrink() :
-                                 Column(
-                                    children: [
-                                      const SizedBox(height: 10),
-                                      ElevatedButton.icon(
-                                          onPressed: () {
-                                            try {
-                                              showDialogPresence(
-                                                  "Confirmar asistencia",
-                                                  "¿Estás seguro de que deseas marcar la asistencia de esta posición?",
-                                                  () async {
-                                                loaderController.show();
-                                                final response =
-                                                    await controller
-                                                        .markPresenceAsStarted(
-                                                            position);
+                            Column(
+                              children: [
+                                const SizedBox(height: 10),
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    try {
+                                      showDialogPresence("Confirmar asistencia",
+                                          "¿Estás seguro de que deseas marcar la asistencia de esta posición?",
+                                          () async {
+                                        loaderController.show();
+                                        final response = await controller
+                                            .markPresenceAsStarted(position);
 
-                                                if (response) {
-                                                  // start();
-                                                }
-                                                loaderController.hide();
-                                              });
-                                            } catch (e) {
-                                              print(
-                                                  "Error marking presence: $e");
-                                            } finally {
-                                              print("Hiding loader");
-                                              loaderController.hide();
-                                            }
-                                          },
-                                          label: Text("Marcar asistencia",
-                                              style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .surface)),
-                                          icon: Icon(
-                                            Icons.check,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .surface,
-                                          ),
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                            minimumSize: const Size(190, 40),
-                                          )),
-                                      const SizedBox(height: 10),
-                                      ElevatedButton.icon(
-                                          onPressed: () {
-                                            showDialogPresence(
-                                                "Confirmar salida",
-                                                "¿Estás seguro de que deseas marcar la salida de esta posición?",
-                                                () async {
-                                              loaderController.show();
-                                              await controller
-                                                  .markPresenceAsEnded(
-                                                      position);
-                                              loaderController.hide();
-                                            });
-                                          },
-                                          label: Text("Marcar salida",
-                                              style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .surface)),
-                                          icon: Icon(
-                                            Icons.exit_to_app,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .surface,
-                                          ),
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Theme.of(context)
-                                                .colorScheme
-                                                .error,
-                                            minimumSize: const Size(190, 40),
-                                          )),
-                                    ],
-                                  )
+                                        if (response) {
+                                          // start();
+                                        }
+                                        loaderController.hide();
+                                      });
+                                    } catch (e) {
+                                      print("Error marking presence: $e");
+                                    } finally {
+                                      print("Hiding loader");
+                                      loaderController.hide();
+                                    }
+                                  },
+                                  label: const Text("Marcar asistencia"),
+                                  icon: const Icon(Icons.check),
+                                ),
+                                const SizedBox(height: 10),
+                                ElevatedButton.icon(
+                                    onPressed: () {
+                                      showDialogPresence("Confirmar salida",
+                                          "¿Estás seguro de que deseas marcar la salida de esta posición?",
+                                          () async {
+                                        loaderController.show();
+                                        await controller
+                                            .markPresenceAsEnded(position);
+                                        loaderController.hide();
+                                      });
+                                    },
+                                    label: const Text("Marcar salida"),
+                                    icon: const Icon(
+                                      Icons.exit_to_app,
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.error,
+                                      minimumSize: const Size(190, 40),
+                                    )),
+                              ],
+                            )
                           ],
                         ),
                         trailing: Text(
