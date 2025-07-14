@@ -59,17 +59,16 @@ class _CustomTimePickerState extends State<CustomTimePicker> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           widget.label,
-          style: const TextStyle(color: Colors.black),
+          style: textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface),
         ),
-        const SizedBox(
-          height: Dimensions.heightSize * 0.5,
-        ),
+        const SizedBox(height: Dimensions.heightSize * 0.5),
         TextFormField(
           onTap: () async {
             if (!widget.enabled) return;
@@ -80,19 +79,19 @@ class _CustomTimePickerState extends State<CustomTimePicker> {
               builder: (context, child) {
                 return Theme(
                   data: Theme.of(context).copyWith(
-                    colorScheme: ColorScheme.light(
-                      primary: colorScheme
-                          .onPrimaryFixed, // color de los números seleccionables
-                      onSurface:
-                          colorScheme.onSurface, // color del texto no seleccionado
+                    colorScheme: ColorScheme.dark(
+                      primary: colorScheme.primary,
+                      onPrimary: colorScheme.onPrimary,
+                      surface: colorScheme.surface,
+                      onSurface: colorScheme.onSurface,
                     ),
                     timePickerTheme: TimePickerThemeData(
-                      dialHandColor: colorScheme.onPrimaryFixed, // manecilla
-                      dialTextColor: colorScheme.onSurface, // números (no seleccionados)
-                      entryModeIconColor: colorScheme.onPrimaryFixed, // ícono del modo
-                      hourMinuteTextColor: colorScheme.onSurface, // texto del input
-                      hourMinuteColor: colorScheme.onSecondaryFixed, // fondo del input
-                      dayPeriodColor: colorScheme.onPrimaryFixed
+                      dialHandColor: colorScheme.primary,
+                      dialTextColor: colorScheme.onSurface,
+                      entryModeIconColor: colorScheme.primary,
+                      hourMinuteTextColor: colorScheme.onSurface,
+                      hourMinuteColor: colorScheme.surface,
+                      dayPeriodColor: colorScheme.primary.withOpacity(0.1),
                     ),
                   ),
                   child: child!,
@@ -107,28 +106,25 @@ class _CustomTimePickerState extends State<CustomTimePicker> {
           enabled: widget.enabled,
           onChanged: widget.onChange,
           readOnly: true,
-          style: CustomStyle.textStyleBlack(context),
+          style: textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface),
           controller: widget.controller,
           keyboardType: widget.keyboardType,
           validator: widget.validator,
           decoration: InputDecoration(
             hintText: widget.hintText,
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-            labelStyle: CustomStyle.textStyleBlack(context),
+            contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+            labelStyle: textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface),
             filled: true,
             fillColor: colorScheme.surface,
-            hintStyle: CustomStyle.textStyleBlack(context),
+            hintStyle: textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface.withOpacity(0.6)),
             focusedBorder: CustomStyle.focusBorder(context),
             enabledBorder: CustomStyle.focusErrorBorder(context),
             focusedErrorBorder: CustomStyle.focusErrorBorder(context),
             errorBorder: CustomStyle.focusErrorBorder(context),
-            prefixIcon: Icon(widget.prefixIcon),
+            prefixIcon: Icon(widget.prefixIcon, color: colorScheme.primary),
           ),
         ),
-        const SizedBox(
-          height: Dimensions.heightSize,
-        ),
+        const SizedBox(height: Dimensions.heightSize),
       ],
     );
   }
