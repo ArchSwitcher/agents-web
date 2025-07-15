@@ -43,10 +43,10 @@ class EmployeeController extends GetxController {
 
   // replaceTempEmployeePosition
   Future<void> replaceTempEmployeePosition(
-      String positionId, String employeeId) async {
+      String positionId, String employeeId, String? oldEmployeeId) async {
     try {
       loaderController.show();
-      await employeeService.replaceTempEmployeePosition(positionId, employeeId);
+      await employeeService.replaceTempEmployeePosition(positionId, employeeId, oldEmployeeId);
       print("objects: Employee position replaced successfully");
     } catch (e) {
       print('Error replacing employee position: $e');

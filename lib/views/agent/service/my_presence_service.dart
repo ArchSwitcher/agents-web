@@ -41,27 +41,16 @@ class MyPresenceService extends BaseService
   // post initPresenceEmployee
   Future<bool> initPresenceEmployee(Map<String, dynamic> body) async {
     try {
-      var bodyTempPresence;
-
-      if (body["positionEmployeeId"] == null) {
-        bodyTempPresence = {
-          "idPresence": body["idPresence"],
-          "startLatitud": body["startLatitud"],
-          "startLongitude": body["startLongitude"],
-          "motive": body["motive"]
-        };
-      } else {
-        bodyTempPresence = {
-          "dayId": body["dayId"],
-          "startLatitud": body["startLatitud"],
-          "startLongitude": body["startLongitude"],
-          "positionEmployeeId": body["positionEmployeeId"],
-          "motive": body["motive"]
-        };
-      }
+      
+      final bodyTempPresence = {
+        "employeeId": body["employeeId"],
+        "positionId": body["positionId"],
+        "latitude": body["latitude"],
+        "longitude": body["longitude"]
+      };
 
       final response = await http.post(
-        Uri.parse("$baseUrl/employee/initPresenceEmployee"),
+        Uri.parse("$baseUrl/employee/start-presence"),
         headers: buildHeaders(),
         body: jsonEncode(bodyTempPresence),
       );
@@ -90,12 +79,12 @@ class MyPresenceService extends BaseService
       var bodyEndPresence = {
         "endLatitud": body["endLatitud"],
         "endLongitud": body["endLongitud"],
-        "positionEmployeeId": body["positionEmployeeId"],
+        "positionId": body["positionId"],
+        "employeeId": body["employeeId"],
       };
 
-
       final response = await http.post(
-        Uri.parse("$baseUrl/employee/endUpdatePresenceEmployee/${body["presenceId"]}"),
+        Uri.parse("$baseUrl/employee/end-presence"),
         headers: buildHeaders(),
         body: jsonEncode(bodyEndPresence),
       );

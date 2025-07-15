@@ -86,7 +86,7 @@ void showReplaceModal({
   String title = 'Sucursal',
   String acceptText = 'Aceptar',
   required String positionId,
-
+  required String? oldEmployeeId,
   // String cancelText = 'Cancelar',
 }) {
   PresenceController controller =
@@ -111,6 +111,7 @@ void showReplaceModal({
         await controller.employeeController.replaceTempEmployeePosition(
           positionId,
           controller.employeeController.employeeTemp.value.id,
+          oldEmployeeId,
         );
         ToastService.success(
           title: "Éxito",

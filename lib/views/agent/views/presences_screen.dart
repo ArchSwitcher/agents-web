@@ -2,6 +2,7 @@ import 'package:agents_app/controllers/globals.dart';
 import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
+import 'package:agents_app/models/presence/presence_model.dart';
 // import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/views/agent/controller/agent_presence_controller.dart';
@@ -73,10 +74,22 @@ class PresencesScreenState extends State<PresencesScreen> {
                       final isActivePosition =
                           position.employee?[0].position?.isActive ?? false;
 
-                      final presence = controller.findDayOfTurn(position);
+                      final turn = controller.findDayOfTurn(position);
+                      final presence = position.presence?.firstWhere(
+                        (presence) => presence.dayId == DateTime.now().weekday,
+                        orElse: () => PresenceModel(
+                            id: null,
+                            dayId: null,
+                            startTime: null,
+                            endTime: null),
+                      );
+                      print(
+                          "presence ---- ${presence?.dayId}  ${presence?.startDate} ${presence?.endDate}");
 
-                      print("objects: presence ---- $presence");
-                      print("objects: position ---- ${isActivePosition}");
+                      // print("objects: presence ---- $presence");
+                      // print("objects: position ---- ${isActivePosition}");
+                      // print(
+                      //     "ACTIVE POSITION ${!(isActivePosition && presence != "0")}");
 
                       return ListTile(
                         title: Text(position.name),
@@ -108,59 +121,78 @@ class PresencesScreenState extends State<PresencesScreen> {
                             //           Theme.of(context).colorScheme.primary,
                             //       minimumSize: const Size(190, 40),
                             //     )),
-                            // !(isActivePosition && presence != null)
-                            //     ? const SizedBox.shrink() :
-                            Column(
-                              children: [
-                                const SizedBox(height: 10),
-                                ElevatedButton.icon(
-                                  onPressed: () {
-                                    try {
-                                      showDialogPresence("Confirmar asistencia",
-                                          "¿Estás seguro de que deseas marcar la asistencia de esta posición?",
-                                          () async {
-                                        loaderController.show();
-                                        final response = await controller
-                                            .markPresenceAsStarted(position);
+                            if (presence?.startDate != null)
+                              Text(
+                                  "Asistencia iniciada:    ${presence?.startDate ?? 'N/A'} ${presence?.startTime ?? ''}",
+                                  style: const TextStyle(fontSize: 16)),
+                            if (presence?.endDate != null)
+                              Text(
+                                  "Asistencia finalizada: ${presence?.endDate ?? 'N/A'} ${presence?.endTime ?? ''}",
+                                  style: const TextStyle(fontSize: 16)),
 
-                                        if (response) {
-                                          // start();
+                            if (isActivePosition && turn != "0")
+                              if (presence?.startDate == null)
+                                Column(
+                                  children: [
+                                    const SizedBox(height: 10),
+                                    ElevatedButton.icon(
+                                      onPressed: () {
+                                        try {
+                                          showDialogPresence(
+                                              "Confirmar asistencia",
+                                              "¿Estás seguro de que deseas marcar la asistencia de esta posición?",
+                                              () async {
+                                            loaderController.show();
+                                            final response = await controller
+                                                .markPresenceAsStarted(
+                                                    position.id!,
+                                                    sessionController.person
+                                                        .value.employeeId!);
+
+                                            if (response) {
+                                              // start();
+                                            }
+                                            loaderController.hide();
+                                          });
+                                        } catch (e) {
+                                          print("Error marking presence: $e");
+                                        } finally {
+                                          print("Hiding loader");
+                                          loaderController.hide();
                                         }
-                                        loaderController.hide();
-                                      });
-                                    } catch (e) {
-                                      print("Error marking presence: $e");
-                                    } finally {
-                                      print("Hiding loader");
-                                      loaderController.hide();
-                                    }
-                                  },
-                                  label: const Text("Marcar asistencia"),
-                                  icon: const Icon(Icons.check),
-                                ),
-                                const SizedBox(height: 10),
-                                ElevatedButton.icon(
-                                    onPressed: () {
-                                      showDialogPresence("Confirmar salida",
-                                          "¿Estás seguro de que deseas marcar la salida de esta posición?",
-                                          () async {
-                                        loaderController.show();
-                                        await controller
-                                            .markPresenceAsEnded(position);
-                                        loaderController.hide();
-                                      });
-                                    },
-                                    label: const Text("Marcar salida"),
-                                    icon: const Icon(
-                                      Icons.exit_to_app,
+                                      },
+                                      label: const Text("Marcar asistencia"),
+                                      icon: const Icon(Icons.check),
                                     ),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          Theme.of(context).colorScheme.error,
-                                      minimumSize: const Size(190, 40),
-                                    )),
-                              ],
-                            )
+                                    const SizedBox(height: 10),
+                                    if (presence?.endDate == null)
+                                      ElevatedButton.icon(
+                                          onPressed: () {
+                                            showDialogPresence(
+                                                "Confirmar salida",
+                                                "¿Estás seguro de que deseas marcar la salida de esta posición?",
+                                                () async {
+                                              loaderController.show();
+                                              await controller
+                                                  .markPresenceAsEnded(
+                                                      position.id!,
+                                                      sessionController.person
+                                                          .value.employeeId!);
+                                              loaderController.hide();
+                                            });
+                                          },
+                                          label: const Text("Marcar salida"),
+                                          icon: const Icon(
+                                            Icons.exit_to_app,
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Theme.of(context)
+                                                .colorScheme
+                                                .error,
+                                            minimumSize: const Size(190, 40),
+                                          )),
+                                  ],
+                                )
                           ],
                         ),
                         trailing: Text(
@@ -186,7 +218,9 @@ void showDialogPresence(
       actions: [
         TextButton(
           onPressed: () => Get.back(),
-          child: const Text("Cancelar"),
+          child: Text("Cancelar",
+              style:
+                  TextStyle(color: Theme.of(Get.context!).colorScheme.error)),
         ),
         ElevatedButton(
           onPressed: () {

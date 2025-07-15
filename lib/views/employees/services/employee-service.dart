@@ -70,15 +70,23 @@ class EmployeeService extends BaseService
   }
 
 
-  Future<bool> replaceTempEmployeePosition(String positionId, String employeeId) async {
+  Future<bool> replaceTempEmployeePosition(String positionId, String employeeId, String? oldEmployeeId) async {
     final response = await http.post(
       Uri.parse('$baseUrl/employee/replaceEmployee'),
       headers: buildHeaders(),
       body: json.encode({
+        'oldEmployeeId': oldEmployeeId,
         'employeeId': employeeId,
         'positionId': positionId,
+        "dayId": DateTime.now().weekday.toString(),
+        "motive": "Reemplazo de empleado temporal",
       }),
     );
+
+    print("objects: response ---- ${DateTime.now().weekday.toString()}");
+    print("objects: oldEmployeeId ---- ${oldEmployeeId.toString()}");
+    print("objects: newEmployeeId ---- ${employeeId.toString()}");
+    print("objects: positionId ---- ${positionId.toString()}");
 
     try {
       if (response.statusCode == 200) {

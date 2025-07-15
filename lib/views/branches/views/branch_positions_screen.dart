@@ -121,58 +121,61 @@ Widget _positionCardBuild(
 
 Widget _turn(BuildContext context, TurnModel? turn) {
   final ColorScheme colorScheme = Theme.of(context).colorScheme;
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        turn != null && turn.name.isNotEmpty
-            ? "Turno: ${turn.name}"
-            : "No hay turno asignado",
-        style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: turn != null && turn.name.isNotEmpty
-                ? Colors.black54
-                : Colors.red),
-      ),
-      const SizedBox(height: 5),
-      turn?.schedule == null
-          ? const SizedBox(
-              height: 70,
-            )
-          : Row(
-              children: [
-                ...turn!.schedule.map((schedule) {
-                  return Card(
-                    color: colorScheme.primary,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Text(
-                            schedule.day!.name,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            "${schedule.initTime} - ${schedule.endTime}",
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ],
+  return SingleChildScrollView(
+    scrollDirection: Axis.horizontal,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          turn != null && turn.name.isNotEmpty
+              ? "Turno: ${turn.name}"
+              : "No hay turno asignado",
+          style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w200,
+              color: turn != null && turn.name.isNotEmpty
+                  ? Theme.of(context).colorScheme.onPrimary
+                  : Colors.red),
+        ),
+        const SizedBox(height: 5),
+        turn?.schedule == null
+            ? const SizedBox(
+                height: 70,
+              )
+            : Row(
+                children: [
+                  ...turn!.schedule.map((schedule) {
+                    return Card(
+                      color: colorScheme.primary,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              schedule.day!.name,
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              "${schedule.initTime} - ${schedule.endTime}",
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                }).toList(),
-              ],
-            )
-    ],
+                    );
+                  }).toList(),
+                ],
+              )
+      ],
+    ),
   );
 }
 
@@ -181,7 +184,9 @@ Widget _employeePosition(List<EmployeeModel>? employees) {
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      ...employees!.where((employee) => employee.position!.isPrincipal == true).map((employee) {
+      ...employees!
+          .where((employee) => employee.position!.isActive == true)
+          .map((employee) {
         return Text(
           "${employee.firstName.toString().trim()} ${employee.lastName.toString().trim()} - ${employee.position!.isPrincipal ? 'Principal' : 'Temporal'} ${employee.position!.isActive ? "Activo" : "Inactivo"} ",
           style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
@@ -213,7 +218,7 @@ Widget _buttonsActions(BuildContext context, PositionModel? position,
                   // final employeeId = position?.employee?[0].id;
                   final employeeMap =
                       position?.employee?.map((e) => e.id).toList();
-                  print("Employee IDs: $employeeMap");
+                  // print("Employee IDs: $employeeMap");
                   final positionId = position?.id;
                   // print(
                   //     "objects: employeeId: $employeeId, positionId: $positionId ------------------");
@@ -238,7 +243,11 @@ Widget _buttonsActions(BuildContext context, PositionModel? position,
       ElevatedButton.icon(
           onPressed: isEnabled
               ? () {
+                  final oldEmployeeId = position?.employee?.firstWhere(
+                      (employee) => employee.position!.isActive == true);
+
                   showReplaceModal(
+                    oldEmployeeId: oldEmployeeId?.id,
                     title: "Reemplazo de empleado",
                     context: context,
                     subtitle: "Reemplazo temporal de empleado en la posición",

@@ -1,5 +1,5 @@
 import 'package:agents_app/models/position/position_model.dart';
-import 'package:agents_app/models/presence/presence_model.dart';
+// import 'package:agents_app/models/presence/presence_model.dart';
 import 'package:agents_app/models/schedule/schedule_days_model.dart';
 import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/views/agent/service/my_presence_service.dart';
@@ -26,7 +26,6 @@ class AgentPresenceController extends GetxController {
   fetchMyPositions(String? employeeId) async {
     try {
       isLoading.value = true;
-      //! retrieve positions by agent ID with get
       final response = await positionServices.getAllPositionsByAgentId(employeeId!);
       if (response.isNotEmpty) {
         positions.value = response;
@@ -56,25 +55,20 @@ class AgentPresenceController extends GetxController {
     return schedule?.day?.id;
   }
 
-  Future<bool> markPresenceAsStarted(PositionModel position) async {
+  Future<bool> markPresenceAsStarted(String positionId, String employeeId) async {
     try {
-      final dayId = findDayOfTurn(position);
+      // final dayId = findDayOfTurn(position);
 
-      final presence =
-          position.presence?.firstWhere((presence) => presence.dayId == null, orElse: () => PresenceModel(id: null, dayId: null, startTime: null, endTime: null));
+      // final presence =
+      //     position.presence?.firstWhere((presence) => presence.dayId == null, orElse: () => PresenceModel(id: null, dayId: null, startTime: null, endTime: null));
       final currentPosition = await determinePosition();
 
       isLoading.value = true;
       final response = await presenceService.initPresenceEmployee({
-        "dayId": dayId,
-        "startLatitud": currentPosition.latitude,
-        "startLongitude": currentPosition.longitude,
-        "motive": "Inicio de asistencia",
-        "idPresence": presence?.id,
-        "positionEmployeeId": position
-                .employee![0].isPermanent //! verify employee from GET
-            ? position.employee![0].id
-            : null, // when this is null, it will create a permanent presence
+        "employeeId": employeeId,
+        "positionId": positionId,
+        "latitude": currentPosition.latitude,
+        "longitude": currentPosition.longitude,
       });
       if (response) {
         return true;
@@ -92,18 +86,18 @@ class AgentPresenceController extends GetxController {
     return false;
   }
 
-  Future<bool?> markPresenceAsEnded(PositionModel position) async {
+  Future<bool?> markPresenceAsEnded(String positionId, String employeeId) async {
     try {
-      position.presence?.sort((a, b) => a.id!.compareTo(b.id!));
-      final List<PresenceModel>? presence = position.presence ?? [];
+      // position.presence?.sort((a, b) => a.id!.compareTo(b.id!));
+      // final List<PresenceModel>? presence = position.presence ?? [];
 
       isLoading.value = true;
       final currentPosition = await determinePosition();
       final response = await presenceService.markPresenceAsEnded({
         "endLatitud": currentPosition.latitude.toString(),
         "endLongitud": currentPosition.longitude.toString(),
-        "positionEmployeeId": position.employee?[0].id,
-        "presenceId": presence?[0].id
+        "positionId": positionId,
+        "presenceId": employeeId
       });
 
       if (response) {
