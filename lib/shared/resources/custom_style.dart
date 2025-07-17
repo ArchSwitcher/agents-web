@@ -24,7 +24,7 @@ class CustomStyle {
       );
 
   static TextStyle hintTextStyleBlack(BuildContext context) => TextStyle(
-        color: Theme.of(context).colorScheme.onSurface.withAlpha(180),
+        color: Theme.of(context).colorScheme.onSurface.withAlpha(30),
         fontSize: Dimensions.defaultTextSize,
         //white
       );

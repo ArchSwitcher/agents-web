@@ -42,7 +42,7 @@ final ThemeData appTheme = ThemeData(
     bodyMedium:
         TextStyle(color: Color(0xFFA1A1AA)), // Texto secundario o de cuerpo
   ),
-
+  shadowColor: Colors.white,
   useMaterial3: true,
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(

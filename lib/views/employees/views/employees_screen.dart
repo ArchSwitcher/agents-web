@@ -5,6 +5,8 @@ import 'package:agents_app/models/employee/employee_model.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/helpers/table/index.dart';
 import 'package:agents_app/views/employees/controller/employee_controller.dart';
+import 'package:agents_app/views/employees/widgets/modal_assign_equipment.dart';
+import 'package:agents_app/views/equipment/widgets/asigment_equipment_modal.dart';
 import 'package:agents_app/widgets/datatable/common_data_table.dart';
 import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
 import 'package:agents_app/widgets/datatable/data_table_local.dart';
@@ -168,7 +170,19 @@ List<DataRow> buildTableRowsFromList(
     return DataRow(
       cells: [
         DataCell(Row(children: [
-          // botones
+          // IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
+          IconButton(onPressed: () {
+            showAssignEquipmentModal(context: context);
+          }, icon: Icon(Icons.add_shopping_cart)),
+
+          IconButton(
+            onPressed: () {
+              // Logic for equipment assignment
+              showAssignmentEquipmentModal(context: context, employeeId: element.id!);
+            },
+            icon: Icon(Icons.assignment),
+            tooltip: 'Assign Equipment',
+          ),
         ])),
         cellDataTable(element.id, context: context),
         cellDataTable(element.firstName, context: context),
