@@ -32,7 +32,7 @@ BranchController controller = Get.put(BranchController());
         ],
       ),
       onAccept: () async {
-        final value = await controller.deleteBranch(branch.id);
+        final value = await controller.deleteBranch(branch.id!);
         if (value) {
           Navigator.pop(context);
         }

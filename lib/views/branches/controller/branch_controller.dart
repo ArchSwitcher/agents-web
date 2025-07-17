@@ -93,6 +93,7 @@ class BranchController extends GetxController {
   // Reactive variables
   RxBool isLoading = true.obs;
   RxList<BranchModel> branches = <BranchModel>[].obs;
+  RxList<BranchModel> branchesPagination = <BranchModel>[].obs;
 
   final RxBool isLoadingClients = true.obs;
   final RxBool isLoadingGroups = true.obs;
@@ -218,6 +219,24 @@ class BranchController extends GetxController {
     } finally {
       loaderController.hide();
       isLoading.value = false;
+    }
+  }
+
+  Future<void> fetchBranchesPagination(String page, String limit) async {
+    try {
+      loaderController.show();
+      isLoading.value = true;
+      final data = await _branchService.getAllPagination(page, limit);
+      branchesPagination.value = data;
+    } catch (e) {
+      ToastService.error(
+        title: "Sucursales",
+        subTitle: "Error al cargar sucursales",
+      );
+      print("Error fetching branches: $e");
+    } finally {
+      isLoading.value = false;
+      loaderController.hide();
     }
   }
 
@@ -405,9 +424,9 @@ class BranchController extends GetxController {
     addressId = branch.businessAddress?.addressId;
     geofenceId = branch.geofence?.id;
 
-    codeGpController.text = branch.codeGp;
-    nameController.text = branch.branchName;
-    nitController.text = branch.nit;
+    codeGpController.text = branch.codeGp!;
+    nameController.text = branch.branchName!;
+    nitController.text = branch.nit!;
     latitudeController.text = branch.latitude.toString();
     longitudeController.text = branch.longitude.toString();
 
@@ -416,19 +435,19 @@ class BranchController extends GetxController {
       label: branch.group?.name ?? '',
     );
     client.value = DropDownOption(
-      id: branch.clientId,
+      id: branch.clientId!,
       label: branch.client?.name ?? '',
     );
     classification.value = DropDownOption(
-      id: branch.classificationId,
+      id: branch.classificationId!,
       label: branch.classification?.name ?? '',
     );
     factory.value = DropDownOption(
-      id: branch.factoryId,
+      id: branch.factoryId!,
       label: branch.factory?.name ?? '',
     );
     accountBoss.value = DropDownOption(
-      id: branch.accountBossId,
+      id: branch.accountBossId!,
       label: branch.accountBoss?.name ?? '',
     );
 
@@ -452,11 +471,11 @@ class BranchController extends GetxController {
     latitudeController.text = branch.geofence?.latitude.toString() ?? '';
     longitudeController.text = branch.geofence?.longitude.toString() ?? '';
     radiusController.text = branch.geofence?.radius.toString() ?? '';
-    initTimeController.text = branch.initTime;
-    endTimeController.text = branch.endTime;
+    initTimeController.text = branch.initTime!;
+    endTimeController.text = branch.endTime!;
 
     turns.clear();
-    turns.addAll(branch.turns);
+    turns.addAll(branch.turns!);
 
     genericListController.isLoadingMunicipality.value = false;
     genericListController.isLoadingClientsByGroup.value = false;

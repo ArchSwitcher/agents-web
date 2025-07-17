@@ -8,6 +8,7 @@ import 'package:agents_app/views/branches/controller/branch_controller.dart';
 import 'package:agents_app/views/branches/widgets/branch_actions_btns_widget.dart';
 import 'package:agents_app/views/branches/widgets/branch_table_row_widget.dart';
 import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
+import 'package:agents_app/widgets/datatable/data_table_local.dart';
 import 'package:agents_app/widgets/datatable/filter_box.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -45,11 +46,10 @@ class _BranchesScreenState extends State<BranchesScreen> {
   ];
 
   start() async {
-    
-    
     await controller.fetchBranches();
-    
-    // setState(() {});
+    // await controller.fetchBranchesPagination("1", "100");
+
+    setState(() {});
   }
 
   @override
@@ -96,18 +96,42 @@ class _BranchesScreenState extends State<BranchesScreen> {
 
           // table content, edit delete elements
           cardContentSpace(),
-          ContentCard(child: Obx(() {
-            return CustomDataTableWidgetV2(
-                // minWidth: 2000,
-                dynamicHeight: false,
-                tableHeight: TableHelper.getTableHeight(controller.branches),
-                fixedColumnWidths: fixedColumnWidths,
-                //columnSizes: columnSizes,
-                tableHeaders: headers,
-                tableRows: buildTableRowsBranches(controller, context));
-          }))
+          // ContentCard(child: Obx(() {
+          //   return CustomDataTableWidgetV2(
+          //       // minWidth: 2000,
+          //       dynamicHeight: false,
+          //       tableHeight: TableHelper.getTableHeight(controller.branches),
+          //       fixedColumnWidths: fixedColumnWidths,
+          //       //columnSizes: columnSizes,
+          //       tableHeaders: headers,
+          //       tableRows: buildTableRowsBranches(controller, context));
+          // }))
+          ContentCard(child: CustomPaginatedDataTableWidget(
+                data: controller.branches,
+                columns: headers
+                    .map((header) => DataColumn(label: Text(header)))
+                    .toList(),
+                buildRows: (list) =>
+                    buildTableRowsBranches(controller, context),
+                rowsPerPage: 100,
+              ))
         ],
       ),
     );
   }
 }
+
+
+  // ContentCard(child: Obx(() {
+  //         return SizedBox(
+  //           height: 500,
+  //           child: PaginatedDataTableWidget(
+  //             tableHeaders: headers,
+  //             tableRows: buildTableRowsBranches(controller, context),
+  //             fixedColumnWidths: fixedColumnWidths,
+  //             // columnSizes: columnSizes,  // si usas
+  //             showCheckboxColumn: false,
+  //             onSort: null,
+  //           ),
+  //         );
+  //       }))

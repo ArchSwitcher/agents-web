@@ -7,6 +7,7 @@ import 'package:agents_app/shared/helpers/table/index.dart';
 import 'package:agents_app/views/employees/controller/employee_controller.dart';
 import 'package:agents_app/widgets/datatable/common_data_table.dart';
 import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
+import 'package:agents_app/widgets/datatable/data_table_local.dart';
 import 'package:agents_app/widgets/datatable/filter_box.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,19 +34,22 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
   ];
 
   final List<double?> fixedColumnWidths = [
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
   ];
 
   start() async {
     await controller.fetchEmployees();
+    setState(() {
+      
+    });
   }
 
   @override
@@ -99,50 +103,83 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
 
               // table content, edit delete elements
               cardContentSpace(),
-              ContentCard(child: Obx(() {
-                return CustomDataTableWidgetV2(
-                    // minWidth: 1,
-                    // dynamicHeight: false,
-                    tableHeight:
-                        TableHelper.getTableHeight(controller.employees),
-                    fixedColumnWidths: fixedColumnWidths,
-                    // columnSizes: columnSizes,
-                    tableHeaders: tableHeaders,
-                    tableRows: _buildTableRows(controller, context));
-              }))
+              ContentCard(
+                  child: CustomPaginatedDataTableWidget(
+                data: controller.employees,
+                columns: tableHeaders
+                    .map((header) => DataColumn(label: Text(header)))
+                    .toList(),
+                buildRows: (list) =>
+                    buildTableRowsFromList(controller.employees, context),
+                rowsPerPage: 100,
+              ))
+              // ContentCard(child: Obx(() {
+              //   return CustomDataTableWidgetV2(
+              //       // minWidth: 1,
+              //       // dynamicHeight: false,
+              //       tableHeight:
+              //           TableHelper.getTableHeight(controller.employees),
+              //       fixedColumnWidths: fixedColumnWidths,
+              //       // columnSizes: columnSizes,
+              //       tableHeaders: tableHeaders,
+              //       tableRows: _buildTableRows(controller, context));
+              // }))
             ],
           ),
         ));
   }
 }
 
-List<DataRow> _buildTableRows(
-    EmployeeController controller, BuildContext context) {
-  return List.generate(
-    controller.employees.length,
-    (index) {
-      final EmployeeModel element = controller.employees.elementAt(index);
-      
-      return DataRow(
-        cells: [
-          DataCell(Row(
-            children: [
-              // Text("${element.firstName}"),
-              // editEmployeeButton(context, element),
-              // deleteEmployeeButton(context, element.id.toString()),
-            ],
-          )),
-          cellDataTable(element.id, context: context),
-          cellDataTable(element.firstName, context: context),
-          cellDataTable(element.lastName, context: context),
-          cellDataTable(element.email, context: context),
-          cellDataTable(element.phone, context: context),
-          cellDataTable(element.agency, context: context),
-          cellDataTable(element.entryDate, context: context),
-          cellDataTable(element.birthDate, context: context),
-        ],
-        color: colorRowDataTable(index, context),
-      );
-    },
-  );
+// List<DataRow> _buildTableRows(
+//     EmployeeController controller, BuildContext context) {
+//   return List.generate(
+//     controller.employees.length,
+//     (index) {
+//       final EmployeeModel element = controller.employees.elementAt(index);
+
+//       return DataRow(
+//         cells: [
+//           DataCell(Row(
+//             children: [
+//               // Text("${element.firstName}"),
+//               // editEmployeeButton(context, element),
+//               // deleteEmployeeButton(context, element.id.toString()),
+//             ],
+//           )),
+//           cellDataTable(element.id, context: context),
+//           cellDataTable(element.firstName, context: context),
+//           cellDataTable(element.lastName, context: context),
+//           cellDataTable(element.email, context: context),
+//           cellDataTable(element.phone, context: context),
+//           cellDataTable(element.agency, context: context),
+//           cellDataTable(element.entryDate, context: context),
+//           cellDataTable(element.birthDate, context: context),
+//         ],
+//         color: colorRowDataTable(index, context),
+//       );
+//     },
+//   );
+// }
+
+List<DataRow> buildTableRowsFromList(
+    List<EmployeeModel> list, BuildContext context) {
+  return List.generate(list.length, (index) {
+    final element = list[index];
+    return DataRow(
+      cells: [
+        DataCell(Row(children: [
+          // botones
+        ])),
+        cellDataTable(element.id, context: context),
+        cellDataTable(element.firstName, context: context),
+        cellDataTable(element.lastName, context: context),
+        cellDataTable(element.email, context: context),
+        cellDataTable(element.phone, context: context),
+        cellDataTable(element.agency, context: context),
+        cellDataTable(element.entryDate, context: context),
+        cellDataTable(element.birthDate, context: context),
+      ],
+      color: colorRowDataTable(index, context),
+    );
+  });
 }

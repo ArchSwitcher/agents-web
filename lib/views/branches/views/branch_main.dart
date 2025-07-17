@@ -132,7 +132,7 @@ class _BranchMainState extends State<BranchMain> {
               ),
               const SizedBox(height: 8),
               SizedBox(
-                height: Get.height - 220,
+                height: Get.height - 240,
                 child: TabBarView(
                   children: [
                     BranchesScreen(),
