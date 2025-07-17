@@ -15,6 +15,7 @@ class ManageGroupController extends GetxController {
     try {
       final data = await GroupService.fetchGroups();
       groups.value = data;
+      print("groups fetched: ${groups.length}");
     } catch (e) {
       print(e);
     } finally {

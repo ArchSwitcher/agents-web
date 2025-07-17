@@ -19,7 +19,7 @@ List<DataRow> buildTableRowsClient(
             ],
           )),
           cellDataTable(element.id, context: context),
-          cellDataTable(element.group.name, context: context),
+          cellDataTable(element.group!.name, context: context),
           cellDataTable(element.name, context: context),
           cellDataTable(element.email, context: context),
           cellDataTable(element.url, context: context),

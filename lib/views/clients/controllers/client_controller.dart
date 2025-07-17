@@ -90,7 +90,7 @@ class ManageClientController extends GetxController {
     return clients.map((client) {
       return DropDownOption(
         id: client.id.toString(),
-        label: client.name,
+        label: client.name!,
       );
     }).toList();
   }
@@ -208,15 +208,15 @@ class ManageClientController extends GetxController {
   }
 
   Future<void> loadClientData(ClientModel client) async {
-    print("Setting data for client: ${client.group.id}");
+    print("Setting data for client: ${client.group!.id}");
     try {
       clientId = client.id ?? '';
-      nameController.text = client.name;
-      emailController.text = client.email;
-      phoneController.text = client.phone;
-      urlController.text = client.url;
+      nameController.text = client.name!;
+      emailController.text = client.email!;
+      phoneController.text = client.phone!;
+      urlController.text = client.url!;
       groupId.value =
-          DropDownOption(id: client.group.id, label: client.group.name);
+          DropDownOption(id: client.group!.id, label: client.group!.name);
       adviser.value = DropDownOption(
           id: client.adviser?.id ?? "", label: client.adviser?.name ?? "");
       accountManager.value = DropDownOption(
@@ -249,14 +249,14 @@ class ManageClientController extends GetxController {
           label: client.paymentAddress?.zone?.name ?? '');
       paymentAddress.text = client.paymentAddress?.address ?? '';
       billPerson.value = DropDownOption(
-          id: client.billing.billCollectorId ?? '',
-          label: client.billing.billCollectorName ?? '');
+          id: client.billing!.billCollectorId ?? '',
+          label: client.billing!.billCollectorName ?? '');
       billingType.value = DropDownOption(
-          id: client.billing.billingType?.id ?? '',
-          label: client.billing.billingType?.name ?? '');
+          id: client.billing!.billingType?.id ?? '',
+          label: client.billing!.billingType?.name ?? '');
       generationType.value = DropDownOption(
-          id: client.billing.generationType?.id ?? '',
-          label: client.billing.generationType?.name ?? '');
+          id: client.billing!.generationType?.id ?? '',
+          label: client.billing!.generationType?.name ?? '');
 
       isLoadingFiscalMunicipalities.value = false;
       isLoadingPaymentMunicipalities.value = false;

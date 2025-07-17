@@ -158,7 +158,7 @@ class BranchController extends GetxController {
       return clientController.clients.map((client) {
         return DropDownOption(
           id: client.id.toString(),
-          label: client.name,
+          label: client.name!,
         );
       }).toList();
     } catch (e) {

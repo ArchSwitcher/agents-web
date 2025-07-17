@@ -10,9 +10,11 @@ class ClientService extends BaseService implements CrudService<ClientModel> {
   Future<List<ClientModel>> getAll(dynamic value) async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/client/getClients'),
+        Uri.parse('$baseUrl/client/getClients?page=1&limit=99999'),
         headers: buildHeaders(),
       );
+
+      // print("CLIENT SERVICE RESPONSE: ${response.body}");
 
       if (response.statusCode == 200) {
         final decoded = json.decode(response.body);
