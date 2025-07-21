@@ -33,13 +33,13 @@ class BranchPositionFormService extends BaseService
       if (response.statusCode == 200) {
         ToastService.success(
           title: "Sucursal",
-          subTitle: "Sucursal creada correctamente",
+          subTitle: "Sucursal entregada correctamente",
         );
         return true;
       } else {
         ToastService.error(
           title: "Sucursal",
-          subTitle: "Error al crear sucursal",
+          subTitle: "Error al entregar sucursal",
         );
         throw Exception('Error al crear sucursal');
       }

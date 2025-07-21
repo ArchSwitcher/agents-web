@@ -2,7 +2,6 @@ import "dart:convert";
 import "package:agents_app/widgets/inputs/custom_input_widget.dart";
 import "package:flutter/material.dart";
 
-
 class FilterBox<T> extends StatefulWidget {
   // final TextEditingController filterBoxController;
   final List<T> elements;
@@ -10,6 +9,7 @@ class FilterBox<T> extends StatefulWidget {
   final bool isLoading;
   final String hint;
   final String label;
+  final VoidCallback? cleanValue;
 
   const FilterBox(
       {super.key,
@@ -17,7 +17,8 @@ class FilterBox<T> extends StatefulWidget {
       required this.handleFilteredData,
       required this.isLoading,
       required this.hint,
-      required this.label});
+      required this.label,
+      this.cleanValue});
 
   @override
   State<FilterBox<T>> createState() => _FilterBoxState<T>();
@@ -30,23 +31,24 @@ class _FilterBoxState<T> extends State<FilterBox<T>> {
   List<T> filteredData = [];
   bool hasUpdate = false;
 
-  @override
-  void didUpdateWidget(FilterBox<T> oldWidget) {
-    if (widget.elements.length > 0 && !hasUpdate) {
-      data = widget.elements;
-      hasUpdate = true;
-    } 
-    else if (data.length != widget.elements.length) {
-      hasUpdate = false;
-      filterBoxController.clear();
-    }
+  // @override
+  // void didUpdateWidget(FilterBox<T> oldWidget) {
+  //   if (widget.elements.length > 0 && !hasUpdate) {
+  //     data = widget.elements;
+  //     hasUpdate = true;
+  //   } else if (data.length != widget.elements.length) {
+  //     hasUpdate = false;
+  //     // filterBoxController.clear();
+  //   }
 
-    super.didUpdateWidget(oldWidget);
-  }
+  //   super.didUpdateWidget(oldWidget);
+  // }
 
   filterByText() {
-    if (filterBoxController.text.length == 0) {
-      //return widget.handleFilteredData(data);
+    print("filterByText: ${filterBoxController.text}");
+    if (filterBoxController.text.isEmpty) {
+      widget.cleanValue?.call();
+      return;
     }
     List<T> suggestions = data.where((element) {
       // encode depends on toJson method in each model, be aware of field do you want to include in the search,
@@ -55,12 +57,20 @@ class _FilterBoxState<T> extends State<FilterBox<T>> {
       return quote.contains(filterBoxController.text.toLowerCase());
     }).toList();
 
+    print("suggestions: ${suggestions.length}");
     widget.handleFilteredData(suggestions);
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     filterBoxController.addListener(() => filterByText());
+     data = widget.elements;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // filterBoxController.addListener(() => filterByText());
 
     return CustomInputWidget(
       controller: filterBoxController,
@@ -70,12 +80,19 @@ class _FilterBoxState<T> extends State<FilterBox<T>> {
       readOnly: widget.isLoading,
       suffixIcon: IconButton(
         onPressed: () {
-          filterBoxController.clear();
-          widget.handleFilteredData(data);
+          // filterBoxController.clear();
+          // widget.handleFilteredData(data);
+          // widget.cleanValue?.call();
+          // filterBoxController
+          //     .removeListener(filterByText); // Detener temporalmente
+          filterBoxController.text = "";
+          // widget.handleFilteredData(data);
+          // filterBoxController.addListener(filterByText); // Volver a añadir
+          widget.cleanValue?.call();
         },
         icon: const Icon(
           Icons.close,
-          color: Colors.black,
+          color: Colors.white,
         ),
       ),
     );

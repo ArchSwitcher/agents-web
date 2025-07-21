@@ -11,7 +11,7 @@ class EquipmentAssignmentModel {
   final String? serialNumber;
   final int? returnQuantity;
   final String? returnNotes;
-  final Equipment? equipment;
+  final EquipmentModel? equipment;
 
   EquipmentAssignmentModel({
     required this.id,
@@ -43,7 +43,7 @@ class EquipmentAssignmentModel {
       serialNumber: json['SerialNumber'],
       returnQuantity: json['Return_quantity'],
       returnNotes: json['Return_notes'],
-      equipment: json['EQUIPMENT'] != null ? Equipment.fromJson(json['EQUIPMENT']) : null,
+      equipment: json['EQUIPMENT'] != null ? EquipmentModel.fromJson(json['EQUIPMENT']) : null,
     );
   }
 
@@ -66,68 +66,65 @@ class EquipmentAssignmentModel {
   }
 }
 
-class Equipment {
-  final int id;
+class EquipmentModel {
+  final int? id;
   final int quantity;
-  final int cost;
+  final double cost;
   final String currency;
-  final int status;
+  final bool? status;
   final String? serialNumber;
   final int isAssigned;
   final int equipmentTypeId;
-  final EquipmentType? equipmentType;
+  final EquipmentTypeModel? equipmentType;
 
-  Equipment({
-    required this.id,
+  EquipmentModel({
+    this.id,
     required this.quantity,
     required this.cost,
     required this.currency,
-    required this.status,
+    this.status,
     this.serialNumber,
     required this.isAssigned,
     required this.equipmentTypeId,
     this.equipmentType,
   });
 
-  factory Equipment.fromJson(Map<String, dynamic> json) {
-    return Equipment(
+  factory EquipmentModel.fromJson(Map<String, dynamic> json) {
+    return EquipmentModel(
       id: json['Id'],
       quantity: json['Quantity'],
       cost: json['Cost'],
       currency: json['Currency'],
-      status: json['Status'] ?? 0,
+      status: json['Status'] != null ? json['Status'] == 1 : null,
       serialNumber: json['SerialNumber'],
       isAssigned: json['IsAssigned'],
       equipmentTypeId: json['EQUIPMENT_TYPE_Id'],
       equipmentType: json['EQUIPMENT_TYPE'] != null
-          ? EquipmentType.fromJson(json['EQUIPMENT_TYPE'])
+          ? EquipmentTypeModel.fromJson(json['EQUIPMENT_TYPE'])
           : null,
     );
   }
 
-  Map<String, dynamic> toJson() {
+Map<String, dynamic> toJson() {
     return {
-      'Id': id,
-      'Quantity': quantity,
-      'Cost': cost,
-      'Currency': currency,
-      'Status': status,
-      'SerialNumber': serialNumber,
-      'IsAssigned': isAssigned,
-      'EQUIPMENT_TYPE_Id': equipmentTypeId,
-      'EQUIPMENT_TYPE': equipmentType?.toJson(),
+      'quantity': quantity,
+      'cost': cost,
+      'currency': currency,
+      'serialNumber': serialNumber,
+      'isAssigned': isAssigned,
+      'equipmentTypeId': equipmentTypeId,
     };
   }
 }
 
-class EquipmentType {
+class EquipmentTypeModel {
   final int id;
   final String name;
   final int status;
   final int isUnique;
   final int? equipmentKitId;
 
-  EquipmentType({
+  EquipmentTypeModel({
     required this.id,
     required this.name,
     required this.status,
@@ -135,8 +132,8 @@ class EquipmentType {
     this.equipmentKitId,
   });
 
-  factory EquipmentType.fromJson(Map<String, dynamic> json) {
-    return EquipmentType(
+  factory EquipmentTypeModel.fromJson(Map<String, dynamic> json) {
+    return EquipmentTypeModel(
       id: json['Id'],
       name: json['Name'],
       status: json['Status'],

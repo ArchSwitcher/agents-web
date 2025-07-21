@@ -9,6 +9,7 @@ class CustomPaginatedDataTableWidget<T> extends StatelessWidget {
   final Color? headingColor;
   final double minWidth;
   final double tableHeight;
+  final int initialPage;
 
   const CustomPaginatedDataTableWidget({
     super.key,
@@ -19,6 +20,7 @@ class CustomPaginatedDataTableWidget<T> extends StatelessWidget {
     this.headingColor,
     this.minWidth = 1350.0,
     this.tableHeight = 0.6,
+    this.initialPage = 0,
   });
 
   @override
@@ -44,15 +46,6 @@ class CustomPaginatedDataTableWidget<T> extends StatelessWidget {
             headingRowColor: WidgetStateProperty.all(
               headingColor ?? colorScheme.surfaceContainerHighest,
             ),
-            // decoration: BoxDecoration(
-            //   color: colorScheme.surface,
-            //   border: Border.all(
-            //     color: colorScheme.outline.withOpacity(0.2),
-            //   ),
-            // ),
-            // dataRowColor: WidgetStateProperty.all(
-            //   colorScheme.surfaceVariant,
-            // ),
             showCheckboxColumn: false,
             dividerThickness: 0,
           ),

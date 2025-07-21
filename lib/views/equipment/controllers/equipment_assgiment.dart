@@ -1,5 +1,5 @@
 import 'package:agents_app/models/equipment/equipment_asigment_model.dart';
-import 'package:agents_app/views/equipment/services/equipment_assigment.dart';
+import 'package:agents_app/views/equipment/services/equipment_assigment_service.dart';
 import 'package:get/get.dart';
 
 class EquipmentAsigmentController extends GetxController {

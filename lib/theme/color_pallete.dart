@@ -55,6 +55,19 @@ final ThemeData appTheme = ThemeData(
       ),
     ),
   ),
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(
+      foregroundColor: Color(0xFFF0F0F0), // Color del texto
+      textStyle: const TextStyle(
+        fontSize: 16,
+        color: Color(0xFFF0F0F0),
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+    ),
+  ),
 );
 
 

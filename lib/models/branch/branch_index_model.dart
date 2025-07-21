@@ -2,7 +2,9 @@ import 'package:agents_app/models/address/address_model.dart';
 import 'package:agents_app/models/common/simple_entity_model.dart';
 import 'package:agents_app/models/document/document_model.dart';
 import 'package:agents_app/models/geofence/geofence_model.dart';
+import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/models/schedule/schedule_days_model.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 class BranchModel {
@@ -38,6 +40,7 @@ class BranchModel {
 
   List<DocumentModel>? documents;
   int? positions;
+  List<PositionModel>? listPositions;
 
   BranchModel({
     this.id,
@@ -64,6 +67,7 @@ class BranchModel {
     this.status,
     this.documents,
     this.positions,
+    this.listPositions
   });
 
  factory BranchModel.fromJson(Map<String, dynamic> data) {
@@ -113,6 +117,11 @@ class BranchModel {
     positions: (data['POSITIONS'] is int)
         ? data['POSITIONS']
         : int.tryParse(data['POSITIONS']?.toString() ?? '') ?? 0,
+    listPositions: (data['POSITIONs'] is List)
+        ? (data['POSITIONs'] as List)
+            .map((item) => PositionModel.fromJson(item))
+            .toList()
+        : null,
   );
 }
 

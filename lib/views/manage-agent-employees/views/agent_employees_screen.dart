@@ -3,12 +3,14 @@ import 'package:agents_app/layout/contect_card_space.dart';
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
 import 'package:agents_app/mocks/personal_info_mocks.dart';
+import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/helpers/table/index.dart';
 import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
 import 'package:agents_app/views/manage-agent-employees/widgets/action_btns.dart';
 import 'package:agents_app/views/positions/widgets/table_rows_widget.dart';
 import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
+import 'package:agents_app/widgets/datatable/data_table_local.dart';
 import 'package:agents_app/widgets/datatable/filter_box.dart';
 import 'package:agents_app/widgets/inputs/custom_dropdownv2_widget.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +35,7 @@ class EmployeesAgentScreenState extends State<EmployeesAgentScreen> {
     'Latitud',
     'Longitud',
     "proseña",
-    "Agencia",
+    "Grupo",
     "Sucursal",
     "Horario"
   ];
@@ -61,8 +63,10 @@ class EmployeesAgentScreenState extends State<EmployeesAgentScreen> {
 
   reloadPositions(String statusTypeId) async {
     loaderController.show();
-    print("controller.selectedPosition.text ${controller.selectedPosition.text} $statusTypeId");
-    await controller.positionController.fetchPositions(statusType: statusTypeId);
+    print(
+        "controller.selectedPosition.text ${controller.selectedPosition.text} $statusTypeId");
+    await controller.positionController
+        .fetchPositions(statusType: statusTypeId);
     loaderController.hide();
     setState(() {});
   }
@@ -86,23 +90,29 @@ class EmployeesAgentScreenState extends State<EmployeesAgentScreen> {
                     crossAxisAlignment: WrapCrossAlignment.center,
                     alignment: WrapAlignment.spaceBetween,
                     children: [
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          minWidth: 300,
-                          maxWidth: 400,
-                        ),
-                        child: FilterBox(
-                          elements: [],
-                          handleFilteredData: (List<dynamic> data) {},
-                          isLoading: false,
-                          hint: "Buscar",
-                          label: "Buscar",
-                        ),
-                      ),
+                      // ConstrainedBox(
+                      //   constraints: const BoxConstraints(
+                      //     minWidth: 300,
+                      //     maxWidth: 400,
+                      //   ),
+                      //   child: FilterBox(
+                      //     cleanValue: () {},
+                      //     elements: [...controller.positionController.positions],
+                      //     handleFilteredData: (List<PositionModel> data) {
+                      //       controller.positionController.positions.value = data;
+                      //       setState(() {
+                              
+                      //       });
+                      //     },
+                      //     isLoading: false,
+                      //     hint: "Buscar",
+                      //     label: "Buscar",
+                      //   ),
+                      // ),
                       SizedBox(
                         width: 250,
                         child: CustomDropdownV2Widget(
-                          initialValue: statusTypePositionMock.last,
+                            initialValue: statusTypePositionMock.last,
                             labelText: "Status de posición",
                             hintText: "",
                             items: statusTypePositionMock,
@@ -126,16 +136,27 @@ class EmployeesAgentScreenState extends State<EmployeesAgentScreen> {
               // table content, edit delete elements
               cardContentSpace(),
 
-              ContentCard(child: Obx(() {
-                return CustomDataTableWidgetV2(
-                    minWidth: 1680,
-                    dynamicHeight: false,
-                    tableHeight: TableHelper.getTableHeight(
-                        controller.positionController.positions),
-                    tableHeaders: headers,
-                    tableRows: buildTablePositionRows(
-                        controller.positionController, context, controller));
-              }))
+              // ContentCard(child: Obx(() {
+              //   return CustomDataTableWidgetV2(
+              //       minWidth: 1680,
+              //       dynamicHeight: false,
+              //       tableHeight: TableHelper.getTableHeight(
+              //           controller.positionController.positions),
+              //       tableHeaders: headers,
+              //       tableRows: buildTablePositionRows(
+              //           controller.positionController, context, controller));
+              // }))
+
+              ContentCard(
+                  child: CustomPaginatedDataTableWidget(
+                data: controller.positionController.positions,
+                columns: headers
+                    .map((header) => DataColumn(label: Text(header)))
+                    .toList(),
+                buildRows: (list) => buildTablePositionRows(
+                    controller.positionController, context, null),
+                rowsPerPage: 100,
+              ))
             ],
           ),
         ));

@@ -10,7 +10,7 @@ class BranchService extends BaseService implements CrudService<BranchModel> {
   @override
   Future<List<BranchModel>> getAll(dynamic value) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/branch?page=1&limit=99999'),
+      Uri.parse('$baseUrl/branch?page=1&limit=100'),
       headers: buildHeaders(),
     );
 
@@ -135,6 +135,28 @@ class BranchService extends BaseService implements CrudService<BranchModel> {
   Future<List<BranchModel>> getAllPagination(String page, String limit) async {
     final response = await http.get(
       Uri.parse('$baseUrl/branch?page=$page&limit=9999'),
+      headers: buildHeaders(),
+    );
+
+    try {
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        final List data = decoded['branches'];
+        print("objects: data BRANCH---- ${decoded["branches"]}");
+        return data.map((json) => BranchModel.fromJson(json)).toList();
+      } else {
+        throw Exception('Error al cargar sucursales');
+      }
+    } catch (e) {
+      print("objects: error ---- ${e.toString()}");
+      throw Exception('Error al cargar sucursales: $e');
+    }
+  }
+
+  Future<List<BranchModel>> searchByKeyword(String? branchName, String? clientName, String? groupName) async {
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/branch/searchBranch?branchName=${branchName ?? ''}&clientName=${clientName ?? ''}&groupName=${groupName ?? ''}'),
       headers: buildHeaders(),
     );
 

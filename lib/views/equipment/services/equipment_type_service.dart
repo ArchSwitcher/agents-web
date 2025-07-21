@@ -5,23 +5,20 @@ import 'package:agents_app/services/base_service.dart';
 import 'package:agents_app/services/crud_service.dart';
 import 'package:http/http.dart' as http;
 
-class EquipmentAssigmentService extends BaseService
-    implements CrudService<EquipmentAssignmentModel> {
+class EquipmentTypeService extends BaseService
+    implements CrudService<EquipmentTypeModel> {
   @override
-  Future<List<EquipmentAssignmentModel>> getAll(dynamic value) async {
-    print("objects: value ---- ${value["employeeId"]}");
-
+  Future<List<EquipmentTypeModel>> getAll(dynamic value) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/equipment/employee/${value['employeeId']}'),
+      Uri.parse('$baseUrl/equipment/equipment-type?page=1&limit=99999'),
       headers: buildHeaders(),
     );
-    print("objects: response ---- ${response.statusCode}");
     try {
       if (response.statusCode == 200) {
         final decoded = json.decode(response.body);
         final List data = decoded['data'];
         return data
-            .map((json) => EquipmentAssignmentModel.fromJson(json))
+            .map((json) => EquipmentTypeModel.fromJson(json))
             .toList();
       } else {
         return [];
@@ -33,7 +30,7 @@ class EquipmentAssigmentService extends BaseService
   }
 
   @override
-  Future<EquipmentAssignmentModel> getById(String id) async {
+  Future<EquipmentTypeModel> getById(String id) async {
     // Implement the logic to fetch a specific equipment assignment by ID
     throw UnimplementedError("getById method not implemented");
   }

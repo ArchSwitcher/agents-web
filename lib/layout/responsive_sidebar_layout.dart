@@ -33,7 +33,7 @@ class ResponsiveSidebarLayout extends StatelessWidget {
             children: [
               if (showBackButton)
                 IconButton(
-                  icon: const Icon(Icons.arrow_back),
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
                   onPressed: () {
                     Navigator.of(context).pop(); // Navega hacia atrás
                   },

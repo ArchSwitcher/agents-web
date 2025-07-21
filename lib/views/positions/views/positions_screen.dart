@@ -8,6 +8,7 @@ import 'package:agents_app/views/positions/controllers/position_controller.dart'
 import 'package:agents_app/views/positions/widgets/actions_btns_widget.dart';
 import 'package:agents_app/views/positions/widgets/table_rows_widget.dart';
 import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
+import 'package:agents_app/widgets/datatable/data_table_local.dart';
 import 'package:agents_app/widgets/datatable/filter_box.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,7 +32,7 @@ class PositionsScreenState extends State<PositionsScreen> {
     'Latitud',
     'Longitud',
     "proseña",
-    "Agencia",
+    "Grupo",
     "Sucursal",
     "Horario"
   ];
@@ -94,19 +95,28 @@ class PositionsScreenState extends State<PositionsScreen> {
 
               // table content, edit delete elements
               cardContentSpace(),
-
-              ContentCard(child: Obx(() {
-                return CustomDataTableWidgetV2(
-                    minWidth: 1680,
-                    dynamicHeight: false,
-                    tableHeight:
-                        TableHelper.getTableHeight(controller.positions),
-                    // fixedColumnWidths: fixedColumnWidths,
-                    // columnSizes: columnSizes,
-                    tableHeaders: headers,
-                    tableRows:
-                        buildTablePositionRows(controller, context, null));
-              }))
+              ContentCard(
+                  child: CustomPaginatedDataTableWidget(
+                data: controller.positions,
+                columns: headers
+                    .map((header) => DataColumn(label: Text(header)))
+                    .toList(),
+                buildRows: (list) =>
+                    buildTablePositionRows(controller, context, null),
+                rowsPerPage: 100,
+              ))
+              // ContentCard(child: Obx(() {
+              //   return CustomDataTableWidgetV2(
+              //       minWidth: 1680,
+              //       dynamicHeight: false,
+              //       tableHeight:
+              //           TableHelper.getTableHeight(controller.positions),
+              //       // fixedColumnWidths: fixedColumnWidths,
+              //       // columnSizes: columnSizes,
+              //       tableHeaders: headers,
+              //       tableRows:
+              //           buildTablePositionRows(controller, context, null));
+              // }))
             ],
           ),
         ));

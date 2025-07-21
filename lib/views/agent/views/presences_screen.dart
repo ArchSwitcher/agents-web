@@ -99,7 +99,7 @@ class PresencesScreenState extends State<PresencesScreen> {
                             Text(
                                 "Puesto: ${position.employee![0].position!.isPrincipal ? "Principal" : "Temporal"}"),
                             Text("Sucursal: ${position.branch?.name ?? 'N/A'}"),
-                            Text("Agencia: ${position.agency?.name ?? 'N/A'}"),
+                            //! hereda de sucursal Text("Agencia: ${position.agency?.name ?? 'N/A'}"),
                             Text(
                                 "Tipo de servicio: ${position.serviceType?.name ?? 'N/A'}"),
                             Text("Fecha de inicio: ${position.initDate}"),

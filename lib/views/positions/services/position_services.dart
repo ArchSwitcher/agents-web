@@ -42,10 +42,10 @@ class PositionServices extends BaseService
       final data = json.decode(response.body)['data'];
       return PositionModel.fromJson(data);
     } else {
-      ToastService.error(
-        title: "Posición",
-        subTitle: "Error al cargar posición",
-      );
+      // ToastService.error(
+      //   title: "Posición",
+      //   subTitle: "Error al cargar posición",
+      // );
       throw Exception('Posición no encontrada');
     }
   }

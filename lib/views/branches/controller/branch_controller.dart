@@ -31,6 +31,10 @@ class BranchController extends GetxController {
 
   final BranchService _branchService = BranchService();
 
+  final TextEditingController controllerSearchBranch = TextEditingController();
+  final TextEditingController controllerSearchClient = TextEditingController();
+  final TextEditingController controllerSearchGroup = TextEditingController();
+
   final initTimeController = TextEditingController();
   final endTimeController = TextEditingController();
 
@@ -213,6 +217,29 @@ class BranchController extends GetxController {
       ToastService.error(
         title: "Sucursales",
         subTitle: "Error al cargar sucursales",
+      );
+      print("Error fetching branches: $e");
+      //Get.snackbar("Error", "No se pudieron cargar las sucursales");
+    } finally {
+      loaderController.hide();
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> searchBranches() async {
+    try {
+      loaderController.show();
+      branches.value = [];
+      isLoading.value = true;
+      final data = await _branchService.searchByKeyword(
+          controllerSearchBranch.text,
+          controllerSearchClient.text,
+          controllerSearchGroup.text);
+      branches.value = data;
+    } catch (e) {
+      ToastService.warning(
+        title: "Sucursales",
+        subTitle: "No se encontraron Sucursales",
       );
       print("Error fetching branches: $e");
       //Get.snackbar("Error", "No se pudieron cargar las sucursales");

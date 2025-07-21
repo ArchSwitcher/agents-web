@@ -26,7 +26,7 @@ class PositionModel {
   String? prosena;
   String positionName;
   String paymentFrequency;
-  String agencyId;
+  // String agencyId;
   String? transportId;
 
   String branchId;
@@ -38,7 +38,7 @@ class PositionModel {
   String? adviserId;
   String? supportDocument;
 
-  SimpleEntity? agency;
+  // SimpleEntity? agency;
   SimpleEntity? transport;
   SimpleEntity? branch;
   SimpleEntity? company;
@@ -76,7 +76,7 @@ class PositionModel {
     this.prosena,
     required this.positionName,
     required this.paymentFrequency,
-    required this.agencyId,
+    // required this.agencyId,
     this.transportId,
     required this.branchId,
     required this.companyId,
@@ -87,7 +87,7 @@ class PositionModel {
     this.adviserId,
     this.supportDocument,
     required this.equipment,
-    this.agency,
+    // this.agency,
     this.branch,
     this.company,
     this.shiftTime,
@@ -128,7 +128,7 @@ class PositionModel {
       prosena: str(p['Prosena']),
       positionName: str(p['Position_name']),
       paymentFrequency: str(p['Payment_frequency']),
-      agencyId: str(p['AGENCY_Id']),
+      // agencyId: str(p['AGENCY_Id']),
       transportId: p['TRANSPORT_Id'] != null ? str(p['TRANSPORT_Id']) : null,
       branchId: str(p['BRANCH_Id']),
       companyId: str(p['COMPANY_Id']),
@@ -138,13 +138,13 @@ class PositionModel {
       transportationCost: p['Transportation_cost'] != null
           ? str(p['Transportation_cost'])
           : null,
-      adviserId: str(p['BOSS_POSITIONs']?[0]?['EMPLOYEE']?['Id']),
-      agency: p['AGENCY'] != null
-          ? SimpleEntity.fromJson({
-              "id": p['AGENCY']['Id'],
-              "name": p['AGENCY']['Name'],
-            })
-          : null,
+      // adviserId: str(p['BOSS_POSITIONs']?[0]?['EMPLOYEE']?['Id']),
+      // agency: p['AGENCY'] != null
+      //     ? SimpleEntity.fromJson({
+      //         "id": p['AGENCY']['Id'],
+      //         "name": p['AGENCY']['Name'],
+      //       })
+      //     : null,
       branch: p['BRANCH'] != null
           ? SimpleEntity.fromJson({
               "id": p['BRANCH']['Id'],
@@ -244,7 +244,7 @@ class PositionModel {
       "document": document,
       "positionName": positionName,
       "paymentFrequency": paymentFrequency,
-      "agencyId": int.tryParse(agencyId) ?? 0,
+      // "agencyId": int.tryParse(agencyId) ?? 0,
       "transportId": transportId != null ? int.tryParse(transportId!) : null,
       "branchId": int.tryParse(branchId) ?? 0,
       "companyId": int.tryParse(companyId) ?? 0,

@@ -49,7 +49,7 @@ class _CustomDropdownV2WidgetState extends State<CustomDropdownV2Widget> {
       children: [
         Text(
           widget.labelText,
-          style: const TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.white),
         ),
         const SizedBox(
           height: Dimensions.heightSize * 0.5,

@@ -45,16 +45,14 @@ class MenuSidebarController extends GetxController {
               label: "Agentes",
               route: RouteConstants.manageAgent,
               icon: Icons.people_alt_outlined),
-          // MenuItemModel(label: "Asistencias Generales", route: RouteConstants.employees, icon: Icons.people_outline),
         ]),
-        //  MenuGroupModel(label: "Agente", children: [
-        //     MenuItemModel(label: "Asistencias", route: RouteConstants.myPresence, icon: Icons.assignment_turned_in_outlined),
-        //   // MenuItemModel(label: "Asistencias Generales", route: RouteConstants.employees, icon: Icons.people_outline),
-        // ]),
-        // MenuGroupModel(label: "Inventario", children: [
-        //   MenuItemModel(label: "Bodega prendas", route: RouteConstants.inventory, icon: Icons.supervisor_account_outlined),
+        MenuGroupModel(label: "Inventario", children: [
+          MenuItemModel(
+              label: "Inventarios",
+              route: RouteConstants.inventory,
+              icon: Icons.inventory_outlined),
+        ]),
 
-        // ]),
       ];
     } else if (role == 'Agente') {
       menu.value = [

@@ -116,3 +116,9 @@ List<DropDownOption> statusTypePositionMock = [
   DropDownOption(id: "2", label: "Rechazado"),
   DropDownOption(id: "3", label: "En proceso"),
 ];
+
+
+List<DropDownOption> currencyMock = [
+  DropDownOption(id: "QTZ", label: "Quetzal"),
+  DropDownOption(id: "USD", label: "Dolar"),
+];

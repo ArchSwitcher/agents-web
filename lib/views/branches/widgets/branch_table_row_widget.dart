@@ -18,6 +18,7 @@ List<DataRow> buildTableRowsBranches(
               deleteBranchButton(context, element),
               viewPositionButton(context, controller, element.id!),
               viewStayButton(context, element.id!, element),
+              viewExpedient(context, element.id!, element)
             ],
           )),
           cellDataTable(element.id, context: context),

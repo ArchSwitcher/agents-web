@@ -14,6 +14,7 @@ import 'package:agents_app/views/clients/views/clients_screen.dart';
 import 'package:agents_app/views/clients/views/manage_client_screen.dart';
 import 'package:agents_app/views/dashboard/dashboard_screen.dart';
 import 'package:agents_app/views/employees/views/employees_screen.dart';
+import 'package:agents_app/views/equipment/views/equipments_screen.dart';
 import 'package:agents_app/views/manage-agent-employees/views/agent_employees_screen.dart';
 import 'package:agents_app/views/manage-agent-employees/views/manage_employee_screen.dart';
 import 'package:agents_app/views/groups/views/groups_screen.dart';
@@ -66,6 +67,8 @@ class MyApp extends StatelessWidget {
           GetPage(name: RouteConstants.branchPositionStay, page: () => const BranchAgentsForm()),
 
           GetPage(name: RouteConstants.myPresence, page: () => const PresencesScreen()),
+
+          GetPage(name: RouteConstants.inventory, page: () => const EquipmentsScreen()),
 
           
         ],

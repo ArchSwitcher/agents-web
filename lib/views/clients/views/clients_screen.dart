@@ -8,6 +8,7 @@ import 'package:agents_app/views/clients/controllers/client_controller.dart';
 import 'package:agents_app/views/clients/widgets/action_btns_client.dart';
 import 'package:agents_app/views/clients/widgets/table_row.dart';
 import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
+import 'package:agents_app/widgets/datatable/data_table_local.dart';
 import 'package:agents_app/widgets/datatable/filter_box.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -90,16 +91,25 @@ class ClientsScreenState extends State<ClientsScreen> {
 
               // table content, edit delete elements
               cardContentSpace(),
-              ContentCard(child: Obx(() {
-                return CustomDataTableWidgetV2(
-                    minWidth: 500,
-                    dynamicHeight: false,
-                    tableHeight: TableHelper.getTableHeight(controller.clients),
-                    //fixedColumnWidths: fixedColumnWidths,
-                    //columnSizes: columnSizes,
-                    tableHeaders: tableHeaders,
-                    tableRows: buildTableRowsClient(controller, context));
-              }))
+            ContentCard(
+                  child: CustomPaginatedDataTableWidget(
+                data: controller.clients,
+                columns: tableHeaders
+                    .map((header) => DataColumn(label: Text(header)))
+                    .toList(),
+                buildRows: (list) => buildTableRowsClient(controller, context),
+                rowsPerPage: 100,
+              ))
+              // ContentCard(child: Obx(() {
+              //   return CustomDataTableWidgetV2(
+              //       minWidth: 500,
+              //       dynamicHeight: false,
+              //       tableHeight: TableHelper.getTableHeight(controller.clients),
+              //       //fixedColumnWidths: fixedColumnWidths,
+              //       //columnSizes: columnSizes,
+              //       tableHeaders: tableHeaders,
+              //       tableRows: buildTableRowsClient(controller, context));
+              // }))
             ],
           ),
         ));

@@ -75,6 +75,7 @@ class PositionController extends GetxController {
   final RxList<EquipmentModel> equipmentList = <EquipmentModel>[].obs;
 
   final RxList<PositionModel> positions = <PositionModel>[].obs;
+  final RxList<PositionModel> positionsBackUp = <PositionModel>[].obs;
 
   void clearPositions() {
     positions.clear();
@@ -150,7 +151,7 @@ class PositionController extends GetxController {
         id: idPosition,
         branchId: branch.value.id,
         companyId: company.value.id,
-        agencyId: agency.value.id,
+        // agencyId: agency.value.id,
         serviceTypeId: serviceType.value.id,
         shiftTimeId: shiftTime.value.id,
         endDate: endDate.text,
@@ -230,8 +231,8 @@ class PositionController extends GetxController {
 
       company.value =
           DropDownOption(id: position.companyId, label: position.company!.name);
-      agency.value =
-          DropDownOption(id: position.agencyId, label: position.agency!.name);
+      // agency.value =
+      //     DropDownOption(id: position.agencyId, label: position.agency!.name);
       serviceType.value = DropDownOption(
           id: position.serviceTypeId, label: position.serviceType!.name);
       shiftTime.value = DropDownOption(

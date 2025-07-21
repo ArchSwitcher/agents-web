@@ -439,7 +439,7 @@ class GenericListController extends GetxController {
 
   Future<List<TurnModel>> fetchTurnsByBranch(String branchId) async {
     try {
-      print("Fetching turns for branch: $branchId");
+      print("fetchTurnsByBranch Fetching turns for branch: $branchId");
       isLoadingTurns.value = true;
       final data = await genericListService.getAll(
           "common/listTurnBranchId/$branchId",
@@ -447,7 +447,7 @@ class GenericListController extends GetxController {
       turns.value = data;
       return data;
     } catch (e) {
-      print("Error fetching assign days: $e");
+      print("fetchTurnsByBranch Error fetching assign days: $e");
       return [];
     } finally {
       isLoadingTurns.value = false;

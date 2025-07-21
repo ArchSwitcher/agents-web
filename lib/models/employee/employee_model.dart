@@ -69,6 +69,7 @@ class EmployeeModel {
   List<NameItem> professions;
 
   SimpleEntity? employeeType;
+  String? cvh;
 
   EmployeeModel({
     required this.firstName,
@@ -138,6 +139,7 @@ class EmployeeModel {
     required this.professions,
     this.employeeType,
     this.id,
+    this.cvh
   });
 
   factory EmployeeModel.fromJson(Map<String, dynamic> json) {
@@ -220,6 +222,7 @@ class EmployeeModel {
               ?.map((e) => NameItem.fromJson(e))
               .toList() ??
           [],
+      cvh: json["CVH"]?.toString(),
     );
   }
 
