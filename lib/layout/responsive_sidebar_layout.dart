@@ -31,18 +31,11 @@ class ResponsiveSidebarLayout extends StatelessWidget {
           leading: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (showBackButton)
-                IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Navega hacia atrás
-                  },
-                ),
               if (constraints.maxWidth <= 600)
                 Builder(
                   builder: (BuildContext context) {
                     return IconButton(
-                      icon: const Icon(Icons.menu),
+                      icon: const Icon(Icons.menu, color: Colors.white),
                       onPressed: () {
                         Scaffold.of(context)
                             .openDrawer(); // Abre el menú lateral
@@ -50,8 +43,24 @@ class ResponsiveSidebarLayout extends StatelessWidget {
                     );
                   },
                 ),
+              if (showBackButton && constraints.maxWidth > 600)
+                IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Navega hacia atrás
+                  },
+                ),
             ],
           ),
+          actions: [
+            if (constraints.maxWidth <= 600 && showBackButton)
+              IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Navega hacia atrás
+                },
+              ),
+          ],
           backgroundColor: colorScheme.primary,
           elevation: 0.5,
           automaticallyImplyLeading: false,
@@ -96,9 +105,7 @@ class ResponsiveSidebarLayout extends StatelessWidget {
             // Contenido general debajo del header
             Padding(
               padding: EdgeInsets.only(top: constraints.maxHeight * 0.09),
-              child: SizedBox(
-                width: double.infinity,
-                child: content),
+              child: SizedBox(width: double.infinity, child: content),
             ),
           ],
         );
