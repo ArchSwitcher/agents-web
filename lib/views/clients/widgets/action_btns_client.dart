@@ -13,10 +13,7 @@ Widget addClientButton(
       color: colorScheme.primary,
       text: Row(
         children: [
-          Icon(
-            Icons.group_add,
-            color: colorScheme.surface,
-          ),
+          const Icon(Icons.group_add),
           const SizedBox(
             width: 6,
           ),
@@ -28,8 +25,8 @@ Widget addClientButton(
       ),
       isLoading: false,
       onPress: () async {
-       await Navigator.pushNamed(context, RouteConstants.manageClient);
-      controller.fetchClients();
+        await Navigator.pushNamed(context, RouteConstants.manageClient);
+        controller.fetchClients();
       });
 }
 
@@ -55,7 +52,6 @@ Widget editClient(BuildContext context, ClientModel element) {
 Widget deleteClient(BuildContext context, ClientModel element) {
   return IconButton(
     onPressed: () {
-      
       Navigator.pushNamed(context, RouteConstants.manageClient, arguments: {
         'title': "Eliminar cliente",
         'isDelete': true,
@@ -68,4 +64,3 @@ Widget deleteClient(BuildContext context, ClientModel element) {
     ),
   );
 }
-

@@ -42,28 +42,23 @@ class ManageClientScreenState extends State<ManageClientScreen> {
   final String subtitle =
       Get.arguments?['subtitle'] ?? "Agrega un nuevo cliente";
 
-  start() async {
+  Future<void> start() async {
     try {
-      
-    await _groupController.fetchGroups();
-    await controller.fetchEmployees();
-    await controller.genericListController.fetchBillingTypes();
-    await controller.genericListController.fetchGenerationTypes();
-    await controller.genericListController.fetchCountries();
-    await controller.genericListController.fetchDepartments();
-    await controller.genericListController.fetchZones();
+      await _groupController.fetchGroups();
+      await controller.fetchEmployees();
+      await controller.genericListController.fetchBillingTypes();
+      await controller.genericListController.fetchGenerationTypes();
+      await controller.genericListController.fetchCountries();
+      await controller.genericListController.fetchDepartments();
+      await controller.genericListController.fetchZones();
     } catch (e) {
-      print("objects ============ CLIENT MANAGE $e");
     }
   }
 
   startEdit() async {
     try {
-      final client = Get.arguments?['client'] as ClientModel;
+      Get.arguments?['client'] as ClientModel;
       controller.loadClientData(Get.arguments?['client']);
-      print("Client data loaded: ${client.fiscalAddress!.address}");
-      print("Client data name: ${client.fiscalAddress!.country!.name}");
-      // print("Client data loaded: ${client.fiscalAddress!.country!.id}");
 
       controller.fiscalMunicipalities.value = await controller
           .genericListController
@@ -72,6 +67,10 @@ class ManageClientScreenState extends State<ManageClientScreen> {
       controller.paymentMunicipalities.value = await controller
           .genericListController
           .fetchMunicipalitiesOnly(controller.paymentDepartment.value.id);
+      // controller.loadClientData(Get.arguments?['client']);
+      setState(() {});
+      _groupController.update();
+      controller.update();
     } catch (e) {
       print("Error loading client data: $e");
     }
@@ -80,9 +79,9 @@ class ManageClientScreenState extends State<ManageClientScreen> {
   @override
   void initState() {
     super.initState();
-    if (isEdit == true) {
-      startEdit();
-    }
+      if (isEdit == true) {
+        startEdit();
+      }
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       start();
     });
@@ -116,14 +115,13 @@ class ManageClientScreenState extends State<ManageClientScreen> {
                       ? (constraints.maxWidth / 3) - 40
                       : constraints.maxWidth - 40;
 
-                  return Obx(() {
-                    return _basicInfo(
+                  return _basicInfo(
                       controller,
                       isEdit ?? true,
                       _groupController,
                       width,
+                      isEdit
                     );
-                  });
                 }),
               ),
               cardContentSpace(),
@@ -254,7 +252,7 @@ Widget _managers(ManageClientController controller) {
 }
 
 Widget _basicInfo(ManageClientController controller, bool isEnabled,
-    ManageGroupController groupController, double width) {
+    ManageGroupController groupController, double width, bool? isEdit ) {
   return Wrap(
     spacing: 30,
     runSpacing: 20,
@@ -285,7 +283,7 @@ Widget _basicInfo(ManageClientController controller, bool isEnabled,
               .toList();
           return filteredOptions.isEmpty ? [] : filteredOptions;
         },
-        enabled: isEnabled,
+        enabled: isEdit == true ? false : true,
       ),
       SizedBox(
         width: width,

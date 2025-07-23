@@ -9,7 +9,7 @@ import 'package:agents_app/views/branches/controller/branch_controller.dart';
 import 'package:agents_app/views/branches/widgets/branch_actions_btns_widget.dart';
 import 'package:agents_app/views/branches/widgets/branch_table_row_widget.dart';
 // import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
-import 'package:agents_app/widgets/datatable/data_table_local.dart';
+// import 'package:agents_app/widgets/datatable/data_table_local.dart';
 import 'package:agents_app/widgets/datatable/data_table_v3.dart';
 // import 'package:agents_app/widgets/datatable/filter_box.dart';
 // import 'package:agents_app/widgets/inputs/custom_input_widget.dart';

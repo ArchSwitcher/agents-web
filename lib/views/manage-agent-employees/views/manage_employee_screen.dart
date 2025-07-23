@@ -6,15 +6,15 @@ import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/additional_info.dart';
+// import 'package:agents_app/views/manage-agent-employees/sections/additional_info.dart';
 import 'package:agents_app/views/manage-agent-employees/sections/birth_address_info.dart';
 import 'package:agents_app/views/manage-agent-employees/sections/contact_info.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/emergency_contact.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/finance_information.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/job_information.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/licence_weapon.dart';
+// import 'package:agents_app/views/manage-agent-employees/sections/emergency_contact.dart';
+// import 'package:agents_app/views/manage-agent-employees/sections/finance_information.dart';
+// import 'package:agents_app/views/manage-agent-employees/sections/job_information.dart';
+// import 'package:agents_app/views/manage-agent-employees/sections/licence_weapon.dart';
 import 'package:agents_app/views/manage-agent-employees/sections/personal_information.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/system_access_status.dart';
+// import 'package:agents_app/views/manage-agent-employees/sections/system_access_status.dart';
 import 'package:agents_app/views/manage-agent-employees/widgets/position_modal.dart';
 import 'package:agents_app/widgets/buttons/custom_button.dart';
 import 'package:agents_app/widgets/buttons/form_button.dart';
@@ -100,17 +100,17 @@ class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen> {
                 cardContentSpace(),
                 contactInfo(context, controller),
                 cardContentSpace(),
-                buildEmergencyContact(context, controller),
+                // buildEmergencyContact(context, controller),
                 cardContentSpace(),
-                jobInformation(context, controller),
+                // jobInformation(context, controller),
                 cardContentSpace(),
-                licenceWeapon(context, controller),
+                // licenceWeapon(context, controller),
                 cardContentSpace(),
-                financialMITInformation(context, controller),
+                // financialMITInformation(context, controller),
                 cardContentSpace(),
-                additionalInfo(context, controller),
+                // additionalInfo(context, controller),
                 cardContentSpace(),
-                systemAccessStatus(context, controller),
+                // systemAccessStatus(context, controller),
                 cardContentSpace(),
                 cardContentSpace(),
                 FormButton(onPress: () {

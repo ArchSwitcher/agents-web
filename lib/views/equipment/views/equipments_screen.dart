@@ -31,11 +31,12 @@ class EquipmentsScreenState extends State<EquipmentsScreen> {
     loaderController.show();
     await equipmentController.fetchEquipments();
     setState(() {});
-    loaderController.hide();
+    // loaderController.hide();
   }
 
   final tableHeaders = [
     '',
+    "#",
     'Código',
     'Tipo de equipo',
     'Número de serie',
@@ -90,9 +91,13 @@ class EquipmentsScreenState extends State<EquipmentsScreen> {
                       child: ElevatedButton.icon(
                         onPressed: () {
                           showEquipmentsModal(
-                              context: context,
-                              equipmentTypeController: equipmentTypeController,
-                              equipmentController: equipmentController);
+                            context: context,
+                            equipmentTypeController: equipmentTypeController,
+                            equipmentController: equipmentController,
+                            onAccept: () {
+                              start();
+                            },
+                          );
                         },
                         label: const Text("Añadir inventario"),
                         icon: const Icon(Icons.inventory),
@@ -119,8 +124,10 @@ class EquipmentsScreenState extends State<EquipmentsScreen> {
             columns: tableHeaders
                 .map((header) => DataColumn(label: Text(header)))
                 .toList(),
-            buildRows: (list) =>
-                buildTableRowsFromList(equipmentController.equipments, context),
+            buildRows: (list) => buildTableRowsFromList(
+                equipmentController.equipments, context, () {
+              start();
+            }),
             rowsPerPage: 100,
           ))
         ],
@@ -129,8 +136,8 @@ class EquipmentsScreenState extends State<EquipmentsScreen> {
   }
 }
 
-List<DataRow> buildTableRowsFromList(
-    List<EquipmentModel> list, BuildContext context) {
+List<DataRow> buildTableRowsFromList(List<EquipmentModel> list,
+    BuildContext context, final VoidCallback? onAccept) {
   return List.generate(list.length, (index) {
     final element = list[index];
     return DataRow(
@@ -142,22 +149,32 @@ List<DataRow> buildTableRowsFromList(
               icon: const Icon(Icons.add_circle_outline),
               onPressed: () {
                 showEquipmentsModal(
-                  context: context,
-                  equipmentTypeController: Get.find<EquipmentTypeController>(),
-                  equipmentController: Get.find<EquipmentController>(),
-                );
+                    context: context,
+                    equipmentTypeController:
+                        Get.find<EquipmentTypeController>(),
+                    equipmentController: Get.find<EquipmentController>(),
+                    onAccept: () {
+                      onAccept?.call();
+                    });
               },
             ),
           // editEquipmentButton(context, element),
           // deleteEquipmentButton(context, element.id.toString()),
         ])),
+        cellDataTable(index + 1, context: context),
         cellDataTable(element.id, context: context),
         cellDataTable(element.equipmentType!.name, context: context),
         cellDataTable(element.serialNumber, context: context),
         cellDataTable(element.quantity, context: context),
         cellDataTable(element.cost, context: context),
         cellDataTable(element.currency, context: context),
-        cellDataTable( element.equipmentType!.isUnique == 1 ?  element.isAssigned == 1 ? "Si" : "No" : "No Aplica", context: context),
+        cellDataTable(
+            element.equipmentType!.isUnique == 1
+                ? element.isAssigned == 1
+                    ? "Si"
+                    : "No"
+                : "No Aplica",
+            context: context),
         cellDataTable(element.equipmentType!.isUnique == 1 ? "Si" : "No",
             context: context),
       ],

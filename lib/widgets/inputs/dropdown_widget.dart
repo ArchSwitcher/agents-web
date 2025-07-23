@@ -5,7 +5,7 @@ import 'package:agents_app/widgets/commons/loading.dart';
 import 'package:agents_app/widgets/inputs/autocomplete_dropdown.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
 
-class LoadingAutocompleteDropdown extends StatelessWidget {
+class LoadingAutocompleteDropdown extends StatefulWidget {
   final RxBool isLoading;
   final List<DropDownOption> listItems;
   final Function(DropDownOption) onSelected;
@@ -35,21 +35,28 @@ class LoadingAutocompleteDropdown extends StatelessWidget {
     this.loadingText = '',
     this.initialValue,
     this.validator,
-
   });
 
   @override
+  State<LoadingAutocompleteDropdown> createState() => _LoadingAutocompleteDropdownState();
+}
+
+class _LoadingAutocompleteDropdownState extends State<LoadingAutocompleteDropdown> {
+  @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (isLoading.value) {
+      if (widget.isLoading.value) {
         return SizedBox(
-          width: width,
-          child:  Align(
+          width: widget.width,
+          child: Align(
             alignment: Alignment.centerLeft,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(loadingText, style: CustomStyle.hintTextStyleBlack(context),),
+                Text(
+                  widget.loadingText,
+                  style: CustomStyle.hintTextStyleBlack(context),
+                ),
                 const Loading(),
               ],
             ),
@@ -57,24 +64,24 @@ class LoadingAutocompleteDropdown extends StatelessWidget {
         );
       }
       return SizedBox(
-        width: width,
+        width: widget.width,
         child: AutocompleteDropdownWidget(
-          validator: validator,
-          initialValue: initialValue,
-          prefixIcon: prefixIcon,
-          enabled: enabled,
-          listItems: listItems,
-          onSelected: onSelected,
-          label: label,
-          hintText: hintText,
+          validator: widget.validator,
+          initialValue: widget.initialValue,
+          prefixIcon: widget.prefixIcon,
+          enabled: widget.enabled,
+          listItems: widget.listItems,
+          onSelected: widget.onSelected,
+          label: widget.label,
+          hintText: widget.hintText,
           onFocusChange: (hasFocus) {},
           resetClean: (clean) {
-            resetValue.value = DropDownOption(
+            widget.resetValue.value = DropDownOption(
               id: '',
-              label: hintText,
+              label: widget.hintText,
             );
           },
-          onTextChange: onTextChange,
+          onTextChange: widget.onTextChange,
         ),
       );
     });

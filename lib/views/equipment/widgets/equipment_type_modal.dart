@@ -1,10 +1,10 @@
-import 'package:agents_app/models/common/dropdown_option_model.dart';
+// import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/services/toast_service.dart';
-import 'package:agents_app/shared/helpers/validations/dropdown_validator.dart';
+// import 'package:agents_app/shared/helpers/validations/dropdown_validator.dart';
 import 'package:agents_app/views/equipment/controllers/equipment_type_controller.dart';
 // import 'package:agents_app/views/equipment/controllers/equipment_assgiment.dart';
 import 'package:agents_app/widgets/commons/generic_modal.dart';
-import 'package:agents_app/widgets/inputs/autocomplete_dropdown.dart';
+// import 'package:agents_app/widgets/inputs/autocomplete_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:get/get.dart';

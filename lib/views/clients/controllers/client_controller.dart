@@ -208,15 +208,16 @@ class ManageClientController extends GetxController {
   }
 
   Future<void> loadClientData(ClientModel client) async {
-    print("Setting data for client: ${client.group!.id}");
+    print("Setting data for client: ${client.group!.id} ${client.group!.name}");
     try {
+      groupId.value = DropDownOption(
+          id: client.group?.id ?? "", label: client.group?.name ?? "");
       clientId = client.id ?? '';
-      nameController.text = client.name!;
-      emailController.text = client.email!;
-      phoneController.text = client.phone!;
-      urlController.text = client.url!;
-      groupId.value =
-          DropDownOption(id: client.group!.id, label: client.group!.name);
+      nameController.text = client.name ?? "";
+      emailController.text = client.email ?? "";
+      phoneController.text = client.phone ?? "";
+      urlController.text = client.url ?? "";
+
       adviser.value = DropDownOption(
           id: client.adviser?.id ?? "", label: client.adviser?.name ?? "");
       accountManager.value = DropDownOption(

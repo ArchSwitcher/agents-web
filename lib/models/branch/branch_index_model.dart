@@ -4,7 +4,7 @@ import 'package:agents_app/models/document/document_model.dart';
 import 'package:agents_app/models/geofence/geofence_model.dart';
 import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/models/schedule/schedule_days_model.dart';
-import 'package:geolocator/geolocator.dart';
+// import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 class BranchModel {

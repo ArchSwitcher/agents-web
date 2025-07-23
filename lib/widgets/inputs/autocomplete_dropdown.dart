@@ -21,7 +21,7 @@ class AutocompleteDropdownWidget extends StatefulWidget {
   final bool enabled;
   final IconData prefixIcon;
 
-  const AutocompleteDropdownWidget({
+  AutocompleteDropdownWidget({
     super.key,
     required this.listItems,
     required this.onSelected,
@@ -49,16 +49,36 @@ class _AutocompleteDropdownWidgetState
   late TextEditingController textEditingController;
 
   updateSelectedOption() {
-    widget.listItems.firstWhere(
-        (option) => option.id == widget.initialValue!.id,
-        orElse: () => DropDownOption(id: '', label: ''));
-    selectedOption = widget.initialValue;
+    final optionSelected = widget.listItems.firstWhere((option) {
+      print("objects ============ ${option.id} ${widget.initialValue?.id}");
+      return option.id.toString() == widget.initialValue!.id.toString();
+    }, orElse: () => DropDownOption(id: '', label: ''));
+
+    print(
+        "initial value AutocompleteDropdownWidget:------  ${widget.initialValue?.id} ${widget.initialValue?.label}");
+    print(
+        "selectedOption AutocompleteDropdownWidget:------  ${optionSelected.id} ${optionSelected.label}");
+    selectedOption = optionSelected;
+    textEditingController.text = selectedOption!.label;
+
+    setState(() {});
   }
 
+  // @override
+  // void initState() {
+  //   print(
+  //       "initial value AutocompleteDropdownWidget 🛸:------  ${widget.initialValue?.id} ${widget.initialValue?.label}");
+  //   if (widget.initialValue != null) {
+  //     updateSelectedOption();
+  //   }
+  //   super.initState();
+  // }
   @override
   void initState() {
+    textEditingController = widget.textController ?? TextEditingController();
     if (widget.initialValue != null) {
       updateSelectedOption();
+      textEditingController.text = widget.initialValue!.label;
     }
     super.initState();
   }
@@ -68,7 +88,11 @@ class _AutocompleteDropdownWidgetState
     super.didUpdateWidget(oldWidget);
     if (widget.initialValue != oldWidget.initialValue &&
         widget.listItems.isNotEmpty) {
+      print(
+          "options ${widget.listItems.length} ${widget.initialValue?.id} ${widget.initialValue?.label}");
       updateSelectedOption();
+      textEditingController.text = widget.initialValue?.label ?? '';
+
       setState(() {});
     }
   }
@@ -85,7 +109,7 @@ class _AutocompleteDropdownWidgetState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Autocomplete<DropDownOption>(
-              initialValue: TextEditingValue(text: widget.initialValue?.label ?? ''),
+              initialValue: TextEditingValue(text: widget.initialValue!.label),
               optionsBuilder: (TextEditingValue textEditingValue) {
                 if (fieldState.value == null && selectedOption != null) {
                   fieldState.didChange(selectedOption);
@@ -112,7 +136,7 @@ class _AutocompleteDropdownWidgetState
                   onFocusChangeInput: widget.onFocusChange,
                   focusNode: focusNode,
                   onFieldSubmitted: (String value) => onFieldSubmitted(),
-                  controller: textEditingController,
+                   controller: textEditingController,
                   label: widget.label,
                   hintText: widget.hintText,
                   prefixIcon: widget.prefixIcon,
