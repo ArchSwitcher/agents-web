@@ -32,6 +32,10 @@ class ManageClientController extends GetxController {
   Rx<DropDownOption> groupId = DropDownOption(id: '', label: '').obs;
   Rx<DropDownOption> adviser = DropDownOption(id: '', label: '').obs;
   Rx<DropDownOption> accountManager = DropDownOption(id: '', label: '').obs;
+  LoaderController loaderController = Get.find<LoaderController>();
+
+  final TextEditingController controllerSearchClient = TextEditingController();
+  final TextEditingController controllerSearchGroup = TextEditingController();
 
   @override
   void onClose() {
@@ -77,6 +81,7 @@ class ManageClientController extends GetxController {
     loader.show();
     try {
       final data = await _clientService.getAll(null);
+      print("Fetched clients: ${data.length}");
       clients.value = data;
     } catch (e) {
       print("Error fetching clients: $e");
@@ -93,6 +98,27 @@ class ManageClientController extends GetxController {
         label: client.name!,
       );
     }).toList();
+  }
+
+  Future<void> searchClients() async {
+    try {
+      loaderController.show();
+      clients.value = [];
+      isLoading.value = true;
+      final data = await _clientService.searchByKeyword(
+          controllerSearchClient.text, controllerSearchGroup.text);
+      clients.value = data;
+    } catch (e) {
+      ToastService.warning(
+        title: "Clientes",
+        subTitle: "No se encontraron Clientes",
+      );
+      print("Error fetching clients: $e");
+      //Get.snackbar("Error", "No se pudieron cargar las Clientes");
+    } finally {
+      loaderController.hide();
+      isLoading.value = false;
+    }
   }
 
   setInfoClient() {

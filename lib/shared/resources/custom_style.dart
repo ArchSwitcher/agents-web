@@ -35,7 +35,7 @@ class CustomStyle {
       );
 
   static TextStyle defaultStyle(BuildContext context) => TextStyle(
-        color: Theme.of(context).colorScheme.primary,
+        color: Theme.of(context).colorScheme.onPrimary,
         fontSize: Dimensions.largeTextSize,
       );
 

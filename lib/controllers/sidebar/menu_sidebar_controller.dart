@@ -30,7 +30,7 @@ class MenuSidebarController extends GetxController {
               route: RouteConstants.branch,
               icon: Icons.business_sharp),
           MenuItemModel(
-              label: "Posiciones",
+              label: "Proseñas",
               route: RouteConstants.positions,
               icon: Icons.location_on_outlined),
         ]),
@@ -39,20 +39,35 @@ class MenuSidebarController extends GetxController {
               label: "Empleados",
               route: RouteConstants.employees,
               icon: Icons.people_outline),
-        ]),
-        MenuGroupModel(label: "Agentes", children: [
-          MenuItemModel(
-              label: "Agentes",
+          MenuItemModel(                           //
+              label: "Aprobación de altas",
               route: RouteConstants.manageAgent,
-              icon: Icons.people_alt_outlined),
+              icon: Icons.assignment_turned_in_outlined),
+          MenuItemModel(
+              label: "Posiciones",
+              route: RouteConstants.manageAgent,
+              icon: Icons.location_history),
+          MenuItemModel(
+              label: "Expedientes",
+              route: RouteConstants.manageAgent,
+              icon: Icons.document_scanner),
         ]),
+        // MenuGroupModel(label: "Agentes", children: [
+        // MenuItemModel(
+        //     label: "Agentes",
+        //     route: RouteConstants.manageAgent,
+        //     icon: Icons.people_alt_outlined),
+        // MenuItemModel(
+        //     label: "Agentes",
+        //     route: RouteConstants.manageAgent,
+        //     icon: Icons.people_alt_outlined),
+        // ]),
         MenuGroupModel(label: "Inventario", children: [
           MenuItemModel(
               label: "Inventarios",
               route: RouteConstants.inventory,
               icon: Icons.inventory_outlined),
         ]),
-
       ];
     } else if (role == 'Agente') {
       menu.value = [

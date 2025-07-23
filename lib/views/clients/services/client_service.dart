@@ -111,4 +111,25 @@ class ClientService extends BaseService implements CrudService<ClientModel> {
       return false;
     }
   }
+
+  Future<List<ClientModel>> searchByKeyword(
+      String? clientName, String? groupName) async {
+    final response = await http.get(
+      Uri.parse(
+          '$baseUrl/client/search?clientName=$clientName&groupName=$groupName'),
+      headers: buildHeaders(),
+    );
+    try {
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        final List data = decoded['data'];
+        return data.map((json) => ClientModel.fromJson(json)).toList();
+      } else {
+        throw Exception('No se encontraron clientes');
+      }
+    } catch (e) {
+      print("objects: error ---- ${e.toString()}");
+      throw Exception('Error al cargar sucursales: $e');
+    }
+  }
 }

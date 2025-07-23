@@ -192,14 +192,14 @@ Widget searchBranchButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text("Cancelar"),
+                    child:const Text("Cerrar"),
                   ),
                   TextButton(
                     onPressed: () {
                       onAccept?.call();
                       Navigator.of(context).pop();
                     },
-                    child: Text("Buscar"),
+                    child:const Text("Buscar"),
                   ),
                 ],
               );

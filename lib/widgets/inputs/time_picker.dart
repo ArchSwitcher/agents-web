@@ -121,7 +121,7 @@ class _CustomTimePickerState extends State<CustomTimePicker> {
             enabledBorder: CustomStyle.focusErrorBorder(context),
             focusedErrorBorder: CustomStyle.focusErrorBorder(context),
             errorBorder: CustomStyle.focusErrorBorder(context),
-            prefixIcon: Icon(widget.prefixIcon, color: colorScheme.primary),
+            prefixIcon: Icon(widget.prefixIcon, color: colorScheme.onPrimary),
           ),
         ),
         const SizedBox(height: Dimensions.heightSize),

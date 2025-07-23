@@ -1,4 +1,3 @@
-
 import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/shared/resources/dimensions.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +66,7 @@ class CustomDatePickerState extends State<CustomDatePicker> {
       children: [
         Text(
           widget.label,
-          style: const TextStyle(color: Colors.black),
+          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
         ),
         const SizedBox(
           height: Dimensions.heightSize * 0.5,

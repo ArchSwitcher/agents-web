@@ -58,13 +58,13 @@ class EmployeesAgentScreenState extends State<EmployeesAgentScreen> {
   @override
   void didUpdateWidget(covariant EmployeesAgentScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    print("didUpdateWidget");
+    // print("didUpdateWidget");
   }
 
   reloadPositions(String statusTypeId) async {
     loaderController.show();
-    print(
-        "controller.selectedPosition.text ${controller.selectedPosition.text} $statusTypeId");
+    // print(
+    //     "controller.selectedPosition.text ${controller.selectedPosition.text} $statusTypeId");
     await controller.positionController
         .fetchPositions(statusType: statusTypeId);
     loaderController.hide();

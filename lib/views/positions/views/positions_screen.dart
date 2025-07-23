@@ -27,11 +27,11 @@ class PositionsScreenState extends State<PositionsScreen> {
 
   final List<String> headers = [
     "",
-    'Código',
+    'Proseña',
     'Nombre',
     'Latitud',
     'Longitud',
-    "proseña",
+    // "proseña",
     "Grupo",
     "Sucursal",
     "Horario"
@@ -56,8 +56,8 @@ class PositionsScreenState extends State<PositionsScreen> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveSidebarLayout(
-        title: "Posiciones",
-        description: "Configuración de posiciones para clientes",
+        title: "Proseñas",
+        description: "Configuración de proseñas para clientes",
         currentRoute: RouteConstants.positions,
         userRole: 'admin',
         content: SingleChildScrollView(

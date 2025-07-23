@@ -40,7 +40,7 @@ class ManagePositionScreenState extends State<ManagePositionScreen> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveSidebarLayout(
-        title: "Posición",
+        title: "Proseña",
         description: title,
         currentRoute: RouteConstants.positions,
         userRole: "admin",
@@ -248,8 +248,8 @@ class _ManagePositionSectionState extends State<ManagePositionSection> {
                       controller.branchController.turns.value =
                           controller.genericListController.turns;
 
-                      print(
-                          "turns: ${controller.genericListController.turns.length}");
+                      // print(
+                      //     "turns: ${controller.genericListController.turns.length}");
                       currentStep = 3;
                       setState(() {});
                     },

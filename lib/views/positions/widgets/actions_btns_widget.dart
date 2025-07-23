@@ -14,13 +14,13 @@ Widget addPositionButton(BuildContext context) {
         children: [
           Icon(
             Icons.group_add,
-            color: colorScheme.surface,
+            color: colorScheme.onSurface,
           ),
           const SizedBox(
             width: 6,
           ),
           Text(
-            "Nueva posición",
+            "Nueva proseña",
             style: CustomStyle.textStyleWhite(context),
           )
         ],
@@ -28,7 +28,7 @@ Widget addPositionButton(BuildContext context) {
       isLoading: false,
       onPress: () async {
         Navigator.pushNamed(context, RouteConstants.managePosition, arguments: {
-          'title': "Agregar posición",
+          'title': "Agregar proseña",
         });
       });
 }
@@ -39,7 +39,7 @@ Widget editPositionButton(BuildContext context, String positionId) {
   return IconButton(
       onPressed: () {
         Navigator.pushNamed(context, RouteConstants.managePosition, arguments: {
-          'title': "Editar posición para cliente",
+          'title': "Editar proseña para cliente",
           'positionId': positionId,
           'isEdit': true,
         });
@@ -78,11 +78,11 @@ Widget manageEquipmentButton(
         text: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Icon(Icons.security, color: colorScheme.surface),
+            Icon(Icons.security, color: colorScheme.onSurface),
             Text(
               "Equipo",
               style: CustomStyle.textStyleBlack(context)
-                  .copyWith(color: colorScheme.surface),
+                  .copyWith(color: colorScheme.onSurface),
             ),
           ],
         ),

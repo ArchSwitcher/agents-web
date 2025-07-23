@@ -1,7 +1,7 @@
 import 'package:agents_app/layout/contect_card_space.dart';
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
-import 'package:agents_app/models/client/clients_model.dart';
+// import 'package:agents_app/models/client/clients_model.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 // import 'package:agents_app/shared/helpers/table/index.dart';
 import 'package:agents_app/views/clients/controllers/client_controller.dart';
@@ -9,7 +9,7 @@ import 'package:agents_app/views/clients/widgets/action_btns_client.dart';
 import 'package:agents_app/views/clients/widgets/table_row.dart';
 // import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
 import 'package:agents_app/widgets/datatable/data_table_local.dart';
-import 'package:agents_app/widgets/datatable/filter_box.dart';
+// import 'package:agents_app/widgets/datatable/filter_box.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -32,6 +32,7 @@ class ClientsScreenState extends State<ClientsScreen> {
   ];
 
   final controller = Get.put(ManageClientController());
+  bool isSearching = false;
 
   //final List<double?> fixedColumnWidths = [120, 120, null, 120];
   //final columnSizes = [ColumnSize.S, ColumnSize.S, ColumnSize.L, ColumnSize.S];
@@ -64,23 +65,30 @@ class ClientsScreenState extends State<ClientsScreen> {
                   spacing: 30,
                   runSpacing: 20,
                   crossAxisAlignment: WrapCrossAlignment.center,
-                  alignment: WrapAlignment.spaceBetween,
+                  alignment: WrapAlignment.end,
                   children: [
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        minWidth: 300,
-                        maxWidth: 600,
-                      ),
-                      child: FilterBox(
-                        elements: [...controller.clients],
-                        handleFilteredData: (List<ClientModel> data) {
-                          controller.clients.value = data;
-                        },
-                        isLoading: false,
-                        hint: "Buscar clientes",
-                        label: "Buscar cliente",
-                      ),
+                    SizedBox(
+                      width: 190,
+                      child: searchClientsButton(context, controller, () async {
+                        await controller.searchClients();
+                        isSearching = true;
+                        setState(() {});
+                      }),
                     ),
+                    if (isSearching)
+                      SizedBox(
+                        width: 220,
+                        child: ElevatedButton.icon(
+                            onPressed: () async {
+                              await controller.fetchClients();
+                              controller.controllerSearchClient.clear();
+                              controller.controllerSearchGroup.clear();
+                              isSearching = false;
+                              setState(() {});
+                            },
+                            label: Text("Limpiar búsqueda"),
+                            icon: Icon(Icons.clear)),
+                      ),
                     SizedBox(
                       width: 160,
                       child: addClientButton(context, controller),
@@ -91,7 +99,7 @@ class ClientsScreenState extends State<ClientsScreen> {
 
               // table content, edit delete elements
               cardContentSpace(),
-            ContentCard(
+              ContentCard(
                   child: CustomPaginatedDataTableWidget(
                 data: controller.clients,
                 columns: tableHeaders

@@ -112,9 +112,9 @@ List<DropDownOption> positionMock = [
 ];
 
 List<DropDownOption> statusTypePositionMock = [
-  DropDownOption(id: "1", label: "Activo"),
-  DropDownOption(id: "2", label: "Rechazado"),
-  DropDownOption(id: "3", label: "En proceso"),
+  DropDownOption(id: "1", label: "ALTA"),
+  DropDownOption(id: "2", label: "VACANTES"),
+  DropDownOption(id: "3", label: "NUEVAS VACANTES"),
 ];
 
 

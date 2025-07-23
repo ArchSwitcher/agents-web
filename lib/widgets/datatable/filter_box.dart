@@ -45,7 +45,7 @@ class _FilterBoxState<T> extends State<FilterBox<T>> {
   // }
 
   filterByText() {
-    print("filterByText: ${filterBoxController.text}");
+    // print("filterByText: ${filterBoxController.text}");
     if (filterBoxController.text.isEmpty) {
       widget.cleanValue?.call();
       return;
@@ -54,19 +54,20 @@ class _FilterBoxState<T> extends State<FilterBox<T>> {
       // encode depends on toJson method in each model, be aware of field do you want to include in the search,
       // enhanced should be included in json.encode(element, functionToEncodable) to search another method to handle de values passed.
       final quote = json.encode(element).toLowerCase();
+      print("quote: $quote");
       return quote.contains(filterBoxController.text.toLowerCase());
     }).toList();
 
-    print("suggestions: ${suggestions.length}");
+    // print("suggestions: ${suggestions.length}");
     widget.handleFilteredData(suggestions);
   }
 
-  @override
-  void initState() {
-    super.initState();
-    filterBoxController.addListener(() => filterByText());
-     data = widget.elements;
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   filterBoxController.addListener(() => filterByText());
+  //   data = widget.elements;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -78,22 +79,30 @@ class _FilterBoxState<T> extends State<FilterBox<T>> {
       hintText: widget.hint,
       prefixIcon: Icons.search,
       readOnly: widget.isLoading,
-      suffixIcon: IconButton(
-        onPressed: () {
-          // filterBoxController.clear();
-          // widget.handleFilteredData(data);
-          // widget.cleanValue?.call();
-          // filterBoxController
-          //     .removeListener(filterByText); // Detener temporalmente
-          filterBoxController.text = "";
-          // widget.handleFilteredData(data);
-          // filterBoxController.addListener(filterByText); // Volver a añadir
-          widget.cleanValue?.call();
-        },
-        icon: const Icon(
-          Icons.close,
-          color: Colors.white,
-        ),
+      suffixIcon: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(onPressed: () {
+            widget.handleFilteredData(data);
+          }, icon: const Icon(Icons.search)),
+          IconButton(
+            onPressed: () {
+              // filterBoxController.clear();
+              // widget.handleFilteredData(data);
+              // widget.cleanValue?.call();
+              // filterBoxController
+              //     .removeListener(filterByText); // Detener temporalmente
+              filterBoxController.text = "";
+              // widget.handleFilteredData(data);
+              // filterBoxController.addListener(filterByText); // Volver a añadir
+              widget.cleanValue?.call();
+            },
+            icon: const Icon(
+              Icons.close,
+              color: Colors.white,
+            ),
+          )
+        ],
       ),
     );
   }

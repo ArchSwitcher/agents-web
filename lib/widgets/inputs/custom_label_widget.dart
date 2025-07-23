@@ -1,4 +1,3 @@
-
 import 'package:agents_app/shared/resources/custom_style.dart';
 import 'package:agents_app/shared/resources/dimensions.dart';
 import 'package:flutter/material.dart';
@@ -19,13 +18,13 @@ class CustomLabelWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme  = Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
-          style: const TextStyle(color: Colors.black),
+          style: TextStyle(color: colorScheme.onPrimary),
         ),
         const SizedBox(
           height: Dimensions.heightSize *
@@ -34,8 +33,8 @@ class CustomLabelWidget extends StatelessWidget {
         TextField(
           readOnly: true,
           controller: controller,
-          style: CustomStyle
-              .textStyleBlack(context), // Make sure to define CustomStyle.textStyleWhite
+          style: CustomStyle.textStyleBlack(
+              context), // Make sure to define CustomStyle.textStyleWhite
           decoration: InputDecoration(
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),

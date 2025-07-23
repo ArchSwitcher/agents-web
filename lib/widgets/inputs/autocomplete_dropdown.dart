@@ -50,14 +50,14 @@ class _AutocompleteDropdownWidgetState
 
   updateSelectedOption() {
     final optionSelected = widget.listItems.firstWhere((option) {
-      print("objects ============ ${option.id} ${widget.initialValue?.id}");
+      // print("objects ============ ${option.id} ${widget.initialValue?.id}");
       return option.id.toString() == widget.initialValue!.id.toString();
     }, orElse: () => DropDownOption(id: '', label: ''));
 
-    print(
-        "initial value AutocompleteDropdownWidget:------  ${widget.initialValue?.id} ${widget.initialValue?.label}");
-    print(
-        "selectedOption AutocompleteDropdownWidget:------  ${optionSelected.id} ${optionSelected.label}");
+    // print(
+    //     "initial value AutocompleteDropdownWidget:------  ${widget.initialValue?.id} ${widget.initialValue?.label}");
+    // print(
+    //     "selectedOption AutocompleteDropdownWidget:------  ${optionSelected.id} ${optionSelected.label}");
     selectedOption = optionSelected;
     textEditingController.text = selectedOption!.label;
 
@@ -109,7 +109,7 @@ class _AutocompleteDropdownWidgetState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Autocomplete<DropDownOption>(
-              initialValue: TextEditingValue(text: widget.initialValue!.label),
+              initialValue: TextEditingValue(text: widget.initialValue?.label ?? ""),
               optionsBuilder: (TextEditingValue textEditingValue) {
                 if (fieldState.value == null && selectedOption != null) {
                   fieldState.didChange(selectedOption);

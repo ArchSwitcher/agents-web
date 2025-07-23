@@ -117,7 +117,7 @@ class _WeekDayTimeState extends State<WeekDayTime> {
             onChanged: widget.onChanged,
             activeColor: Theme.of(context).colorScheme.primary,
             unSelectedColor: Theme.of(context).colorScheme.primary,
-            checkColor: Theme.of(context).colorScheme.surface,
+            checkColor: Theme.of(context).colorScheme.onSurface,
           ),
           const SizedBox(width: 12),
           // CustomTimePicker

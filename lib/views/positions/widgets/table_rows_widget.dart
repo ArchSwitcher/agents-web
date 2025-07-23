@@ -38,7 +38,7 @@ List<DataRow> buildTablePositionRows(PositionController controller,
                           'position': element,
                           'employeeType': "Permanente",
                         });
-                    print("object ${element.positionName}");
+                    // print("object ${element.positionName}");
                     loaderController.show();
                     controller.positions.clear();
                     await Future.delayed(const Duration(seconds: 1));
@@ -52,7 +52,7 @@ List<DataRow> buildTablePositionRows(PositionController controller,
           cellDataTable(element.name, context: context),
           cellDataTable(element.latitude, context: context),
           cellDataTable(element.longitude, context: context),
-          cellDataTable(element.prosena, context: context),
+          // cellDataTable(element.prosena, context: context),
           cellDataTable(element.group?.name ?? "", context: context),
           cellDataTable(element.branch?.name, context: context),
           cellDataTable(element.shiftTime?.name, context: context),
