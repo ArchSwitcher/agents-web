@@ -25,7 +25,10 @@ class EmployeeAgentController extends GetxController {
   final secondLastNameController = TextEditingController();
   final genderController = TextEditingController();
   final birthDateController = TextEditingController();
-  final idTypeController = TextEditingController(text: "DPI");
+  // final idTypeController = TextEditingController(text: "DPI");
+  final identificationType = Rx<DropDownOption>(
+      DropDownOption(id: "", label: ""),
+  );
   final identificationController = TextEditingController();
   final nationalityController = TextEditingController(text: "Guatemalteca");
   final bloodTypeController = TextEditingController(text: "");
@@ -125,7 +128,7 @@ class EmployeeAgentController extends GetxController {
     secondLastNameController.clear();
     genderController.clear();
     birthDateController.clear();
-    idTypeController.clear();
+    identificationType.value = DropDownOption(id: "", label: "");
     identificationController.clear();
     nationalityController.clear();
     bloodTypeController.clear();
@@ -205,17 +208,16 @@ class EmployeeAgentController extends GetxController {
       sex: genderController.text,
       employeeTypeId: int.parse(positionEmployeeController.value.id),
       internalCode: internalCodeController.text,
-      gender: genderController.text,
       birthDate: birthDateController.text,
       entryDate: joinDateController.text,
-      identificationType: idTypeController.text,
+      identificationTypeId: int.parse(identificationType.value.id),
       identificationNumber: identificationController.text,
       nationality: nationalityController.text,
-      operationalProfile: operationalProfileController.value.label,
+      operationalProfileId: int.parse(operationalProfileController.value.id), //--DD
       rrhhProfile: hrProfileController.text,
       blueCard: blueCardController.value,
-      type: typeController.text,
-      driverLicenseType: driverLicenseTypeController.text,
+      // type: typeController.text, // REMOVE THIS
+      licenseTypeId: int.parse(driverLicenseTypeController.text), //--DD
       driverLicenseNumber: driverLicenseNumberController.text,
       gunCarryPermit: gunPermitController.value, //
       administrativeDepartment: administrativeDepartmentController.text,
@@ -229,17 +231,17 @@ class EmployeeAgentController extends GetxController {
       phone: phoneController.text,
       address: addressController.text,
       email: emailController.text,
-      paymentType: paymentTypeController.text,
-      company: companyController.text,
-      agency: agencyController.text,
-      bloodType: bloodTypeController.text,
-      maritalStatus: maritalStatusController.text,
+      paymentTypeId: int.parse(paymentTypeController.text), //--DD
+      previousCompanyId: int.parse(companyController.text), //--DD
+      agencyId: int.parse(agencyController.text), //--DD
+      bloodTypeId: int.parse(bloodTypeController.text),
+      maritalStatusId: int.parse(maritalStatusController.text),
       lifeInsurance: lifeInsuranceController.value, //
-      educationLevel: educationController.text,
-      shootingPractice: shootingPracticeController.text,
-      graduationNote: graduationScoreController.text,
+      educationLevelId: int.parse(educationController.text), //--DD
+      shootingPracticeDate: shootingPracticeController.text,
+      graduationScore: double.tryParse(graduationScoreController.text) ?? 0.0,
       referredBy: referredByController.text,
-      emergencyRelationship: emergencyRelationshipController.value.label,
+      emergencyRelationshipId: int.parse(emergencyRelationshipController.value.id),//--DD
       emergencyName: emergencyNameController.text,
       emergencyPhone: emergencyPhoneController.text,
       emergencyMobile: emergencyMobileController.text,
@@ -259,16 +261,14 @@ class EmployeeAgentController extends GetxController {
       residenceDepartment: addressDepartmentController.value.label,
       residenceMunicipality: addressMunicipalityController.value.label,
       payroll: payrollController.text,
-      profession: professionController.text,
+      // educationLevelId: professionController.text,
       positionSlot: positionEmployeeController.value.label,
       contractType: contractTypeController.text,
-      howHired: hiringMethodController.text,
+      hireDate: hiringMethodController.text, // UPDATE
       workCountry: workCountryController.text,
-      bank: bankController.value.label,
+      bankId: int.parse(bankController.value.id), //--DD
       accountNumber: accountNumberController.text,
       isPermanent: contractTypeController.text == "PERMANENT",
-      titles: [],
-      professions: [],
     );
   }
 

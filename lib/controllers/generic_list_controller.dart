@@ -28,6 +28,20 @@ class GenericListController extends GetxController {
   final RxBool isLoadingBranchesDd = true.obs;
   final RxBool isLoadingTurns = true.obs;
 
+final RxBool isLoadingLicense = true.obs;
+final RxBool isLoadingEmployeeType = true.obs;
+final RxBool isLoadingJobFrequency = true.obs;
+final RxBool isLoadingHrProfile = true.obs;
+final RxBool isLoadingPaymentType = true.obs;
+final RxBool isLoadingBloodType = true.obs;
+final RxBool isLoadingMaritalStatus = true.obs;
+final RxBool isLoadingRelationShip = true.obs;
+final RxBool isLoadingWorkerStatus = true.obs;
+final RxBool isLoadingBank = true.obs;
+final RxBool isLoadingIdentificationType = true.obs;
+final RxBool isLoadingOperationalProfile = true.obs;
+final RxBool isLoadingRegion = true.obs;
+
   final RxList<DropDownOption> employees = <DropDownOption>[].obs;
   final RxList<DropDownOption> classification = <DropDownOption>[].obs;
   final RxList<DropDownOption> cities = <DropDownOption>[].obs;
@@ -49,6 +63,21 @@ class GenericListController extends GetxController {
   final RxList<DropDownOption> municipalities = <DropDownOption>[].obs;
   final RxList<DropDownOption> branchesDd = <DropDownOption>[].obs;
   final RxList<TurnModel> turns = <TurnModel>[].obs;
+
+
+final RxList<DropDownOption> license = <DropDownOption>[].obs;
+final RxList<DropDownOption> employeeType = <DropDownOption>[].obs;
+final RxList<DropDownOption> jobFrequency = <DropDownOption>[].obs;
+final RxList<DropDownOption> hrProfile = <DropDownOption>[].obs;
+final RxList<DropDownOption> paymentType = <DropDownOption>[].obs;
+final RxList<DropDownOption> bloodType = <DropDownOption>[].obs;
+final RxList<DropDownOption> maritalStatus = <DropDownOption>[].obs;
+final RxList<DropDownOption> relationShip = <DropDownOption>[].obs;
+final RxList<DropDownOption> workerStatus = <DropDownOption>[].obs;
+final RxList<DropDownOption> bank = <DropDownOption>[].obs;
+final RxList<DropDownOption> identificationType = <DropDownOption>[].obs;
+final RxList<DropDownOption> operationalProfile = <DropDownOption>[].obs;
+final RxList<DropDownOption> region = <DropDownOption>[].obs;
 
   Future<List<DropDownOption>> fetchClassification() async {
     try {
@@ -453,6 +482,255 @@ class GenericListController extends GetxController {
       isLoadingTurns.value = false;
     }
   }
+
+Future<List<DropDownOption>> fetchLicense() async {
+    isLoadingLicense.value = true;
+    try{
+        final data = await genericListService.getAll(
+            "common/getLicense", (json) => GenericListModel.fromJson(json));
+         license.value = data.map((item){
+          return DropDownOption(
+            id: item.id.toString(),
+            label: item.name,
+          );
+         }).toList();
+         return license;
+    }catch (e) {
+      print("Error fetching license: $e");
+      return [];
+    } finally {
+      isLoadingLicense.value = false;
+    }
+}
+Future<List<DropDownOption>> fetchEmployeeType() async {
+    isLoadingEmployeeType.value = true;
+    try{
+        final data = await genericListService.getAll(
+            "common/getEmployeeType", (json) => GenericListModel.fromJson(json));
+         employeeType.value = data.map((item){
+          return DropDownOption(
+            id: item.id.toString(),
+            label: item.name,
+          );
+         }).toList();
+         return employeeType;
+    }catch (e) {
+      print("Error fetching license: $e");
+      return [];
+    } finally {
+      isLoadingEmployeeType.value = false;
+    }
+}
+Future<List<DropDownOption>> fetchJobFrequency() async {
+    isLoadingJobFrequency.value = true;
+    try{
+        final data = await genericListService.getAll(
+            "common/getJobFrequency", (json) => GenericListModel.fromJson(json));
+         jobFrequency.value = data.map((item){
+          return DropDownOption(
+            id: item.id.toString(),
+            label: item.name,
+          );
+         }).toList();
+         return jobFrequency;
+    }catch (e) {
+      print("Error fetching license: $e");
+      return [];
+    } finally {
+      isLoadingJobFrequency.value = false;
+    }
+}
+Future<List<DropDownOption>> fetchHrProfile() async {
+    isLoadingHrProfile.value = true;
+    try{
+        final data = await genericListService.getAll(
+            "common/getHrProfile", (json) => GenericListModel.fromJson(json));
+         hrProfile.value = data.map((item){
+          return DropDownOption(
+            id: item.id.toString(),
+            label: item.name,
+          );
+         }).toList();
+         return hrProfile;
+    }catch (e) {
+      print("Error fetching license: $e");
+      return [];
+    } finally {
+      isLoadingHrProfile.value = false;
+    }
+}
+Future<List<DropDownOption>> fetchPaymentType() async {
+    isLoadingPaymentType.value = true;
+    try{
+        final data = await genericListService.getAll(
+            "common/getPaymentType", (json) => GenericListModel.fromJson(json));
+         paymentType.value = data.map((item){
+          return DropDownOption(
+            id: item.id.toString(),
+            label: item.name,
+          );
+         }).toList();
+         return paymentType;
+    }catch (e) {
+      print("Error fetching license: $e");
+      return [];
+    } finally {
+      isLoadingPaymentType.value = false;
+    }
+}
+Future<List<DropDownOption>> fetchBloodType() async {
+    isLoadingBloodType.value = true;
+    try{
+        final data = await genericListService.getAll(
+            "common/getBloodType", (json) => GenericListModel.fromJson(json));
+         bloodType.value = data.map((item){
+          return DropDownOption(
+            id: item.id.toString(),
+            label: item.name,
+          );
+         }).toList();
+         return bloodType;
+    }catch (e) {
+      print("Error fetching license: $e");
+      return [];
+    } finally {
+      isLoadingBloodType.value = false;
+    }
+}
+Future<List<DropDownOption>> fetchMaritalStatus() async {
+    isLoadingMaritalStatus.value = true;
+    try{
+        final data = await genericListService.getAll(
+            "common/getMaritalStatus", (json) => GenericListModel.fromJson(json));
+         maritalStatus.value = data.map((item){
+          return DropDownOption(
+            id: item.id.toString(),
+            label: item.name,
+          );
+         }).toList();
+         return maritalStatus;
+    }catch (e) {
+      print("Error fetching license: $e");
+      return [];
+    } finally {
+      isLoadingMaritalStatus.value = false;
+    }
+}
+Future<List<DropDownOption>> fetchRelationShip() async {
+    isLoadingRelationShip.value = true;
+    try{
+        final data = await genericListService.getAll(
+            "common/getRelationShip", (json) => GenericListModel.fromJson(json));
+         relationShip.value = data.map((item){
+          return DropDownOption(
+            id: item.id.toString(),
+            label: item.name,
+          );
+         }).toList();
+         return relationShip;
+    }catch (e) {
+      print("Error fetching license: $e");
+      return [];
+    } finally {
+      isLoadingRelationShip.value = false;
+    }
+}
+Future<List<DropDownOption>> fetchWorkerStatus() async {
+    isLoadingWorkerStatus.value = true;
+    try{
+        final data = await genericListService.getAll(
+            "common/getWorkerStatus", (json) => GenericListModel.fromJson(json));
+         workerStatus.value = data.map((item){
+          return DropDownOption(
+            id: item.id.toString(),
+            label: item.name,
+          );
+         }).toList();
+         return workerStatus;
+    }catch (e) {
+      print("Error fetching license: $e");
+      return [];
+    } finally {
+      isLoadingWorkerStatus.value = false;
+    }
+}
+Future<List<DropDownOption>> fetchBank() async {
+    isLoadingBank.value = true;
+    try{
+        final data = await genericListService.getAll(
+            "common/getBank", (json) => GenericListModel.fromJson(json));
+         bank.value = data.map((item){
+          return DropDownOption(
+            id: item.id.toString(),
+            label: item.name,
+          );
+         }).toList();
+         return bank;
+    }catch (e) {
+      print("Error fetching license: $e");
+      return [];
+    } finally {
+      isLoadingBank.value = false;
+    }
+}
+Future<List<DropDownOption>> fetchIdentificationType() async {
+    isLoadingIdentificationType.value = true;
+    try{
+        final data = await genericListService.getAll(
+            "common/getIdentificationType", (json) => GenericListModel.fromJson(json));
+        print("fetchIdentificationType data: $data");
+         identificationType.value = data.map((item){
+          return DropDownOption(
+            id: item.id.toString(),
+            label: item.name,
+          );
+         }).toList();
+         return identificationType;
+    }catch (e) {
+      print("Error fetching license: $e");
+      return [];
+    } finally {
+      isLoadingIdentificationType.value = false;
+    }
+}
+Future<List<DropDownOption>> fetchOperationalProfile() async {
+    isLoadingOperationalProfile.value = true;
+    try{
+        final data = await genericListService.getAll(
+            "common/getOperationalProfile", (json) => GenericListModel.fromJson(json));
+         operationalProfile.value = data.map((item){
+          return DropDownOption(
+            id: item.id.toString(),
+            label: item.name,
+          );
+         }).toList();
+         return operationalProfile;
+    }catch (e) {
+      print("Error fetching license: $e");
+      return [];
+    } finally {
+      isLoadingOperationalProfile.value = false;
+    }
+}
+Future<List<DropDownOption>> fetchRegion() async {
+    isLoadingRegion.value = true;
+    try{
+        final data = await genericListService.getAll(
+            "common/getRegion", (json) => GenericListModel.fromJson(json));
+         region.value = data.map((item){
+          return DropDownOption(
+            id: item.id.toString(),
+            label: item.name,
+          );
+         }).toList();
+         return region;
+    }catch (e) {
+      print("Error fetching license: $e");
+      return [];
+    } finally {
+      isLoadingRegion.value = false;
+    }
+}
 
   //clean clientsByGroup
   void cleanClientsByGroup() {

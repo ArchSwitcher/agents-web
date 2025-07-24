@@ -34,7 +34,6 @@ class EmployeesAgentScreenState extends State<EmployeesAgentScreen> {
     'Nombre',
     'Latitud',
     'Longitud',
-    "proseña",
     "Grupo",
     "Sucursal",
     "Horario"
@@ -154,7 +153,7 @@ class EmployeesAgentScreenState extends State<EmployeesAgentScreen> {
                     .map((header) => DataColumn(label: Text(header)))
                     .toList(),
                 buildRows: (list) => buildTablePositionRows(
-                    controller.positionController, context, null),
+                    controller.positionController, context, controller),
                 rowsPerPage: 100,
               ))
             ],

@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Image.asset("lib/assets/icons/elebano.png"),
+                    Image.asset("lib/assets/icons/elebano.png", color: Colors.white),
                     const SizedBox(height: 20),
                     TextField(
                       controller: _usernameController,

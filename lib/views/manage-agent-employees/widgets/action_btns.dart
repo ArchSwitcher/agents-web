@@ -13,7 +13,7 @@ Widget addTemporalEmployeeButton(BuildContext context, EmployeeAgentController c
         children: [
           Icon(
             Icons.group_add,
-            color: colorScheme.surface,
+            color: colorScheme.onSurface,
           ),
           const SizedBox(
             width: 6,

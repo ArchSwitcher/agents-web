@@ -26,8 +26,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
   final List<String> tableHeaders = [
     '',
     'Código',
-    'Nombre',
-    'Apellido',
+    'Nombre completo',
     'Email',
     'Teléfono',
     'Agencia',
@@ -49,9 +48,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
 
   start() async {
     await controller.fetchEmployees();
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   @override
@@ -93,12 +90,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                         hint: "Buscar grupos",
                         label: "Buscar grupo",
                       ),
-                    ),
-                    // SizedBox(
-                    //   width: 160,
-                    //   child: Text(
-                    //       "añadir empleado"), // Placeholder for add employee button
-                    // )
+                    )
                   ],
                 ),
               ),
@@ -115,83 +107,44 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                     buildTableRowsFromList(controller.employees, context),
                 rowsPerPage: 100,
               ))
-              // ContentCard(child: Obx(() {
-              //   return CustomDataTableWidgetV2(
-              //       // minWidth: 1,
-              //       // dynamicHeight: false,
-              //       tableHeight:
-              //           TableHelper.getTableHeight(controller.employees),
-              //       fixedColumnWidths: fixedColumnWidths,
-              //       // columnSizes: columnSizes,
-              //       tableHeaders: tableHeaders,
-              //       tableRows: _buildTableRows(controller, context));
-              // }))
             ],
           ),
         ));
   }
 }
 
-// List<DataRow> _buildTableRows(
-//     EmployeeController controller, BuildContext context) {
-//   return List.generate(
-//     controller.employees.length,
-//     (index) {
-//       final EmployeeModel element = controller.employees.elementAt(index);
-
-//       return DataRow(
-//         cells: [
-//           DataCell(Row(
-//             children: [
-//               // Text("${element.firstName}"),
-//               // editEmployeeButton(context, element),
-//               // deleteEmployeeButton(context, element.id.toString()),
-//             ],
-//           )),
-//           cellDataTable(element.id, context: context),
-//           cellDataTable(element.firstName, context: context),
-//           cellDataTable(element.lastName, context: context),
-//           cellDataTable(element.email, context: context),
-//           cellDataTable(element.phone, context: context),
-//           cellDataTable(element.agency, context: context),
-//           cellDataTable(element.entryDate, context: context),
-//           cellDataTable(element.birthDate, context: context),
-//         ],
-//         color: colorRowDataTable(index, context),
-//       );
-//     },
-//   );
-// }
-
 List<DataRow> buildTableRowsFromList(
     List<EmployeeModel> list, BuildContext context) {
   return List.generate(list.length, (index) {
     final element = list[index];
+    final String fullName = '${element.firstName ?? ''} ${element.middleName ?? ''} ${element.lastName ?? ''} ${element.lastName ?? ''}'.trim();
     return DataRow(
       cells: [
         DataCell(Row(children: [
           // IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
-          IconButton(onPressed: () {
-            showAssignEquipmentModal(context: context);
-          }, icon: Icon(Icons.add_shopping_cart)),
+          IconButton(
+              onPressed: () {
+                showAssignEquipmentModal(context: context);
+              },
+              icon: const Icon(Icons.add_shopping_cart)),
 
           IconButton(
             onPressed: () {
               // Logic for equipment assignment
-              showAssignmentEquipmentModal(context: context, employeeId: element.id!);
+              showAssignmentEquipmentModal(
+                  context: context, employeeId: element.id!);
             },
-            icon: Icon(Icons.assignment),
+            icon: const Icon(Icons.assignment),
             tooltip: 'Assign Equipment',
           ),
         ])),
-        cellDataTable(element.id, context: context),
-        cellDataTable(element.firstName, context: context),
-        cellDataTable(element.lastName, context: context),
+        cellDataTable(element.id ?? "", context: context),
+        cellDataTable(element.fullName ?? fullName , context: context),
         cellDataTable(element.email, context: context),
         cellDataTable(element.phone, context: context),
-        cellDataTable(element.agency, context: context),
+        cellDataTable(element.agency?.name ?? "", context: context),
         cellDataTable(element.entryDate, context: context),
-        cellDataTable(element.birthDate, context: context),
+        cellDataTable(element.birthDate ?? "", context: context),
       ],
       color: colorRowDataTable(index, context),
     );
