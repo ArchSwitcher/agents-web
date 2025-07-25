@@ -1,15 +1,17 @@
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/mocks/personal_info_mocks.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
+import 'package:agents_app/shared/helpers/validations/dropdown_validator.dart';
 import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
 import 'package:agents_app/widgets/inputs/autocomplete_dropdown.dart';
 import 'package:agents_app/widgets/inputs/custom_checkBox_widget.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:agents_app/widgets/inputs/date_picker.dart';
+import 'package:agents_app/widgets/inputs/dropdown_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-Widget jobInformation(BuildContext context, EmployeeAgentController controller) {
+Widget jobInformation(BuildContext context, EmployeeAgentController controller, bool enabled) {
   final colorScheme = Theme.of(context).colorScheme;
   return ContentCard(
     child: LayoutBuilder(builder: (context, constraints) {
@@ -24,6 +26,32 @@ Widget jobInformation(BuildContext context, EmployeeAgentController controller) 
         crossAxisAlignment: WrapCrossAlignment.center,
         alignment: WrapAlignment.spaceBetween,
         children: [
+          LoadingAutocompleteDropdown(
+              enabled: enabled,
+              initialValue: controller.agencyController.value,
+              prefixIcon: Icons.bloodtype,
+              validator: (value) =>
+                  notEmptyDropdownOption(value, "Agencia del Ebano Requerida"),
+              isLoading: controller.genericListController.isLoadingBloodType,
+              listItems: controller.genericListController.bloodType,
+              onSelected: (DropDownOption option) {
+                controller.bloodTypeController.value = option;
+              },
+              label: "Tipo de sangre",
+              hintText: "Sangre",
+              resetValue: controller.bloodTypeController,
+              width: width,
+              onTextChange: (text) async {
+                List<DropDownOption> filteredOptions = controller
+                    .genericListController.bloodType
+                    .where((option) =>
+                        option.label.toLowerCase().contains(text.toLowerCase()))
+                    .toList();
+                return filteredOptions.isEmpty ? [] : filteredOptions;
+              },
+            ),
+
+
           SizedBox(
               width: width,
               child: CustomInputWidget(

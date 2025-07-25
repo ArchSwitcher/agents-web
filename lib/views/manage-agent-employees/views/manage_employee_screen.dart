@@ -40,7 +40,12 @@ class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen> {
     await controller.genericListController.fetchDepartments();
     await controller.genericListController.fetchZones();
     await controller.genericListController.fetchIdentificationType();
-    
+    await controller.genericListController.fetchBloodType();
+    await controller.genericListController.fetchMaritalStatus();
+    await controller.genericListController.fetchEductionLevel();
+    await controller.genericListController.getAllAgency();
+
+
     controller.contractTypeController.text =
         position == null ? "TEMPORAL" : "PERMANENTE";
 
@@ -92,21 +97,30 @@ class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen> {
                     ],
                   )),
                 cardContentSpace(),
-                personalInformation(context, controller),
+                jobInformation(context, controller, true),
+                cardContentSpace(),
+                cardContentSpace(),
+                // RRHH
+                personalInformation(context, controller, true),
+                cardContentSpace(),
                 cardContentSpace(),
                 birthAddressInfo(context, controller),
                 cardContentSpace(),
+                cardContentSpace(),
                 contactInfo(context, controller),
+                cardContentSpace(),
                 cardContentSpace(),
                 buildEmergencyContact(context, controller),
                 cardContentSpace(),
-                jobInformation(context, controller),
                 cardContentSpace(),
                 licenceWeapon(context, controller),
                 cardContentSpace(),
+                cardContentSpace(),
                 financialMITInformation(context, controller),
                 cardContentSpace(),
+                cardContentSpace(),
                 additionalInfo(context, controller),
+                cardContentSpace(),
                 cardContentSpace(),
                 systemAccessStatus(context, controller),
                 cardContentSpace(),

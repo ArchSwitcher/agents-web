@@ -2,7 +2,7 @@ import 'package:agents_app/models/common/simple_entity_model.dart';
 
 class EmployeeModel {
   String? id;
-  String? nationality;
+  bool? nationality;
   String? firstName;
   String? lastName;
   String? contact;
@@ -316,7 +316,7 @@ class EmployeeModel {
       fullName: json["Full_name"],
       contact: person["Contact"],
       sex: person["sex"],
-      nationality: person["Nationality"],
+      nationality: person["Nationality"] == 1 || person["Nationality"] == true,
       language: person["Language"],
       birthDate: person["Date_of_birth"],
       ethnicity: person["Ethnicity"],

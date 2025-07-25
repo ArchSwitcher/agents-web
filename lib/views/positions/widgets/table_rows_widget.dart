@@ -10,7 +10,8 @@ import 'package:get/get.dart';
 
 List<DataRow> buildTablePositionRows(PositionController controller,
     BuildContext context, EmployeeAgentController? employeeController) {
-  LoaderController loaderController = Get.put<LoaderController>(LoaderController());
+  LoaderController loaderController =
+      Get.put<LoaderController>(LoaderController());
 
   return List.generate(
     controller.positions.length,
@@ -29,6 +30,7 @@ List<DataRow> buildTablePositionRows(PositionController controller,
             DataCell(Row(
               children: [
                 IconButton(
+                  tooltip: "Crear nuevo agente vinculado a esta proseña",
                   icon: const Icon(Icons.person),
                   onPressed: () async {
                     // print("object ${element.positionName}");
@@ -45,6 +47,19 @@ List<DataRow> buildTablePositionRows(PositionController controller,
                     await controller.fetchPositions();
                     loaderController.hide();
                   },
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.work),
+                  tooltip: "Asignar proseña a empleado",
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+               
+                IconButton(
+                  onPressed: () {},
+                  tooltip: "Quitar proseña a empleado",
+                  icon: const Icon(Icons.no_accounts_rounded),
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ],
             )),

@@ -15,8 +15,8 @@ class EmployeeAgentController extends GetxController {
   EmployeeAgentService employeeService = EmployeeAgentService();
 
   // manage-employees-screen
-  TextEditingController selectedPosition = TextEditingController(text: "En proceso");
-  
+  TextEditingController selectedPosition =
+      TextEditingController(text: "En proceso");
 
   // 🧍 Personal Information
   final firstNameController = TextEditingController();
@@ -27,13 +27,16 @@ class EmployeeAgentController extends GetxController {
   final birthDateController = TextEditingController();
   // final idTypeController = TextEditingController(text: "DPI");
   final identificationType = Rx<DropDownOption>(
-      DropDownOption(id: "", label: ""),
+    DropDownOption(id: "", label: ""),
   );
   final identificationController = TextEditingController();
-  final nationalityController = TextEditingController(text: "Guatemalteca");
-  final bloodTypeController = TextEditingController(text: "");
-  final maritalStatusController = TextEditingController(text: "");
-  final educationController = TextEditingController();
+  RxBool nationalityController = false.obs;
+  Rx<DropDownOption> bloodTypeController =
+      DropDownOption(id: "", label: "").obs;
+  Rx<DropDownOption> maritalStatusController =
+      DropDownOption(id: "", label: "").obs;
+  Rx<DropDownOption> educationController = 
+      DropDownOption(id: "", label: "").obs;
   final languageController = TextEditingController();
   final ethnicityController = TextEditingController();
 
@@ -73,18 +76,19 @@ class EmployeeAgentController extends GetxController {
   final joinDateController = TextEditingController();
   Rx<DropDownOption> operationalProfileController =
       DropDownOption(id: "", label: "").obs;
-  Rx<DropDownOption>  positionEmployeeController =
+  Rx<DropDownOption> positionEmployeeController =
       DropDownOption(id: "", label: "").obs;
   RxBool blueCardController = false.obs;
   final typeController = TextEditingController();
   final administrativeDepartmentController = TextEditingController();
-  
+
   final hrProfileController = TextEditingController();
 
   final socialSecurityCodeController = TextEditingController();
   final paymentTypeController = TextEditingController();
   final companyController = TextEditingController(text: "EBANO");
-  final agencyController = TextEditingController();
+  Rx<DropDownOption> agencyController = 
+      DropDownOption(id: "", label: "").obs;
   final payrollController = TextEditingController();
   final professionController = TextEditingController();
   final workplaceController = TextEditingController();
@@ -130,10 +134,10 @@ class EmployeeAgentController extends GetxController {
     birthDateController.clear();
     identificationType.value = DropDownOption(id: "", label: "");
     identificationController.clear();
-    nationalityController.clear();
-    bloodTypeController.clear();
-    maritalStatusController.clear();
-    educationController.clear();
+    nationalityController.value = false;
+    bloodTypeController.value = DropDownOption(id: "", label: "");
+    maritalStatusController.value = DropDownOption(id: "", label: "");
+    educationController.value = DropDownOption(id: "", label: "");;
     languageController.clear();
     ethnicityController.clear();
 
@@ -164,7 +168,7 @@ class EmployeeAgentController extends GetxController {
     socialSecurityCodeController.clear();
     paymentTypeController.clear();
     companyController.clear();
-    agencyController.clear();
+    agencyController.value = DropDownOption(id: "", label: "");
     payrollController.clear();
     professionController.clear();
     workplaceController.clear();
@@ -212,8 +216,9 @@ class EmployeeAgentController extends GetxController {
       entryDate: joinDateController.text,
       identificationTypeId: int.parse(identificationType.value.id),
       identificationNumber: identificationController.text,
-      nationality: nationalityController.text,
-      operationalProfileId: int.parse(operationalProfileController.value.id), //--DD
+      nationality: nationalityController.value,
+      operationalProfileId:
+          int.parse(operationalProfileController.value.id), //--DD
       rrhhProfile: hrProfileController.text,
       blueCard: blueCardController.value,
       // type: typeController.text, // REMOVE THIS
@@ -233,15 +238,16 @@ class EmployeeAgentController extends GetxController {
       email: emailController.text,
       paymentTypeId: int.parse(paymentTypeController.text), //--DD
       previousCompanyId: int.parse(companyController.text), //--DD
-      agencyId: int.parse(agencyController.text), //--DD
-      bloodTypeId: int.parse(bloodTypeController.text),
-      maritalStatusId: int.parse(maritalStatusController.text),
+      agencyId: int.parse(agencyController.value.id), //--DD
+      bloodTypeId: int.parse(bloodTypeController.value.id),
+      maritalStatusId: int.parse(maritalStatusController.value.id),
       lifeInsurance: lifeInsuranceController.value, //
-      educationLevelId: int.parse(educationController.text), //--DD
+      educationLevelId: int.parse(educationController.value.id), //--DD
       shootingPracticeDate: shootingPracticeController.text,
       graduationScore: double.tryParse(graduationScoreController.text) ?? 0.0,
       referredBy: referredByController.text,
-      emergencyRelationshipId: int.parse(emergencyRelationshipController.value.id),//--DD
+      emergencyRelationshipId:
+          int.parse(emergencyRelationshipController.value.id), //--DD
       emergencyName: emergencyNameController.text,
       emergencyPhone: emergencyPhoneController.text,
       emergencyMobile: emergencyMobileController.text,

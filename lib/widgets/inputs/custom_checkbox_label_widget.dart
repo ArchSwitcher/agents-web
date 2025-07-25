@@ -24,7 +24,7 @@ class CustomCheckboxLabelWidget extends StatelessWidget {
           onChanged: onChanged,
           activeColor: Theme.of(context).colorScheme.primary,
           unSelectedColor: Theme.of(context).colorScheme.surface,
-          checkColor: Theme.of(context).colorScheme.surface,
+          checkColor: Theme.of(context).colorScheme.onSurface,
         ),
         const SizedBox(width: 10),
         icon != null ? Icon(icon) : const Icon(Icons.security),

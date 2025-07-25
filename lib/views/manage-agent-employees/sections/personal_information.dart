@@ -3,15 +3,16 @@ import 'package:agents_app/mocks/personal_info_mocks.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/shared/helpers/validations/dropdown_validator.dart';
 import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
-
+import 'package:agents_app/widgets/inputs/custom_checkbox_label_widget.dart';
 import 'package:agents_app/widgets/inputs/custom_dropdownv2_widget.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:agents_app/widgets/inputs/date_picker.dart';
 import 'package:agents_app/widgets/inputs/dropdown_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 Widget personalInformation(
-    BuildContext context, EmployeeAgentController controller) {
+    BuildContext context, EmployeeAgentController controller, bool enabled) {
   return ContentCard(
     child: LayoutBuilder(builder: (context, constraints) {
       final isWideScreen = constraints.maxWidth > 750;
@@ -28,6 +29,7 @@ Widget personalInformation(
           SizedBox(
               width: width,
               child: CustomInputWidget(
+                  enabled: enabled,
                   controller: controller.firstNameController,
                   label: "Primer nombre",
                   hintText: "",
@@ -35,6 +37,7 @@ Widget personalInformation(
           SizedBox(
               width: width,
               child: CustomInputWidget(
+                  enabled: enabled,
                   controller: controller.middleNameController,
                   label: "Segundo Nombre",
                   hintText: "",
@@ -42,6 +45,7 @@ Widget personalInformation(
           SizedBox(
               width: width,
               child: CustomInputWidget(
+                  enabled: enabled,
                   controller: controller.lastNameController,
                   label: "Apellido",
                   hintText: "",
@@ -49,6 +53,7 @@ Widget personalInformation(
           SizedBox(
               width: width,
               child: CustomInputWidget(
+                  enabled: enabled,
                   controller: controller.secondLastNameController,
                   label: "Segundo Apellido",
                   hintText: "",
@@ -68,11 +73,14 @@ Widget personalInformation(
                   prefixIcon: const Icon(Icons.transgender),
                   textEditingController: controller.genderController,
                   onValueChanged: (v) {
-                    controller.genderController.text = v!.label.toString();
+                    enabled
+                        ? controller.genderController.text = v!.label.toString()
+                        : null;
                   })),
           SizedBox(
               width: width,
               child: CustomDatePicker(
+                  enabled: enabled,
                   firstDate: DateTime(1900),
                   validator: (value) {
                     // Validate the date input and verify if the ages is greater than 18
@@ -97,24 +105,16 @@ Widget personalInformation(
                   label: "Fecha de nacimiento",
                   hintText: "",
                   prefixIcon: Icons.cake)),
-          // SizedBox(
-          //     width: width,
-          //     child: CustomInputWidget(
-          //         enabled: false,
-          //         controller: controller.idTypeController,
-          //         label: "Tipo de Identificación",
-          //         hintText: "",
-          //         prefixIcon: Icons.badge)),
-
           SizedBox(
             width: width,
             child: LoadingAutocompleteDropdown(
+              enabled: enabled,
               initialValue: controller.identificationType.value,
               prefixIcon: Icons.badge,
-              validator: (value) =>
-                  notEmptyDropdownOption(value, "Tipo de identificación requerido"),
-              enabled: true,
-              isLoading: controller.genericListController.isLoadingIdentificationType,
+              validator: (value) => notEmptyDropdownOption(
+                  value, "Tipo de identificación requerido"),
+              isLoading:
+                  controller.genericListController.isLoadingIdentificationType,
               listItems: controller.genericListController.identificationType,
               onSelected: (DropDownOption option) {
                 controller.identificationType.value = option;
@@ -133,10 +133,10 @@ Widget personalInformation(
               },
             ),
           ),
-
           SizedBox(
               width: width,
               child: CustomInputWidget(
+                  enabled: enabled,
                   controller: controller.identificationController,
                   label: "Identificación",
                   hintText: "",
@@ -153,54 +153,99 @@ Widget personalInformation(
                   prefixIcon: Icons.credit_card)),
           SizedBox(
               width: width,
-              child: CustomInputWidget(
-                  enabled: false,
-                  controller: controller.nationalityController,
-                  label: "Nacionalidad",
-                  hintText: "",
-                  prefixIcon: Icons.flag)),
+              child: Obx(() => CustomCheckboxLabelWidget(
+                    icon: Icons.flag,
+                    label: "¿Es extranjero?",
+                    isChecked: controller.nationalityController.value,
+                    onChanged: (value) => enabled
+                        ? controller.nationalityController.value =
+                            value ?? false
+                        : null,
+                  ))),
           SizedBox(
+            width: width,
+            child: LoadingAutocompleteDropdown(
+              enabled: enabled,
+              initialValue: controller.bloodTypeController.value,
+              prefixIcon: Icons.bloodtype,
+              validator: (value) =>
+                  notEmptyDropdownOption(value, "Tipo de sangre"),
+              isLoading: controller.genericListController.isLoadingBloodType,
+              listItems: controller.genericListController.bloodType,
+              onSelected: (DropDownOption option) {
+                controller.bloodTypeController.value = option;
+              },
+              label: "Tipo de sangre",
+              hintText: "Sangre",
+              resetValue: controller.bloodTypeController,
               width: width,
-              child: CustomDropdownV2Widget(
-                  labelText: "Tipo de sangre",
-                  hintText: "",
-                  items: bloodListMock.map<DropDownOption>((String value) {
-                    return DropDownOption(
-                      id: value,
-                      label: value,
-                    );
-                  }).toList(),
-                  validator: (p0) => null,
-                  prefixIcon: const Icon(Icons.bloodtype),
-                  textEditingController: controller.bloodTypeController,
-                  onValueChanged: (v) {
-                    controller.bloodTypeController.text = v!.label.toString();
-                  })),
+              onTextChange: (text) async {
+                List<DropDownOption> filteredOptions = controller
+                    .genericListController.bloodType
+                    .where((option) =>
+                        option.label.toLowerCase().contains(text.toLowerCase()))
+                    .toList();
+                return filteredOptions.isEmpty ? [] : filteredOptions;
+              },
+            ),
+          ),
           SizedBox(
+            width: width,
+            child: LoadingAutocompleteDropdown(
+              enabled: enabled,
+              initialValue: controller.maritalStatusController.value,
+              prefixIcon: Icons.family_restroom,
+              validator: (value) =>
+                  notEmptyDropdownOption(value, "Estado civil"),
+              isLoading:
+                  controller.genericListController.isLoadingMaritalStatus,
+              listItems: controller.genericListController.maritalStatus,
+              onSelected: (DropDownOption option) {
+                controller.maritalStatusController.value = option;
+              },
+              label: "Estado civil",
+              hintText: "Estado civil",
+              resetValue: controller.maritalStatusController,
               width: width,
-              child: CustomDropdownV2Widget(
-                  labelText: "Estado Civil",
-                  hintText: "",
-                  items: civilStatusMock.map<DropDownOption>((String value) {
-                    return DropDownOption(
-                      id: value,
-                      label: value,
-                    );
-                  }).toList(),
-                  validator: (p0) => null,
-                  prefixIcon: const Icon(Icons.family_restroom),
-                  textEditingController: controller.maritalStatusController,
-                  onValueChanged: (v) {
-                    controller.maritalStatusController.text =
-                        v!.label.toString();
-                  })),
+              onTextChange: (text) async {
+                List<DropDownOption> filteredOptions = controller
+                    .genericListController.maritalStatus
+                    .where((option) =>
+                        option.label.toLowerCase().contains(text.toLowerCase()))
+                    .toList();
+                return filteredOptions.isEmpty ? [] : filteredOptions;
+              },
+            ),
+          ),
+
           SizedBox(
+            width: width,
+            child: LoadingAutocompleteDropdown(
+              enabled: enabled,
+              initialValue: controller.educationController.value,
+              prefixIcon: Icons.school,
+              validator: (value) =>
+                  notEmptyDropdownOption(value, "Grado académico"),
+              isLoading:
+                  controller.genericListController.isLoadingEducation,
+              listItems: controller.genericListController.education,
+              onSelected: (DropDownOption option) {
+                controller.educationController.value = option;
+              },
+              label: "Grado académico",
+              hintText: "grado académico",
+              resetValue: controller.educationController,
               width: width,
-              child: CustomInputWidget(
-                  controller: controller.educationController,
-                  label: "Educación",
-                  hintText: "",
-                  prefixIcon: Icons.school)),
+              onTextChange: (text) async {
+                List<DropDownOption> filteredOptions = controller
+                    .genericListController.education
+                    .where((option) =>
+                        option.label.toLowerCase().contains(text.toLowerCase()))
+                    .toList();
+                return filteredOptions.isEmpty ? [] : filteredOptions;
+              },
+            ),
+          ),
           SizedBox(
               width: width,
               child: CustomDropdownV2Widget(
@@ -216,7 +261,10 @@ Widget personalInformation(
                   prefixIcon: const Icon(Icons.language),
                   textEditingController: controller.languageController,
                   onValueChanged: (v) {
-                    controller.languageController.text = v!.label.toString();
+                    enabled
+                        ? controller.languageController.text =
+                            v!.label.toString()
+                        : null;
                   })),
           SizedBox(
               width: width,
@@ -233,7 +281,10 @@ Widget personalInformation(
                   prefixIcon: const Icon(Icons.people),
                   textEditingController: controller.ethnicityController,
                   onValueChanged: (v) {
-                    controller.ethnicityController.text = v!.label.toString();
+                    enabled
+                        ? controller.ethnicityController.text =
+                            v!.label.toString()
+                        : null;
                   })),
           SizedBox(width: width),
           SizedBox(width: width),
