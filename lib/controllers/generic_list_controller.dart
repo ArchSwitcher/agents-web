@@ -27,6 +27,7 @@ class GenericListController extends GetxController {
   final RxBool isLoadingMunicipality = true.obs;
   final RxBool isLoadingBranchesDd = true.obs;
   final RxBool isLoadingTurns = true.obs;
+  
 
   final RxBool isLoadingLicense = true.obs;
   final RxBool isLoadingEmployeeType = true.obs;
@@ -42,6 +43,8 @@ class GenericListController extends GetxController {
   final RxBool isLoadingOperationalProfile = true.obs;
   final RxBool isLoadingRegion = true.obs;
   final RxBool isLoadingEducation = true.obs;
+  final RxBool isLoadingEmployeeClassification = true.obs;
+  final RxBool isLoadingProfessions = true.obs;
 
   final RxList<DropDownOption> employees = <DropDownOption>[].obs;
   final RxList<DropDownOption> classification = <DropDownOption>[].obs;
@@ -79,6 +82,8 @@ class GenericListController extends GetxController {
   final RxList<DropDownOption> operationalProfile = <DropDownOption>[].obs;
   final RxList<DropDownOption> region = <DropDownOption>[].obs;
   final RxList<DropDownOption> education = <DropDownOption>[].obs;
+  final RxList<DropDownOption> employeeClassifications = <DropDownOption>[].obs;
+  final RxList<DropDownOption> professions = <DropDownOption>[].obs;
 
   Future<List<DropDownOption>> fetchClassification() async {
     try {
@@ -764,6 +769,46 @@ class GenericListController extends GetxController {
       return [];
     } finally {
       isLoadingEducation.value = false;
+    }
+  }
+
+  Future<List<DropDownOption>> fetchEmployeeClassifications() async {
+    isLoadingEducation.value = true;
+    try {
+      final data = await genericListService.getAll(
+          "common/getEmployeeClassifications", (json) => GenericListModel.fromJson(json));
+      education.value = data.map((item) {
+        return DropDownOption(
+          id: item.id.toString(),
+          label: item.name,
+        );
+      }).toList();
+      return region;
+    } catch (e) {
+      print("Error fetching license: $e");
+      return [];
+    } finally {
+      isLoadingEducation.value = false;
+    }
+  }
+
+  Future<List<DropDownOption>> fetchProfessions() async {
+    isLoadingProfessions.value = true;
+    try {
+      final data = await genericListService.getAll(
+          "common/getProfession", (json) => GenericListModel.fromJson(json));
+      professions.value = data.map((item) {
+        return DropDownOption(
+          id: item.id.toString(),
+          label: item.name,
+        );
+      }).toList();
+      return region;
+    } catch (e) {
+      print("Error fetching license: $e");
+      return [];
+    } finally {
+      isLoadingProfessions.value = false;
     }
   }
 

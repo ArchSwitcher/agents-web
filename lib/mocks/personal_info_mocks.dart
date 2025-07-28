@@ -23,7 +23,7 @@ List<String> ethnicityMock = [
   "Otro"
 ];
 
-List<String> languageMock = ["Español", "Inglés"];
+List<String> languageMock = ["Español", "Inglés", "Kiché", "Mam", "Otro"];
 
 List<String> relationshipsMock = [
   'Padre',
@@ -79,7 +79,15 @@ List<String> jobTypeMock = [
   "Prácticas"
 ];
 
-List<String> paymentTypeMock = ["Efectivo", "Transferencia", "Cheque"];
+List<DropDownOption> paymentMethodMock = [
+  DropDownOption(id: "CHECK", label: "Cheque"),
+  DropDownOption(id: "BANK", label: "Banco")
+];
+
+List<DropDownOption> accTypeBankMock = [
+  DropDownOption(id: "MONETARY", label: "Monetaria"),
+  DropDownOption(id: "SAVINGS", label: "Ahorro"),
+];
 
 List<DropDownOption> banksMock = [
   DropDownOption(id: "1", label: "Banco Industrial"),
@@ -117,8 +125,18 @@ List<DropDownOption> statusTypePositionMock = [
   DropDownOption(id: "3", label: "NUEVAS VACANTES"),
 ];
 
-
 List<DropDownOption> currencyMock = [
   DropDownOption(id: "QTZ", label: "Quetzal"),
   DropDownOption(id: "USD", label: "Dolar"),
+];
+
+List<DropDownOption> contractTypeMock = [
+  DropDownOption(id: "DEFINED", label: "Definido"),
+  DropDownOption(id: "UNDEFINED", label: "Indefinido"),
+  DropDownOption(id: "TEMP", label: "Temporal")
+];
+
+List<DropDownOption> contractTypeTermMock = [
+  DropDownOption(id: "TEMP_CONTRACT_TERM", label: "Temporal"),
+  DropDownOption(id: "PERMANENT_CONTRACT_TERM", label: "Permanente"),
 ];

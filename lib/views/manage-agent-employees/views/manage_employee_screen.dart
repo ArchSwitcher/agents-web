@@ -3,17 +3,18 @@ import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
 import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/services/toast_service.dart';
+import 'package:agents_app/shared/constants/database_constants.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/additional_info.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/birth_address_info.dart';
+import 'package:agents_app/views/manage-agent-employees/sections/bank_info.dart';
 import 'package:agents_app/views/manage-agent-employees/sections/contact_info.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/emergency_contact.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/finance_information.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/job_information.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/licence_weapon.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/personal_information.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/system_access_status.dart';
+import 'package:agents_app/views/manage-agent-employees/sections/family_info.dart';
+import 'package:agents_app/views/manage-agent-employees/sections/images_info.dart';
+import 'package:agents_app/views/manage-agent-employees/sections/job_info.dart';
+import 'package:agents_app/views/manage-agent-employees/sections/operation_profile.dart';
+import 'package:agents_app/views/manage-agent-employees/sections/payment_info.dart';
+import 'package:agents_app/views/manage-agent-employees/sections/personal_info.dart';
+import 'package:agents_app/views/manage-agent-employees/sections/personal_references.dart';
 import 'package:agents_app/views/manage-agent-employees/widgets/position_modal.dart';
 import 'package:agents_app/widgets/buttons/custom_button.dart';
 import 'package:agents_app/widgets/buttons/form_button.dart';
@@ -36,18 +37,54 @@ class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   start() async {
-    await controller.genericListController.fetchCountries();
-    await controller.genericListController.fetchDepartments();
-    await controller.genericListController.fetchZones();
-    await controller.genericListController.fetchIdentificationType();
-    await controller.genericListController.fetchBloodType();
-    await controller.genericListController.fetchMaritalStatus();
-    await controller.genericListController.fetchEductionLevel();
     await controller.genericListController.getAllAgency();
+    await controller.genericListController.fetchEmployeeType();
+    await controller.genericListController.fetchBank();
+    await controller.genericListController.fetchHrProfile();
+    await controller.genericListController.fetchEmployeeType();
+
+    controller.isLoadingSupervisor.value = true;
+    controller.supervisors.value = await controller.employeeDropdownService
+        .fetchEmployees(EmployeeTypeDatabaseConstants
+            .adviser); //! todo supervisor boss is not defined
+    controller.isLoadingSupervisor.value = false;
+
+    controller.isLoadingPerformanceDepartments.value = true;
+    controller.performanceDepartments.value =
+        await controller.genericListController.fetchDepartments();
+    controller.isLoadingPerformanceDepartments.value = false;
+
+    await controller.genericListController.fetchLicense();
+
+    controller.isLoadingDepartmentHome.value = true;
+    controller.departmentsHome.value =
+        await controller.genericListController.fetchDepartments();
+    controller.isLoadingDepartmentHome.value = false;
+
+    controller.isLoadingResidenceDepartment.value = true;
+    controller.residenceDepartments.value =
+        await controller.genericListController.fetchDepartments();
+    controller.isLoadingResidenceDepartment.value = false;
+
+    await controller.genericListController.fetchCountries();
+
+    controller.isLoadingMunicipalityOfBirth.value = true;
+    controller.municipalitiesOfBirth.value =
+        await controller.genericListController.fetchMunicipalities("null");
+    controller.isLoadingMunicipalityOfBirth.value = false;
+
+    await controller.genericListController.fetchProfessions();
 
 
-    controller.contractTypeController.text =
-        position == null ? "TEMPORAL" : "PERMANENTE";
+    await controller.genericListController.fetchMaritalStatus();
+
+    // await controller.genericListController.fetchDepartments();
+    // await controller.genericListController.fetchZones();
+    // await controller.genericListController.fetchIdentificationType();
+    // await controller.genericListController.fetchMaritalStatus();
+
+    // controller.contractTypeController.text =
+    //     position == null ? "TEMPORAL" : "PERMANENTE";
 
     // print("Position---: ${position?.id}");
   }
@@ -100,29 +137,28 @@ class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen> {
                 jobInformation(context, controller, true),
                 cardContentSpace(),
                 cardContentSpace(),
-                // RRHH
-                personalInformation(context, controller, true),
+                paymentInfoWidget(context, controller, true),
                 cardContentSpace(),
                 cardContentSpace(),
-                birthAddressInfo(context, controller),
+                bankInfoWidget(context, controller, true),
                 cardContentSpace(),
                 cardContentSpace(),
-                contactInfo(context, controller),
+                rrhhProfile(context, controller, true),
                 cardContentSpace(),
                 cardContentSpace(),
-                buildEmergencyContact(context, controller),
+                personalInfo(context, controller, true),
                 cardContentSpace(),
                 cardContentSpace(),
-                licenceWeapon(context, controller),
+                contactInfo(context, controller, true),
                 cardContentSpace(),
                 cardContentSpace(),
-                financialMITInformation(context, controller),
+                familyInfo(context, controller, true),
                 cardContentSpace(),
                 cardContentSpace(),
-                additionalInfo(context, controller),
+                personalReference(context, controller, true),
                 cardContentSpace(),
                 cardContentSpace(),
-                systemAccessStatus(context, controller),
+                imagesInfo(context, controller, true),
                 cardContentSpace(),
                 cardContentSpace(),
                 FormButton(onPress: () {

@@ -1,8 +1,10 @@
 import 'package:agents_app/controllers/generic_list_controller.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
+import 'package:agents_app/models/common/image_model.dart';
 import 'package:agents_app/models/employee/employee_model.dart';
-import 'package:agents_app/models/position/position_model.dart';
+import 'package:agents_app/services/employee_dropdown_service.dart';
 import 'package:agents_app/services/toast_service.dart';
+import 'package:agents_app/services/upload_file.dart';
 import 'package:agents_app/views/manage-agent-employees/services/employee_agent_service.dart';
 import 'package:agents_app/views/positions/controllers/position_controller.dart';
 import 'package:flutter/material.dart';
@@ -13,282 +15,419 @@ class EmployeeAgentController extends GetxController {
   GenericListController genericListController =
       Get.put(GenericListController());
   EmployeeAgentService employeeService = EmployeeAgentService();
-
-  // manage-employees-screen
-  TextEditingController selectedPosition =
-      TextEditingController(text: "En proceso");
-
-  // 🧍 Personal Information
-  final firstNameController = TextEditingController();
-  final middleNameController = TextEditingController();
-  final lastNameController = TextEditingController();
-  final secondLastNameController = TextEditingController();
-  final genderController = TextEditingController();
-  final birthDateController = TextEditingController();
-  // final idTypeController = TextEditingController(text: "DPI");
-  final identificationType = Rx<DropDownOption>(
-    DropDownOption(id: "", label: ""),
-  );
-  final identificationController = TextEditingController();
-  RxBool nationalityController = false.obs;
-  Rx<DropDownOption> bloodTypeController =
-      DropDownOption(id: "", label: "").obs;
-  Rx<DropDownOption> maritalStatusController =
-      DropDownOption(id: "", label: "").obs;
-  Rx<DropDownOption> educationController = 
-      DropDownOption(id: "", label: "").obs;
-  final languageController = TextEditingController();
-  final ethnicityController = TextEditingController();
-
-  // 🏠 Birth and Address Info DropDownOption
-  Rx<DropDownOption> birthCountryController =
-      DropDownOption(id: "", label: "").obs;
-  Rx<DropDownOption> birthDepartmentController =
-      DropDownOption(id: "", label: "").obs;
-  Rx<DropDownOption> birthMunicipalityController =
-      DropDownOption(id: "", label: "").obs;
-  Rx<DropDownOption> addressDepartmentController =
-      DropDownOption(id: "", label: "").obs;
-  Rx<DropDownOption> addressMunicipalityController =
-      DropDownOption(id: "", label: "").obs;
-  final addressController = TextEditingController();
-  // 🏠 Birth and Address Info Observables
-  RxBool isLoadingBirthMunicipalities = false.obs;
-  RxList<DropDownOption> birthMunicipalities = <DropDownOption>[].obs;
-  RxBool isLoadingAddressMunicipalities = false.obs;
-  RxList<DropDownOption> addressMunicipalities = <DropDownOption>[].obs;
-
-  // ☎️ Contact Info
-  final phoneController = TextEditingController();
-  final mobileController = TextEditingController();
-  final emailController = TextEditingController();
-
-  // 🚨 Emergency Contact
-  // final emergencyRelationshipController = TextEditingController();
-  Rx<DropDownOption> emergencyRelationshipController =
-      DropDownOption(id: "", label: "").obs;
-  final emergencyNameController = TextEditingController();
-  final emergencyPhoneController = TextEditingController();
-  final emergencyMobileController = TextEditingController();
-
-  // 🏢 Job Information
-  final internalCodeController = TextEditingController();
-  final joinDateController = TextEditingController();
-  Rx<DropDownOption> operationalProfileController =
-      DropDownOption(id: "", label: "").obs;
-  Rx<DropDownOption> positionEmployeeController =
-      DropDownOption(id: "", label: "").obs;
-  RxBool blueCardController = false.obs;
-  final typeController = TextEditingController();
-  final administrativeDepartmentController = TextEditingController();
-
-  final hrProfileController = TextEditingController();
-
-  final socialSecurityCodeController = TextEditingController();
-  final paymentTypeController = TextEditingController();
-  final companyController = TextEditingController(text: "EBANO");
-  Rx<DropDownOption> agencyController = 
-      DropDownOption(id: "", label: "").obs;
-  final payrollController = TextEditingController();
-  final professionController = TextEditingController();
-  final workplaceController = TextEditingController();
-  final contractTypeController = TextEditingController();
-  final hiringMethodController = TextEditingController();
-  final workCountryController = TextEditingController();
-  final workShiftController = TextEditingController();
-  final baseSalaryController = TextEditingController();
-  final decreeBonusController = TextEditingController();
-
-  // 🚗 License & Weapon
-  final driverLicenseTypeController = TextEditingController();
-  final driverLicenseNumberController = TextEditingController();
-  RxBool gunPermitController = false.obs;
-
-  // 💳 Financial Info
-  Rx<DropDownOption> bankController = DropDownOption(id: "", label: "").obs;
-  final accountNumberController = TextEditingController();
-
-  // 🧾 Additional Info
-  RxBool lifeInsuranceController = false.obs;
-  final shootingPracticeController = TextEditingController();
-  final graduationScoreController = TextEditingController();
-  final referredByController = TextEditingController();
-
-  // ⚙️ System Access / Status
-  final stateController = TextEditingController(text: "ALTA");
-  final accessUserController = TextEditingController();
-  RxBool billableController = false.obs;
-  RxBool approvedByPaymentsController = false.obs;
-
-  // 🛠 MT Position
-  final mtPositionController = TextEditingController();
-
-  @override
-  void onClose() {
-    // Dispose each controller here
-    firstNameController.clear();
-    middleNameController.clear();
-    lastNameController.clear();
-    secondLastNameController.clear();
-    genderController.clear();
-    birthDateController.clear();
-    identificationType.value = DropDownOption(id: "", label: "");
-    identificationController.clear();
-    nationalityController.value = false;
-    bloodTypeController.value = DropDownOption(id: "", label: "");
-    maritalStatusController.value = DropDownOption(id: "", label: "");
-    educationController.value = DropDownOption(id: "", label: "");;
-    languageController.clear();
-    ethnicityController.clear();
-
-    birthCountryController.value = DropDownOption(id: "", label: "");
-    birthDepartmentController.value = DropDownOption(id: "", label: "");
-    birthMunicipalityController.value = DropDownOption(id: "", label: "");
-    addressDepartmentController.value = DropDownOption(id: "", label: "");
-    addressMunicipalityController.value = DropDownOption(id: "", label: "");
-    addressController.clear();
-
-    phoneController.clear();
-    mobileController.clear();
-    emailController.clear();
-
-    emergencyRelationshipController.value = DropDownOption(id: "", label: "");
-    emergencyNameController.clear();
-    emergencyPhoneController.clear();
-    emergencyMobileController.clear();
-
-    internalCodeController.clear();
-    joinDateController.clear();
-    operationalProfileController.value = DropDownOption(id: "", label: "");
-    hrProfileController.clear();
-    blueCardController.value = false;
-    typeController.clear();
-    administrativeDepartmentController.clear();
-    // positionController.dispose();
-    socialSecurityCodeController.clear();
-    paymentTypeController.clear();
-    companyController.clear();
-    agencyController.value = DropDownOption(id: "", label: "");
-    payrollController.clear();
-    professionController.clear();
-    workplaceController.clear();
-    contractTypeController.clear();
-    hiringMethodController.clear();
-    workCountryController.clear();
-    workShiftController.clear();
-    baseSalaryController.clear();
-    decreeBonusController.clear();
-
-    driverLicenseTypeController.clear();
-    driverLicenseNumberController.clear();
-    gunPermitController.value = false;
-
-    bankController.value = DropDownOption(id: "", label: "");
-    accountNumberController.clear();
-
-    lifeInsuranceController.value = false;
-    shootingPracticeController.clear();
-    graduationScoreController.clear();
-    referredByController.clear();
-
-    stateController.clear();
-    accessUserController.clear();
-    billableController.value = false;
-    approvedByPaymentsController.value = false;
-
-    mtPositionController.clear();
-
-    super.onClose();
-  }
+  EmployeeDropdownService employeeDropdownService = EmployeeDropdownService();
+  UploadFileService uploadFileService = UploadFileService();
 
   get employeeValues {
-    final PositionModel? position = Get.arguments?['position'];
-    print("Position: ${position == null ? 'null' : position.id}");
+    EmployeeModel employee = EmployeeModel(
+        agencyId: int.parse(agencyController.value.id),
+        employeeTypeId: int.parse(employeeTypeController.value.id),
+        contractType: contractTypeController.text,
+        contractTermType: contractTypeTermController.text,
+        contractTime: DateTime.parse(contractTimeController.text),
+        hireDate: DateTime.parse(startDateController.text),
+        workSchedule: workScheduleController.text,
+        costCenter: costCenterController.text,
+        maritalStatusId: int.parse(maritalStatusController.value.id),
+        // Datos Salariales
+        entryReason: entryReasonController.text,
+        decreeBonus: double.tryParse(decreeBonusController.text) ?? 0.0,
+        payroll: payrollController.text,
+        payrollOccupations2989: payrollOccupations2989Controller.text,
+        disabilityType2989Report: disabilityType2989ReportController.text,
+        salaryBaseMintrabType: salaryBaseMintrabTypeController.text,
+        currentSalary: double.tryParse(currentSalaryController.text) ?? 0.0,
+        currentSalaryDate: DateTime.parse(currentSalaryDateController.text),
+        previousSalaryDate: DateTime.parse(previousSalaryDateController.text),
+        lifeInsurance: insuranceTypeController.text,
+        // bank info
+        bankId: int.parse(bankController.value.id),
+        bankAccountType: accTypeBankController.text,
+        paymentMethod: paymentMethodController.text,
+        accountNumber: accNumberBankController.text,
+        birthMunicipalityId: int.parse(municipalityOfBirthController.value.id),
+        performanceDepartmentId:
+            int.parse(performanceDepartmentController.value.id),
+        // Perfil Operativo / RRHH
+        hrProfileId: int.parse(hrProfileController.value.id),
+        employeeClassificationId: int.parse(classificationController.value.id),
+        supervisorWorkerId: int.parse(supervisorController.value.id),
+        performanceMunicipality:
+            int.parse(performanceMunicipalityController.value.id),
+        mintrabPerformanceRegion: mintrabPerformanceRegionController.text,
+        mintrabBirthRegion: mintrabBirthRegionController.text,
+        mtPosition: positionMtController.text,
+        digesspPosition: digesspPositionController.text,
+        positionSlot: positionSlotController.text,
+        companyEmail: companyEmailController.text,
+        socialSecurityCode: igssController.text,
+        cvh: cvhController.text,
+        // Información Personal
+        firstName: firstNameController.text,
+        middleName: middleNameController.text,
+        lastName: lastNameController.text,
+        secondLastName: secondLastNameController.text,
+        marriedLastName: marriedLastNameController.text,
+        birthDate: DateTime.parse(birthDateController.text),
+        gender: genderController.text,
+        nationality: nationalityController.value,
+        identificationTypeId: int.parse(identificationTypeController.value.id),
+        identificationNumber: identificationController.text,
+        identificationIssueDate:
+            DateTime.parse(identificationIssueDateController.text),
+        identificationEndDate:
+            DateTime.parse(identificationEndDateController.text),
+        licenseTypeId: int.parse(licenseTypeController.value.id),
+        driverLicenseNumber: licenseController.text,
+        taxIdNumber: nitController.text,
+        educationLevelId: int.parse(educationLevelController.value.id),
+        ethnicity: ethnicityController.text,
+        language: languageController.text,
+        professionId: int.parse(professionController.value.id),
+        // ------------------------
+        email: emailController.text,
+        mobile: mobileController.text,
+        cityHome: cityController.text,
+        address: addressController.text,
+        departmentHomeId: int.parse(departmentHomeController.value.id),
+        municipalityHomeId: int.parse(municipalityHomeController.value.id),
+        birthCountryId: int.parse(countryOfBirthController.value.id),
+        numberOfChildren: int.tryParse(numberOfChildrenController.text) ?? 0,
+        emergencyContactName: emergencyNameController.text,
+        emergencyPhone: emergencyContactController.text,
+        residenceDepartmentId:
+            int.parse(residenceDepartmentController.value.id),
+        residenceMunicipalityId:
+            int.parse(residenceMunicipalityController.value.id),
+        referenceName1: referenceName1.text,
+        referencePhone1: referencePhone1.text,
+        referenceName2: referenceName2.text,
+        referencePhone2: referencePhone2.text,
+        referenceName3: referenceName3.text,
+        referencePhone3: referencePhone3.text,
+        position: null
+        // images loader
 
-    return EmployeeModel(
-      firstName: firstNameController.text,
-      lastName: lastNameController.text,
-      contact: phoneController.text,
-      sex: genderController.text,
-      employeeTypeId: int.parse(positionEmployeeController.value.id),
-      internalCode: internalCodeController.text,
-      birthDate: birthDateController.text,
-      entryDate: joinDateController.text,
-      identificationTypeId: int.parse(identificationType.value.id),
-      identificationNumber: identificationController.text,
-      nationality: nationalityController.value,
-      operationalProfileId:
-          int.parse(operationalProfileController.value.id), //--DD
-      rrhhProfile: hrProfileController.text,
-      blueCard: blueCardController.value,
-      // type: typeController.text, // REMOVE THIS
-      licenseTypeId: int.parse(driverLicenseTypeController.text), //--DD
-      driverLicenseNumber: driverLicenseNumberController.text,
-      gunCarryPermit: gunPermitController.value, //
-      administrativeDepartment: administrativeDepartmentController.text,
-      position: position == null
-          ? null
-          : PositionEmployee(
-              positionId: int.parse(position.id!),
-              isPrincipal: true,
-              isActive: true),
-      socialSecurityCode: socialSecurityCodeController.text,
-      phone: phoneController.text,
-      address: addressController.text,
-      email: emailController.text,
-      paymentTypeId: int.parse(paymentTypeController.text), //--DD
-      previousCompanyId: int.parse(companyController.text), //--DD
-      agencyId: int.parse(agencyController.value.id), //--DD
-      bloodTypeId: int.parse(bloodTypeController.value.id),
-      maritalStatusId: int.parse(maritalStatusController.value.id),
-      lifeInsurance: lifeInsuranceController.value, //
-      educationLevelId: int.parse(educationController.value.id), //--DD
-      shootingPracticeDate: shootingPracticeController.text,
-      graduationScore: double.tryParse(graduationScoreController.text) ?? 0.0,
-      referredBy: referredByController.text,
-      emergencyRelationshipId:
-          int.parse(emergencyRelationshipController.value.id), //--DD
-      emergencyName: emergencyNameController.text,
-      emergencyPhone: emergencyPhoneController.text,
-      emergencyMobile: emergencyMobileController.text,
-      accessUser: accessUserController.text,
-      availableForBilling: billableController.value, //
-      approvedByPayments: approvedByPaymentsController.value, //
-      mobile: mobileController.text,
-      language: languageController.text,
-      ethnicity: ethnicityController.text,
-      mtPosition: mtPositionController.text,
-      birthCountry: birthCountryController.value.label,
-      birthDepartment: birthDepartmentController.value.label,
-      birthMunicipality: birthMunicipalityController.value.label,
-      workSchedule: workShiftController.text,
-      baseSalary: double.parse(baseSalaryController.text),
-      decreeBonus: double.parse(decreeBonusController.text),
-      residenceDepartment: addressDepartmentController.value.label,
-      residenceMunicipality: addressMunicipalityController.value.label,
-      payroll: payrollController.text,
-      // educationLevelId: professionController.text,
-      positionSlot: positionEmployeeController.value.label,
-      contractType: contractTypeController.text,
-      hireDate: hiringMethodController.text, // UPDATE
-      workCountry: workCountryController.text,
-      bankId: int.parse(bankController.value.id), //--DD
-      accountNumber: accountNumberController.text,
-      isPermanent: contractTypeController.text == "PERMANENT",
-    );
+        //! has left all SimpleEntity values
+
+        );
+
+    return employee;
   }
 
-  void createEmployee() async {
+  Future<void> createEmployee() async {
     try {
-      final employee = employeeValues;
-      print("Creating employee with values: ${employee.toJson()}");
-      final result = await employeeService.create(employee);
-      if (result) {
-        ToastService.success(
-            title: "Empleado", subTitle: "Empleado creado exitosamente");
+      EmployeeModel employee = employeeValues;
+
+      if (courseImageController.base64 != null) {
+        final courseLink = await uploadFileService.uploadPhotoWebFromBase64(
+            base64String: courseImageController.base64!,
+            fileName: 'course.png',
+            mimeType: 'image/png',
+            folder: 'courses');
+
+        employee.courses = [
+          DocumentsEmployee(
+            date: RxString(dateCourseController.text),
+            description: RxString(descriptionCourseController.text),
+            documentUrl: RxString(courseLink!),
+          )
+        ];
       }
+
+      if (shootingPracticeImageController.base64 != null) {
+        final shootingPracticeLink =
+            await uploadFileService.uploadPhotoWebFromBase64(
+                base64String: shootingPracticeImageController.base64!,
+                fileName: 'shooting_practice.png',
+                mimeType: 'image/png',
+                folder: 'shooting_practices');
+
+        employee.shootingPractices = [
+          DocumentsEmployee(
+            date: RxString(dateShootingPracticeController.text),
+            description: RxString(descriptionShootingPracticeController.text),
+            documentUrl: RxString(shootingPracticeLink!),
+          )
+        ];
+
+        employee.shootingPractices = [
+          DocumentsEmployee(
+            date: RxString(dateShootingPracticeController.text),
+            description: RxString(descriptionShootingPracticeController.text),
+            documentUrl: RxString(shootingPracticeLink),
+          )
+        ];
+      }
+
+      if (criminalRecordImageController.base64 != null) {
+        final criminalRecordLink =
+            await uploadFileService.uploadPhotoWebFromBase64(
+                base64String: criminalRecordImageController.base64!,
+                fileName: 'criminal_record.png',
+                mimeType: 'image/png',
+                folder: 'criminal_records');
+
+        employee.criminalRecords = [
+          DocumentsEmployee(
+            date: RxString(dateCriminalRecordController.text),
+            description: RxString(descriptionCriminalRecordController.text),
+            documentUrl: RxString(criminalRecordLink!),
+          )
+        ];
+      }
+      if (policeRecordsImageController.base64 != null) {
+        final policeRecordLink =
+            await uploadFileService.uploadPhotoWebFromBase64(
+                base64String: policeRecordsImageController.base64!,
+                fileName: 'police_record.png',
+                mimeType: 'image/png',
+                folder: 'police_records');
+
+        employee.policeRecords = [
+          DocumentsEmployee(
+            date: RxString(datePoliceRecordsController.text),
+            description: RxString(descriptionPoliceRecordsController.text),
+            documentUrl: RxString(policeRecordLink!),
+          )
+        ];
+      }
+
+      if (vacationStatusImageController.base64 != null) {
+        final vacationStatusLink =
+            await uploadFileService.uploadPhotoWebFromBase64(
+                base64String: vacationStatusImageController.base64!,
+                fileName: 'vacation_status.png',
+                mimeType: 'image/png',
+                folder: 'vacation_status');
+
+        employee.vacationStatus = [
+          DocumentsEmployee(
+            date: RxString(dateVacationStatusController.text),
+            description: RxString(descriptionVacationStatusController.text),
+            documentUrl: RxString(vacationStatusLink!),
+          )
+        ];
+      }
+      await employeeService.create(employee);
+
+      ToastService.success(
+          title: "Empleado", subTitle: "Empleado creado con éxito");
     } catch (e) {
+      ToastService.error(
+          title: "Empleado", subTitle: "No se pudo crear el empleado");
       print("Error creating employee: $e");
     }
+    // employeeService.create()
   }
+
+  TextEditingController selectedPosition =
+      TextEditingController(text: "En proceso");
+  //Información Laboral
+  Rx<DropDownOption> agencyController = DropDownOption(id: "", label: "").obs;
+  Rx<DropDownOption> employeeTypeController =
+      DropDownOption(id: "", label: "").obs;
+  TextEditingController contractTypeController = TextEditingController();
+  TextEditingController contractTypeTermController = TextEditingController();
+  TextEditingController contractTimeController = TextEditingController();
+  TextEditingController startDateController = TextEditingController();
+  TextEditingController entryReasonController = TextEditingController();
+  TextEditingController workScheduleController = TextEditingController();
+  TextEditingController costCenterController = TextEditingController();
+  Rx<DropDownOption> maritalStatusController =
+      DropDownOption(id: "", label: "").obs;
+
+  //Datos Salariales
+  TextEditingController decreeBonusController = TextEditingController();
+  TextEditingController payrollController = TextEditingController();
+  TextEditingController payrollOccupations2989Controller =
+      TextEditingController();
+  TextEditingController disabilityType2989ReportController =
+      TextEditingController();
+  TextEditingController salaryBaseMintrabTypeController =
+      TextEditingController();
+  TextEditingController lifeInsuranceController = TextEditingController();
+  TextEditingController currentSalaryController = TextEditingController();
+  TextEditingController currentSalaryDateController = TextEditingController();
+  TextEditingController previousSalaryDateController = TextEditingController();
+  TextEditingController insuranceTypeController = TextEditingController();
+
+  // Información Bancaria
+  Rx<DropDownOption> bankController = DropDownOption(id: "", label: "").obs;
+  TextEditingController accNumberBankController = TextEditingController();
+  TextEditingController accTypeBankController = TextEditingController();
+  TextEditingController paymentMethodController = TextEditingController();
+
+  //Perfil Operativo / RRHH
+
+  Rx<DropDownOption> hrProfileController =
+      DropDownOption(id: "", label: "").obs;
+  Rx<DropDownOption> classificationLevelController =
+      DropDownOption(id: "", label: "").obs;
+  Rx<DropDownOption> classificationController =
+      DropDownOption(id: "", label: "").obs;
+  Rx<DropDownOption> operationalProfileController =
+      DropDownOption(id: "", label: "").obs;
+
+  RxBool isLoadingSupervisor = false.obs;
+  RxList<DropDownOption> supervisors = <DropDownOption>[].obs;
+  Rx<DropDownOption> supervisorController =
+      DropDownOption(id: "", label: "").obs;
+
+  RxBool isLoadingPerformanceDepartments = false.obs;
+  RxBool isLoadingPerformanceMunicipalities = false.obs;
+  RxList<DropDownOption> performanceDepartments = <DropDownOption>[].obs;
+  RxList<DropDownOption> performanceMunicipalities = <DropDownOption>[].obs;
+  Rx<DropDownOption> performanceDepartmentController =
+      DropDownOption(id: "", label: "").obs;
+  Rx<DropDownOption> performanceMunicipalityController =
+      DropDownOption(id: "", label: "").obs;
+  TextEditingController mintrabPerformanceRegionController =
+      TextEditingController();
+  TextEditingController mintrabBirthRegionController = TextEditingController();
+  TextEditingController positionMtController = TextEditingController();
+  TextEditingController digesspPositionController = TextEditingController();
+  TextEditingController positionSlotController = TextEditingController();
+  TextEditingController positionDesignationController = TextEditingController();
+  TextEditingController companyEmailController = TextEditingController();
+  TextEditingController igssController = TextEditingController();
+  TextEditingController cvhController = TextEditingController();
+
+  // personal info
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController middleNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController secondLastNameController = TextEditingController();
+  TextEditingController marriedLastNameController = TextEditingController();
+  TextEditingController birthDateController = TextEditingController();
+  TextEditingController genderController = TextEditingController();
+  RxBool nationalityController = false.obs;
+
+  Rx<DropDownOption> identificationTypeController =
+      DropDownOption(id: "", label: "").obs;
+  TextEditingController identificationController = TextEditingController();
+  TextEditingController identificationIssueDateController =
+      TextEditingController();
+  TextEditingController identificationEndDateController =
+      TextEditingController();
+  Rx<DropDownOption> licenseTypeController =
+      DropDownOption(id: "", label: "").obs;
+  TextEditingController licenseController = TextEditingController();
+  TextEditingController nitController = TextEditingController();
+  Rx<DropDownOption> educationLevelController =
+      DropDownOption(id: "", label: "").obs;
+  TextEditingController ethnicityController = TextEditingController();
+  TextEditingController languageController = TextEditingController();
+  Rx<DropDownOption> professionController =
+      DropDownOption(id: "", label: "").obs;
+
+  // CONTACT AND POSITION INFO
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+
+  RxBool isLoadingDepartmentHome = false.obs;
+  RxList<DropDownOption> departmentsHome = <DropDownOption>[].obs;
+  Rx<DropDownOption> departmentHomeController =
+      DropDownOption(id: "", label: "").obs;
+
+  RxBool isLoadingMunicipalityHome = true.obs;
+  RxList<DropDownOption> municipalitiesHome = <DropDownOption>[].obs;
+  Rx<DropDownOption> municipalityHomeController =
+      DropDownOption(id: "", label: "").obs;
+
+  RxBool isLoadingResidenceMunicipality = false.obs;
+  RxList<DropDownOption> residenceMunicipalities = <DropDownOption>[].obs;
+  Rx<DropDownOption> residenceMunicipalityController =
+      DropDownOption(id: "", label: "").obs;
+
+  RxBool isLoadingResidenceDepartment = false.obs;
+  RxList<DropDownOption> residenceDepartments = <DropDownOption>[].obs;
+  Rx<DropDownOption> residenceDepartmentController =
+      DropDownOption(id: "", label: "").obs;
+
+  Rx<DropDownOption> countryOfBirthController =
+      DropDownOption(id: "", label: "").obs;
+
+  RxBool isLoadingMunicipalityOfBirth = false.obs;
+  RxList<DropDownOption> municipalitiesOfBirth = <DropDownOption>[].obs;
+  Rx<DropDownOption> municipalityOfBirthController =
+      DropDownOption(id: "", label: "").obs;
+
+  // FAMILY INFO
+  TextEditingController numberOfChildrenController = TextEditingController();
+  TextEditingController emergencyNameController = TextEditingController();
+  TextEditingController emergencyContactController = TextEditingController();
+
+  // REFERENCES
+  TextEditingController referenceName1 = TextEditingController();
+  TextEditingController referencePhone1 = TextEditingController();
+  TextEditingController referenceName2 = TextEditingController();
+  TextEditingController referencePhone2 = TextEditingController();
+  TextEditingController referenceName3 = TextEditingController();
+  TextEditingController referencePhone3 = TextEditingController();
+
+  // COURSES LOADED
+  ImageToUpload courseImageController = ImageToUpload(
+    base64: null,
+    needUpdate: true,
+    link: "",
+  );
+  TextEditingController dateCourseController = TextEditingController();
+  TextEditingController descriptionCourseController = TextEditingController();
+
+  ImageToUpload shootingPracticeImageController = ImageToUpload(
+    base64: null,
+    needUpdate: true,
+    link: "",
+  );
+  TextEditingController dateShootingPracticeController =
+      TextEditingController();
+  TextEditingController descriptionShootingPracticeController =
+      TextEditingController();
+
+  ImageToUpload criminalRecordImageController = ImageToUpload(
+    base64: null,
+    needUpdate: true,
+    link: "",
+  );
+  TextEditingController dateCriminalRecordController = TextEditingController();
+  TextEditingController descriptionCriminalRecordController =
+      TextEditingController();
+
+  ImageToUpload policeRecordsImageController = ImageToUpload(
+    base64: null,
+    needUpdate: true,
+    link: "",
+  );
+  TextEditingController datePoliceRecordsController = TextEditingController();
+  TextEditingController descriptionPoliceRecordsController =
+      TextEditingController();
+
+  ImageToUpload vacationStatusImageController = ImageToUpload(
+    base64: null,
+    needUpdate: true,
+    link: "",
+  );
+  TextEditingController dateVacationStatusController = TextEditingController();
+  TextEditingController descriptionVacationStatusController =
+      TextEditingController();
+
+  RxList<DocumentsEmployee> courses = <DocumentsEmployee>[].obs;
+  RxList<DocumentsEmployee> shootingPractices = <DocumentsEmployee>[].obs;
+  RxList<DocumentsEmployee> criminalRecords = <DocumentsEmployee>[].obs;
+  RxList<DocumentsEmployee> policeRecords = <DocumentsEmployee>[].obs;
+  RxList<DocumentsEmployee> vacationStatus = <DocumentsEmployee>[].obs;
+}
+
+class LoadDocumentsEmployee {
+  ImageToUpload courseImageController = ImageToUpload(
+    base64: null,
+    needUpdate: true,
+    link: "",
+  );
+  TextEditingController dateCourseController = TextEditingController();
+  TextEditingController descriptionCourseController = TextEditingController();
 }

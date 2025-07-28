@@ -20,3 +20,7 @@ samples, guidance on mobile development, and a full API reference.
 flutter run -d chrome
 
 ```
+jobInfo
+termination_date (Fecha Egreso)
+Entry_reason (Causa de Ingreso)
+termination_reason (Causa de Retiro)

@@ -12,6 +12,7 @@ class CustomDropdownV2Widget extends StatefulWidget {
   final TextEditingController textEditingController;
   final ValueChanged<DropDownOption?> onValueChanged;
   final DropDownOption? initialValue;
+  final bool? enabled;
 
   CustomDropdownV2Widget({
     Key? key,
@@ -23,6 +24,7 @@ class CustomDropdownV2Widget extends StatefulWidget {
     required this.textEditingController,
     required this.onValueChanged,
     this.initialValue,
+    this.enabled = true,
   }) : super(key: key);
 
   @override
