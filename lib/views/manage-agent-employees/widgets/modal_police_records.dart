@@ -17,6 +17,7 @@ void showPoliceRecordModal({
   showDialog(
     context: context,
     builder: (context) => GenericModal(
+      showAcceptButton: false,
       content: PoliceRecordsModal(controller: controller),
       onAccept: () async {},
       onCancel: () {},

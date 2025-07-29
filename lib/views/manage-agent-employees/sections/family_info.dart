@@ -21,7 +21,7 @@ Widget familyInfo(
           SizedBox(
             width: width,
             child: CustomInputWidget(
-              controller: controller.entryReasonController,
+              controller: controller.numberOfChildrenController,
               label: "Cantidad de hijos",
               hintText: "",
               prefixIcon: Icons.child_care_rounded,

@@ -183,6 +183,36 @@ Widget jobInformation(
             },
           ),
 
+          SizedBox(
+            width: width,
+            child: CustomInputWidget(
+              controller: controller.semiannualPolygraphResultController,
+              label: "Calificación semestral de polígrafo",
+              hintText: "",
+              prefixIcon: Icons.fact_check,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Calificación semestral de polígrafo requerida";
+                }
+                final double? result = double.tryParse(value);
+                if (result == null || result < 0 || result > 100) {
+                  return "Debe ser un número entre 0 y 100";
+                }
+                return null;
+              },
+            ),
+          ),
+          SizedBox(
+            width: width,
+            child: CustomDatePicker(
+                initialDate: DateTime(2025),
+                controller: controller.dateOfLastPolygraphTestController,
+                enabled: enabled,
+                label: "Fecha de último polígrafo",
+                hintText: "",
+                prefixIcon: Icons.date_range),
+          ),
+
           // SizedBox(
           //   width: width,
           //   child: Obx(() => CustomCheckboxLabelWidget(

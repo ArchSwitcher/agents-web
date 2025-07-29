@@ -79,13 +79,14 @@ Widget personalInfo(
               label: "apellido de casada",
               hintText: "",
               prefixIcon: Icons.person,
-              validator: (value) => notEmptyFieldValidator(value),
+              // validator: (value) => notEmptyFieldValidator(value),
             ),
           ),
 
           SizedBox(
             width: width,
             child: CustomDatePicker(
+                firstDate: DateTime(1900),
                 initialDate: DateTime(2025),
                 controller: controller.birthDateController,
                 enabled: enabled,
@@ -183,18 +184,6 @@ Widget personalInfo(
                 validator: (value) => notEmptyFieldValidator(value),
                 hintText: "",
                 prefixIcon: Icons.badge),
-          ),
-
-          SizedBox(
-            width: width,
-            child: CustomInputWidget(
-              enabled: enabled,
-              controller: controller.identificationController,
-              label: "Numero de identificación",
-              hintText: "",
-              prefixIcon: Icons.badge,
-              validator: (value) => notEmptyFieldValidator(value),
-            ),
           ),
 
           LoadingAutocompleteDropdown(

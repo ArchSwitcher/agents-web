@@ -11,6 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class EmployeeAgentController extends GetxController {
+  bool rrhForm = false;
+  bool personalForm = false;
+  bool otherForm = false;
+
   PositionController positionController = Get.put(PositionController());
   GenericListController genericListController =
       Get.put(GenericListController());
@@ -105,7 +109,9 @@ class EmployeeAgentController extends GetxController {
         referencePhone2: referencePhone2.text,
         referenceName3: referenceName3.text,
         referencePhone3: referencePhone3.text,
-        position: null
+        position: null,
+        semiannualPolygraphResult: double.tryParse(semiannualPolygraphResultController.text) ?? 0.0,
+        dateOfLastPolygraphTest: dateOfLastPolygraphTestController.text.isEmpty ? null : DateTime.parse(dateOfLastPolygraphTestController.text),
         // images loader
 
         //! has left all SimpleEntity values
@@ -236,6 +242,8 @@ class EmployeeAgentController extends GetxController {
   TextEditingController costCenterController = TextEditingController();
   Rx<DropDownOption> maritalStatusController =
       DropDownOption(id: "", label: "").obs;
+  TextEditingController semiannualPolygraphResultController = TextEditingController();
+  TextEditingController dateOfLastPolygraphTestController = TextEditingController();
 
   //Datos Salariales
   TextEditingController decreeBonusController = TextEditingController();
@@ -420,6 +428,18 @@ class EmployeeAgentController extends GetxController {
   RxList<DocumentsEmployee> criminalRecords = <DocumentsEmployee>[].obs;
   RxList<DocumentsEmployee> policeRecords = <DocumentsEmployee>[].obs;
   RxList<DocumentsEmployee> vacationStatus = <DocumentsEmployee>[].obs;
+
+
+  ImageToUpload employeePhoto = ImageToUpload(
+    base64: null,
+    needUpdate: true,
+    link: "",
+  );
+
+  @override
+  void onInit() {
+    super.onInit();
+  }
 }
 
 class LoadDocumentsEmployee {

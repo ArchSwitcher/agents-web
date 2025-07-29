@@ -7,7 +7,6 @@ import 'package:agents_app/mocks/personal_info_mocks.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 // import 'package:agents_app/shared/helpers/table/index.dart';
 import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
-import 'package:agents_app/views/manage-agent-employees/widgets/action_btns.dart';
 import 'package:agents_app/views/positions/widgets/table_rows_widget.dart';
 // import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
 import 'package:agents_app/widgets/datatable/data_table_local.dart';
@@ -73,8 +72,8 @@ class EmployeesAgentScreenState extends State<EmployeesAgentScreen> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveSidebarLayout(
-        title: 'Empleados',
-        description: "Gestión de empleados",
+        title: 'Proseñas',
+        description: "Gestion de las proseñas de los guardias",
         currentRoute: RouteConstants.manageAgent,
         userRole: 'admin',
         content: SingleChildScrollView(
@@ -89,25 +88,7 @@ class EmployeesAgentScreenState extends State<EmployeesAgentScreen> {
                     crossAxisAlignment: WrapCrossAlignment.center,
                     alignment: WrapAlignment.spaceBetween,
                     children: [
-                      // ConstrainedBox(
-                      //   constraints: const BoxConstraints(
-                      //     minWidth: 300,
-                      //     maxWidth: 400,
-                      //   ),
-                      //   child: FilterBox(
-                      //     cleanValue: () {},
-                      //     elements: [...controller.positionController.positions],
-                      //     handleFilteredData: (List<PositionModel> data) {
-                      //       controller.positionController.positions.value = data;
-                      //       setState(() {
-                              
-                      //       });
-                      //     },
-                      //     isLoading: false,
-                      //     hint: "Buscar",
-                      //     label: "Buscar",
-                      //   ),
-                      // ),
+                      
                       SizedBox(
                         width: 250,
                         child: CustomDropdownV2Widget(
@@ -125,10 +106,7 @@ class EmployeesAgentScreenState extends State<EmployeesAgentScreen> {
                               await reloadPositions(v.id);
                             }),
                       ),
-                      SizedBox(
-                        width: 230,
-                        child: addTemporalEmployeeButton(context, controller),
-                      )
+                     
                     ]),
               ),
 

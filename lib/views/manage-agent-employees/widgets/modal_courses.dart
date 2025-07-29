@@ -40,6 +40,14 @@ class ModalCourses extends StatefulWidget {
 }
 
 class _ModalCoursesState extends State<ModalCourses> {
+
+  @override
+  void initState() {
+    // widget.controller.courseImageController.updateBase64String(newBase64String)
+    super.initState();
+  }
+  
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

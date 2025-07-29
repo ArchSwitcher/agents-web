@@ -39,7 +39,7 @@ Widget complementaryInfo(BranchController controller) {
                 width: width,
                 child: AutocompleteDropdownWidget(
                   validator: (value) =>
-                      notEmptyDropdownOption(value, "Clasificación requerida"),
+                      notEmptyFieldValidator("Clasificación requerida"),
                   enabled: true,
                   listItems: controller.genericListController.classification,
                   onSelected: (DropDownOption option) {

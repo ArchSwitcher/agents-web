@@ -34,6 +34,7 @@ class LogoUploadWidget extends StatefulWidget {
   final FormFieldValidator<Object>? validator;
   final bool enabled;
   final Icon icon;
+  final double height;
 
   const LogoUploadWidget(
       {super.key,
@@ -41,6 +42,7 @@ class LogoUploadWidget extends StatefulWidget {
       required this.text,
       required this.validator,
       this.enabled = true,
+      this.height = 50.0,
       this.icon = const Icon(
         Icons.upload,
         color: Colors.white,
@@ -53,7 +55,6 @@ class LogoUploadWidget extends StatefulWidget {
 class _LogoUploadWidgetState extends State<LogoUploadWidget> {
   final RxString controllerImage = "".obs;
 
-  @override
   @override
   Widget build(BuildContext context) {
     final String? linkImage = widget.uploadImageController.link;
@@ -71,7 +72,7 @@ class _LogoUploadWidgetState extends State<LogoUploadWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: 50,
+              height: widget.height,
               decoration: BoxDecoration(
                 border: Border.all(color: colorscheme.primary),
                 borderRadius: BorderRadius.circular(12),
@@ -156,7 +157,7 @@ class _LogoUploadWidgetState extends State<LogoUploadWidget> {
                         icon: Icon(Icons.image,
                             color: !showImageButton
                                 ? colorscheme.onSurfaceVariant
-                                : colorscheme.primary),
+                                : colorscheme.onPrimary),
                         onPressed: !showImageButton
                             ? null
                             : () {

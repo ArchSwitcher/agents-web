@@ -70,7 +70,7 @@ class _ImagePickerButtonState extends State<ImagePickerButton> {
             children: [
               GestureDetector(
                 child: Container(
-                  height: 50.0,
+                  height: 30.0,
                   width: Get.width,
                   decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.primary,
@@ -142,9 +142,8 @@ class _ImagePickerButtonState extends State<ImagePickerButton> {
               widget.uploadImageController.needUpdate == false &&
                       linkImage != null
                   ? Image.network(linkImage)
-                  : Obx(
-                      () => Center(
-                          child: controllerImage.value.isNotEmpty
+                  : Center(
+                          child: widget.uploadImageController.base64 != null
                               ? Image.memory(
                                   base64Decode(widget.uploadImageController.base64!),
                                   fit: BoxFit.cover,
@@ -152,7 +151,6 @@ class _ImagePickerButtonState extends State<ImagePickerButton> {
                                   width: 600,
                                 )
                               : null),
-                    ),
             ],
           );
         });

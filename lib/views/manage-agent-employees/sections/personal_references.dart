@@ -1,4 +1,5 @@
 import 'package:agents_app/layout/content_card.dart';
+import 'package:agents_app/shared/helpers/validations/not_empty.dart';
 import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ Widget personalReference(
               label: "Referencia personal 1",
               hintText: "",
               prefixIcon: Icons.person,
+              validator: (value) => notEmptyFieldValidator(value),
             ),
           ),
           SizedBox(
@@ -36,6 +38,7 @@ Widget personalReference(
               label: "Teléfono referencia 1",
               hintText: "",
               prefixIcon: Icons.phone,
+              validator: (value) => notEmptyFieldValidator(value),
             ),
           ),
           SizedBox(
@@ -46,6 +49,7 @@ Widget personalReference(
               label: "Referencia personal 2",
               hintText: "",
               prefixIcon: Icons.person,
+              validator: (value) => notEmptyFieldValidator(value),
             ),
           ),
           SizedBox(
@@ -56,6 +60,7 @@ Widget personalReference(
               label: "Teléfono referencia 2",
               hintText: "",
               prefixIcon: Icons.phone,
+              validator: (value) => notEmptyFieldValidator(value),
             ),
           ),
           SizedBox(
@@ -66,6 +71,7 @@ Widget personalReference(
               label: "Referencia personal 3",
               hintText: "",
               prefixIcon: Icons.person,
+              validator: (value) => notEmptyFieldValidator(value),
             ),
           ),
           SizedBox(
@@ -76,6 +82,7 @@ Widget personalReference(
               label: "Teléfono referencia 3",
               hintText: "",
               prefixIcon: Icons.phone,
+              validator: (value) => notEmptyFieldValidator(value),
             ),
           ),
           SizedBox(width: width),

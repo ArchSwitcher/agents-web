@@ -17,6 +17,7 @@ void showCriminalModal({
   showDialog(
     context: context,
     builder: (context) => GenericModal(
+      showAcceptButton: false,
       content: ModalCriminalRecord(controller: controller),
       onAccept: () async {},
       onCancel: () {},

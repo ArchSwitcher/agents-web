@@ -82,7 +82,7 @@ class EmployeeModel {
   int? academicTitleId;
   int? bankId; //? -----
   int? testWorkerId;
-  int? previousCompanyId;
+  int? previousCompany;
   int? jobPositionId;
   int? frequencyId;
 
@@ -144,12 +144,15 @@ class EmployeeModel {
   int? municipalityHomeId; //? -----
   int? residenceMunicipalityId; //? -----
   int? professionId; //? -----
+  
+  double? semiannualPolygraphResult;
+  DateTime? dateOfLastPolygraphTest;
+
   List<DocumentsEmployee>? courses;
   List<DocumentsEmployee>? shootingPractices;
   List<DocumentsEmployee>? criminalRecords;
   List<DocumentsEmployee>? policeRecords;
   List<DocumentsEmployee>? vacationStatus;
-  
 
 //   SimpleEntity? costCenter;
   SimpleEntity? agency;
@@ -176,6 +179,7 @@ class EmployeeModel {
   SimpleEntity? residenceDepartment;
   EmployeeModel? supervisorWorker;
   int? performanceMunicipality;
+  bool status = true;
   // SimpleEntity? employeeClassification
 
   EmployeeModel({
@@ -220,9 +224,12 @@ class EmployeeModel {
     required this.accountNumber,
     //   required this.isPermanent,
     //   required this.shootingPracticeDate,
+    this.status = true,
     this.residenceDepartmentId,
     this.residenceDepartment,
     required this.cityHome,
+    this.semiannualPolygraphResult,
+    this.dateOfLastPolygraphTest,
     this.residenceMunicipalityId,
     this.professionId,
     this.profession,
@@ -268,7 +275,7 @@ class EmployeeModel {
     this.academicTitleId,
     this.bankId,
     this.testWorkerId,
-    this.previousCompanyId,
+    this.previousCompany,
     this.jobPositionId,
     this.frequencyId,
     this.hireDate,
@@ -345,331 +352,327 @@ class EmployeeModel {
     final person = json["PERSON"] ?? {};
 
     return EmployeeModel(
-        id: json["Id"]?.toString(),
-        cvh: json["previous_cvh"],
-        cityHome: json["City_home"] ?? '',
-        identificationIssueDate: json["Identification_issue_date"] != null
-            ? DateTime.parse(json["Identification_issue_date"])
-            : DateTime(2025),
-        identificationEndDate: json["Identification_end_date"] != null
-            ? DateTime.parse(json["Identification_end_date"])
-            : DateTime(2025),
-        employeeTypeId: json["EMPLOYEE_TYPE_Id"],
-        contractTime: json["Contract_time"] != null
-            ? DateTime.tryParse(json["Contract_time"]) ?? DateTime(2025)
-            : DateTime(2025),
-        firstName: person["First_name"],
-        lastName: person["Last_name"],
-        middleName: person["Middle_name"],
-        secondLastName: person["Second_last_name"],
-        marriedLastName: person["Married_last_name"],
-        fullName: json["Full_name"],
-        gender: person["gender"],
-        nationality:
-            person["Nationality"] == 1 || person["Nationality"] == true,
-        language: person["Language"],
-        birthDate: person["Date_of_birth"],
-        ethnicity: person["Ethnicity"],
-        identificationNumber: json["Identification_number"] ?? '',
-        //   rrhhProfile: json["RRHH_profile"] ?? '',
-        driverLicenseNumber: json["Driver_license_number"] ?? '',
-        //   gunCarryPermit: json["Gun_carry_permit"] == 1 || json["Gun_carry_permit"] == true,
-        //   administrativeDepartment: json["Administrative_department"] ?? '',
-        socialSecurityCode: json["Social_security_code"] ?? '',
-        lifeInsurance: json["Life_insurance"] ?? '',
-        //   accessUser: json["Access_user"] ?? '',
-        //   availableForBilling: json["Available_for_billing"] == 1 || json["Available_for_billing"] == true,
-        //   approvedByPayments: json["Approved_by_payments"] == 1 || json["Approved_by_payments"] == true,
-        mtPosition: json["Mt_position"] ?? '',
-        //   birthDepartment: json["Birth_department"] ?? '',
-        workSchedule: json["Work_schedule"] ?? '',
-        //   baseSalary: json["Base_salary"] == null ? 0.0 : double.tryParse(json["Base_salary"].toString()) ?? 0.0,
-        decreeBonus: json["Decree_bonus"] == null
-            ? 0.0
-            : double.tryParse(json["Decree_bonus"].toString()) ?? 0.0,
-        payroll: json["Payroll"] ?? '',
-        positionSlot: json["Position_slot"]?.toString() ?? '',
-        contractType: json["Contract_type"] ?? '', //! ------------------------
-        contractTermType: json["Contract_term_type"] ?? '',
-        //   workCountry: json["Work_country"] ?? '',
-        accountNumber: json["Account_number"] ?? '',
-        //   isPermanent: json["Is_permanent"] == 1 || json["Is_permanent"] == true,
-        subRegion: json["Sub_region"],
-        hireDate: json["hire_date"],
-        terminationDate: json["termination_date"],
-        terminationReason: json["termination_reason"],
-        isOperationalForce: json["is_operational_force"] == true,
-        isSent: json["is_sent"] == 1 || json["is_sent"] == true,
-        isScheduled: json["is_scheduled"] == 1 || json["is_scheduled"] == true,
-        jobPositionName: json["job_position_name"],
-        address: json["address"] ?? '',
-        // //   phone: json["phone"] ?? '',
-        mobile: json["mobile"] ?? '',
-        email: json["email"] ?? '',
-        emergencyContactName: json["emergency_contact_name"] ?? '',
-        emergencyPhone: json["emergency_contact_phone"] ?? '',
-        //   emergencyMobile: json["emergency_contact_mobile"] ?? '',
-        //   referredBy: json["referred_by"] ?? '',
-        graduationScore: (json["graduation_score"] as num?)?.toDouble() ?? 0.0,
-        field1: json["field_1"] ?? '',
-        field2: json["field_2"] ?? '',
-        field3: json["field_3"] ?? '',
-        field4: json["field_4"] ?? '',
-        createdAt: json["created_at"] ?? '',
-        updatedAt: json["updated_at"] ?? '',
-        deletedAt: json["deleted_at"] ?? '',
-        isActive: json["is_active"] == true,
-        //   shootingPracticeDate: json["shooting_practice_date"],
+      id: json["Id"]?.toString(),
+      status: json["Status"] == 1,
+      semiannualPolygraphResult: json["Semiannual_polygraph_result"],
+      dateOfLastPolygraphTest: json["Date_of_last_polygraph_test"],
+      cvh: json["previous_cvh"],
+      cityHome: json["City_home"] ?? '',
+      identificationIssueDate: json["Identification_issue_date"] != null
+          ? DateTime.tryParse(json["Identification_issue_date"]) ??
+              DateTime(2025)
+          : DateTime(2025),
+      identificationEndDate: json["Identification_end_date"] != null
+          ? DateTime.tryParse(json["Identification_end_date"]) ?? DateTime(2025)
+          : DateTime(2025),
+      employeeTypeId: json["EMPLOYEE_TYPE_Id"],
+      contractTime: json["Contract_time"] != null
+          ? DateTime.tryParse(json["Contract_time"]) ?? DateTime(2025)
+          : DateTime(2025),
+      firstName: person["First_name"],
+      lastName: person["Last_name"],
+      middleName: person["Middle_name"],
+      secondLastName: person["Second_last_name"],
+      marriedLastName: person["Married_last_name"],
+      fullName: json["Full_name"],
+      gender: person["gender"],
+      nationality: person["Nationality"] == 1 || person["Nationality"] == true,
+      language: person["Language"],
+      birthDate: person["Date_of_birth"],
+      ethnicity: person["Ethnicity"],
+      identificationNumber: json["Identification_number"] ?? '',
+      //   rrhhProfile: json["RRHH_profile"] ?? '',
+      driverLicenseNumber: json["Driver_license_number"] ?? '',
+      //   gunCarryPermit: json["Gun_carry_permit"] == 1 || json["Gun_carry_permit"] == true,
+      //   administrativeDepartment: json["Administrative_department"] ?? '',
+      socialSecurityCode: json["Social_security_code"] ?? '',
+      lifeInsurance: json["Life_insurance"] ?? '',
+      //   accessUser: json["Access_user"] ?? '',
+      //   availableForBilling: json["Available_for_billing"] == 1 || json["Available_for_billing"] == true,
+      //   approvedByPayments: json["Approved_by_payments"] == 1 || json["Approved_by_payments"] == true,
+      mtPosition: json["Mt_position"] ?? '',
+      //   birthDepartment: json["Birth_department"] ?? '',
+      workSchedule: json["Work_schedule"] ?? '',
+      //   baseSalary: json["Base_salary"] == null ? 0.0 : double.tryParse(json["Base_salary"].toString()) ?? 0.0,
+      decreeBonus: json["Decree_bonus"] == null
+          ? 0.0
+          : double.tryParse(json["Decree_bonus"].toString()) ?? 0.0,
+      payroll: json["Payroll"] ?? '',
+      positionSlot: json["Position_slot"]?.toString() ?? '',
+      contractType: json["Contract_type"] ?? '', //! ------------------------
+      contractTermType: json["Contract_term_type"] ?? '',
+      //   workCountry: json["Work_country"] ?? '',
+      accountNumber: json["Account_number"] ?? '',
+      //   isPermanent: json["Is_permanent"] == 1 || json["Is_permanent"] == true,
+      subRegion: json["Sub_region"],
+      hireDate: json["hire_date"],
+      terminationDate: json["termination_date"],
+      terminationReason: json["termination_reason"],
+      isOperationalForce: json["is_operational_force"] == true,
+      isSent: json["is_sent"] == 1 || json["is_sent"] == true,
+      isScheduled: json["is_scheduled"] == 1 || json["is_scheduled"] == true,
+      jobPositionName: json["job_position_name"],
+      address: json["address"] ?? '',
+      // //   phone: json["phone"] ?? '',
+      mobile: json["mobile"] ?? '',
+      email: json["email"] ?? '',
+      emergencyContactName: json["emergency_contact_name"] ?? '',
+      emergencyPhone: json["emergency_contact_phone"] ?? '',
+      //   emergencyMobile: json["emergency_contact_mobile"] ?? '',
+      //   referredBy: json["referred_by"] ?? '',
+      graduationScore: (json["graduation_score"] as num?)?.toDouble() ?? 0.0,
+      field1: json["field_1"] ?? '',
+      field2: json["field_2"] ?? '',
+      field3: json["field_3"] ?? '',
+      field4: json["field_4"] ?? '',
+      createdAt: json["created_at"] ?? '',
+      updatedAt: json["updated_at"] ?? '',
+      deletedAt: json["deleted_at"] ?? '',
+      isActive: json["is_active"] == true,
+      //   shootingPracticeDate: json["shooting_practice_date"],
 
-        // nuevos campos
-        reasonForWithdrawal: json["reasonForWithdrawal"],
-        //   costCenterId: json["costCenterId"],
-        performanceDepartment: json["performanceDepartment"],
-        companyEmail: json["companyEmail"],
-        currentSalaryDate: json["currentSalaryDate"],
-        previousSalaryDate: json["previousSalaryDate"],
-        paymentMethod: json["paymentMethod"],
-        performanceMunicipality: json["performanceMunicipality"],
-        payrollOccupations2989: json["payrollOccupations2989"],
-        positionOrDesignation: json["positionOrDesignation"],
-        digesspPosition: json["digesspPosition"],
-        mintrabPosition: json["mintrabPosition"],
-        mintrabPerformanceRegion: json["mintrabPerformanceRegion"],
-        mintrabBirthRegion: json["mintrabBirthRegion"],
-        currentSalary: json["currentSalary"],
-        disabilityType2989Report: json["disabilityType2989Report"],
-        supervisorWorker: json["supervisorWorker"] ?? null,
-        numberOfChildren: json["numberOfChildren"],
-        comment: json["comment"],
-        isForeigner: json["isForeigner"],
-        dpiIssueDate: json["dpiIssueDate"],
-        taxIdNumber: json["taxIdNumber"],
-        referenceName1: json["referenceName1"],
-        referenceName2: json["referenceName2"],
-        referenceName3: json["referenceName3"],
-        referencePhone1: json["referencePhone1"],
-        referencePhone2: json["referencePhone2"],
-        referencePhone3: json["referencePhone3"],
-        bankAccountType: json["bank_account_type"], //? --- dropdown MOCK
-        municipalityHomeId: json["MUNICIPALITY_HOME_Id"], //? -----
+      // nuevos campos
+      reasonForWithdrawal: json["reasonForWithdrawal"],
+      //   costCenterId: json["costCenterId"],
+      performanceDepartment: json["performanceDepartment"],
+      companyEmail: json["companyEmail"],
+      currentSalaryDate: json["currentSalaryDate"],
+      previousSalaryDate: json["previousSalaryDate"],
+      paymentMethod: json["paymentMethod"],
+      performanceMunicipality: json["performanceMunicipality"],
+      payrollOccupations2989: json["payrollOccupations2989"],
+      positionOrDesignation: json["positionOrDesignation"],
+      digesspPosition: json["digesspPosition"],
+      mintrabPosition: json["mintrabPosition"],
+      mintrabPerformanceRegion: json["mintrabPerformanceRegion"],
+      mintrabBirthRegion: json["mintrabBirthRegion"],
+      currentSalary: json["currentSalary"],
+      disabilityType2989Report: json["disabilityType2989Report"],
+      supervisorWorker: json["supervisorWorker"] ?? null,
+      numberOfChildren: json["numberOfChildren"],
+      comment: json["comment"],
+      isForeigner: json["isForeigner"],
+      dpiIssueDate: json["dpiIssueDate"],
+      taxIdNumber: json["taxIdNumber"],
+      referenceName1: json["referenceName1"],
+      referenceName2: json["referenceName2"],
+      referenceName3: json["referenceName3"],
+      referencePhone1: json["referencePhone1"],
+      referencePhone2: json["referencePhone2"],
+      referencePhone3: json["referencePhone3"],
+      bankAccountType: json["bank_account_type"], //? --- dropdown MOCK
+      municipalityHomeId: json["MUNICIPALITY_HOME_Id"], //? -----
 
-        // Relaciones tipo SimpleEntity
-        residenceDepartment: json["RESIDENCE_DEPARTMENT"] != null
-            ? SimpleEntity.fromJson(json["RESIDENCE_DEPARTMENT"])
-            : null,
-        profession: json["PROFESSION"] != null
-            ? SimpleEntity.fromJson(json["PROFESSION"])
-            : null,
-        birthCountry:
-            json["BIRTH_COUNTRY"] != null //? --------------------------
-                ? SimpleEntity.fromJson(json["BIRTH_COUNTRY"])
-                : null,
-        residenceMunicipality: json["RESIDENCE_MUNICIPALITY"] !=
-                null //? --------------------------
-            ? SimpleEntity.fromJson(json["RESIDENCE_MUNICIPALITY"])
-            : null,
-        municipalityHome:
-            json["MUNICIPALITY_HOME"] != null //? --------------------------
-                ? SimpleEntity.fromJson(json["MUNICIPALITY_HOME"])
-                : null,
-        agency: json["AGENCY"] != null
-            ? SimpleEntity.fromJson(json["AGENCY"])
-            : null,
-        bank: json["BANK"] != null ? SimpleEntity.fromJson(json["BANK"]) : null,
-        departmentHome:
-            json["DEPARTMENT_HOME"] != null //? --------------------------
-                ? SimpleEntity.fromJson(json["DEPARTMENT_HOME"])
-                : null,
-        bloodType: json["BLOOD_TYPE"] != null
-            ? SimpleEntity.fromJson(json["BLOOD_TYPE"])
-            : null,
-        educationLevel: json["EDUCATION_LEVEL"] != null
-            ? SimpleEntity.fromJson(json["EDUCATION_LEVEL"])
-            : null,
-        emergencyRelationship: json["EMERGENCY_RELATIONSHIP"] != null
-            ? SimpleEntity.fromJson(json["EMERGENCY_RELATIONSHIP"])
-            : null,
-        hrProfile: json["HR_PROFILE"] != null
-            ? SimpleEntity.fromJson(json["HR_PROFILE"])
-            : null,
-        identificationType: json["IDENTIFICATION_TYPE"] != null
-            ? SimpleEntity.fromJson(json["IDENTIFICATION_TYPE"])
-            : null,
-        licenseType: json["LICENSE_TYPE"] != null
-            ? SimpleEntity.fromJson(json["LICENSE_TYPE"])
-            : null,
-        maritalStatus: json["MARITAL_STATUS"] != null
-            ? SimpleEntity.fromJson(json["MARITAL_STATUS"])
-            : null,
-        operationalProfile: json["OPERATIONAL_PROFILE"] != null
-            ? SimpleEntity.fromJson(json["OPERATIONAL_PROFILE"])
-            : null,
-        paymentType: json["PAYMENT_TYPE"] != null
-            ? SimpleEntity.fromJson(json["PAYMENT_TYPE"])
-            : null,
-        workerStatus: json["WORKER_STATUS"] != null
-            ? SimpleEntity.fromJson(json["WORKER_STATUS"])
-            : null,
-        frequency: json["FREQUENCY"] != null
-            ? SimpleEntity.fromJson(json["FREQUENCY"])
-            : null,
-        region: json["REGION"] != null
-            ? SimpleEntity.fromJson(json["REGION"])
-            : null,
+      // Relaciones tipo SimpleEntity
+      residenceDepartment: json["RESIDENCE_DEPARTMENT"] != null
+          ? SimpleEntity.fromJson(json["RESIDENCE_DEPARTMENT"])
+          : null,
+      profession: json["PROFESSION"] != null
+          ? SimpleEntity.fromJson(json["PROFESSION"])
+          : null,
+      birthCountry: json["BIRTH_COUNTRY"] != null //? --------------------------
+          ? SimpleEntity.fromJson(json["BIRTH_COUNTRY"])
+          : null,
+      residenceMunicipality:
+          json["RESIDENCE_MUNICIPALITY"] != null //? --------------------------
+              ? SimpleEntity.fromJson(json["RESIDENCE_MUNICIPALITY"])
+              : null,
+      municipalityHome:
+          json["MUNICIPALITY_HOME"] != null //? --------------------------
+              ? SimpleEntity.fromJson(json["MUNICIPALITY_HOME"])
+              : null,
+      agency:
+          json["AGENCY"] != null ? SimpleEntity.fromJson(json["AGENCY"]) : null,
+      bank: json["BANK"] != null ? SimpleEntity.fromJson(json["BANK"]) : null,
+      departmentHome:
+          json["DEPARTMENT_HOME"] != null //? --------------------------
+              ? SimpleEntity.fromJson(json["DEPARTMENT_HOME"])
+              : null,
+      bloodType: json["BLOOD_TYPE"] != null
+          ? SimpleEntity.fromJson(json["BLOOD_TYPE"])
+          : null,
+      educationLevel: json["EDUCATION_LEVEL"] != null
+          ? SimpleEntity.fromJson(json["EDUCATION_LEVEL"])
+          : null,
+      emergencyRelationship: json["EMERGENCY_RELATIONSHIP"] != null
+          ? SimpleEntity.fromJson(json["EMERGENCY_RELATIONSHIP"])
+          : null,
+      hrProfile: json["HR_PROFILE"] != null
+          ? SimpleEntity.fromJson(json["HR_PROFILE"])
+          : null,
+      identificationType: json["IDENTIFICATION_TYPE"] != null
+          ? SimpleEntity.fromJson(json["IDENTIFICATION_TYPE"])
+          : null,
+      licenseType: json["LICENSE_TYPE"] != null
+          ? SimpleEntity.fromJson(json["LICENSE_TYPE"])
+          : null,
+      maritalStatus: json["MARITAL_STATUS"] != null
+          ? SimpleEntity.fromJson(json["MARITAL_STATUS"])
+          : null,
+      operationalProfile: json["OPERATIONAL_PROFILE"] != null
+          ? SimpleEntity.fromJson(json["OPERATIONAL_PROFILE"])
+          : null,
+      paymentType: json["PAYMENT_TYPE"] != null
+          ? SimpleEntity.fromJson(json["PAYMENT_TYPE"])
+          : null,
+      workerStatus: json["WORKER_STATUS"] != null
+          ? SimpleEntity.fromJson(json["WORKER_STATUS"])
+          : null,
+      frequency: json["FREQUENCY"] != null
+          ? SimpleEntity.fromJson(json["FREQUENCY"])
+          : null,
+      region:
+          json["REGION"] != null ? SimpleEntity.fromJson(json["REGION"]) : null,
 
-        //   costCenter: json["COST_CENTER"] != null
-        //       ? SimpleEntity.fromJson(json["COST_CENTER"])
-        //       : null,
+      //   costCenter: json["COST_CENTER"] != null
+      //       ? SimpleEntity.fromJson(json["COST_CENTER"])
+      //       : null,
 
-        // Relaciones simples por ID
-        agencyId: json["AGENCY_Id"],
-        bankId: json["BANK_Id"],
-        bloodTypeId: json["BLOOD_TYPE_Id"],
-        educationLevelId: json["EDUCATION_LEVEL_Id"],
-        emergencyRelationshipId: json["EMERGENCY_RELATIONSHIP_Id"],
-        hrProfileId: json["HR_PROFILE_Id"],
-        identificationTypeId: json["IDENTIFICATION_TYPE_Id"],
-        licenseTypeId: json["LICENSE_TYPE_Id"],
-        maritalStatusId: json["MARITAL_STATUS_Id"],
-        operationalProfileId: json["OPERATIONAL_PROFILE_Id"],
-        paymentTypeId: json["PAYMENT_TYPE_Id"],
-        workerStatusId: json["WORKER_STATUS_Id"],
-        frequencyId: json["FREQUENCY_Id"],
-        regionId: json["REGION_Id"],
-        personId: json["PERSON_Id"],
-        userId: json["USER_Id"],
-        createdById: json["Created_by_id"],
-        modifiedById: json["Modified_by_id"],
-        schoolLevelId: json["School_level_id"],
-        academicTitleId: json["Academic_title_id"],
-        testWorkerId: json["Test_worker_id"],
-        previousCompanyId: json["Previous_company_id"],
-        jobPositionId: json["Job_position_id"],
+      // Relaciones simples por ID
+      agencyId: json["AGENCY_Id"],
+      bankId: json["BANK_Id"],
+      bloodTypeId: json["BLOOD_TYPE_Id"],
+      educationLevelId: json["EDUCATION_LEVEL_Id"],
+      emergencyRelationshipId: json["EMERGENCY_RELATIONSHIP_Id"],
+      hrProfileId: json["HR_PROFILE_Id"],
+      identificationTypeId: json["IDENTIFICATION_TYPE_Id"],
+      licenseTypeId: json["LICENSE_TYPE_Id"],
+      maritalStatusId: json["MARITAL_STATUS_Id"],
+      operationalProfileId: json["OPERATIONAL_PROFILE_Id"],
+      paymentTypeId: json["PAYMENT_TYPE_Id"],
+      workerStatusId: json["WORKER_STATUS_Id"],
+      frequencyId: json["FREQUENCY_Id"],
+      regionId: json["REGION_Id"],
+      personId: json["PERSON_Id"],
+      userId: json["USER_Id"],
+      createdById: json["Created_by_id"],
+      modifiedById: json["Modified_by_id"],
+      schoolLevelId: json["School_level_id"],
+      academicTitleId: json["Academic_title_id"],
+      testWorkerId: json["Test_worker_id"],
+      previousCompany: json["Previous_company_id"],
+      jobPositionId: json["Job_position_id"],
 
-        // POSITION_EMPLOYEEs
-        position: (json["POSITION_EMPLOYEEs"] != null &&
-                json["POSITION_EMPLOYEEs"] is List &&
-                json["POSITION_EMPLOYEEs"].isNotEmpty)
-            ? PositionEmployee.fromJson(json["POSITION_EMPLOYEEs"][0])
-            : null,
-        // EMPLOYEE
-        photo: person["photoEmployee"],
-        courses: json["COURSES"] != null
-            ? json["COURSES"] as List<DocumentsEmployee>
-            : null,
-        shootingPractices: json["SHOOTING_PRACTICES"] != null
-            ? json["SHOOTING_PRACTICES"] as List<DocumentsEmployee>
-            : null,
-        criminalRecords: json["criminalRecords"] != null
-            ? json["criminalRecords"] as List<DocumentsEmployee>
-            : null,
-        policeRecords: json["policeRecords"] != null
-            ? json["policeRecords"] as List<DocumentsEmployee>
-            : null,
-        vacationStatus: json["vacationStatus"] != null
-            ? json["vacationStatus"] as List<DocumentsEmployee>
-            : null,
-        );
+      // POSITION_EMPLOYEEs
+      position: (json["POSITION_EMPLOYEEs"] != null &&
+              json["POSITION_EMPLOYEEs"] is List &&
+              json["POSITION_EMPLOYEEs"].isNotEmpty)
+          ? PositionEmployee.fromJson(json["POSITION_EMPLOYEEs"][0])
+          : null,
+      // EMPLOYEE
+      photo: person["photoEmployee"],
+      courses: json["COURSES"] != null
+          ? json["COURSES"] as List<DocumentsEmployee>
+          : null,
+      shootingPractices: json["SHOOTING_PRACTICES"] != null
+          ? json["SHOOTING_PRACTICES"] as List<DocumentsEmployee>
+          : null,
+      criminalRecords: json["criminalRecords"] != null
+          ? json["criminalRecords"] as List<DocumentsEmployee>
+          : null,
+      policeRecords: json["policeRecords"] != null
+          ? json["policeRecords"] as List<DocumentsEmployee>
+          : null,
+      vacationStatus: json["vacationStatus"] != null
+          ? json["vacationStatus"] as List<DocumentsEmployee>
+          : null,
+    );
   }
 
   Map<String, dynamic> toJson() => {
+        // "Status": req.body?.person.status,
         "id": id,
         "position": position?.toJson(),
-        "firstName": firstName,
-        "lastName": lastName,
+
+        // "status": status,
+        // "fullName": fullName,
         "middleName": middleName,
         "secondLastName": secondLastName,
         "marriedLastName": marriedLastName,
-
-        "gender": gender,
-        "employeeTypeId": employeeTypeId,
-        "birthDate": birthDate,
-        "identificationNumber": identificationNumber,
+        "dateOfBirth": birthDate,
         "nationality": nationality,
-        // "rrhhProfile": rrhhProfile,
-        "driverLicenseNumber": driverLicenseNumber,
-        // "gunCarryPermit": gunCarryPermit,
-        // "administrativeDepartment": administrativeDepartment,
-        "socialSecurityCode": socialSecurityCode,
-        // "phone": phone,
-        "address": address,
-        "email": email,
-        "agencyId": agencyId,
-        "bloodTypeId": bloodTypeId,
-        "lifeInsurance": lifeInsurance,
-        "educationLevelId": educationLevelId,
-        "graduationScore": graduationScore,
-        // "referredBy": referredBy,
-        "emergencyContactName": emergencyContactName,
-        "emergencyContactPhone": emergencyPhone,
-        // "emergencyContactMobile": emergencyMobile,
-        // "accessUser": accessUser,
-        // "availableForBilling": availableForBilling,
-        // "approvedByPayments": approvedByPayments,
-        "mobile": mobile,
         "language": language,
         "ethnicity": ethnicity,
-        "mtPosition": mtPosition,
-        "birthCountry": birthCountry,
-        // // "birthDepartment": birthDepartment,
-        "birthMunicipality": birthMunicipality,
-        "workSchedule": workSchedule,
-        // // "baseSalary": baseSalary,
+        "identificationNumber": identificationNumber,
+        "driverLicenseNumber": driverLicenseNumber,
+        "email": email,
+        "mobile": mobile,
+        // "phone": phone,
+        "dpiIssueDate": dpiIssueDate,
+        "taxIdNumber": taxIdNumber,
+        "cityHome": cityHome,
+        "isForeigner": isForeigner,
+        "emergencyContactName": emergencyContactName,
+        "emergencyContactPhone": emergencyPhone,
+        "emergencyContactMobile": emergencyPhone,
+        "referenceName1": referenceName1,
+        "referenceName2": referenceName2,
+        "referenceName3": referenceName3,
+        "referencePhone1": referencePhone1,
+        "referencePhone2": referencePhone2,
+        "referencePhone3": referencePhone3,
+        // "blueCard": blueCard,
+        "numberOfChildren": numberOfChildren,
+        "comment": comment,
+        "countryOfBirthId": birthCountry,
+        "birthMunicipalityId": birthMunicipalityId,
+        "residenceMunicipalityId": residenceMunicipalityId,
+        "licenseTypeId": licenseTypeId,
+        "identificationTypeId": identificationTypeId,
+        "educationLevelId": educationLevelId,
+        "departmentHomeId": departmentHomeId,
+        "addressHome": address,
+        "dpiEndDate": identificationEndDate,
+        "municipalityHomeId": municipalityHomeId,
+        "professionId": professionId,
+        "cvh": cvh,
+        "semiannualPolygraphResult": semiannualPolygraphResult, // !!!!!!!!!!!
+        "dateOfLastPolygraphTest": dateOfLastPolygraphTest, // !!!!!!!!!!!
+        
+        "employeeTypeId": employeeTypeId,
+        "status": status,
+        "personId": personId,
+        "socialSecurityCode": socialSecurityCode,
+        "lifeInsurance": lifeInsurance,
         "decreeBonus": decreeBonus,
-        "residenceDepartment": residenceDepartment,
-        "residenceMunicipality": residenceMunicipality,
         "payroll": payroll,
         "positionSlot": positionSlot,
         "contractType": contractType,
-        // "workCountry": workCountry,
-        "bankId": bankId,
+        "contractTermType": contractTermType,
         "accountNumber": accountNumber,
-        // // "isPermanent": isPermanent,
-        "cvh": cvh,
-
-        // Nuevos campos
-        "photo": photo,
-        "personId": personId,
-        "fullName": fullName,
-        "regionId": regionId,
         "subRegion": subRegion,
         "hrProfileId": hrProfileId,
-        "licenseTypeId": licenseTypeId,
         "paymentTypeId": paymentTypeId,
-        "maritalStatusId": maritalStatusId,
-        "emergencyRelationshipId": emergencyRelationshipId,
+        "agencyId": agencyId,
         "workerStatusId": workerStatusId,
-        "identificationTypeId": identificationTypeId,
         "operationalProfileId": operationalProfileId,
         "userId": userId,
         "createdById": createdById,
         "modifiedById": modifiedById,
-        "schoolLevelId": schoolLevelId,
-        "academicTitleId": academicTitleId,
+        "bankId": bankId,
         "testWorkerId": testWorkerId,
-        "previousCompanyId": previousCompanyId,
+        "previousCompany": previousCompany,
         "jobPositionId": jobPositionId,
-        "frequencyId": frequencyId,
+        "contractTime": contractTime,
         "hireDate": hireDate,
         "terminationDate": terminationDate,
         "terminationReason": terminationReason,
         "isOperationalForce": isOperationalForce,
         "isSent": isSent,
         "isScheduled": isScheduled,
-        "isActive": isActive,
         "jobPositionName": jobPositionName,
         "bankAccountType": bankAccountType,
-        // "countryOfBirth": countryOfBirth,
-        // "shootingPracticeDate": shootingPracticeDate,
-        "field1": field1,
+        "graduationScore": graduationScore,
+        "salaryBaseMintrabType": salaryBaseMintrabType,
         "field2": field2,
         "field3": field3,
         "field4": field4,
         "createdAt": createdAt,
         "updatedAt": updatedAt,
         "deletedAt": deletedAt,
-
-        //nuevos campos
+        "isActive": isActive,
+        "frequencyId": frequencyId,
+        "regionId": regionId,
         "reasonForWithdrawal": reasonForWithdrawal,
         "costCenter": costCenter,
         "performanceDepartmentId": performanceDepartmentId,
@@ -677,27 +680,26 @@ class EmployeeModel {
         "currentSalaryDate": currentSalaryDate,
         "previousSalaryDate": previousSalaryDate,
         "paymentMethod": paymentMethod,
-        "performanceMunicipality": performanceMunicipality,
+        "performanceMunicipalityId": performanceMunicipalityId,
         "payrollOccupations2989": payrollOccupations2989,
-        "positionOrDesignation": positionOrDesignation,
         "digesspPosition": digesspPosition,
-        "mintrabPosition": mintrabPosition,
+        "positionMt": mtPosition,
         "mintrabPerformanceRegion": mintrabPerformanceRegion,
         "mintrabBirthRegion": mintrabBirthRegion,
         "currentSalary": currentSalary,
         "disabilityType2989Report": disabilityType2989Report,
-        "supervisorWorker": supervisorWorker,
-        "numberOfChildren": numberOfChildren,
-        "comment": comment,
-        "isForeigner": isForeigner,
-        "dpiIssueDate": dpiIssueDate,
-        "taxIdNumber": taxIdNumber,
-        "referenceName1": referenceName1,
-        "referenceName2": referenceName2,
-        "referenceName3": referenceName3,
-        "referencePhone1": referencePhone1,
-        "referencePhone2": referencePhone2,
-        "referencePhone3": referencePhone3,
+        "supervisorWorkerId": supervisorWorkerId,
+        "entryReason": entryReason,
+        "employeeClassificationId": employeeClassificationId,
+        "residenceDepartmentId": residenceDepartmentId,
+        "maritalStatusId": maritalStatusId,
+        "gender": gender,
+        "photoEmployee": photo,
+        "courses": courses,
+        "shootingPractices": shootingPractices,
+        "criminalRecords": criminalRecords,
+        "policeRecords": policeRecords,
+        "vacationStatus": vacationStatus,
       };
 }
 

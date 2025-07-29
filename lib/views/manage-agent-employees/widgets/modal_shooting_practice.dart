@@ -17,6 +17,7 @@ void showShootingPracticesModal({
   showDialog(
     context: context,
     builder: (context) => GenericModal(
+      showAcceptButton: false,
       content: ModalShootingPractice(controller: controller),
       onAccept: () async {},
       onCancel: () {},

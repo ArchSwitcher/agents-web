@@ -1,13 +1,14 @@
 import 'dart:convert';
 
+import 'package:agents_app/models/employee/employee_model.dart';
 import 'package:agents_app/services/base_service.dart';
 import 'package:agents_app/services/crud_service.dart';
 import 'package:agents_app/services/toast_service.dart';
 import 'package:http/http.dart' as http;
 
-class EmployeeAgentService extends BaseService implements CrudService<dynamic> {
+class EmployeeAgentService extends BaseService implements CrudService<EmployeeModel> {
   @override
-  Future<bool> create(dynamic model) async {
+  Future<bool> create(EmployeeModel model) async {
     final response = await http.post(
       Uri.parse("$baseUrl/employee/createEmployee"),
       headers: buildHeaders(),
@@ -28,12 +29,12 @@ class EmployeeAgentService extends BaseService implements CrudService<dynamic> {
   }
 
   @override
-  Future<dynamic> getById(String id) async {
+  Future<EmployeeModel> getById(String id) async {
     throw UnimplementedError('read method is not implemented');
   }
 
   @override
-  Future<List<dynamic>> getAll(dynamic value) async {
+  Future<List<EmployeeModel>> getAll(dynamic value) async {
     throw UnimplementedError('getAll method is not implemented');
   }
 

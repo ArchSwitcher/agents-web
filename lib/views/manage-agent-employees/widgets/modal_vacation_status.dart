@@ -17,6 +17,7 @@ void showVacationStatusModal({
   showDialog(
     context: context,
     builder: (context) => GenericModal(
+      showAcceptButton: false,
       content: ModalVacationStatus(controller: controller),
       onAccept: () async {},
       onCancel: () {},

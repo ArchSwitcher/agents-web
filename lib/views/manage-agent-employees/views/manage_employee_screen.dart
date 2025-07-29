@@ -29,12 +29,18 @@ class ManageEmployeeAgentScreen extends StatefulWidget {
       ManageEmployeeAgentScreenState();
 }
 
-class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen> {
+class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   // Controller for managing employee data
   final controller = Get.put(EmployeeAgentController());
   final PositionModel? position = Get.arguments?['position'];
   // formkey
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyPersonal = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKeyOther = GlobalKey<FormState>();
 
   start() async {
     await controller.genericListController.getAllAgency();
@@ -55,6 +61,7 @@ class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen> {
     controller.isLoadingPerformanceDepartments.value = false;
 
     await controller.genericListController.fetchLicense();
+    await controller.genericListController.fetchIdentificationType();
 
     controller.isLoadingDepartmentHome.value = true;
     controller.departmentsHome.value =
@@ -75,8 +82,10 @@ class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen> {
 
     await controller.genericListController.fetchProfessions();
 
-
     await controller.genericListController.fetchMaritalStatus();
+
+    await controller.genericListController.fetchEmployeeClassifications();
+    await controller.genericListController.fetchEductionLevel();
 
     // await controller.genericListController.fetchDepartments();
     // await controller.genericListController.fetchZones();
@@ -99,81 +108,279 @@ class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return ResponsiveSidebarLayout(
-        title: 'Empleados',
-        description: "Gestión de empleados",
-        currentRoute: RouteConstants.manageAgent,
-        userRole: 'admin',
-        showBackButton: true,
-        content: SingleChildScrollView(
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                if (position != null)
-                  ContentCard(
-                      child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      CustomButton(
-                          width: 30,
-                          color: Theme.of(context).colorScheme.primary,
-                          text: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.work_outline),
-                              SizedBox(width: 8),
-                              Text('Información de la proseña'),
-                            ],
-                          ),
-                          isLoading: false,
-                          onPress: () {
-                            showPositionModal(
-                                context: context, position: position);
-                          }),
-                    ],
-                  )),
-                cardContentSpace(),
-                jobInformation(context, controller, true),
-                cardContentSpace(),
-                cardContentSpace(),
-                paymentInfoWidget(context, controller, true),
-                cardContentSpace(),
-                cardContentSpace(),
-                bankInfoWidget(context, controller, true),
-                cardContentSpace(),
-                cardContentSpace(),
-                rrhhProfile(context, controller, true),
-                cardContentSpace(),
-                cardContentSpace(),
-                personalInfo(context, controller, true),
-                cardContentSpace(),
-                cardContentSpace(),
-                contactInfo(context, controller, true),
-                cardContentSpace(),
-                cardContentSpace(),
-                familyInfo(context, controller, true),
-                cardContentSpace(),
-                cardContentSpace(),
-                personalReference(context, controller, true),
-                cardContentSpace(),
-                cardContentSpace(),
-                imagesInfo(context, controller, true),
-                cardContentSpace(),
-                cardContentSpace(),
-                FormButton(onPress: () {
-                  print("Guardar empleado");
-                  if (!formKey.currentState!.validate()) {
-                    ToastService.warning(
-                        title: "validación", subTitle: "Verifica los campos");
-                    return;
-                  }
-                  controller.createEmployee();
-                  Navigator.pop(context);
-                })
-              ],
-            ),
+      title: 'Empleados',
+      description: "Gestión de empleados",
+      currentRoute: RouteConstants.manageAgent,
+      userRole: 'admin',
+      showBackButton: true,
+      content: SingleChildScrollView(
+        child: Form(
+          key: formKey,
+          child: Column(
+            children: [
+              // ElevatedButton(
+              //     onPressed: () async {
+              //       await controller.genericListController
+              //           .fetchEmployeeClassifications();
+              //     },
+              //     child: Text("Prueba de boton")),
+              if (position != null)
+                ContentCard(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    CustomButton(
+                        width: 30,
+                        color: Theme.of(context).colorScheme.primary,
+                        text: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.work_outline),
+                            SizedBox(width: 8),
+                            Text('Información de la proseña'),
+                          ],
+                        ),
+                        isLoading: false,
+                        onPress: () {
+                          showPositionModal(
+                              context: context, position: position);
+                        }),
+                  ],
+                )),
+              cardContentSpace(),
+              jobInformation(context, controller, true),
+              cardContentSpace(),
+              cardContentSpace(),
+              paymentInfoWidget(context, controller, true),
+              cardContentSpace(),
+              cardContentSpace(),
+              bankInfoWidget(context, controller, true),
+              cardContentSpace(),
+              cardContentSpace(),
+              rrhhProfile(context, controller, true),
+              cardContentSpace(),
+              cardContentSpace(),
+              personalInfo(context, controller, true),
+              cardContentSpace(),
+              cardContentSpace(),
+              contactInfo(context, controller, true),
+              cardContentSpace(),
+              cardContentSpace(),
+              familyInfo(context, controller, true),
+              cardContentSpace(),
+              cardContentSpace(),
+              personalReference(context, controller, true),
+              cardContentSpace(),
+              cardContentSpace(),
+              imagesInfo(context, controller, true),
+              cardContentSpace(),
+              cardContentSpace(),
+              FormButton(onPress: () {
+                print("Guardar empleado");
+
+                if (!formKey.currentState!.validate()) {
+                  ToastService.warning(
+                      title: "validación", subTitle: "Verifica los campos");
+                  return;
+                }
+                controller.createEmployee();
+                // Navigator.pop(context);
+              })
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
+
+
+
+
+
+
+
+
+//  DefaultTabController(
+//               length: 3,
+//               child: Column(
+//                 children: [
+//                   Container(
+//                     decoration: const BoxDecoration(
+//                       color: Colors.transparent,
+//                     ),
+//                     child: Align(
+//                       alignment: Alignment.centerLeft,
+//                       child: SizedBox(
+//                         width: 600,
+//                         child: TabBar(
+//                           physics: const NeverScrollableScrollPhysics(),
+//                           // controller: _tabController,
+//                           dividerColor: Colors.transparent,
+//                           isScrollable: false,
+//                           indicator: BoxDecoration(
+//                             color: colorScheme.primaryContainer,
+//                             borderRadius: BorderRadius.circular(8),
+//                           ),
+//                           indicatorSize: TabBarIndicatorSize.tab,
+//                           labelColor: Colors.white,
+//                           labelPadding:
+//                               const EdgeInsets.symmetric(horizontal: 12),
+//                           tabs: [
+//                             Tab(
+//                               child: Container(
+//                                 decoration: BoxDecoration(
+//                                   color: colorScheme.primaryContainer,
+//                                   borderRadius: BorderRadius.circular(8),
+//                                 ),
+//                                 padding: const EdgeInsets.symmetric(
+//                                     vertical: 8, horizontal: 16),
+//                                 child: const Row(
+//                                   mainAxisSize: MainAxisSize.min,
+//                                   children: [
+//                                     Icon(Icons.work, color: Colors.white),
+//                                     SizedBox(width: 8),
+//                                     Text(
+//                                       "RRHH",
+//                                       style: TextStyle(color: Colors.white),
+//                                     ),
+//                                   ],
+//                                 ),
+//                               ),
+//                             ),
+//                             Tab(
+//                               child: Container(
+//                                 decoration: BoxDecoration(
+//                                   color: colorScheme.primaryContainer,
+//                                   borderRadius: BorderRadius.circular(8),
+//                                 ),
+//                                 padding: const EdgeInsets.symmetric(
+//                                     vertical: 8, horizontal: 16),
+//                                 child: const Row(
+//                                   mainAxisSize: MainAxisSize.min,
+//                                   children: [
+//                                     Icon(Icons.person, color: Colors.white),
+//                                     SizedBox(width: 8),
+//                                     Text(
+//                                       "Datos Personales",
+//                                       style: TextStyle(color: Colors.white),
+//                                     ),
+//                                   ],
+//                                 ),
+//                               ),
+//                             ),
+//                             Tab(
+//                               child: Container(
+//                                 decoration: BoxDecoration(
+//                                   color: colorScheme.primaryContainer,
+//                                   borderRadius: BorderRadius.circular(8),
+//                                 ),
+//                                 padding: const EdgeInsets.symmetric(
+//                                     vertical: 8, horizontal: 16),
+//                                 child: const Row(
+//                                   mainAxisSize: MainAxisSize.min,
+//                                   children: [
+//                                     Icon(Icons.more_horiz, color: Colors.white),
+//                                     SizedBox(width: 8),
+//                                     Text(
+//                                       "Otros",
+//                                       style: TextStyle(color: Colors.white),
+//                                     ),
+//                                   ],
+//                                 ),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                   const SizedBox(height: 8),
+//                   SizedBox(
+//                     height: Get.height - 352,
+//                     child: TabBarView(
+//                       physics: const NeverScrollableScrollPhysics(),
+//                       children: [
+//                         SingleChildScrollView(
+//                           child: Form(
+//                             key: formKeyRrhh,
+//                             child: Column(children: [
+//                               if (position != null)
+//                                 ContentCard(
+//                                     child: Row(
+//                                   mainAxisAlignment: MainAxisAlignment.end,
+//                                   children: [
+//                                     CustomButton(
+//                                         width: 30,
+//                                         color: Theme.of(context)
+//                                             .colorScheme
+//                                             .primary,
+//                                         text: const Row(
+//                                           mainAxisSize: MainAxisSize.min,
+//                                           children: [
+//                                             Icon(Icons.work_outline),
+//                                             SizedBox(width: 8),
+//                                             Text('Información de la proseña'),
+//                                           ],
+//                                         ),
+//                                         isLoading: false,
+//                                         onPress: () {
+//                                           showPositionModal(
+//                                               context: context,
+//                                               position: position);
+//                                         }),
+//                                   ],
+//                                 )),
+//                               cardContentSpace(),
+//                               jobInformation(context, controller, true),
+//                               cardContentSpace(),
+//                               cardContentSpace(),
+//                               paymentInfoWidget(context, controller, true),
+//                               cardContentSpace(),
+//                               cardContentSpace(),
+//                               bankInfoWidget(context, controller, true),
+//                               cardContentSpace(),
+//                               cardContentSpace(),
+//                             ]),
+//                           ),
+//                         ),
+//                         SingleChildScrollView(
+//                           child: Form(
+//                             key: formKeyPersonal,
+//                             child: Column(children: [
+//                               rrhhProfile(context, controller, true),
+//                               cardContentSpace(),
+//                               cardContentSpace(),
+//                               personalInfo(context, controller, true),
+//                               cardContentSpace(),
+//                               cardContentSpace(),
+//                               contactInfo(context, controller, true),
+//                               cardContentSpace(),
+//                               cardContentSpace(),
+//                               familyInfo(context, controller, true),
+//                               cardContentSpace(),
+//                               cardContentSpace(),
+//                             ]),
+//                           ),
+//                         ),
+//                         SingleChildScrollView(
+//                           child: Form(
+//                             key: formKeyOther,
+//                             child: Column(children: [
+//                               personalReference(context, controller, true),
+//                               cardContentSpace(),
+//                               cardContentSpace(),
+//                               imagesInfo(context, controller, true),
+//                               cardContentSpace(),
+//                               cardContentSpace(),
+//                             ]),
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),

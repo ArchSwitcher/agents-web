@@ -773,11 +773,11 @@ class GenericListController extends GetxController {
   }
 
   Future<List<DropDownOption>> fetchEmployeeClassifications() async {
-    isLoadingEducation.value = true;
+    isLoadingEmployeeClassification.value = true;
     try {
       final data = await genericListService.getAll(
-          "common/getEmployeeClassifications", (json) => GenericListModel.fromJson(json));
-      education.value = data.map((item) {
+          "common/getEmployeeClassification", (json) => GenericListModel.fromJson(json));
+      employeeClassifications.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
           label: item.name,
@@ -788,7 +788,7 @@ class GenericListController extends GetxController {
       print("Error fetching license: $e");
       return [];
     } finally {
-      isLoadingEducation.value = false;
+      isLoadingEmployeeClassification.value = false;
     }
   }
 

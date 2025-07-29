@@ -38,10 +38,31 @@ class _CustomDropdownV2WidgetState extends State<CustomDropdownV2Widget> {
   void initState() {
     super.initState();
     _selectedValue = widget.initialValue;
-    if (_selectedValue != null) {
-      widget.textEditingController.text = _selectedValue!.id;
+    if (_selectedValue != null || widget.textEditingController.text.isNotEmpty) {
+      print("Initial value: ${widget.initialValue?.label}");
+      // widget.textEditingController.text = _selectedValue!.id;
+      _selectedValue = widget.items.firstWhere(
+        (item) => item.id == widget.textEditingController.text,
+        orElse: () => widget.initialValue ?? widget.items.first,
+      );
     }
   }
+
+  // @override
+  // void didUpdateWidget(covariant CustomDropdownV2Widget oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   final matchingItem = widget.items.firstWhere(
+  //     (item) => item.id == widget.textEditingController.text,
+  //     orElse: () => widget.initialValue ?? widget.items.first,
+  //   );
+
+  //   print("Matching item: ${matchingItem.label}");
+  //   if (_selectedValue?.id != matchingItem.id) {
+  //     setState(() {
+  //       _selectedValue = matchingItem;
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +80,11 @@ class _CustomDropdownV2WidgetState extends State<CustomDropdownV2Widget> {
         DropdownButtonFormField<DropDownOption>(
           style: CustomStyle.textStyleBlack(context),
           onChanged: (value) {
-            setState(() {
-              _selectedValue = value;
-            });
-            widget.onValueChanged(value);
-            widget.textEditingController.text = value?.id ?? '';
+            // setState(() {
+            //   _selectedValue = value;
+            // });
+            // widget.onValueChanged(value);
+            // widget.textEditingController.text = value?.id ?? '';
           },
           value: _selectedValue,
           items: widget.items.map((DropDownOption option) {

@@ -36,21 +36,21 @@ class MenuSidebarController extends GetxController {
         ]),
         MenuGroupModel(label: "Recursos humanos", children: [
           MenuItemModel(
-              label: "Empleados",
+              label: "Aprobación de altas",
               route: RouteConstants.employees,
               icon: Icons.people_outline),
           MenuItemModel(                           //
-              label: "Aprobación de altas",
+              label: "Proseñas",
               route: RouteConstants.manageAgent,
               icon: Icons.assignment_turned_in_outlined),
           MenuItemModel(
-              label: "Posiciones",
-              route: RouteConstants.manageAgent,
-              icon: Icons.location_history),
-          MenuItemModel(
               label: "Expedientes",
               route: RouteConstants.manageAgent,
-              icon: Icons.document_scanner),
+              icon: Icons.location_history),
+          // MenuItemModel(
+          //     label: "Expedientes",
+          //     route: RouteConstants.manageAgent,
+          //     icon: Icons.document_scanner),
         ]),
         // MenuGroupModel(label: "Agentes", children: [
         // MenuItemModel(

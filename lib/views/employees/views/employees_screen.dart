@@ -5,12 +5,12 @@ import 'package:agents_app/models/employee/employee_model.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 // import 'package:agents_app/shared/helpers/table/index.dart';
 import 'package:agents_app/views/employees/controller/employee_controller.dart';
+import 'package:agents_app/views/employees/widgets/action_btns.dart';
 import 'package:agents_app/views/employees/widgets/modal_assign_equipment.dart';
 import 'package:agents_app/views/equipment/widgets/asigment_equipment_modal.dart';
 import 'package:agents_app/widgets/datatable/common_data_table.dart';
 // import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
 import 'package:agents_app/widgets/datatable/data_table_local.dart';
-import 'package:agents_app/widgets/datatable/filter_box.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -62,12 +62,13 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveSidebarLayout(
-        title: 'Empleados',
+        title: 'Aprobación de altas',
         description: "Configuración de empleados",
         currentRoute: RouteConstants.employees,
         userRole: 'admin',
         content: SingleChildScrollView(
           child: Column(
+            
             children: [
               // add new group
               ContentCard(
@@ -76,20 +77,24 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                   runSpacing:
                       20, // espacio vertical entre líneas si se hace wrap
                   crossAxisAlignment: WrapCrossAlignment.center,
-                  alignment: WrapAlignment.spaceBetween,
+                  alignment: WrapAlignment.end,
                   children: [
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        minWidth: 300,
-                        maxWidth: 600,
-                      ),
-                      child: FilterBox(
-                        elements: [],
-                        handleFilteredData: (List<dynamic> data) {},
-                        isLoading: false,
-                        hint: "Buscar grupos",
-                        label: "Buscar grupo",
-                      ),
+                    // ConstrainedBox(
+                    //   constraints: const BoxConstraints(
+                    //     minWidth: 300,
+                    //     maxWidth: 600,
+                    //   ),
+                    //   child: FilterBox(
+                    //     elements: [],
+                    //     handleFilteredData: (List<dynamic> data) {},
+                    //     isLoading: false,
+                    //     hint: "Buscar grupos",
+                    //     label: "Buscar grupo",
+                    //   ),
+                    // )
+                    SizedBox(
+                      width: 180,
+                      child: addEmployeeButton(context),
                     )
                   ],
                 ),
@@ -117,7 +122,9 @@ List<DataRow> buildTableRowsFromList(
     List<EmployeeModel> list, BuildContext context) {
   return List.generate(list.length, (index) {
     final element = list[index];
-    final String fullName = '${element.firstName ?? ''} ${element.middleName ?? ''} ${element.lastName ?? ''} ${element.lastName ?? ''}'.trim();
+    final String fullName =
+        '${element.firstName ?? ''} ${element.middleName ?? ''} ${element.lastName ?? ''} ${element.lastName ?? ''}'
+            .trim();
     return DataRow(
       cells: [
         DataCell(Row(children: [
@@ -137,9 +144,11 @@ List<DataRow> buildTableRowsFromList(
             icon: const Icon(Icons.assignment),
             tooltip: 'Assign Equipment',
           ),
+          downEmployeeButton(context, element),
+          editEmployeeButton(context, element),
         ])),
         cellDataTable(element.id ?? "", context: context),
-        cellDataTable(element.fullName ?? fullName , context: context),
+        cellDataTable(element.fullName ?? fullName, context: context),
         cellDataTable(element.email, context: context),
         cellDataTable(element.mobile, context: context),
         cellDataTable(element.agency?.name ?? "", context: context),
