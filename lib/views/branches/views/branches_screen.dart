@@ -50,6 +50,7 @@ class _BranchesScreenState extends State<BranchesScreen> {
     null,
   ];
 
+  bool isSearched = false;
   start() async {
     await controller.fetchBranches();
     // await controller.fetchBranchesPagination("1", "100");
@@ -83,22 +84,25 @@ class _BranchesScreenState extends State<BranchesScreen> {
                   width: 190,
                   child: searchBranchButton(context, controller, () async {
                     await controller.searchBranches();
+                    isSearched = true;
                     setState(() {});
                   }),
                 ),
-                SizedBox(
-                  width: 220,
-                  child: ElevatedButton.icon(
-                      onPressed: () async{
-                        controller.controllerSearchBranch.clear();
-                        controller.controllerSearchClient.clear();
-                        controller.controllerSearchGroup.clear();
-                        await controller.fetchBranches();
-                        setState(() {});
-                      },
-                      label: Text("Limpiar búsqueda"),
-                      icon: Icon(Icons.clear)),
-                ),
+                if (isSearched)
+                  SizedBox(
+                    width: 220,
+                    child: ElevatedButton.icon(
+                        onPressed: () async {
+                          controller.controllerSearchBranch.clear();
+                          controller.controllerSearchClient.clear();
+                          controller.controllerSearchGroup.clear();
+                          await controller.fetchBranches();
+                          isSearched = false;
+                          setState(() {});
+                        },
+                        label: Text("Limpiar búsqueda"),
+                        icon: Icon(Icons.clear)),
+                  ),
                 SizedBox(
                     width: 160, child: addBranchButton(context, controller)),
               ],

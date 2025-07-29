@@ -87,7 +87,7 @@ class EmployeeModel {
   int? frequencyId;
 
   DateTime? hireDate;
-  String? terminationDate;
+  DateTime? terminationDate;
   String? terminationReason;
 
   bool? isOperationalForce;
@@ -144,7 +144,7 @@ class EmployeeModel {
   int? municipalityHomeId; //? -----
   int? residenceMunicipalityId; //? -----
   int? professionId; //? -----
-  
+
   double? semiannualPolygraphResult;
   DateTime? dateOfLastPolygraphTest;
 
@@ -355,9 +355,11 @@ class EmployeeModel {
       id: json["Id"]?.toString(),
       status: json["Status"] == 1,
       semiannualPolygraphResult: json["Semiannual_polygraph_result"],
-      dateOfLastPolygraphTest: json["Date_of_last_polygraph_test"],
       cvh: json["previous_cvh"],
       cityHome: json["City_home"] ?? '',
+      dateOfLastPolygraphTest: json["Date_of_last_polygraph_test"] != null
+          ? DateTime.tryParse(json["Date_of_last_polygraph_test"])
+          : null,
       identificationIssueDate: json["Identification_issue_date"] != null
           ? DateTime.tryParse(json["Identification_issue_date"]) ??
               DateTime(2025)
@@ -369,16 +371,24 @@ class EmployeeModel {
       contractTime: json["Contract_time"] != null
           ? DateTime.tryParse(json["Contract_time"]) ?? DateTime(2025)
           : DateTime(2025),
+      birthDate: json[person["Date_of_birth"]] != null
+          ? DateTime.tryParse(json[person["Date_of_birth"]])
+          : DateTime(2025),
+      hireDate: json["hire_date"] != null
+          ? DateTime.tryParse(json["hire_date"]) ?? DateTime(2025)
+          : DateTime(2025), //json["hire_date"]
+      terminationDate: json["termination_date"] != null 
+          ? DateTime.tryParse(json["termination_date"]) ?? DateTime(2025)
+          : null, // Este es String, este no lo toques 
       firstName: person["First_name"],
       lastName: person["Last_name"],
       middleName: person["Middle_name"],
-      secondLastName: person["Second_last_name"],
+      secondLastName: person["Second_last_ame"],
       marriedLastName: person["Married_last_name"],
       fullName: json["Full_name"],
       gender: person["gender"],
       nationality: person["Nationality"] == 1 || person["Nationality"] == true,
-      language: person["Language"],
-      birthDate: person["Date_of_birth"],
+      language: person["Language"] ?? "",
       ethnicity: person["Ethnicity"],
       identificationNumber: json["Identification_number"] ?? '',
       //   rrhhProfile: json["RRHH_profile"] ?? '',
@@ -405,8 +415,7 @@ class EmployeeModel {
       accountNumber: json["Account_number"] ?? '',
       //   isPermanent: json["Is_permanent"] == 1 || json["Is_permanent"] == true,
       subRegion: json["Sub_region"],
-      hireDate: json["hire_date"],
-      terminationDate: json["termination_date"],
+
       terminationReason: json["termination_reason"],
       isOperationalForce: json["is_operational_force"] == true,
       isSent: json["is_sent"] == 1 || json["is_sent"] == true,
@@ -584,12 +593,25 @@ class EmployeeModel {
         "id": id,
         "position": position?.toJson(),
 
+        "dateOfBirth": birthDate?.toIso8601String(),
+        "dpiIssueDate": dpiIssueDate?.toIso8601String(),
+        "dpiEndDate": identificationEndDate?.toIso8601String(),
+        "contractTime": contractTime?.toIso8601String(),
+        "hireDate": hireDate?.toIso8601String(),
+        "terminationDate": terminationDate, // Este es String, este no lo toques
+        "createdAt": createdAt, // Este ya es String
+        "updatedAt": updatedAt,
+        "deletedAt": deletedAt,
+        "currentSalaryDate": currentSalaryDate?.toIso8601String(),
+        "previousSalaryDate": previousSalaryDate?.toIso8601String(),
+        "dateOfLastPolygraphTest": dateOfLastPolygraphTest?.toIso8601String(),
+
         // "status": status,
-        // "fullName": fullName,
+        "firstName": firstName,
         "middleName": middleName,
         "secondLastName": secondLastName,
         "marriedLastName": marriedLastName,
-        "dateOfBirth": birthDate,
+        "lastName": lastName,
         "nationality": nationality,
         "language": language,
         "ethnicity": ethnicity,
@@ -598,7 +620,6 @@ class EmployeeModel {
         "email": email,
         "mobile": mobile,
         // "phone": phone,
-        "dpiIssueDate": dpiIssueDate,
         "taxIdNumber": taxIdNumber,
         "cityHome": cityHome,
         "isForeigner": isForeigner,
@@ -622,13 +643,11 @@ class EmployeeModel {
         "educationLevelId": educationLevelId,
         "departmentHomeId": departmentHomeId,
         "addressHome": address,
-        "dpiEndDate": identificationEndDate,
         "municipalityHomeId": municipalityHomeId,
         "professionId": professionId,
         "cvh": cvh,
         "semiannualPolygraphResult": semiannualPolygraphResult, // !!!!!!!!!!!
-        "dateOfLastPolygraphTest": dateOfLastPolygraphTest, // !!!!!!!!!!!
-        
+
         "employeeTypeId": employeeTypeId,
         "status": status,
         "personId": personId,
@@ -653,9 +672,6 @@ class EmployeeModel {
         "testWorkerId": testWorkerId,
         "previousCompany": previousCompany,
         "jobPositionId": jobPositionId,
-        "contractTime": contractTime,
-        "hireDate": hireDate,
-        "terminationDate": terminationDate,
         "terminationReason": terminationReason,
         "isOperationalForce": isOperationalForce,
         "isSent": isSent,
@@ -667,9 +683,6 @@ class EmployeeModel {
         "field2": field2,
         "field3": field3,
         "field4": field4,
-        "createdAt": createdAt,
-        "updatedAt": updatedAt,
-        "deletedAt": deletedAt,
         "isActive": isActive,
         "frequencyId": frequencyId,
         "regionId": regionId,
@@ -677,8 +690,6 @@ class EmployeeModel {
         "costCenter": costCenter,
         "performanceDepartmentId": performanceDepartmentId,
         "companyEmail": companyEmail,
-        "currentSalaryDate": currentSalaryDate,
-        "previousSalaryDate": previousSalaryDate,
         "paymentMethod": paymentMethod,
         "performanceMunicipalityId": performanceMunicipalityId,
         "payrollOccupations2989": payrollOccupations2989,

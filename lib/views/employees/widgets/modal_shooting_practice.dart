@@ -1,16 +1,16 @@
-import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
+import 'package:agents_app/views/employees/controller/manage_employee_controller.dart';
 import 'package:agents_app/widgets/commons/generic_modal.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:agents_app/widgets/inputs/date_picker.dart';
 import 'package:agents_app/widgets/inputs/image_picker_button.dart';
 import 'package:flutter/material.dart';
 
-void showVacationStatusModal({
+void showShootingPracticesModal({
   required BuildContext context,
   VoidCallback? onAccept,
   VoidCallback? onCancel,
   String description = "",
-  String title = "Vacaciones del empleado",
+  String title = "Practica de tiro del empleado",
   bool isEdit = true,
   required EmployeeAgentController controller,
 }) {
@@ -18,7 +18,7 @@ void showVacationStatusModal({
     context: context,
     builder: (context) => GenericModal(
       showAcceptButton: false,
-      content: ModalVacationStatus(controller: controller),
+      content: ModalShootingPractice(controller: controller),
       onAccept: () async {},
       onCancel: () {},
 
@@ -31,16 +31,16 @@ void showVacationStatusModal({
   );
 }
 
-class ModalVacationStatus extends StatefulWidget {
+class ModalShootingPractice extends StatefulWidget {
   final EmployeeAgentController controller;
 
-  const ModalVacationStatus({Key? key, required this.controller}) : super(key: key);
+  const ModalShootingPractice({Key? key, required this.controller}) : super(key: key);
 
   @override
-  _ModalVacationStatusState createState() => _ModalVacationStatusState();
+  _ModalShootingPracticeState createState() => _ModalShootingPracticeState();
 }
 
-class _ModalVacationStatusState extends State<ModalVacationStatus> {
+class _ModalShootingPracticeState extends State<ModalShootingPractice> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -50,8 +50,8 @@ class _ModalVacationStatusState extends State<ModalVacationStatus> {
           SizedBox(
             width: 800,
             child: ImagePickerButton(
-                uploadImageController: widget.controller.vacationStatusImageController,
-                text: "Vacaciones",
+                uploadImageController: widget.controller.shootingPracticeImageController,
+                text: "Practica de tiro",
                 validator: null),
           ),
           Row(
@@ -60,9 +60,9 @@ class _ModalVacationStatusState extends State<ModalVacationStatus> {
                 width: 400,
                 child: CustomDatePicker(
                     initialDate: DateTime(2025),
-                    controller: widget.controller.dateVacationStatusController,
+                    controller: widget.controller.dateShootingPracticeController,
                     enabled: true,
-                    label: "Fecha del curso",
+                    label: "Fecha de practica",
                     hintText: "",
                     prefixIcon: Icons.date_range),
               ),
@@ -70,27 +70,27 @@ class _ModalVacationStatusState extends State<ModalVacationStatus> {
               SizedBox(
                 width: 400,
                 child: CustomInputWidget(
-                    controller: widget.controller.descriptionVacationStatusController,
-                    label: "Descripción del curso",
+                    controller: widget.controller.descriptionShootingPracticeController,
+                    label: "Observaciones",
                     hintText: "",
                     prefixIcon: Icons.description),
               )
             ],
           ),
           const Divider(),
-          widget.controller.vacationStatus.isEmpty
-              ? const Text("No hay cursos agregados")
+          widget.controller.shootingPractices.isEmpty
+              ? const Text("No hay practicas de tiro agregadas")
               : Column(children: [
-                const Text("Cursos Agregados:"),
+                const Text("Practicas de tiro:"),
                 ListView.builder(
                   shrinkWrap: true,
-                  itemCount: widget.controller.vacationStatus.length,
+                  itemCount: widget.controller.shootingPractices.length,
                   itemBuilder: (context, index) {
-                    final vacationS = widget.controller.vacationStatus[index];
+                    final shootingPractice = widget.controller.shootingPractices[index];
                     return ListTile(
-                      title: Text(vacationS.description!.value),
-                      subtitle: Text(vacationS.date.toString()),
-                      leading: Image.network(vacationS.documentUrl!.value,
+                      title: Text(shootingPractice.description!.value),
+                      subtitle: Text(shootingPractice.date.toString()),
+                      leading: Image.network(shootingPractice.documentUrl!.value,
                           width: 100, height: 100),
                     );
                   },

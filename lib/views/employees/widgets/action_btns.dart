@@ -29,7 +29,7 @@ Widget addEmployeeButton(BuildContext context) {
       onPress: () async {
         Navigator.pushNamed(context, RouteConstants.manageEmployee, arguments: {
           'position': null,
-          'employeeType': "Temporal",
+          // 'employeeType': "Temporal",
         });
       });
 }
@@ -44,7 +44,7 @@ Widget downEmployeeButton(BuildContext context, EmployeeModel employee) {
             context: context,
             title: "dar de baja a empleado ${employee.fullName ?? fullName}",
             employeeStatus: employee.status,
-            terminationDate: employee.terminationDate ?? "",
+            terminationDate: employee.terminationDate?.toIso8601String() ?? "",
             terminationReason: employee.terminationReason ?? "",
             );
       },

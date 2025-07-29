@@ -16,7 +16,7 @@ import 'package:agents_app/views/dashboard/dashboard_screen.dart';
 import 'package:agents_app/views/employees/views/employees_screen.dart';
 import 'package:agents_app/views/equipment/views/equipments_screen.dart';
 import 'package:agents_app/views/manage-agent-employees/views/agent_employees_screen.dart';
-import 'package:agents_app/views/manage-agent-employees/views/manage_employee_screen.dart';
+import 'package:agents_app/views/employees/views/manage_employee_screen.dart';
 import 'package:agents_app/views/groups/views/groups_screen.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/theme/color_pallete.dart';

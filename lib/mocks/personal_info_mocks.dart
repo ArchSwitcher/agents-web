@@ -80,8 +80,8 @@ List<String> jobTypeMock = [
 ];
 
 List<DropDownOption> paymentMethodMock = [
-  DropDownOption(id: "CHECK", label: "Cheque"),
-  DropDownOption(id: "BANK", label: "Banco")
+  DropDownOption(id: "Cheque", label: "Cheque"),
+  DropDownOption(id: "Banco", label: "Banco")
 ];
 
 List<DropDownOption> accTypeBankMock = [

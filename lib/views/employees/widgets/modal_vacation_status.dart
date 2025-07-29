@@ -1,16 +1,16 @@
-import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
+import 'package:agents_app/views/employees/controller/manage_employee_controller.dart';
 import 'package:agents_app/widgets/commons/generic_modal.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:agents_app/widgets/inputs/date_picker.dart';
 import 'package:agents_app/widgets/inputs/image_picker_button.dart';
 import 'package:flutter/material.dart';
 
-void showPoliceRecordModal({
+void showVacationStatusModal({
   required BuildContext context,
   VoidCallback? onAccept,
   VoidCallback? onCancel,
   String description = "",
-  String title = "Antecedentes policíacos",
+  String title = "Vacaciones del empleado",
   bool isEdit = true,
   required EmployeeAgentController controller,
 }) {
@@ -18,7 +18,7 @@ void showPoliceRecordModal({
     context: context,
     builder: (context) => GenericModal(
       showAcceptButton: false,
-      content: PoliceRecordsModal(controller: controller),
+      content: ModalVacationStatus(controller: controller),
       onAccept: () async {},
       onCancel: () {},
 
@@ -31,16 +31,16 @@ void showPoliceRecordModal({
   );
 }
 
-class PoliceRecordsModal extends StatefulWidget {
+class ModalVacationStatus extends StatefulWidget {
   final EmployeeAgentController controller;
 
-  const PoliceRecordsModal({Key? key, required this.controller}) : super(key: key);
+  const ModalVacationStatus({Key? key, required this.controller}) : super(key: key);
 
   @override
-  _PoliceRecordsModalState createState() => _PoliceRecordsModalState();
+  _ModalVacationStatusState createState() => _ModalVacationStatusState();
 }
 
-class _PoliceRecordsModalState extends State<PoliceRecordsModal> {
+class _ModalVacationStatusState extends State<ModalVacationStatus> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -50,8 +50,8 @@ class _PoliceRecordsModalState extends State<PoliceRecordsModal> {
           SizedBox(
             width: 800,
             child: ImagePickerButton(
-                uploadImageController: widget.controller.policeRecordsImageController,
-                text: "Antecedentes policíacos",
+                uploadImageController: widget.controller.vacationStatusImageController,
+                text: "Vacaciones",
                 validator: null),
           ),
           Row(
@@ -60,9 +60,9 @@ class _PoliceRecordsModalState extends State<PoliceRecordsModal> {
                 width: 400,
                 child: CustomDatePicker(
                     initialDate: DateTime(2025),
-                    controller: widget.controller.datePoliceRecordsController,
+                    controller: widget.controller.dateVacationStatusController,
                     enabled: true,
-                    label: "Fecha de vencimiento",
+                    label: "Fecha del curso",
                     hintText: "",
                     prefixIcon: Icons.date_range),
               ),
@@ -70,27 +70,27 @@ class _PoliceRecordsModalState extends State<PoliceRecordsModal> {
               SizedBox(
                 width: 400,
                 child: CustomInputWidget(
-                    controller: widget.controller.descriptionPoliceRecordsController,
-                    label: "Observaciones",
+                    controller: widget.controller.descriptionVacationStatusController,
+                    label: "Descripción del curso",
                     hintText: "",
                     prefixIcon: Icons.description),
               )
             ],
           ),
           const Divider(),
-          widget.controller.policeRecords.isEmpty
-              ? const Text("No hay antecedentes policíacos agregados")
+          widget.controller.vacationStatus.isEmpty
+              ? const Text("No hay cursos agregados")
               : Column(children: [
-                const Text("Antecedentes policíacos:"),
+                const Text("Cursos Agregados:"),
                 ListView.builder(
                   shrinkWrap: true,
-                  itemCount: widget.controller.policeRecords.length,
+                  itemCount: widget.controller.vacationStatus.length,
                   itemBuilder: (context, index) {
-                    final policeRecord = widget.controller.policeRecords[index];
+                    final vacationS = widget.controller.vacationStatus[index];
                     return ListTile(
-                      title: Text(policeRecord.description!.value),
-                      subtitle: Text(policeRecord.date.toString()),
-                      leading: Image.network(policeRecord.documentUrl!.value,
+                      title: Text(vacationS.description!.value),
+                      subtitle: Text(vacationS.date.toString()),
+                      leading: Image.network(vacationS.documentUrl!.value,
                           width: 100, height: 100),
                     );
                   },

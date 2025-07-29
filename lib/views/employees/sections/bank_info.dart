@@ -2,7 +2,7 @@ import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/mocks/personal_info_mocks.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/shared/helpers/validations/dropdown_validator.dart';
-import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
+import 'package:agents_app/views/employees/controller/manage_employee_controller.dart';
 import 'package:agents_app/widgets/inputs/custom_dropdownv2_widget.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:agents_app/widgets/inputs/dropdown_widget.dart';

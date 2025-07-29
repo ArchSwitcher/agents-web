@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:agents_app/models/employee/employee_model.dart';
 import 'package:agents_app/services/base_service.dart';
 import 'package:agents_app/services/crud_service.dart';
+import 'package:agents_app/services/toast_service.dart';
 import 'package:http/http.dart' as http;
 
 class EmployeeService extends BaseService
@@ -20,7 +21,8 @@ class EmployeeService extends BaseService
         final List data = decoded['data'];
         return data.map((json) => EmployeeModel.fromJson(json)).toList();
       } else {
-        throw Exception('Error al cargar sucursales');
+        ToastService.warning(title: "Empleados", subTitle: "No se encontraron empleados");
+        return [];
       }
     } catch (e) {
       print("objects: error ---- $e");

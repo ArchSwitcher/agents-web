@@ -1,10 +1,10 @@
 import 'package:agents_app/layout/content_card.dart';
-import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
-import 'package:agents_app/views/manage-agent-employees/widgets/modal_courses.dart';
-import 'package:agents_app/views/manage-agent-employees/widgets/modal_criminal_records.dart';
-import 'package:agents_app/views/manage-agent-employees/widgets/modal_police_records.dart';
-import 'package:agents_app/views/manage-agent-employees/widgets/modal_shooting_practice.dart';
-import 'package:agents_app/views/manage-agent-employees/widgets/modal_vacation_status.dart';
+import 'package:agents_app/views/employees/controller/manage_employee_controller.dart';
+import 'package:agents_app/views/employees/widgets/modal_courses.dart';
+import 'package:agents_app/views/employees/widgets/modal_criminal_records.dart';
+import 'package:agents_app/views/employees/widgets/modal_police_records.dart';
+import 'package:agents_app/views/employees/widgets/modal_shooting_practice.dart';
+import 'package:agents_app/views/employees/widgets/modal_vacation_status.dart';
 import 'package:agents_app/widgets/inputs/image_upload_widget.dart';
 import 'package:flutter/material.dart';
 

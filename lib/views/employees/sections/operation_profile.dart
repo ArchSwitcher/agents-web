@@ -3,7 +3,7 @@ import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/shared/helpers/validations/dropdown_validator.dart';
 import 'package:agents_app/shared/helpers/validations/email_validator.dart';
 import 'package:agents_app/shared/helpers/validations/not_empty.dart';
-import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
+import 'package:agents_app/views/employees/controller/manage_employee_controller.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:agents_app/widgets/inputs/custom_label_widget.dart';
 import 'package:agents_app/widgets/inputs/dropdown_widget.dart';

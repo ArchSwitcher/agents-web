@@ -1,5 +1,5 @@
 import 'package:agents_app/layout/content_card.dart';
-import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
+import 'package:agents_app/views/employees/controller/manage_employee_controller.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:flutter/material.dart';
 

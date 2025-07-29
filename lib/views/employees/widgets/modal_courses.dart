@@ -1,24 +1,23 @@
-import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
+import 'package:agents_app/views/employees/controller/manage_employee_controller.dart';
 import 'package:agents_app/widgets/commons/generic_modal.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:agents_app/widgets/inputs/date_picker.dart';
 import 'package:agents_app/widgets/inputs/image_picker_button.dart';
 import 'package:flutter/material.dart';
 
-void showShootingPracticesModal({
+void showCoursesModal({
   required BuildContext context,
   VoidCallback? onAccept,
   VoidCallback? onCancel,
   String description = "",
-  String title = "Practica de tiro del empleado",
+  String title = "Agregar curso al empleado",
   bool isEdit = true,
   required EmployeeAgentController controller,
 }) {
   showDialog(
     context: context,
     builder: (context) => GenericModal(
-      showAcceptButton: false,
-      content: ModalShootingPractice(controller: controller),
+      content: ModalCourses(controller: controller),
       onAccept: () async {},
       onCancel: () {},
 
@@ -31,16 +30,24 @@ void showShootingPracticesModal({
   );
 }
 
-class ModalShootingPractice extends StatefulWidget {
+class ModalCourses extends StatefulWidget {
   final EmployeeAgentController controller;
 
-  const ModalShootingPractice({Key? key, required this.controller}) : super(key: key);
+  const ModalCourses({Key? key, required this.controller}) : super(key: key);
 
   @override
-  _ModalShootingPracticeState createState() => _ModalShootingPracticeState();
+  _ModalCoursesState createState() => _ModalCoursesState();
 }
 
-class _ModalShootingPracticeState extends State<ModalShootingPractice> {
+class _ModalCoursesState extends State<ModalCourses> {
+
+  @override
+  void initState() {
+    // widget.controller.courseImageController.updateBase64String(newBase64String)
+    super.initState();
+  }
+  
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -50,8 +57,8 @@ class _ModalShootingPracticeState extends State<ModalShootingPractice> {
           SizedBox(
             width: 800,
             child: ImagePickerButton(
-                uploadImageController: widget.controller.shootingPracticeImageController,
-                text: "Practica de tiro",
+                uploadImageController: widget.controller.courseImageController,
+                text: "Curso",
                 validator: null),
           ),
           Row(
@@ -60,9 +67,9 @@ class _ModalShootingPracticeState extends State<ModalShootingPractice> {
                 width: 400,
                 child: CustomDatePicker(
                     initialDate: DateTime(2025),
-                    controller: widget.controller.dateShootingPracticeController,
+                    controller: widget.controller.dateCourseController,
                     enabled: true,
-                    label: "Fecha de practica",
+                    label: "Fecha del curso",
                     hintText: "",
                     prefixIcon: Icons.date_range),
               ),
@@ -70,27 +77,27 @@ class _ModalShootingPracticeState extends State<ModalShootingPractice> {
               SizedBox(
                 width: 400,
                 child: CustomInputWidget(
-                    controller: widget.controller.descriptionShootingPracticeController,
-                    label: "Observaciones",
+                    controller: widget.controller.descriptionCourseController,
+                    label: "Descripción del curso",
                     hintText: "",
                     prefixIcon: Icons.description),
               )
             ],
           ),
           const Divider(),
-          widget.controller.shootingPractices.isEmpty
-              ? const Text("No hay practicas de tiro agregadas")
+          widget.controller.courses.isEmpty
+              ? const Text("No hay cursos agregados")
               : Column(children: [
-                const Text("Practicas de tiro:"),
+                const Text("Cursos Agregados:"),
                 ListView.builder(
                   shrinkWrap: true,
-                  itemCount: widget.controller.shootingPractices.length,
+                  itemCount: widget.controller.courses.length,
                   itemBuilder: (context, index) {
-                    final shootingPractice = widget.controller.shootingPractices[index];
+                    final course = widget.controller.courses[index];
                     return ListTile(
-                      title: Text(shootingPractice.description!.value),
-                      subtitle: Text(shootingPractice.date.toString()),
-                      leading: Image.network(shootingPractice.documentUrl!.value,
+                      title: Text(course.description!.value),
+                      subtitle: Text(course.date.toString()),
+                      leading: Image.network(course.documentUrl!.value,
                           width: 100, height: 100),
                     );
                   },

@@ -1,16 +1,16 @@
-import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
+import 'package:agents_app/views/employees/controller/manage_employee_controller.dart';
 import 'package:agents_app/widgets/commons/generic_modal.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:agents_app/widgets/inputs/date_picker.dart';
 import 'package:agents_app/widgets/inputs/image_picker_button.dart';
 import 'package:flutter/material.dart';
 
-void showCriminalModal({
+void showPoliceRecordModal({
   required BuildContext context,
   VoidCallback? onAccept,
   VoidCallback? onCancel,
   String description = "",
-  String title = "Antecedentes penales del empleado",
+  String title = "Antecedentes policíacos",
   bool isEdit = true,
   required EmployeeAgentController controller,
 }) {
@@ -18,7 +18,7 @@ void showCriminalModal({
     context: context,
     builder: (context) => GenericModal(
       showAcceptButton: false,
-      content: ModalCriminalRecord(controller: controller),
+      content: PoliceRecordsModal(controller: controller),
       onAccept: () async {},
       onCancel: () {},
 
@@ -31,16 +31,16 @@ void showCriminalModal({
   );
 }
 
-class ModalCriminalRecord extends StatefulWidget {
+class PoliceRecordsModal extends StatefulWidget {
   final EmployeeAgentController controller;
 
-  const ModalCriminalRecord({Key? key, required this.controller}) : super(key: key);
+  const PoliceRecordsModal({Key? key, required this.controller}) : super(key: key);
 
   @override
-  _ModalCriminalRecordState createState() => _ModalCriminalRecordState();
+  _PoliceRecordsModalState createState() => _PoliceRecordsModalState();
 }
 
-class _ModalCriminalRecordState extends State<ModalCriminalRecord> {
+class _PoliceRecordsModalState extends State<PoliceRecordsModal> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -50,8 +50,8 @@ class _ModalCriminalRecordState extends State<ModalCriminalRecord> {
           SizedBox(
             width: 800,
             child: ImagePickerButton(
-                uploadImageController: widget.controller.criminalRecordImageController,
-                text: "Antecedentes penales",
+                uploadImageController: widget.controller.policeRecordsImageController,
+                text: "Antecedentes policíacos",
                 validator: null),
           ),
           Row(
@@ -60,7 +60,7 @@ class _ModalCriminalRecordState extends State<ModalCriminalRecord> {
                 width: 400,
                 child: CustomDatePicker(
                     initialDate: DateTime(2025),
-                    controller: widget.controller.dateCriminalRecordController,
+                    controller: widget.controller.datePoliceRecordsController,
                     enabled: true,
                     label: "Fecha de vencimiento",
                     hintText: "",
@@ -70,7 +70,7 @@ class _ModalCriminalRecordState extends State<ModalCriminalRecord> {
               SizedBox(
                 width: 400,
                 child: CustomInputWidget(
-                    controller: widget.controller.descriptionCriminalRecordController,
+                    controller: widget.controller.descriptionPoliceRecordsController,
                     label: "Observaciones",
                     hintText: "",
                     prefixIcon: Icons.description),
@@ -78,19 +78,19 @@ class _ModalCriminalRecordState extends State<ModalCriminalRecord> {
             ],
           ),
           const Divider(),
-          widget.controller.criminalRecords.isEmpty
-              ? const Text("No hay antecedentes penales  agregados")
+          widget.controller.policeRecords.isEmpty
+              ? const Text("No hay antecedentes policíacos agregados")
               : Column(children: [
-                const Text("Antecedentes penales:"),
+                const Text("Antecedentes policíacos:"),
                 ListView.builder(
                   shrinkWrap: true,
-                  itemCount: widget.controller.criminalRecords.length,
+                  itemCount: widget.controller.policeRecords.length,
                   itemBuilder: (context, index) {
-                    final criminalRecord = widget.controller.criminalRecords[index];
+                    final policeRecord = widget.controller.policeRecords[index];
                     return ListTile(
-                      title: Text(criminalRecord.description!.value),
-                      subtitle: Text(criminalRecord.date.toString()),
-                      leading: Image.network(criminalRecord.documentUrl!.value,
+                      title: Text(policeRecord.description!.value),
+                      subtitle: Text(policeRecord.date.toString()),
+                      leading: Image.network(policeRecord.documentUrl!.value,
                           width: 100, height: 100),
                     );
                   },

@@ -5,16 +5,16 @@ import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/constants/database_constants.dart';
 import 'package:agents_app/shared/constants/routes.dart';
-import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/bank_info.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/contact_info.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/family_info.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/images_info.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/job_info.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/operation_profile.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/payment_info.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/personal_info.dart';
-import 'package:agents_app/views/manage-agent-employees/sections/personal_references.dart';
+import 'package:agents_app/views/employees/controller/manage_employee_controller.dart';
+import 'package:agents_app/views/employees/sections/bank_info.dart';
+import 'package:agents_app/views/employees/sections/contact_info.dart';
+import 'package:agents_app/views/employees/sections/family_info.dart';
+import 'package:agents_app/views/employees/sections/images_info.dart';
+import 'package:agents_app/views/employees/sections/job_info.dart';
+import 'package:agents_app/views/employees/sections/operation_profile.dart';
+import 'package:agents_app/views/employees/sections/payment_info.dart';
+import 'package:agents_app/views/employees/sections/personal_info.dart';
+import 'package:agents_app/views/employees/sections/personal_references.dart';
 import 'package:agents_app/views/manage-agent-employees/widgets/position_modal.dart';
 import 'package:agents_app/widgets/buttons/custom_button.dart';
 import 'package:agents_app/widgets/buttons/form_button.dart';
@@ -29,11 +29,7 @@ class ManageEmployeeAgentScreen extends StatefulWidget {
       ManageEmployeeAgentScreenState();
 }
 
-class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
+class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen> {
   // Controller for managing employee data
   final controller = Get.put(EmployeeAgentController());
   final PositionModel? position = Get.arguments?['position'];
@@ -106,9 +102,9 @@ class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen>
     });
   }
 
+  // @mustCallSuper
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return ResponsiveSidebarLayout(
       title: 'Empleados',
       description: "Gestión de empleados",

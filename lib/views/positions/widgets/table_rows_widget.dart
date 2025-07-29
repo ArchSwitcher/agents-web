@@ -1,7 +1,7 @@
 import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/shared/constants/routes.dart';
-import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
+import 'package:agents_app/views/employees/controller/manage_employee_controller.dart';
 import 'package:agents_app/views/positions/controllers/position_controller.dart';
 import 'package:agents_app/views/positions/widgets/actions_btns_widget.dart';
 import 'package:agents_app/widgets/datatable/common_data_table.dart';

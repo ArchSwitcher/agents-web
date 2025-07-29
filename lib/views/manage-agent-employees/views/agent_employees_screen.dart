@@ -6,7 +6,7 @@ import 'package:agents_app/mocks/personal_info_mocks.dart';
 // import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/shared/constants/routes.dart';
 // import 'package:agents_app/shared/helpers/table/index.dart';
-import 'package:agents_app/views/manage-agent-employees/controllers/employee_controller.dart';
+import 'package:agents_app/views/employees/controller/manage_employee_controller.dart';
 import 'package:agents_app/views/positions/widgets/table_rows_widget.dart';
 // import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
 import 'package:agents_app/widgets/datatable/data_table_local.dart';
