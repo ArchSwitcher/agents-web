@@ -356,26 +356,33 @@ class EmployeeModel {
     final person = json["PERSON"] ?? {};
 
     return EmployeeModel(
+      //person
+      cityHome: person["City_home"] ?? '',
+      mobile: person["mobile"] ?? '',
+      email: person["email"] ?? '',
+      emergencyContactName: person["emergency_contact_name"] ?? '',
+      emergencyPhone: person["emergency_contact_phone"] ?? '',
+      address: person["Address_home"] ?? '',
+
       id: json["Id"]?.toString(),
       entryReason: "${json["Entry_reason"] ?? ''}",
       status: json["Status"] == 1,
       cvh: json["previous_cvh"],
-      cityHome: json["City_home"] ?? '',
       employeeTypeId: json["EMPLOYEE_TYPE_Id"],
       dateOfLastPolygraphTest: json["Date_of_last_polygraph_test"] != null
           ? DateTime.tryParse(json["Date_of_last_polygraph_test"])
           : null,
-      identificationIssueDate: json["Dpi_issue_date"] != null
-          ? DateTime.tryParse(json["Dpi_issue_date"])
+      identificationIssueDate: person["Dpi_issue_date"] != null
+          ? DateTime.tryParse(person["Dpi_issue_date"])
           : null,
-      identificationEndDate: json["Dpi_end_date"] != null
-          ? DateTime.tryParse(json["Dpi_end_date"])
+      identificationEndDate: person["Dpi_end_date"] != null
+          ? DateTime.tryParse(person["Dpi_end_date"])
           : null,
       contractTime: json["Contract_time"] != null
           ? DateTime.tryParse(json["Contract_time"])
           : null,
-      birthDate: json[person["Date_of_birth"]] != null
-          ? DateTime.tryParse(json[person["Date_of_birth"]])
+      birthDate: person["Date_of_birth"] != null
+          ? DateTime.tryParse(person["Date_of_birth"])
           : null,
       hireDate: json["hire_date"] != null
           ? DateTime.tryParse(json["hire_date"])
@@ -413,9 +420,9 @@ class EmployeeModel {
       nationality: person["Nationality"] == 1 || person["Nationality"] == true,
       language: person["Language"] ?? "",
       ethnicity: person["Ethnicity"],
-      identificationNumber: json["Identification_number"] ?? '',
+      identificationNumber: person["Identification_number"] ?? '',
       //   rrhhProfile: json["RRHH_profile"] ?? '',
-      driverLicenseNumber: json["Driver_license_number"] ?? '',
+      driverLicenseNumber: person["Driver_license_number"] ?? '',
       //   gunCarryPermit: json["Gun_carry_permit"] == 1 || json["Gun_carry_permit"] == true,
       //   administrativeDepartment: json["Administrative_department"] ?? '',
       socialSecurityCode: json["Social_security_code"] ?? '',
@@ -442,12 +449,9 @@ class EmployeeModel {
       isSent: json["is_sent"] == 1 || json["is_sent"] == true,
       isScheduled: json["is_scheduled"] == 1 || json["is_scheduled"] == true,
       jobPositionName: json["job_position_name"],
-      address: json["Address_home"] ?? '',
+
       // //   phone: json["phone"] ?? '',
-      mobile: json["mobile"] ?? '',
-      email: json["email"] ?? '',
-      emergencyContactName: json["emergency_contact_name"] ?? '',
-      emergencyPhone: json["emergency_contact_phone"] ?? '',
+
       //   emergencyMobile: json["emergency_contact_mobile"] ?? '',
       //   referredBy: json["referred_by"] ?? '',
       field1: json["field_1"] ?? '',
@@ -473,22 +477,22 @@ class EmployeeModel {
       mintrabBirthRegion: json["Mintrab_birth_region"],
 
       disabilityType2989Report: json["Disability_type_29_89_report"],
-      numberOfChildren: json["Number_of_children"],
+      numberOfChildren: person["Number_of_children"],
       comment: json["Comment"],
-      isForeigner: json["Is_foreigner"],
-      taxIdNumber: json["Tax_id_number"],
-      referenceName1: json["Reference_name_1"],
-      referenceName2: json["Reference_name_2"],
-      referenceName3: json["Reference_name_3"],
-      referencePhone1: json["Reference_phone_1"],
-      referencePhone2: json["Reference_phone_2"],
-      referencePhone3: json["Reference_phone_3"],
+      isForeigner:
+          person["Is_foreigner"] == 1 ?? person["Is_foreigner"] == true,
+      taxIdNumber: person["Tax_id_number"],
+      referenceName1: person["Reference_name_1"],
+      referenceName2: person["Reference_name_2"],
+      referenceName3: person["Reference_name_3"],
+      referencePhone1: person["Reference_phone_1"],
+      referencePhone2: person["Reference_phone_2"],
+      referencePhone3: person["Reference_phone_3"],
       bankAccountType: json["bank_account_type"], //? --- dropdown MOCK
       municipalityHomeId: json["MUNICIPALITY_HOME_Id"], //? -----
-      photo: person["Photo_employee"],
+      photo: json["Photo_employee"],
 
       //doubles
-     
 
       decreeBonus: json["Decree_bonus"] == null
           ? 0.0
@@ -498,13 +502,14 @@ class EmployeeModel {
           ? 0.0
           : double.tryParse(json["graduation_score"].toString()) ?? 0.0,
 
-      currentSalary: json["Current_salary"] == null ?
-          0.0
+      currentSalary: json["Current_salary"] == null
+          ? 0.0
           : double.tryParse(json["Current_salary"].toString()) ?? 0.0,
-          
+
       semiannualPolygraphResult: json["Semiannual_polygraph_result"] == null
           ? 0.0
-          : double.tryParse(json["Semiannual_polygraph_result"].toString()) ?? 0.0,
+          : double.tryParse(json["Semiannual_polygraph_result"].toString()) ??
+              0.0,
 
       // Relaciones tipo SimpleEntity
       birthMunicipality: person["BIRTH_MUNICIPALITY"] != null
@@ -557,9 +562,10 @@ class EmployeeModel {
       residenceDepartment: json["RESIDENCE_DEPARTMENT"] != null
           ? SimpleEntity.fromJson(json["RESIDENCE_DEPARTMENT"])
           : null,
-      birthCountry: json["BIRTH_COUNTRY"] != null //? --------------------------
-          ? SimpleEntity.fromJson(json["BIRTH_COUNTRY"])
-          : null,
+      birthCountry:
+          person["COUNTRY_OF_BIRTH"] != null //? --------------------------
+              ? SimpleEntity.fromJson(person["COUNTRY_OF_BIRTH"])
+              : null,
       agency:
           json["AGENCY"] != null ? SimpleEntity.fromJson(json["AGENCY"]) : null,
       bank: json["BANK"] != null ? SimpleEntity.fromJson(json["BANK"]) : null,
@@ -628,23 +634,48 @@ class EmployeeModel {
           ? PositionEmployee.fromJson(json["POSITION_EMPLOYEEs"][0])
           : null,
       // EMPLOYEE
+      salaryBaseMintrabType: json["Salary_base_mintrab_type"] ?? '',
 
-      courses: json["COURSES"] != null
-          ? json["COURSES"] as List<DocumentsEmployee>
-          : null,
-      shootingPractices: json["SHOOTING_PRACTICES"] != null
-          ? json["SHOOTING_PRACTICES"] as List<DocumentsEmployee>
-          : null,
-      criminalRecords: json["criminalRecords"] != null
-          ? json["criminalRecords"] as List<DocumentsEmployee>
-          : null,
-      policeRecords: json["policeRecords"] != null
-          ? json["policeRecords"] as List<DocumentsEmployee>
-          : null,
-      vacationStatus: json["vacationStatus"] != null
-          ? json["vacationStatus"] as List<DocumentsEmployee>
-          : null,
-    );
+      vacationStatus: (json["vacationStatus"] as List<dynamic>?)
+          ?.map((e) => DocumentsEmployee.fromJson({
+                "date": e["Date"],
+                "description": e["Description"],
+                "document_url": e["Document_url"],
+              }))
+          .toList(),
+
+      shootingPractices: (json["shootingPractices"] as List<dynamic>?)
+          ?.map((e) => DocumentsEmployee.fromJson({
+                "date": e["Date"],
+                "description": e["Description"],
+                "document_url": e["Document_url"],
+              }))
+          .toList(),
+
+      criminalRecords: (json["criminalRecords"] as List<dynamic>?)
+          ?.map((e) => DocumentsEmployee.fromJson({
+                "date": e["Date"],
+                "description": e["Description"],
+                "document_url": e["Document_url"],
+              }))
+          .toList(),
+
+      policeRecords: (json["policeRecords"] as List<dynamic>?)
+          ?.map((e) => DocumentsEmployee.fromJson({
+                "date": e["Date"],
+                "description": e["Description"],
+                "document_url": e["Document_url"],
+              }))
+          .toList(),
+
+      courses: (json["courses"] as List<dynamic>?)
+          ?.map((e) => DocumentsEmployee.fromJson({
+                "date": e["Date"],
+                "description": e["Description"],
+                "document_url": e["Document_url"],
+              }))
+          .toList(),
+          );
   }
 
   Map<String, dynamic> toJson() => {
@@ -704,7 +735,7 @@ class EmployeeModel {
         "addressHome": address,
         "municipalityHomeId": municipalityHomeId,
         "professionId": professionId,
-        "previous_cvh": cvh,
+        "previousCvh": cvh,
         "semiannualPolygraphResult": semiannualPolygraphResult, // !!!!!!!!!!!
         "positionDesignation": positionOrDesignation,
         "employeeTypeId": employeeTypeId,
@@ -781,15 +812,15 @@ class DocumentsEmployee {
 
   factory DocumentsEmployee.fromJson(Map<String, dynamic> json) =>
       DocumentsEmployee(
-        date: json["date"].obs,
-        description: json["description"].obs,
-        documentUrl: json["document_url"].obs,
+        date: (json["date"] ?? "").toString().obs,
+        description: (json["description"] ?? "").toString().obs,
+        documentUrl: (json["document_url"] ?? "").toString().obs,
       );
 
   Map<String, dynamic> toJson() => {
         "date": date?.value,
         "description": description?.value,
-        "document_url": documentUrl?.value,
+        "documentUrl": documentUrl?.value,
       };
 }
 

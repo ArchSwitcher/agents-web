@@ -91,6 +91,9 @@ Widget personalInfo(
                 enabled: enabled,
                 label: "Fecha de nacimiento",
                 hintText: "",
+                validator: (value) {
+                  return notEmptyFieldValidator(value);
+                },
                 prefixIcon: Icons.cake),
           ),
           SizedBox(

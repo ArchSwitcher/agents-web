@@ -1,3 +1,4 @@
+import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/layout/contect_card_space.dart';
 import 'package:agents_app/layout/content_card.dart';
 import 'package:agents_app/layout/responsive_sidebar_layout.dart';
@@ -5,7 +6,6 @@ import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/constants/database_constants.dart';
 import 'package:agents_app/shared/constants/routes.dart';
-import 'package:agents_app/views/employees/controller/edit_employee_controller.dart';
 import 'package:agents_app/views/employees/controller/manage_employee_controller.dart';
 import 'package:agents_app/views/employees/sections/bank_info.dart';
 import 'package:agents_app/views/employees/sections/contact_info.dart';
@@ -32,7 +32,8 @@ class ManageEmployeeScreen extends StatefulWidget {
 class ManageEmployeeScreenState extends State<ManageEmployeeScreen> {
   // Controller for managing employee data
   final controller = Get.put(ManageEmployeeController());
-  final editController = Get.put(EditEmployeeController());
+  // final editController = Get.put(EditEmployeeController());
+  final LoaderController loaderController = Get.put(LoaderController());
   final PositionModel? position = Get.arguments?['position'];
   final String? employeeId = Get.arguments?['employeeId'];
 
@@ -42,81 +43,99 @@ class ManageEmployeeScreenState extends State<ManageEmployeeScreen> {
   final GlobalKey<FormState> formKeyOther = GlobalKey<FormState>();
 
   Future<void> start() async {
-    print("ManageEmployeeScreenState start");
-    await controller.genericListController.getAllAgency();
-    await controller.genericListController.fetchEmployeeType();
-    await controller.genericListController.fetchBank();
-    await controller.genericListController.fetchHrProfile();
-    await controller.genericListController.fetchEmployeeType();
+    try {
+      // loaderController.show();
+      print("ManageEmployeeScreenState start");
+      await controller.genericListController.getAllAgency();
+      await controller.genericListController.fetchEmployeeType();
+      await controller.genericListController.fetchBank();
+      await controller.genericListController.fetchHrProfile();
+      await controller.genericListController.fetchEmployeeType();
 
-    controller.isLoadingSupervisor.value = true;
-    controller.supervisors.value = await controller.employeeDropdownService
-        .fetchEmployees(EmployeeTypeDatabaseConstants
-            .adviser); //! todo supervisor boss is not defined
-    controller.isLoadingSupervisor.value = false;
+      controller.isLoadingSupervisor.value = true;
+      controller.supervisors.value = await controller.employeeDropdownService
+          .fetchEmployees(EmployeeTypeDatabaseConstants
+              .adviser); //! todo supervisor boss is not defined
+      controller.isLoadingSupervisor.value = false;
 
-    controller.isLoadingPerformanceDepartments.value = true;
-    controller.performanceDepartments.value =
-        await controller.genericListController.fetchDepartments();
-    controller.isLoadingPerformanceDepartments.value = false;
+      controller.isLoadingPerformanceDepartments.value = true;
+      controller.performanceDepartments.value =
+          await controller.genericListController.fetchDepartments();
+      controller.isLoadingPerformanceDepartments.value = false;
 
-    await controller.genericListController.fetchLicense();
-    await controller.genericListController.fetchIdentificationType();
+      await controller.genericListController.fetchLicense();
+      await controller.genericListController.fetchIdentificationType();
 
-    controller.isLoadingDepartmentHome.value = true;
-    controller.departmentsHome.value =
-        await controller.genericListController.fetchDepartments();
-    controller.isLoadingDepartmentHome.value = false;
+      controller.isLoadingDepartmentHome.value = true;
+      controller.departmentsHome.value =
+          await controller.genericListController.fetchDepartments();
+      controller.isLoadingDepartmentHome.value = false;
 
-    controller.isLoadingResidenceDepartment.value = true;
-    controller.residenceDepartments.value =
-        await controller.genericListController.fetchDepartments();
-    controller.isLoadingResidenceDepartment.value = false;
+      controller.isLoadingResidenceDepartment.value = true;
+      controller.residenceDepartments.value =
+          await controller.genericListController.fetchDepartments();
+      controller.isLoadingResidenceDepartment.value = false;
 
-    await controller.genericListController.fetchCountries();
+      await controller.genericListController.fetchCountries();
 
-    controller.isLoadingMunicipalityOfBirth.value = true;
-    controller.municipalitiesOfBirth.value =
-        await controller.genericListController.fetchMunicipalities("null");
-    controller.isLoadingMunicipalityOfBirth.value = false;
+      controller.isLoadingMunicipalityOfBirth.value = true;
+      controller.municipalitiesOfBirth.value =
+          await controller.genericListController.fetchMunicipalities("null");
+      controller.isLoadingMunicipalityOfBirth.value = false;
 
-    await controller.genericListController.fetchProfessions();
+      await controller.genericListController.fetchProfessions();
 
-    await controller.genericListController.fetchMaritalStatus();
+      await controller.genericListController.fetchMaritalStatus();
 
-    await controller.genericListController.fetchEmployeeClassifications();
-    await controller.genericListController.fetchEductionLevel();
+      await controller.genericListController.fetchEmployeeClassifications();
+      await controller.genericListController.fetchEductionLevel();
 
-    // await controller.genericListController.fetchDepartments();
-    // await controller.genericListController.fetchZones();
-    // await controller.genericListController.fetchIdentificationType();
-    // await controller.genericListController.fetchMaritalStatus();
+      // await controller.genericListController.fetchDepartments();
+      // await controller.genericListController.fetchZones();
+      // await controller.genericListController.fetchIdentificationType();
+      // await controller.genericListController.fetchMaritalStatus();
 
-    // controller.contractTypeController.text =
-    //     position == null ? "TEMPORAL" : "PERMANENTE";
+      // controller.contractTypeController.text =
+      //     position == null ? "TEMPORAL" : "PERMANENTE";
 
-    // print("Position---: ${position?.id}");
-    print("ManageEmployeeScreenState START 🛸 END");
+      // print("Position---: ${position?.id}");
+      print("ManageEmployeeScreenState START 🛸 END");
+    } catch (e) {
+      print("objects: error in start: $e");
+    } finally {
+      // Hide the loader after all operations are done
+      controller.genericListController.setLoadings(false);
+      // loaderController.hide();
+    }
   }
 
   Future<void> editData() async {
-    await start().then((_) async {
-      await controller.setEmployeeValues(employeeId);
-    });
-    controller.genericListController.setLoadings(true);
-    setState(() {});
-    controller.genericListController.setLoadings(false);
+    try {
+      loaderController.show();
+      await start().then((_) async {
+        await controller.setEmployeeValues(employeeId);
+      });
+      controller.genericListController.setLoadings(true);
+      setState(() {});
+    } catch (e) {
+      print("error in editData: $e");
+    } finally {
+      controller.genericListController.setLoadings(false);
+      loaderController.hide();
+    }
   }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      start();
+      if (employeeId == null) {
+        start();
+      }
+      if (employeeId != null) {
+        editData();
+      }
     });
-    if (employeeId != null) {
-      editData();
-    }
   }
 
   // @mustCallSuper
@@ -133,7 +152,6 @@ class ManageEmployeeScreenState extends State<ManageEmployeeScreen> {
           key: formKey,
           child: Column(
             children: [
-
               if (position != null)
                 ContentCard(
                     child: Row(
@@ -194,7 +212,7 @@ class ManageEmployeeScreenState extends State<ManageEmployeeScreen> {
                   return;
                 }
 
-                if(employeeId != null) {
+                if (employeeId != null) {
                   controller.updateEmployee();
                 } else {
                   controller.createEmployee();

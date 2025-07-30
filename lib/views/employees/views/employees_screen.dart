@@ -7,6 +7,7 @@ import 'package:agents_app/shared/constants/routes.dart';
 import 'package:agents_app/views/employees/controller/employee_controller.dart';
 import 'package:agents_app/views/employees/widgets/action_btns.dart';
 import 'package:agents_app/views/employees/widgets/modal_assign_equipment.dart';
+import 'package:agents_app/views/employees/widgets/search_modal.dart';
 import 'package:agents_app/views/equipment/widgets/asigment_equipment_modal.dart';
 import 'package:agents_app/widgets/datatable/common_data_table.dart';
 // import 'package:agents_app/widgets/datatable/custom_data_table_widget_v2.dart';
@@ -78,19 +79,6 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   alignment: WrapAlignment.end,
                   children: [
-                    // ConstrainedBox(
-                    //   constraints: const BoxConstraints(
-                    //     minWidth: 300,
-                    //     maxWidth: 600,
-                    //   ),
-                    //   child: FilterBox(
-                    //     elements: [],
-                    //     handleFilteredData: (List<dynamic> data) {},
-                    //     isLoading: false,
-                    //     hint: "Buscar grupos",
-                    //     label: "Buscar grupo",
-                    //   ),
-                    // )
                     searchEmployeeButton(context, controller, () async {
                       await controller.searchEmployees();
                       isSearched = true;
@@ -125,8 +113,8 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                 columns: tableHeaders
                     .map((header) => DataColumn(label: Text(header)))
                     .toList(),
-                buildRows: (list) =>
-                    buildTableRowsFromList(controller.employees, context),
+                buildRows: (list) => buildTableRowsFromList(
+                    controller.employees, context, controller),
                 rowsPerPage: 100,
               ))
             ],
@@ -136,7 +124,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
 }
 
 List<DataRow> buildTableRowsFromList(
-    List<EmployeeModel> list, BuildContext context) {
+    List<EmployeeModel> list, BuildContext context, EmployeeController controller) {
   return List.generate(list.length, (index) {
     final element = list[index];
     final String fullName =
@@ -159,9 +147,11 @@ List<DataRow> buildTableRowsFromList(
                   context: context, employeeId: element.id!);
             },
             icon: const Icon(Icons.assignment),
-            tooltip: 'Assign Equipment',
+            tooltip: 'Equipo asignado',
           ),
-          downEmployeeButton(context, element),
+          changeStatusEmployeeButton(context, element, () async {
+            controller.changeEmployeeStatus();
+          }),
           editEmployeeButton(context, element),
         ])),
         cellDataTable(element.id ?? "", context: context),

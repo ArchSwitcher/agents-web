@@ -1,7 +1,10 @@
+import 'package:agents_app/controllers/generic_list_controller.dart';
 import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/models/employee/employee_model.dart';
+import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/views/employees/services/employee-service.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
@@ -17,25 +20,56 @@ class EmployeeController extends GetxController {
   final Rx<DropDownOption> employeeTemp = DropDownOption(id: '', label: '').obs;
 
   TextEditingController searchNameController = TextEditingController();
+  GenericListController genericListController = GenericListController();
+
+  String employeeIdChangeStatus = "h";
+  TextEditingController commentEmployeeController = TextEditingController();
+  Rx<DropDownOption> ddEmployeeStatus = DropDownOption(id: '', label: '').obs;
 
   Future<void> fetchEmployees() async {
-    loaderController.show();
-    final result = await employeeService.getAll(null);
-    print("object----%% $result ${result.length}");
-    result
-        .map((e) => {
-              print("object ${e.firstName}"),
-            })
-        .toList();
-    employees.value = result;
-    loaderController.hide();
+    try {
+      employees.clear();
+      await Future.delayed(const Duration(milliseconds: 100));
+      
+      loaderController.show();
+      final result = await employeeService.getAll(null);
+
+      employees.value = result;
+    } finally {
+      loaderController.hide();
+    }
+  }
+
+  Future<void> changeEmployeeStatus() async {
+    try {
+      loaderController.show();
+
+      final result = await employeeService.changeEmployeeStatus(
+          employeeIdChangeStatus,
+          commentEmployeeController.text,
+          ddEmployeeStatus.value.id);
+
+      if (result) {
+        ToastService.success(
+            title: "Cambio de estado",
+            subTitle:
+                "El estado del empleado ha sido actualizado correctamente.");
+      }
+      await fetchEmployees();
+    } catch (e) {
+      print("Error changing employee status: $e");
+    } finally {
+      loaderController.hide();
+    }
   }
 
   Future<void> searchEmployees() async {
     try {
       loaderController.show();
+      print(
+          "Searching employees with name: ${searchNameController.text} and status: ${ddEmployeeStatus.value.id}");
       final result = await employeeService.searchEmployee(
-          searchNameController.text);
+          searchNameController.text, ddEmployeeStatus.value.id);
       print("object----%% $result ${result.length}");
       employees.value = result;
     } catch (e) {
@@ -63,7 +97,8 @@ class EmployeeController extends GetxController {
       String positionId, String employeeId, String? oldEmployeeId) async {
     try {
       loaderController.show();
-      await employeeService.replaceTempEmployeePosition(positionId, employeeId, oldEmployeeId);
+      await employeeService.replaceTempEmployeePosition(
+          positionId, employeeId, oldEmployeeId);
       print("objects: Employee position replaced successfully");
     } catch (e) {
       print('Error replacing employee position: $e');

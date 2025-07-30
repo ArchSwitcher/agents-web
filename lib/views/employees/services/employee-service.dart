@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:agents_app/controllers/globals.dart';
 import 'package:agents_app/models/employee/employee_model.dart';
 import 'package:agents_app/services/base_service.dart';
 import 'package:agents_app/services/crud_service.dart';
 import 'package:agents_app/services/toast_service.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class EmployeeService extends BaseService
@@ -103,9 +105,22 @@ class EmployeeService extends BaseService
     }
   }
 
-  Future<List<EmployeeModel>> searchEmployee(String fullName) async {
+  Future<List<EmployeeModel>> searchEmployee(
+      String fullName, String workerStatus) async {
+    String query = "employee/search";
+    if (fullName.isNotEmpty) {
+      query += "?fullName=$fullName";
+    }
+    if (workerStatus.isNotEmpty) {
+      query += fullName.isNotEmpty
+          ? "&workerStatus=$workerStatus"
+          : "?workerStatus=$workerStatus";
+    }
+
+    print("Searching employees with query: $query");
+
     final response = await http.get(
-      Uri.parse('$baseUrl/employee/search?fullName=$fullName'),
+      Uri.parse('$baseUrl/$query'),
       headers: buildHeaders(),
     );
 
@@ -123,6 +138,31 @@ class EmployeeService extends BaseService
     } catch (e) {
       print("objects: error ---- $e");
       throw Exception('Error al cargar sucursales: $e');
+    }
+  }
+
+  Future<bool> changeEmployeeStatus(String employeeId, String comment, String newStatus) async {
+    final authController = Get.find<SessionController>();
+
+    final response = await http.put(
+      Uri.parse('$baseUrl/employee/change-employee-status'),
+      headers: buildHeaders(),
+      body: jsonEncode({
+        "id": employeeId,
+        "comment": comment,
+        "user": authController.getUserId,
+        "newStatus": newStatus,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      ToastService.error(
+        title: "Empleado",
+        subTitle: "Error al cambiar estado del empleado",
+      );
+      throw Exception('Error al cambiar estado del empleado');
     }
   }
 

@@ -23,14 +23,14 @@ class NavigationSidebar extends StatelessWidget {
     final SidebarController sidebarController = Get.find();
     final colorScheme = Theme.of(context).colorScheme;
 
-    print(
-        'userInfo: ${userInfo.username.value}, role: ${userInfo.role.value.name}');
+    // print(
+    //     'userInfo: ${userInfo.username.value}, role: ${userInfo.role.value.name}');
 
     // Cargar menú si está vacío
-    print("Verificando si el menú está vacío: ${menuController.menu.isEmpty}");
+    // print("Verificando si el menú está vacío: ${menuController.menu.isEmpty}");
     if (menuController.menu.isEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        print("Cargando menú desde el controlador");
+        // print("Cargando menú desde el controlador");
         menuController.loadMenu(userInfo.role.value.name);
       });
     }

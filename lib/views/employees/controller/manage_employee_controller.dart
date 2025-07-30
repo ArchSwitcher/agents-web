@@ -128,12 +128,12 @@ class ManageEmployeeController extends GetxController {
   }
 
     setEmployeeValues(String? employeeId) async{
-    print("Setting employee values for ID: $employeeId");
     if (employeeId == null || employeeId.isEmpty) {
      ToastService.error(title: "Empleado", subTitle: "El ID del empleado no puede estar vacío");
       return;
     }
     final employeeData = await employeeService.getById(employeeId);
+    print("Setting employee values for ID: ${employeeData.referenceName1}");
 
     this.employeeId = employeeId;
     personId = employeeData.personId;
@@ -234,6 +234,16 @@ class ManageEmployeeController extends GetxController {
     referencePhone3.text = employeeData.referencePhone3 ?? '';
     ethnicityController.text = employeeData.ethnicity ?? '';
 
+
+    nationalityController.value = employeeData.nationality ?? false;
+    
+    print("vacationStatus length: ${employeeData.vacationStatus?.length}");
+    if(employeeData.photo != null){
+      print("Setting employee photo: ${employeeData.photo}");
+      employeePhoto.updateLink(employeeData.photo!);
+    }
+    vacationStatus.value = employeeData.vacationStatus ?? <DocumentsEmployee>[];
+
     // NOT FILL ONLY USED IN CREATE
     // dateCourseController.text = employeeData.dateCourse?.toIso8601String() ?? '';
     // descriptionCourseController.text = employeeData.descriptionCourse ?? '';
@@ -252,7 +262,7 @@ class ManageEmployeeController extends GetxController {
     print("Setting employee values for ID: END");
   }
 
-  Future<dynamic> createImagesForEmployee() async{
+  Future<void> createImagesForEmployee() async{
     if (courseImageController.base64 != null) {
         final courseLink = await uploadFileService.uploadPhotoWebFromBase64(
             base64String: courseImageController.base64!,
@@ -260,7 +270,7 @@ class ManageEmployeeController extends GetxController {
             mimeType: 'image/png',
             folder: 'courses');
       print("Course link: $courseLink");
-        employeeValues.courses = [
+        courses.value = [
           DocumentsEmployee(
             date: RxString(dateCourseController.text),
             description: RxString(descriptionCourseController.text),
@@ -277,7 +287,7 @@ class ManageEmployeeController extends GetxController {
                 mimeType: 'image/png',
                 folder: 'shooting_practices');
         print("Shooting practice link: $shootingPracticeLink");
-        employeeValues.shootingPractices = [
+        shootingPractices.value = [
           DocumentsEmployee(
             date: RxString(dateShootingPracticeController.text),
             description: RxString(descriptionShootingPracticeController.text),
@@ -285,7 +295,7 @@ class ManageEmployeeController extends GetxController {
           )
         ];
 
-        employeeValues.shootingPractices = [
+        shootingPractices.value = [
           DocumentsEmployee(
             date: RxString(dateShootingPracticeController.text),
             description: RxString(descriptionShootingPracticeController.text),
@@ -302,7 +312,7 @@ class ManageEmployeeController extends GetxController {
                 mimeType: 'image/png',
                 folder: 'criminal_records');
         print("Criminal record link: $criminalRecordLink");
-        employeeValues.criminalRecords = [
+        criminalRecords.value = [
           DocumentsEmployee(
             date: RxString(dateCriminalRecordController.text),
             description: RxString(descriptionCriminalRecordController.text),
@@ -318,7 +328,7 @@ class ManageEmployeeController extends GetxController {
                 mimeType: 'image/png',
                 folder: 'police_records');
         print("Police record link: $policeRecordLink");
-        employeeValues.policeRecords = [
+        policeRecords.value = [
           DocumentsEmployee(
             date: RxString(datePoliceRecordsController.text),
             description: RxString(descriptionPoliceRecordsController.text),
@@ -335,7 +345,7 @@ class ManageEmployeeController extends GetxController {
                 mimeType: 'image/png',
                 folder: 'vacation_status');
         print("Vacation status link: $vacationStatusLink");
-        employeeValues.vacationStatus = [
+        vacationStatus.value = [
           DocumentsEmployee(
             date: RxString(dateVacationStatusController.text),
             description: RxString(descriptionVacationStatusController.text),
@@ -354,13 +364,6 @@ class ManageEmployeeController extends GetxController {
         employeePhoto.updateLink(photoLink!);
       }
 
-      return {
-        courses: employeeValues.courses,
-        shootingPractices: employeeValues.shootingPractices,
-        criminalRecords: employeeValues.criminalRecords,
-        policeRecords: employeeValues.policeRecords,
-        vacationStatus: employeeValues.vacationStatus,
-      };
   }
 
   Future<void> createEmployee() async {
@@ -368,6 +371,13 @@ class ManageEmployeeController extends GetxController {
       EmployeeModel employee = employeeValues;
       await createImagesForEmployee();
       print("employeeValues.photo: ${employeePhoto.link}");
+      employee.photo = employeePhoto.link;
+      employee.courses = courses;
+      employee.shootingPractices = shootingPractices;
+      employee.criminalRecords = criminalRecords;
+      employee.policeRecords = policeRecords;
+      employee.vacationStatus = vacationStatus;
+
       await employeeService.create(employee);
 
       ToastService.success(
@@ -382,12 +392,18 @@ class ManageEmployeeController extends GetxController {
 
   Future<void> updateEmployee() async {
     try {
-      // EmployeeModel employee = employeeValues;
+      EmployeeModel employee = employeeValues;
       await createImagesForEmployee();
-      
       print("employeeValues.photo: ${employeePhoto.link}");
-      print("vacatioNStatus: ${employeeValues.vacationStatus}");
-      // await employeeService.update(employeeId,employee);
+      employee.photo = employeePhoto.link;
+      employee.courses = courses;
+      employee.shootingPractices = shootingPractices;
+      employee.criminalRecords = criminalRecords;
+      employee.policeRecords = policeRecords;
+      employee.vacationStatus = vacationStatus;
+      
+      
+      await employeeService.update(employeeId,employee);
 
       ToastService.success(
           title: "Empleado", subTitle: "Empleado actualizado con éxito");

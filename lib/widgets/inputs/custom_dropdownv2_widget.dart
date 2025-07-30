@@ -51,12 +51,12 @@ class _CustomDropdownV2WidgetState extends State<CustomDropdownV2Widget> {
   @override
   void didUpdateWidget(covariant CustomDropdownV2Widget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    print("didUpdateWidget called ${widget.initialValue?.label}");
+    // print("didUpdateWidget called ${widget.initialValue?.label}");
     final matchingItem = widget.items.firstWhere(
       (item) => item.id == widget.textEditingController.text,
       orElse: () => DropDownOption(id: "", label: ""),
     );
-    print("Matching item: ${widget.labelText} ${matchingItem.label} ------- ${_selectedValue?.id != matchingItem.id} ${_selectedValue?.id} ${matchingItem.id}");
+    // print("Matching item: ${widget.labelText} ${matchingItem.label} ------- ${_selectedValue?.id != matchingItem.id} ${_selectedValue?.id} ${matchingItem.id}");
 
     if ((_selectedValue?.id != matchingItem.id) && matchingItem.id.isNotEmpty) {
       setState(() {
