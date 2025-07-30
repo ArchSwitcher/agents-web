@@ -2,6 +2,7 @@ import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/models/common/dropdown_option_model.dart';
 import 'package:agents_app/models/employee/employee_model.dart';
 import 'package:agents_app/views/employees/services/employee-service.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class EmployeeController extends GetxController {
@@ -15,6 +16,8 @@ class EmployeeController extends GetxController {
 
   final Rx<DropDownOption> employeeTemp = DropDownOption(id: '', label: '').obs;
 
+  TextEditingController searchNameController = TextEditingController();
+
   Future<void> fetchEmployees() async {
     loaderController.show();
     final result = await employeeService.getAll(null);
@@ -26,6 +29,20 @@ class EmployeeController extends GetxController {
         .toList();
     employees.value = result;
     loaderController.hide();
+  }
+
+  Future<void> searchEmployees() async {
+    try {
+      loaderController.show();
+      final result = await employeeService.searchEmployee(
+          searchNameController.text);
+      print("object----%% $result ${result.length}");
+      employees.value = result;
+    } catch (e) {
+      print("Error searching employees: $e");
+    } finally {
+      loaderController.hide();
+    }
   }
 
   Future<void> fetchInactiveEmployees() async {

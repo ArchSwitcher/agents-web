@@ -42,12 +42,11 @@ class EmployeeModel {
   String positionSlot;
   String contractType; //?
   String contractTermType; //?
-  DateTime contractTime; //?
+  DateTime? contractTime; //?
   String? entryReason; //?
 //   String workCountry;
   String accountNumber;
 //   bool isPermanent;
-  SimpleEntity? employeeType; //?
   String? cvh; //?
   String cityHome; //?
   int? departmentHomeId; //? -----
@@ -105,9 +104,9 @@ class EmployeeModel {
   String? field3;
   String? field4;
 
-  String? createdAt;
-  String? updatedAt;
-  String? deletedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  DateTime? deletedAt;
 //   String? shootingPracticeDate;
 
   String? reasonForWithdrawal;
@@ -128,7 +127,7 @@ class EmployeeModel {
   int? numberOfChildren;
   String? comment;
   bool? isForeigner;
-  DateTime? dpiIssueDate;
+  // DateTime? dpiIssueDate;
   String? taxIdNumber;
   String? referenceName1;
   String? referenceName2;
@@ -177,8 +176,10 @@ class EmployeeModel {
   SimpleEntity? birthCountry;
   SimpleEntity? profession;
   SimpleEntity? residenceDepartment;
-  EmployeeModel? supervisorWorker;
-  int? performanceMunicipality;
+  SimpleEntity? employeeClassification; //? -----
+  SimpleEntity? supervisorWorker;
+  SimpleEntity? performanceMunicipality;
+  SimpleEntity? employeeType; //? -----
   bool status = true;
   // SimpleEntity? employeeClassification
 
@@ -225,9 +226,11 @@ class EmployeeModel {
     //   required this.isPermanent,
     //   required this.shootingPracticeDate,
     this.status = true,
+    this.employeeClassification,
     this.residenceDepartmentId,
     this.residenceDepartment,
     required this.cityHome,
+    this.performanceMunicipalityId,
     this.semiannualPolygraphResult,
     this.dateOfLastPolygraphTest,
     this.residenceMunicipalityId,
@@ -236,6 +239,7 @@ class EmployeeModel {
     this.birthCountryId,
     this.birthCountry,
     this.birthMunicipalityId,
+    this.birthMunicipality,
     this.residenceMunicipality,
     this.departmentHomeId,
     this.municipalityHomeId,
@@ -332,7 +336,7 @@ class EmployeeModel {
     this.numberOfChildren,
     this.comment,
     this.isForeigner,
-    this.dpiIssueDate,
+    // this.dpiIssueDate,
     this.taxIdNumber,
     this.referenceName1,
     this.referenceName2,
@@ -353,40 +357,59 @@ class EmployeeModel {
 
     return EmployeeModel(
       id: json["Id"]?.toString(),
+      entryReason: "${json["Entry_reason"] ?? ''}",
       status: json["Status"] == 1,
-      semiannualPolygraphResult: json["Semiannual_polygraph_result"],
       cvh: json["previous_cvh"],
       cityHome: json["City_home"] ?? '',
+      employeeTypeId: json["EMPLOYEE_TYPE_Id"],
       dateOfLastPolygraphTest: json["Date_of_last_polygraph_test"] != null
           ? DateTime.tryParse(json["Date_of_last_polygraph_test"])
           : null,
-      identificationIssueDate: json["Identification_issue_date"] != null
-          ? DateTime.tryParse(json["Identification_issue_date"]) ??
-              DateTime(2025)
-          : DateTime(2025),
-      identificationEndDate: json["Identification_end_date"] != null
-          ? DateTime.tryParse(json["Identification_end_date"]) ?? DateTime(2025)
-          : DateTime(2025),
-      employeeTypeId: json["EMPLOYEE_TYPE_Id"],
+      identificationIssueDate: json["Dpi_issue_date"] != null
+          ? DateTime.tryParse(json["Dpi_issue_date"])
+          : null,
+      identificationEndDate: json["Dpi_end_date"] != null
+          ? DateTime.tryParse(json["Dpi_end_date"])
+          : null,
       contractTime: json["Contract_time"] != null
-          ? DateTime.tryParse(json["Contract_time"]) ?? DateTime(2025)
-          : DateTime(2025),
+          ? DateTime.tryParse(json["Contract_time"])
+          : null,
       birthDate: json[person["Date_of_birth"]] != null
           ? DateTime.tryParse(json[person["Date_of_birth"]])
-          : DateTime(2025),
+          : null,
       hireDate: json["hire_date"] != null
-          ? DateTime.tryParse(json["hire_date"]) ?? DateTime(2025)
-          : DateTime(2025), //json["hire_date"]
-      terminationDate: json["termination_date"] != null 
-          ? DateTime.tryParse(json["termination_date"]) ?? DateTime(2025)
-          : null, // Este es String, este no lo toques 
+          ? DateTime.tryParse(json["hire_date"])
+          : null,
+      terminationDate: json["termination_date"] != null
+          ? DateTime.tryParse(json["termination_date"])
+          : null,
+
+      currentSalaryDate: json["Current_salary_date"] != null
+          ? DateTime.tryParse(json["Current_salary_date"])
+          : null,
+      previousSalaryDate: json["Previous_salary_date"] != null
+          ? DateTime.tryParse(json["Previous_salary_date"])
+          : null,
+      // dpiIssueDate: json["Dpi_issue_date"] != null
+      //     ? DateTime.tryParse(json["Dpi_issue_date"])
+      //     : null,
+      createdAt: json["created_at"] != null
+          ? DateTime.tryParse(json["created_at"])
+          : null,
+      updatedAt: json["updated_at"] != null
+          ? DateTime.tryParse(json["updated_at"])
+          : null,
+      deletedAt: json["deleted_at"] != null
+          ? DateTime.tryParse(json["deleted_at"])
+          : null,
+
       firstName: person["First_name"],
       lastName: person["Last_name"],
       middleName: person["Middle_name"],
-      secondLastName: person["Second_last_ame"],
+      secondLastName: person["Second_last_name"],
       marriedLastName: person["Married_last_name"],
       fullName: json["Full_name"],
-      gender: person["gender"],
+      gender: json["Gender"],
       nationality: person["Nationality"] == 1 || person["Nationality"] == true,
       language: person["Language"] ?? "",
       ethnicity: person["Ethnicity"],
@@ -400,13 +423,11 @@ class EmployeeModel {
       //   accessUser: json["Access_user"] ?? '',
       //   availableForBilling: json["Available_for_billing"] == 1 || json["Available_for_billing"] == true,
       //   approvedByPayments: json["Approved_by_payments"] == 1 || json["Approved_by_payments"] == true,
-      mtPosition: json["Mt_position"] ?? '',
+      mtPosition: json["position_mt"] ?? '',
       //   birthDepartment: json["Birth_department"] ?? '',
       workSchedule: json["Work_schedule"] ?? '',
       //   baseSalary: json["Base_salary"] == null ? 0.0 : double.tryParse(json["Base_salary"].toString()) ?? 0.0,
-      decreeBonus: json["Decree_bonus"] == null
-          ? 0.0
-          : double.tryParse(json["Decree_bonus"].toString()) ?? 0.0,
+
       payroll: json["Payroll"] ?? '',
       positionSlot: json["Position_slot"]?.toString() ?? '',
       contractType: json["Contract_type"] ?? '', //! ------------------------
@@ -417,11 +438,11 @@ class EmployeeModel {
       subRegion: json["Sub_region"],
 
       terminationReason: json["termination_reason"],
-      isOperationalForce: json["is_operational_force"] == true,
+      // isOperationalForce: json["is_operational_force"] == true,
       isSent: json["is_sent"] == 1 || json["is_sent"] == true,
       isScheduled: json["is_scheduled"] == 1 || json["is_scheduled"] == true,
       jobPositionName: json["job_position_name"],
-      address: json["address"] ?? '',
+      address: json["Address_home"] ?? '',
       // //   phone: json["phone"] ?? '',
       mobile: json["mobile"] ?? '',
       email: json["email"] ?? '',
@@ -429,91 +450,127 @@ class EmployeeModel {
       emergencyPhone: json["emergency_contact_phone"] ?? '',
       //   emergencyMobile: json["emergency_contact_mobile"] ?? '',
       //   referredBy: json["referred_by"] ?? '',
-      graduationScore: (json["graduation_score"] as num?)?.toDouble() ?? 0.0,
       field1: json["field_1"] ?? '',
       field2: json["field_2"] ?? '',
       field3: json["field_3"] ?? '',
       field4: json["field_4"] ?? '',
-      createdAt: json["created_at"] ?? '',
-      updatedAt: json["updated_at"] ?? '',
-      deletedAt: json["deleted_at"] ?? '',
+
       isActive: json["is_active"] == true,
       //   shootingPracticeDate: json["shooting_practice_date"],
 
       // nuevos campos
-      reasonForWithdrawal: json["reasonForWithdrawal"],
+      reasonForWithdrawal: json["Reason_for_withdrawal"],
       //   costCenterId: json["costCenterId"],
-      performanceDepartment: json["performanceDepartment"],
-      companyEmail: json["companyEmail"],
-      currentSalaryDate: json["currentSalaryDate"],
-      previousSalaryDate: json["previousSalaryDate"],
-      paymentMethod: json["paymentMethod"],
-      performanceMunicipality: json["performanceMunicipality"],
-      payrollOccupations2989: json["payrollOccupations2989"],
-      positionOrDesignation: json["positionOrDesignation"],
-      digesspPosition: json["digesspPosition"],
-      mintrabPosition: json["mintrabPosition"],
-      mintrabPerformanceRegion: json["mintrabPerformanceRegion"],
-      mintrabBirthRegion: json["mintrabBirthRegion"],
-      currentSalary: json["currentSalary"],
-      disabilityType2989Report: json["disabilityType2989Report"],
-      supervisorWorker: json["supervisorWorker"] ?? null,
-      numberOfChildren: json["numberOfChildren"],
-      comment: json["comment"],
-      isForeigner: json["isForeigner"],
-      dpiIssueDate: json["dpiIssueDate"],
-      taxIdNumber: json["taxIdNumber"],
-      referenceName1: json["referenceName1"],
-      referenceName2: json["referenceName2"],
-      referenceName3: json["referenceName3"],
-      referencePhone1: json["referencePhone1"],
-      referencePhone2: json["referencePhone2"],
-      referencePhone3: json["referencePhone3"],
+      companyEmail: json["Company_email"],
+
+      paymentMethod: json["Payment_method"],
+      // performanceMunicipality: json["performanceMunicipality"],
+      payrollOccupations2989: json["Payroll_occupations_29_89"],
+      positionOrDesignation: json["Position_designation"],
+      digesspPosition: json["Digessp_position"],
+      // mintrabPosition: json["mintrabPosition"], //!
+      mintrabPerformanceRegion: json["Mintrab_performance_region"],
+      mintrabBirthRegion: json["Mintrab_birth_region"],
+
+      disabilityType2989Report: json["Disability_type_29_89_report"],
+      numberOfChildren: json["Number_of_children"],
+      comment: json["Comment"],
+      isForeigner: json["Is_foreigner"],
+      taxIdNumber: json["Tax_id_number"],
+      referenceName1: json["Reference_name_1"],
+      referenceName2: json["Reference_name_2"],
+      referenceName3: json["Reference_name_3"],
+      referencePhone1: json["Reference_phone_1"],
+      referencePhone2: json["Reference_phone_2"],
+      referencePhone3: json["Reference_phone_3"],
       bankAccountType: json["bank_account_type"], //? --- dropdown MOCK
       municipalityHomeId: json["MUNICIPALITY_HOME_Id"], //? -----
+      photo: person["Photo_employee"],
+
+      //doubles
+     
+
+      decreeBonus: json["Decree_bonus"] == null
+          ? 0.0
+          : double.tryParse(json["Decree_bonus"].toString()) ?? 0.0,
+
+      graduationScore: json["graduation_score"] == null
+          ? 0.0
+          : double.tryParse(json["graduation_score"].toString()) ?? 0.0,
+
+      currentSalary: json["Current_salary"] == null ?
+          0.0
+          : double.tryParse(json["Current_salary"].toString()) ?? 0.0,
+          
+      semiannualPolygraphResult: json["Semiannual_polygraph_result"] == null
+          ? 0.0
+          : double.tryParse(json["Semiannual_polygraph_result"].toString()) ?? 0.0,
 
       // Relaciones tipo SimpleEntity
+      birthMunicipality: person["BIRTH_MUNICIPALITY"] != null
+          ? SimpleEntity.fromJson(person["BIRTH_MUNICIPALITY"])
+          : null,
+      profession: person["PROFESSION"] != null
+          ? SimpleEntity.fromJson(person["PROFESSION"])
+          : null,
+      residenceMunicipality: person["RESIDENCE_MUNICIPALITY"] !=
+              null //? --------------------------
+          ? SimpleEntity.fromJson(person["RESIDENCE_MUNICIPALITY"])
+          : null,
+      municipalityHome:
+          person["MUNICIPALITY_HOME"] != null //? --------------------------
+              ? SimpleEntity.fromJson(person["MUNICIPALITY_HOME"])
+              : null,
+      departmentHome:
+          person["DEPARMENT_HOME"] != null //? --------------------------
+              ? SimpleEntity.fromJson(person["DEPARMENT_HOME"])
+              : null,
+      educationLevel: person["EDUCATION_LEVEL"] != null
+          ? SimpleEntity.fromJson(person["EDUCATION_LEVEL"])
+          : null,
+      identificationType: person["IDENTIFICATION_TYPE"] != null
+          ? SimpleEntity.fromJson(person["IDENTIFICATION_TYPE"])
+          : null,
+      licenseType: person["LICENSE_TYPE"] != null
+          ? SimpleEntity.fromJson(person["LICENSE_TYPE"])
+          : null,
+      employeeType: json["EMPLOYEE_TYPE"] != null
+          ? SimpleEntity.fromJson(json["EMPLOYEE_TYPE"])
+          : null,
+      performanceMunicipality: json["PERFORMANCE_MUNICIPALITY"] != null
+          ? SimpleEntity.fromJson(json["PERFORMANCE_MUNICIPALITY"])
+          : null,
+      performanceDepartment: json["PERFORMANCE_DEPARTMENT"] != null
+          ? SimpleEntity.fromJson(json["PERFORMANCE_DEPARTMENT"])
+          : null,
+      supervisorWorker: json["SUPERVISOR_WORKER"] != null
+          ? SimpleEntity.fromJson({
+              "id": json["SUPERVISOR_WORKER"]["Id"].toString(),
+              "name":
+                  "${json["SUPERVISOR_WORKER"]["PERSON"]["First_name"]} ${json["SUPERVISOR_WORKER"]["PERSON"]["Last_name"]}"
+            })
+          : null,
+
+      employeeClassification: json["EMPLOYEE_CLASSIFICATION"] != null
+          ? SimpleEntity.fromJson(json["EMPLOYEE_CLASSIFICATION"])
+          : null,
       residenceDepartment: json["RESIDENCE_DEPARTMENT"] != null
           ? SimpleEntity.fromJson(json["RESIDENCE_DEPARTMENT"])
-          : null,
-      profession: json["PROFESSION"] != null
-          ? SimpleEntity.fromJson(json["PROFESSION"])
           : null,
       birthCountry: json["BIRTH_COUNTRY"] != null //? --------------------------
           ? SimpleEntity.fromJson(json["BIRTH_COUNTRY"])
           : null,
-      residenceMunicipality:
-          json["RESIDENCE_MUNICIPALITY"] != null //? --------------------------
-              ? SimpleEntity.fromJson(json["RESIDENCE_MUNICIPALITY"])
-              : null,
-      municipalityHome:
-          json["MUNICIPALITY_HOME"] != null //? --------------------------
-              ? SimpleEntity.fromJson(json["MUNICIPALITY_HOME"])
-              : null,
       agency:
           json["AGENCY"] != null ? SimpleEntity.fromJson(json["AGENCY"]) : null,
       bank: json["BANK"] != null ? SimpleEntity.fromJson(json["BANK"]) : null,
-      departmentHome:
-          json["DEPARTMENT_HOME"] != null //? --------------------------
-              ? SimpleEntity.fromJson(json["DEPARTMENT_HOME"])
-              : null,
-      bloodType: json["BLOOD_TYPE"] != null
-          ? SimpleEntity.fromJson(json["BLOOD_TYPE"])
-          : null,
-      educationLevel: json["EDUCATION_LEVEL"] != null
-          ? SimpleEntity.fromJson(json["EDUCATION_LEVEL"])
-          : null,
+      // bloodType: json["BLOOD_TYPE"] != null
+      //     ? SimpleEntity.fromJson(json["BLOOD_TYPE"])
+      //     : null,
       emergencyRelationship: json["EMERGENCY_RELATIONSHIP"] != null
           ? SimpleEntity.fromJson(json["EMERGENCY_RELATIONSHIP"])
           : null,
       hrProfile: json["HR_PROFILE"] != null
           ? SimpleEntity.fromJson(json["HR_PROFILE"])
-          : null,
-      identificationType: json["IDENTIFICATION_TYPE"] != null
-          ? SimpleEntity.fromJson(json["IDENTIFICATION_TYPE"])
-          : null,
-      licenseType: json["LICENSE_TYPE"] != null
-          ? SimpleEntity.fromJson(json["LICENSE_TYPE"])
           : null,
       maritalStatus: json["MARITAL_STATUS"] != null
           ? SimpleEntity.fromJson(json["MARITAL_STATUS"])
@@ -532,6 +589,7 @@ class EmployeeModel {
           : null,
       region:
           json["REGION"] != null ? SimpleEntity.fromJson(json["REGION"]) : null,
+      costCenter: json["Cost_center"],
 
       //   costCenter: json["COST_CENTER"] != null
       //       ? SimpleEntity.fromJson(json["COST_CENTER"])
@@ -540,7 +598,7 @@ class EmployeeModel {
       // Relaciones simples por ID
       agencyId: json["AGENCY_Id"],
       bankId: json["BANK_Id"],
-      bloodTypeId: json["BLOOD_TYPE_Id"],
+      // bloodTypeId: json["BLOOD_TYPE_Id"],
       educationLevelId: json["EDUCATION_LEVEL_Id"],
       emergencyRelationshipId: json["EMERGENCY_RELATIONSHIP_Id"],
       hrProfileId: json["HR_PROFILE_Id"],
@@ -552,24 +610,25 @@ class EmployeeModel {
       workerStatusId: json["WORKER_STATUS_Id"],
       frequencyId: json["FREQUENCY_Id"],
       regionId: json["REGION_Id"],
-      personId: json["PERSON_Id"],
+      personId: person["Id"],
       userId: json["USER_Id"],
       createdById: json["Created_by_id"],
       modifiedById: json["Modified_by_id"],
       schoolLevelId: json["School_level_id"],
-      academicTitleId: json["Academic_title_id"],
+      // academicTitleId: json["Academic_title_id"],
       testWorkerId: json["Test_worker_id"],
       previousCompany: json["Previous_company_id"],
       jobPositionId: json["Job_position_id"],
 
       // POSITION_EMPLOYEEs
+
       position: (json["POSITION_EMPLOYEEs"] != null &&
               json["POSITION_EMPLOYEEs"] is List &&
               json["POSITION_EMPLOYEEs"].isNotEmpty)
           ? PositionEmployee.fromJson(json["POSITION_EMPLOYEEs"][0])
           : null,
       // EMPLOYEE
-      photo: person["photoEmployee"],
+
       courses: json["COURSES"] != null
           ? json["COURSES"] as List<DocumentsEmployee>
           : null,
@@ -592,9 +651,9 @@ class EmployeeModel {
         // "Status": req.body?.person.status,
         "id": id,
         "position": position?.toJson(),
-
+        "personId": personId,
         "dateOfBirth": birthDate?.toIso8601String(),
-        "dpiIssueDate": dpiIssueDate?.toIso8601String(),
+        "dpiIssueDate": identificationIssueDate?.toIso8601String(),
         "dpiEndDate": identificationEndDate?.toIso8601String(),
         "contractTime": contractTime?.toIso8601String(),
         "hireDate": hireDate?.toIso8601String(),
@@ -635,7 +694,7 @@ class EmployeeModel {
         // "blueCard": blueCard,
         "numberOfChildren": numberOfChildren,
         "comment": comment,
-        "countryOfBirthId": birthCountry,
+        "countryOfBirthId": birthCountryId,
         "birthMunicipalityId": birthMunicipalityId,
         "residenceMunicipalityId": residenceMunicipalityId,
         "licenseTypeId": licenseTypeId,
@@ -645,12 +704,11 @@ class EmployeeModel {
         "addressHome": address,
         "municipalityHomeId": municipalityHomeId,
         "professionId": professionId,
-        "cvh": cvh,
+        "previous_cvh": cvh,
         "semiannualPolygraphResult": semiannualPolygraphResult, // !!!!!!!!!!!
-
+        "positionDesignation": positionOrDesignation,
         "employeeTypeId": employeeTypeId,
         "status": status,
-        "personId": personId,
         "socialSecurityCode": socialSecurityCode,
         "lifeInsurance": lifeInsurance,
         "decreeBonus": decreeBonus,

@@ -12,7 +12,7 @@ void showVacationStatusModal({
   String description = "",
   String title = "Vacaciones del empleado",
   bool isEdit = true,
-  required EmployeeAgentController controller,
+  required ManageEmployeeController controller,
 }) {
   showDialog(
     context: context,
@@ -32,7 +32,7 @@ void showVacationStatusModal({
 }
 
 class ModalVacationStatus extends StatefulWidget {
-  final EmployeeAgentController controller;
+  final ManageEmployeeController controller;
 
   const ModalVacationStatus({Key? key, required this.controller}) : super(key: key);
 
@@ -81,7 +81,7 @@ class _ModalVacationStatusState extends State<ModalVacationStatus> {
           widget.controller.vacationStatus.isEmpty
               ? const Text("No hay cursos agregados")
               : Column(children: [
-                const Text("Cursos Agregados:"),
+                const Text("Estado de vacaciones:"),
                 ListView.builder(
                   shrinkWrap: true,
                   itemCount: widget.controller.vacationStatus.length,

@@ -19,7 +19,7 @@ class SimpleEntity {
 
     String id = json['id']?.toString() ?? json['Id']?.toString() ?? '';
     String name = json['name']?.toString() ?? json['Name']?.toString() ?? '';
-
+    // print("SimpleEntity.fromJson: id: $id, name: $name");
     return SimpleEntity(
       id: id,
       name: name,

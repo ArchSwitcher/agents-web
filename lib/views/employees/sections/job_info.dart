@@ -7,10 +7,11 @@ import 'package:agents_app/widgets/inputs/custom_dropdownv2_widget.dart';
 import 'package:agents_app/widgets/inputs/custom_input_widget.dart';
 import 'package:agents_app/widgets/inputs/date_picker.dart';
 import 'package:agents_app/widgets/inputs/dropdown_widget.dart';
+import 'package:agents_app/widgets/inputs/reactive_text_dropdown.dart';
 import 'package:flutter/material.dart';
 
 Widget jobInformation(
-    BuildContext context, EmployeeAgentController controller, bool enabled) {
+    BuildContext context, ManageEmployeeController controller, bool enabled) {
   return ContentCard(
     child: LayoutBuilder(builder: (context, constraints) {
       final isWideScreen = constraints.maxWidth > 750;
@@ -25,6 +26,7 @@ Widget jobInformation(
         alignment: WrapAlignment.spaceBetween,
         children: [
           LoadingAutocompleteDropdown(
+            // key: ValueKey(controller.agencyController.value.id),
             enabled: enabled,
             initialValue: controller.agencyController.value,
             prefixIcon: Icons.business,
@@ -49,9 +51,32 @@ Widget jobInformation(
             },
           ),
 
+          // ReactiveAutocompleteDropdown(
+          //   enabled: enabled,
+          //   selectedValue: controller.agencyController, // Rx<DropDownOption>
+          //   prefixIcon: Icons.business,
+          //   validator: (value) =>
+          //       notEmptyDropdownOption(value, "Agencia del Ebano Requerida"),
+          //   isLoading: controller.genericListController.isLoadingAgency,
+          //   listItems: controller.genericListController.agencies,
+          //   onSelected: (DropDownOption option) {
+          //     controller.agencyController.value = option;
+          //   },
+          //   label: "Agencia el Ebano",
+          //   hintText: "Agencia el Ebano",
+          //   loadingText: "Cargando agencias...",
+          //   width: width,
+          //   onTextChange: (text) async {
+          //     return Future.value(controller.genericListController.agencies
+          //         .where((option) =>
+          //             option.label.toLowerCase().contains(text.toLowerCase()))
+          //         .toList());
+          //   },
+          // ),
+
           LoadingAutocompleteDropdown(
             enabled: enabled,
-            initialValue: controller.agencyController.value,
+            initialValue: controller.employeeTypeController.value,
             prefixIcon: Icons.work,
             validator: (value) =>
                 notEmptyDropdownOption(value, "Cargo Requerido"),
@@ -62,7 +87,7 @@ Widget jobInformation(
             },
             label: "Cargo del Empleado",
             hintText: "Puesto de trabajo",
-            resetValue: controller.agencyController,
+            resetValue: controller.employeeTypeController,
             width: width,
             onTextChange: (text) async {
               List<DropDownOption> filteredOptions = controller

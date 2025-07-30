@@ -53,30 +53,18 @@ class _AutocompleteDropdownWidgetState
       // print("objects ============ ${option.id} ${widget.initialValue?.id}");
       return option.id.toString() == widget.initialValue!.id.toString();
     }, orElse: () => DropDownOption(id: '', label: ''));
-
-    // print(
-    //     "initial value AutocompleteDropdownWidget:------  ${widget.initialValue?.id} ${widget.initialValue?.label}");
-    // print(
-    //     "selectedOption AutocompleteDropdownWidget:------  ${optionSelected.id} ${optionSelected.label}");
-    selectedOption = optionSelected;
-    textEditingController.text = selectedOption!.label;
-
-    setState(() {});
+    setState(() {
+      selectedOption = optionSelected;
+      textEditingController.text = selectedOption!.label;
+    });
   }
 
-  // @override
-  // void initState() {
-  //   print(
-  //       "initial value AutocompleteDropdownWidget 🛸:------  ${widget.initialValue?.id} ${widget.initialValue?.label}");
-  //   if (widget.initialValue != null) {
-  //     updateSelectedOption();
-  //   }
-  //   super.initState();
-  // }
   @override
   void initState() {
     textEditingController = widget.textController ?? TextEditingController();
     if (widget.initialValue != null) {
+      // print(
+      //     "initial value ${widget.label} AutocompleteDropdownWidget 🛸:------  ${widget.initialValue?.id} ${widget.initialValue?.label}");
       updateSelectedOption();
       textEditingController.text = widget.initialValue!.label;
     }
@@ -88,8 +76,8 @@ class _AutocompleteDropdownWidgetState
     super.didUpdateWidget(oldWidget);
     if (widget.initialValue != oldWidget.initialValue &&
         widget.listItems.isNotEmpty) {
-      print(
-          "options ${widget.listItems.length} ${widget.initialValue?.id} ${widget.initialValue?.label}");
+      // print(
+      //     "options ${widget.listItems.length} ${widget.initialValue?.id} ${widget.initialValue?.label}");
       updateSelectedOption();
       textEditingController.text = widget.initialValue?.label ?? '';
 
@@ -109,7 +97,8 @@ class _AutocompleteDropdownWidgetState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Autocomplete<DropDownOption>(
-              initialValue: TextEditingValue(text: widget.initialValue?.label ?? ""),
+              initialValue: TextEditingValue(
+                  text: widget.initialValue?.label ?? selectedOption?.label ?? ''),
               optionsBuilder: (TextEditingValue textEditingValue) {
                 if (fieldState.value == null && selectedOption != null) {
                   fieldState.didChange(selectedOption);
@@ -136,7 +125,7 @@ class _AutocompleteDropdownWidgetState
                   onFocusChangeInput: widget.onFocusChange,
                   focusNode: focusNode,
                   onFieldSubmitted: (String value) => onFieldSubmitted(),
-                   controller: textEditingController,
+                  controller: textEditingController,
                   label: widget.label,
                   hintText: widget.hintText,
                   prefixIcon: widget.prefixIcon,

@@ -45,7 +45,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
     null,
     null
   ];
-
+  bool isSearched = false;
   start() async {
     await controller.fetchEmployees();
     setState(() {});
@@ -68,7 +68,6 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
         userRole: 'admin',
         content: SingleChildScrollView(
           child: Column(
-            
             children: [
               // add new group
               ContentCard(
@@ -92,6 +91,24 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
                     //     label: "Buscar grupo",
                     //   ),
                     // )
+                    searchEmployeeButton(context, controller, () async {
+                      await controller.searchEmployees();
+                      isSearched = true;
+                      setState(() {});
+                    }),
+                    if (isSearched)
+                      SizedBox(
+                        width: 220,
+                        child: ElevatedButton.icon(
+                            onPressed: () async {
+                              controller.searchNameController.clear();
+                              await controller.fetchEmployees();
+                              isSearched = false;
+                              setState(() {});
+                            },
+                            label: const Text("Limpiar búsqueda"),
+                            icon: const Icon(Icons.clear)),
+                      ),
                     SizedBox(
                       width: 180,
                       child: addEmployeeButton(context),
@@ -123,7 +140,7 @@ List<DataRow> buildTableRowsFromList(
   return List.generate(list.length, (index) {
     final element = list[index];
     final String fullName =
-        '${element.firstName ?? ''} ${element.middleName ?? ''} ${element.lastName ?? ''} ${element.lastName ?? ''}'
+        '${element.firstName ?? ''} ${element.middleName ?? ''} ${element.lastName ?? ''} ${element.secondLastName ?? ''}'
             .trim();
     return DataRow(
       cells: [

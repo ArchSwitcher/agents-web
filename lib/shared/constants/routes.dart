@@ -17,6 +17,7 @@ static const managePosition =  "/manage-position";
 static const manageAgent =  "/manage-agent";
 static const employees =  "/employees";
 static const manageEmployee =  "/manage-employee";
+static const agentRecords =  "/agent-record";
 
 static const myPresence =  "/presence";
 

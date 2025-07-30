@@ -10,7 +10,7 @@ import 'package:agents_app/widgets/inputs/dropdown_widget.dart';
 import 'package:flutter/material.dart';
 
 Widget rrhhProfile(
-    BuildContext context, EmployeeAgentController controller, bool enabled) {
+    BuildContext context, ManageEmployeeController controller, bool enabled) {
   return ContentCard(
     child: LayoutBuilder(builder: (context, constraints) {
       final isWideScreen = constraints.maxWidth > 750;
@@ -51,7 +51,7 @@ Widget rrhhProfile(
           // 11111111111111111111111111 --------------------------------------
           LoadingAutocompleteDropdown(
             enabled: enabled,
-            initialValue: controller.classificationLevelController.value,
+            initialValue: controller.classificationController.value,
             prefixIcon: Icons.work,
             validator: (value) => notEmptyDropdownOption(
                 value, "Clasificación del puesto requerida"),

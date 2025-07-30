@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 List<DataRow> buildTablePositionRows(PositionController controller,
-    BuildContext context, EmployeeAgentController? employeeController) {
+    BuildContext context, ManageEmployeeController? employeeController) {
   LoaderController loaderController =
       Get.put<LoaderController>(LoaderController());
 
@@ -48,19 +48,20 @@ List<DataRow> buildTablePositionRows(PositionController controller,
                     loaderController.hide();
                   },
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.work),
-                  tooltip: "Asignar proseña a empleado",
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-               
-                IconButton(
-                  onPressed: () {},
-                  tooltip: "Quitar proseña a empleado",
-                  icon: const Icon(Icons.no_accounts_rounded),
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+                if (employeeController.selectedPosition.text == "1")
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.work),
+                    tooltip: "Asignar proseña a empleado",
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                if (employeeController.selectedPosition.text == "1")
+                  IconButton(
+                    onPressed: () {},
+                    tooltip: "Quitar proseña a empleado",
+                    icon: const Icon(Icons.no_accounts_rounded),
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
               ],
             )),
           cellDataTable(element.id, context: context),

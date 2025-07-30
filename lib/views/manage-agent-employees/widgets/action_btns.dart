@@ -5,7 +5,7 @@ import 'package:agents_app/widgets/buttons/custom_button.dart';
 import 'package:flutter/material.dart';
 
 Widget addTemporalEmployeeButton(
-    BuildContext context, EmployeeAgentController controller) {
+    BuildContext context, ManageEmployeeController controller) {
   final colorScheme = Theme.of(context).colorScheme;
 
   return CustomButton(

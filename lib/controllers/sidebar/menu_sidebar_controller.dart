@@ -45,7 +45,7 @@ class MenuSidebarController extends GetxController {
               icon: Icons.assignment_turned_in_outlined),
           MenuItemModel(
               label: "Expedientes",
-              route: RouteConstants.manageAgent,
+              route: RouteConstants.agentRecords,
               icon: Icons.location_history),
           // MenuItemModel(
           //     label: "Expedientes",

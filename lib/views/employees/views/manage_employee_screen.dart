@@ -5,6 +5,7 @@ import 'package:agents_app/models/position/position_model.dart';
 import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/shared/constants/database_constants.dart';
 import 'package:agents_app/shared/constants/routes.dart';
+import 'package:agents_app/views/employees/controller/edit_employee_controller.dart';
 import 'package:agents_app/views/employees/controller/manage_employee_controller.dart';
 import 'package:agents_app/views/employees/sections/bank_info.dart';
 import 'package:agents_app/views/employees/sections/contact_info.dart';
@@ -21,24 +22,27 @@ import 'package:agents_app/widgets/buttons/form_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ManageEmployeeAgentScreen extends StatefulWidget {
-  const ManageEmployeeAgentScreen({super.key});
+class ManageEmployeeScreen extends StatefulWidget {
+  const ManageEmployeeScreen({super.key});
 
   @override
-  ManageEmployeeAgentScreenState createState() =>
-      ManageEmployeeAgentScreenState();
+  ManageEmployeeScreenState createState() => ManageEmployeeScreenState();
 }
 
-class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen> {
+class ManageEmployeeScreenState extends State<ManageEmployeeScreen> {
   // Controller for managing employee data
-  final controller = Get.put(EmployeeAgentController());
+  final controller = Get.put(ManageEmployeeController());
+  final editController = Get.put(EditEmployeeController());
   final PositionModel? position = Get.arguments?['position'];
+  final String? employeeId = Get.arguments?['employeeId'];
+
   // formkey
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> formKeyPersonal = GlobalKey<FormState>();
   final GlobalKey<FormState> formKeyOther = GlobalKey<FormState>();
 
-  start() async {
+  Future<void> start() async {
+    print("ManageEmployeeScreenState start");
     await controller.genericListController.getAllAgency();
     await controller.genericListController.fetchEmployeeType();
     await controller.genericListController.fetchBank();
@@ -92,6 +96,16 @@ class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen> {
     //     position == null ? "TEMPORAL" : "PERMANENTE";
 
     // print("Position---: ${position?.id}");
+    print("ManageEmployeeScreenState START 🛸 END");
+  }
+
+  Future<void> editData() async {
+    await start().then((_) async {
+      await controller.setEmployeeValues(employeeId);
+    });
+    controller.genericListController.setLoadings(true);
+    setState(() {});
+    controller.genericListController.setLoadings(false);
   }
 
   @override
@@ -100,6 +114,9 @@ class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       start();
     });
+    if (employeeId != null) {
+      editData();
+    }
   }
 
   // @mustCallSuper
@@ -116,12 +133,7 @@ class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen> {
           key: formKey,
           child: Column(
             children: [
-              // ElevatedButton(
-              //     onPressed: () async {
-              //       await controller.genericListController
-              //           .fetchEmployeeClassifications();
-              //     },
-              //     child: Text("Prueba de boton")),
+
               if (position != null)
                 ContentCard(
                     child: Row(
@@ -181,7 +193,13 @@ class ManageEmployeeAgentScreenState extends State<ManageEmployeeAgentScreen> {
                       title: "validación", subTitle: "Verifica los campos");
                   return;
                 }
-                controller.createEmployee();
+
+                if(employeeId != null) {
+                  controller.updateEmployee();
+                } else {
+                  controller.createEmployee();
+                }
+                // controller.createEmployee();
                 // Navigator.pop(context);
               })
             ],

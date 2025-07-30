@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 Widget personalInfo(
-    BuildContext context, EmployeeAgentController controller, bool enabled) {
+    BuildContext context, ManageEmployeeController controller, bool enabled) {
   return ContentCard(
     child: LayoutBuilder(builder: (context, constraints) {
       final isWideScreen = constraints.maxWidth > 750;
@@ -82,7 +82,6 @@ Widget personalInfo(
               // validator: (value) => notEmptyFieldValidator(value),
             ),
           ),
-
           SizedBox(
             width: width,
             child: CustomDatePicker(
@@ -94,7 +93,6 @@ Widget personalInfo(
                 hintText: "",
                 prefixIcon: Icons.cake),
           ),
-
           SizedBox(
               width: width,
               child: CustomDropdownV2Widget(
@@ -150,7 +148,6 @@ Widget personalInfo(
               return filteredOptions.isEmpty ? [] : filteredOptions;
             },
           ),
-
           SizedBox(
             width: width,
             child: CustomInputWidget(
@@ -162,7 +159,6 @@ Widget personalInfo(
               validator: (value) => notEmptyFieldValidator(value),
             ),
           ),
-
           SizedBox(
             width: width,
             child: CustomDatePicker(
@@ -185,7 +181,6 @@ Widget personalInfo(
                 hintText: "",
                 prefixIcon: Icons.badge),
           ),
-
           LoadingAutocompleteDropdown(
             enabled: enabled,
             initialValue: controller.licenseTypeController.value,
@@ -256,7 +251,6 @@ Widget personalInfo(
               return filteredOptions.isEmpty ? [] : filteredOptions;
             },
           ),
-
           LoadingAutocompleteDropdown(
             enabled: enabled,
             initialValue: controller.professionController.value,
@@ -301,7 +295,6 @@ Widget personalInfo(
                             v!.label.toString()
                         : null;
                   })),
-
           SizedBox(
               width: width,
               child: CustomDropdownV2Widget(

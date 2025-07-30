@@ -5,12 +5,12 @@ import 'package:agents_app/models/employee/employee_model.dart';
 import 'package:agents_app/services/employee_dropdown_service.dart';
 import 'package:agents_app/services/toast_service.dart';
 import 'package:agents_app/services/upload_file.dart';
-import 'package:agents_app/views/manage-agent-employees/services/employee_agent_service.dart';
+import 'package:agents_app/views/employees/services/employee-service.dart';
 import 'package:agents_app/views/positions/controllers/position_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EmployeeAgentController extends GetxController {
+class ManageEmployeeController extends GetxController {
   bool rrhForm = false;
   bool personalForm = false;
   bool otherForm = false;
@@ -18,12 +18,19 @@ class EmployeeAgentController extends GetxController {
   PositionController positionController = Get.put(PositionController());
   GenericListController genericListController =
       Get.put(GenericListController());
-  EmployeeAgentService employeeService = EmployeeAgentService();
+  // EmployeeAgentService employeeAgentService = EmployeeAgentService();
+  EmployeeService employeeService = EmployeeService();
   EmployeeDropdownService employeeDropdownService = EmployeeDropdownService();
   UploadFileService uploadFileService = UploadFileService();
 
-  get employeeValues {
+  String employeeId = "";
+  int? personId;
+
+  EmployeeModel get employeeValues {
     EmployeeModel employee = EmployeeModel(
+        id: employeeId,
+        personId: personId,
+        workerStatusId: 1, // ACTIVO SHOULD BE FROM DROPDOWN BUT IN DROPDOWN SET DEFAULT TO ACTIVE
         agencyId: int.parse(agencyController.value.id),
         employeeTypeId: int.parse(employeeTypeController.value.id),
         contractType: contractTypeController.text,
@@ -56,7 +63,7 @@ class EmployeeAgentController extends GetxController {
         hrProfileId: int.parse(hrProfileController.value.id),
         employeeClassificationId: int.parse(classificationController.value.id),
         supervisorWorkerId: int.parse(supervisorController.value.id),
-        performanceMunicipality:
+        performanceMunicipalityId:
             int.parse(performanceMunicipalityController.value.id),
         mintrabPerformanceRegion: mintrabPerformanceRegionController.text,
         mintrabBirthRegion: mintrabBirthRegionController.text,
@@ -115,24 +122,145 @@ class EmployeeAgentController extends GetxController {
         // images loader
 
         //! has left all SimpleEntity values
-
         );
 
     return employee;
   }
 
-  Future<void> createEmployee() async {
-    try {
-      EmployeeModel employee = employeeValues;
+    setEmployeeValues(String? employeeId) async{
+    print("Setting employee values for ID: $employeeId");
+    if (employeeId == null || employeeId.isEmpty) {
+     ToastService.error(title: "Empleado", subTitle: "El ID del empleado no puede estar vacío");
+      return;
+    }
+    final employeeData = await employeeService.getById(employeeId);
 
-      if (courseImageController.base64 != null) {
+    this.employeeId = employeeId;
+    personId = employeeData.personId;
+
+    // DROPDOWNS FROM DATABASE
+    performanceDepartmentController.value = DropDownOption(id: employeeData.performanceDepartment?.id ?? "", label: employeeData.performanceDepartment?.name?? "");
+    performanceMunicipalities.value = await genericListController.fetchMunicipalitiesOnly(employeeData.performanceDepartment?.id ?? "0");
+    performanceMunicipalityController.value = DropDownOption(id: employeeData.performanceMunicipality?.id ?? "", label: employeeData.performanceMunicipality?.name?? "");
+
+    departmentHomeController.value = DropDownOption(id: employeeData.departmentHome?.id ?? "", label: employeeData.departmentHome?.name?? "");
+    municipalitiesHome.value = await genericListController.fetchMunicipalitiesOnly(employeeData.departmentHome?.id ?? "0");
+    municipalityHomeController.value = DropDownOption(id: employeeData.municipalityHome?.id ?? "", label: employeeData.municipalityHome?.name?? "");
+    
+    residenceDepartmentController.value = DropDownOption(id: employeeData.residenceDepartment?.id ?? "", label: employeeData.residenceDepartment?.name?? "");
+    residenceMunicipalities.value = await genericListController.fetchMunicipalities(residenceDepartmentController.value.id);
+    residenceMunicipalityController.value = DropDownOption(id: employeeData.residenceMunicipality?.id ?? "", label: employeeData.residenceMunicipality?.name?? "");
+
+
+    countryOfBirthController.value = DropDownOption(id: employeeData.birthCountry?.id ?? "", label: employeeData.birthCountry?.name?? "");
+    municipalityOfBirthController.value = DropDownOption(id: employeeData.birthMunicipality?.id ?? "", label: employeeData.birthMunicipality?.name?? "");
+    identificationTypeController.value = DropDownOption(id: employeeData.identificationType?.id ?? "", label: employeeData.identificationType?.name?? "");
+    licenseTypeController.value = DropDownOption(id: employeeData.licenseType?.id ?? "", label: employeeData.licenseType?.name?? "");
+    educationLevelController.value = DropDownOption(id: employeeData.educationLevel?.id ?? "", label: employeeData.educationLevel?.name?? "");
+    professionController.value = DropDownOption(id: employeeData.profession?.id ?? "", label: employeeData.profession?.name?? "");
+    supervisorController.value = DropDownOption(id: employeeData.supervisorWorker?.id ?? "", label: employeeData.supervisorWorker?.name?? "");
+    agencyController.value = DropDownOption(id: employeeData.agency?.id ?? "" , label: employeeData.agency?.name ?? "");
+    employeeTypeController.value = DropDownOption(id: employeeData.employeeType?.id ?? "", label: employeeData.employeeType?.name ?? "");
+    maritalStatusController.value = DropDownOption(id: employeeData.maritalStatus?.id ?? "", label: employeeData.maritalStatus?.name ?? "");
+    bankController.value = DropDownOption(id: employeeData.bank?.id ?? "", label: employeeData.bank?.name ?? "");
+    // NIVEL DE CLASIFICACIÓN classificationLevelController
+    hrProfileController.value = DropDownOption(id: employeeData.hrProfile?.id ?? "", label: employeeData.hrProfile?.name ?? "");
+    // CLASIFICACIÓN DEL PUESTO
+    classificationController.value = DropDownOption(id: employeeData.employeeClassification?.id ?? "", label: employeeData.employeeClassification?.name ?? "");
+
+
+    isLoadingPerformanceMunicipalities.value = false;
+    isLoadingMunicipalityHome.value = false;
+    isLoadingResidenceMunicipality.value = false;
+
+    // TEXT FIELDS
+    contractTypeController.text = employeeData.contractType ?? '';
+    contractTypeTermController.text = employeeData.contractTermType ?? '';
+    contractTimeController.text = employeeData.contractTime?.toIso8601String() ?? '';
+    startDateController.text = employeeData.hireDate?.toIso8601String() ?? '';
+    entryReasonController.text = employeeData.entryReason ?? '';
+    workScheduleController.text = employeeData.workSchedule ?? '';
+    costCenterController.text = employeeData.costCenter ?? '';
+    semiannualPolygraphResultController.text = employeeData.semiannualPolygraphResult.toString();
+    dateOfLastPolygraphTestController.text = employeeData.dateOfLastPolygraphTest?.toIso8601String() ?? '';
+    decreeBonusController.text = employeeData.decreeBonus.toString();
+    payrollController.text = employeeData.payroll ?? '';
+    payrollOccupations2989Controller.text = employeeData.payrollOccupations2989 ?? '';
+    disabilityType2989ReportController.text = employeeData.disabilityType2989Report ?? '';
+    salaryBaseMintrabTypeController.text = employeeData.salaryBaseMintrabType ?? '';
+    lifeInsuranceController.text = employeeData.lifeInsurance ?? '';
+    currentSalaryController.text = employeeData.currentSalary.toString();
+    currentSalaryDateController.text = employeeData.currentSalaryDate?.toIso8601String() ?? '';
+    previousSalaryDateController.text = employeeData.previousSalaryDate?.toIso8601String() ?? '';
+    insuranceTypeController.text = employeeData.lifeInsurance ?? '';
+    accNumberBankController.text = employeeData.accountNumber ?? '';
+    accTypeBankController.text = employeeData.bankAccountType ?? '';
+    paymentMethodController.text = employeeData.paymentMethod ?? '';
+    mintrabPerformanceRegionController.text = employeeData.mintrabPerformanceRegion ?? '';
+    mintrabBirthRegionController.text = employeeData.mintrabBirthRegion ?? '';
+    positionMtController.text = employeeData.mtPosition ?? '';
+    digesspPositionController.text = employeeData.digesspPosition ?? '';
+    positionSlotController.text = employeeData.positionSlot ?? '';
+    // positionDesignationController.text = employeeData.positionDesignation ?? '';
+    companyEmailController.text = employeeData.companyEmail ?? '';
+    igssController.text = employeeData.socialSecurityCode ?? '';
+    cvhController.text = employeeData.cvh ?? '';
+    firstNameController.text = employeeData.firstName ?? '';
+    middleNameController.text = employeeData.middleName ?? '';
+    lastNameController.text = employeeData.lastName ?? '';
+    secondLastNameController.text = employeeData.secondLastName ?? '';
+    marriedLastNameController.text = employeeData.marriedLastName ?? '';
+    birthDateController.text = employeeData.birthDate?.toIso8601String() ?? '';
+    genderController.text = employeeData.gender ?? '';
+    identificationController.text = employeeData.identificationNumber ?? '';
+    identificationIssueDateController.text = employeeData.identificationIssueDate?.toIso8601String() ?? '';
+    identificationEndDateController.text = employeeData.identificationEndDate?.toIso8601String() ?? '';
+    licenseController.text = employeeData.driverLicenseNumber ?? '';
+    nitController.text = employeeData.taxIdNumber ?? '';
+    
+    languageController.text = employeeData.language ?? '';
+    emailController.text = employeeData.email ?? '';
+    mobileController.text = employeeData.mobile ?? '';
+    cityController.text = employeeData.cityHome ?? '';
+    addressController.text = employeeData.address ?? '';
+    numberOfChildrenController.text = employeeData.numberOfChildren?.toString() ?? '';
+    emergencyNameController.text = employeeData.emergencyContactName ?? '';
+    emergencyContactController.text = employeeData.emergencyPhone ?? '';
+    referenceName1.text = employeeData.referenceName1 ?? '';
+    referencePhone1.text = employeeData.referencePhone1 ?? '';
+    referenceName2.text = employeeData.referenceName2 ?? '';
+    referencePhone2.text = employeeData.referencePhone2 ?? '';
+    referenceName3.text = employeeData.referenceName3 ?? '';
+    referencePhone3.text = employeeData.referencePhone3 ?? '';
+    ethnicityController.text = employeeData.ethnicity ?? '';
+
+    // NOT FILL ONLY USED IN CREATE
+    // dateCourseController.text = employeeData.dateCourse?.toIso8601String() ?? '';
+    // descriptionCourseController.text = employeeData.descriptionCourse ?? '';
+    // dateShootingPracticeController.text = employeeData.dateShootingPractice?.toIso8601String() ?? '';
+    // descriptionShootingPracticeController.text = employeeData.descriptionShootingPractice ?? '';
+    // dateCriminalRecordController.text = employeeData.dateCriminalRecord?.toIso8601String() ?? '';
+    // descriptionCriminalRecordController.text = employeeData.descriptionCriminalRecord ?? '';
+    // datePoliceRecordsController.text = employeeData.datePoliceRecords?.toIso8601String() ?? '';
+    // descriptionPoliceRecordsController.text = employeeData.descriptionPoliceRecords ?? '';
+    // dateVacationStatusController.text = employeeData.dateVacationStatus?.toIso8601String() ?? '';
+    // descriptionVacationStatusController.text = employeeData.descriptionVacationStatus ?? '';
+    
+// TextEditingController dateCourseController
+// TextEditingController descriptionCourseController
+
+    print("Setting employee values for ID: END");
+  }
+
+  Future<dynamic> createImagesForEmployee() async{
+    if (courseImageController.base64 != null) {
         final courseLink = await uploadFileService.uploadPhotoWebFromBase64(
             base64String: courseImageController.base64!,
             fileName: 'course.png',
             mimeType: 'image/png',
             folder: 'courses');
-
-        employee.courses = [
+      print("Course link: $courseLink");
+        employeeValues.courses = [
           DocumentsEmployee(
             date: RxString(dateCourseController.text),
             description: RxString(descriptionCourseController.text),
@@ -148,8 +276,8 @@ class EmployeeAgentController extends GetxController {
                 fileName: 'shooting_practice.png',
                 mimeType: 'image/png',
                 folder: 'shooting_practices');
-
-        employee.shootingPractices = [
+        print("Shooting practice link: $shootingPracticeLink");
+        employeeValues.shootingPractices = [
           DocumentsEmployee(
             date: RxString(dateShootingPracticeController.text),
             description: RxString(descriptionShootingPracticeController.text),
@@ -157,7 +285,7 @@ class EmployeeAgentController extends GetxController {
           )
         ];
 
-        employee.shootingPractices = [
+        employeeValues.shootingPractices = [
           DocumentsEmployee(
             date: RxString(dateShootingPracticeController.text),
             description: RxString(descriptionShootingPracticeController.text),
@@ -173,8 +301,8 @@ class EmployeeAgentController extends GetxController {
                 fileName: 'criminal_record.png',
                 mimeType: 'image/png',
                 folder: 'criminal_records');
-
-        employee.criminalRecords = [
+        print("Criminal record link: $criminalRecordLink");
+        employeeValues.criminalRecords = [
           DocumentsEmployee(
             date: RxString(dateCriminalRecordController.text),
             description: RxString(descriptionCriminalRecordController.text),
@@ -189,8 +317,8 @@ class EmployeeAgentController extends GetxController {
                 fileName: 'police_record.png',
                 mimeType: 'image/png',
                 folder: 'police_records');
-
-        employee.policeRecords = [
+        print("Police record link: $policeRecordLink");
+        employeeValues.policeRecords = [
           DocumentsEmployee(
             date: RxString(datePoliceRecordsController.text),
             description: RxString(descriptionPoliceRecordsController.text),
@@ -206,8 +334,8 @@ class EmployeeAgentController extends GetxController {
                 fileName: 'vacation_status.png',
                 mimeType: 'image/png',
                 folder: 'vacation_status');
-
-        employee.vacationStatus = [
+        print("Vacation status link: $vacationStatusLink");
+        employeeValues.vacationStatus = [
           DocumentsEmployee(
             date: RxString(dateVacationStatusController.text),
             description: RxString(descriptionVacationStatusController.text),
@@ -215,6 +343,31 @@ class EmployeeAgentController extends GetxController {
           )
         ];
       }
+
+      if(employeePhoto.base64 != null) {
+        final photoLink = await uploadFileService.uploadPhotoWebFromBase64(
+            base64String: employeePhoto.base64!,
+            fileName: 'employee_photo.png',
+            mimeType: 'image/png',
+            folder: 'employee_photos');
+        print("Employee photo link: $photoLink");
+        employeePhoto.updateLink(photoLink!);
+      }
+
+      return {
+        courses: employeeValues.courses,
+        shootingPractices: employeeValues.shootingPractices,
+        criminalRecords: employeeValues.criminalRecords,
+        policeRecords: employeeValues.policeRecords,
+        vacationStatus: employeeValues.vacationStatus,
+      };
+  }
+
+  Future<void> createEmployee() async {
+    try {
+      EmployeeModel employee = employeeValues;
+      await createImagesForEmployee();
+      print("employeeValues.photo: ${employeePhoto.link}");
       await employeeService.create(employee);
 
       ToastService.success(
@@ -226,6 +379,25 @@ class EmployeeAgentController extends GetxController {
     }
     // employeeService.create()
   }
+
+  Future<void> updateEmployee() async {
+    try {
+      // EmployeeModel employee = employeeValues;
+      await createImagesForEmployee();
+      
+      print("employeeValues.photo: ${employeePhoto.link}");
+      print("vacatioNStatus: ${employeeValues.vacationStatus}");
+      // await employeeService.update(employeeId,employee);
+
+      ToastService.success(
+          title: "Empleado", subTitle: "Empleado actualizado con éxito");
+    } catch (e) {
+      ToastService.error(
+          title: "Empleado", subTitle: "No se pudo actualizar el empleado");
+      print("Error updating employee: $e");
+    }
+  }
+
 
   TextEditingController selectedPosition =
       TextEditingController(text: "En proceso");

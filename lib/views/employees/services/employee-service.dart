@@ -21,7 +21,8 @@ class EmployeeService extends BaseService
         final List data = decoded['data'];
         return data.map((json) => EmployeeModel.fromJson(json)).toList();
       } else {
-        ToastService.warning(title: "Empleados", subTitle: "No se encontraron empleados");
+        ToastService.warning(
+            title: "Empleados", subTitle: "No se encontraron empleados");
         return [];
       }
     } catch (e) {
@@ -30,7 +31,6 @@ class EmployeeService extends BaseService
     }
   }
 
-  
   Future<List<EmployeeModel>> getInactiveEmployees(dynamic value) async {
     final response = await http.get(
       Uri.parse('$baseUrl/employee/getInactiveEmployee'),
@@ -71,8 +71,8 @@ class EmployeeService extends BaseService
     }
   }
 
-
-  Future<bool> replaceTempEmployeePosition(String positionId, String employeeId, String? oldEmployeeId) async {
+  Future<bool> replaceTempEmployeePosition(
+      String positionId, String employeeId, String? oldEmployeeId) async {
     final response = await http.post(
       Uri.parse('$baseUrl/employee/replaceEmployee'),
       headers: buildHeaders(),
@@ -101,29 +101,90 @@ class EmployeeService extends BaseService
       print("objects: error ---- $e");
       throw Exception('Error al reemplazar empleado temporal: $e');
     }
-
   }
 
+  Future<List<EmployeeModel>> searchEmployee(String fullName) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/employee/search?fullName=$fullName'),
+      headers: buildHeaders(),
+    );
+
+    try {
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        final List data = decoded['data'];
+        return data.map((json) => EmployeeModel.fromJson(json)).toList();
+      } else {
+        ToastService.warning(
+            title: "Búsqueda empleados",
+            subTitle: "No se encontraron empleados");
+        return [];
+      }
+    } catch (e) {
+      print("objects: error ---- $e");
+      throw Exception('Error al cargar sucursales: $e');
+    }
+  }
 
   @override
   Future<EmployeeModel> getById(String id) async {
-    // Implement logic to fetch an employee by ID
-    // Example:
-    throw UnimplementedError('getById method not implemented');
+    final response = await http.get(
+      Uri.parse("$baseUrl/employee/employee/$id"),
+      headers: buildHeaders(),
+    );
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+      return EmployeeModel.fromJson(body['data']);
+    } else {
+      ToastService.error(
+        title: "Empleado",
+        subTitle: "Error al obtener Empleado",
+      );
+      throw Exception('Error al obtener Empleado');
+    }
   }
 
   @override
-  Future<bool> create(EmployeeModel item) async {
-    // Implement logic to create a new employee
-    // Example:
-    return true;
+  Future<bool> create(EmployeeModel model) async {
+    final response = await http.post(
+      Uri.parse("$baseUrl/employee/createEmployee"),
+      headers: buildHeaders(),
+      body: jsonEncode(model.toJson()),
+    );
+
+    print("objects: response employee ##### ${model.toJson()}");
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      // ToastService.error(
+      //   title: "Empleado",
+      //   subTitle: "Error al crear Empleado",
+      // );
+      throw Exception('Error al crear Empleado');
+    }
   }
 
   @override
   Future<bool> update(String id, EmployeeModel item) async {
-    // Implement logic to update an existing employee
-    // Example:
-    return true;
+    final response = await http.put(
+      Uri.parse("$baseUrl/employee/updateEmployee/$id"),
+      headers: buildHeaders(),
+      body: jsonEncode(item.toJson()),
+    );
+    print("UPDATE ID 👁️: $id");
+    print("objects: UPDATE 🦁 employee ##### ${item.toJson().toString()}");
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      // ToastService.error(
+      //   title: "Empleado",
+      //   subTitle: "Error al actualizar Empleado",
+      // );
+      throw Exception('Error al actualizar Empleado');
+    }
   }
 
   @override

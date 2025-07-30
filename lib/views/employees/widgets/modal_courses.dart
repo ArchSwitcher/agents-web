@@ -12,7 +12,7 @@ void showCoursesModal({
   String description = "",
   String title = "Agregar curso al empleado",
   bool isEdit = true,
-  required EmployeeAgentController controller,
+  required ManageEmployeeController controller,
 }) {
   showDialog(
     context: context,
@@ -31,7 +31,7 @@ void showCoursesModal({
 }
 
 class ModalCourses extends StatefulWidget {
-  final EmployeeAgentController controller;
+  final ManageEmployeeController controller;
 
   const ModalCourses({Key? key, required this.controller}) : super(key: key);
 

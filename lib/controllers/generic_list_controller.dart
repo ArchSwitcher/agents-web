@@ -27,8 +27,6 @@ class GenericListController extends GetxController {
   final RxBool isLoadingMunicipality = true.obs;
   final RxBool isLoadingBranchesDd = true.obs;
   final RxBool isLoadingTurns = true.obs;
-  
-
   final RxBool isLoadingLicense = true.obs;
   final RxBool isLoadingEmployeeType = true.obs;
   final RxBool isLoadingJobFrequency = true.obs;
@@ -695,7 +693,6 @@ class GenericListController extends GetxController {
       final data = await genericListService.getAll(
           "common/getIdentificationType",
           (json) => GenericListModel.fromJson(json));
-      print("fetchIdentificationType data: $data");
       identificationType.value = data.map((item) {
         return DropDownOption(
           id: item.id.toString(),
@@ -824,5 +821,44 @@ class GenericListController extends GetxController {
 
   void cleanMunicipalities() {
     municipalities.value = [];
+  }
+
+  void setLoadings(bool value) {
+    isLoadingEmployees.value = value;
+    isLoadingClassification.value = value;
+    isLoadingCity.value = value;
+    isLoadingCountry.value = value;
+    isLoadingZone.value = value;
+    isLoadingBilling.value = value;
+    isLoadingGeneration.value = value;
+    isLoadingFactory.value = value;
+    isLoadingAgency.value = value;
+    isLoadingCompany.value = value;
+    isLoadingServiceType.value = value;
+    isLoadingShiftTime.value = value;
+    isLoadingTransport.value = value;
+    isLoadingClientsByGroup.value = value;
+    isLoadingBranchByClient.value = value;
+    isLoadingEquipmentType.value = value;
+    isLoadingStatusType.value = value;
+    isLoadingMunicipality.value = value;
+    isLoadingBranchesDd.value = value;
+    isLoadingTurns.value = value;
+    isLoadingLicense.value = value;
+    isLoadingEmployeeType.value = value;
+    isLoadingJobFrequency.value = value;
+    isLoadingHrProfile.value = value;
+    isLoadingPaymentType.value = value;
+    isLoadingBloodType.value = value;
+    isLoadingMaritalStatus.value = value;
+    isLoadingRelationShip.value = value;
+    isLoadingWorkerStatus.value = value;
+    isLoadingBank.value = value;
+    isLoadingIdentificationType.value = value;
+    isLoadingOperationalProfile.value = value;
+    isLoadingRegion.value = value;
+    isLoadingEducation.value = value;
+    isLoadingEmployeeClassification.value = value;
+    isLoadingProfessions.value = value;
   }
 }

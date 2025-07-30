@@ -4,6 +4,7 @@ import 'package:agents_app/controllers/loader_controller.dart';
 import 'package:agents_app/controllers/sidebar/menu_sidebar_controller.dart';
 import 'package:agents_app/controllers/sidebar/sidebar_controller.dart';
 import 'package:agents_app/views/agent/views/presences_screen.dart';
+import 'package:agents_app/views/agents-records/views/agent_records_screen.dart';
 import 'package:agents_app/views/agents/agents_screen.dart';
 import 'package:agents_app/views/branches/pages/branch_agents_form.dart';
 import 'package:agents_app/views/branches/pages/manage_branch_tab.dart';
@@ -62,7 +63,8 @@ class MyApp extends StatelessWidget {
           GetPage(name: RouteConstants.branch, page: () => const BranchMain()),
           GetPage(name: RouteConstants.managePosition, page: () => const ManagePositionScreen()),
           GetPage(name: RouteConstants.manageAgent, page: () => const EmployeesAgentScreen()),
-          GetPage(name: RouteConstants.manageEmployee, page: () => const ManageEmployeeAgentScreen()),
+          GetPage(name: RouteConstants.agentRecords, page: () => const AgentRecordsScreen()),
+          GetPage(name: RouteConstants.manageEmployee, page: () => const ManageEmployeeScreen()),
           GetPage(name: RouteConstants.employees, page: () => const EmployeesScreen()),
           GetPage(name: RouteConstants.branchPositionStay, page: () => const BranchAgentsForm()),
 

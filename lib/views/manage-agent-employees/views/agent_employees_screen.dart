@@ -23,8 +23,8 @@ class EmployeesAgentScreen extends StatefulWidget {
 }
 
 class EmployeesAgentScreenState extends State<EmployeesAgentScreen> {
-  final EmployeeAgentController controller =
-      Get.put<EmployeeAgentController>(EmployeeAgentController());
+  final ManageEmployeeController controller =
+      Get.put<ManageEmployeeController>(ManageEmployeeController());
   final LoaderController loaderController = Get.find<LoaderController>();
 
   final List<String> headers = [
@@ -61,8 +61,8 @@ class EmployeesAgentScreenState extends State<EmployeesAgentScreen> {
 
   reloadPositions(String statusTypeId) async {
     loaderController.show();
-    // print(
-    //     "controller.selectedPosition.text ${controller.selectedPosition.text} $statusTypeId");
+    print(
+        "controller.selectedPosition.text ${controller.selectedPosition.text} $statusTypeId");
     await controller.positionController
         .fetchPositions(statusType: statusTypeId);
     loaderController.hide();
@@ -93,7 +93,7 @@ class EmployeesAgentScreenState extends State<EmployeesAgentScreen> {
                         width: 250,
                         child: CustomDropdownV2Widget(
                             initialValue: statusTypePositionMock.last,
-                            labelText: "Status de posición",
+                            labelText: "Estatus de posición",
                             hintText: "",
                             items: statusTypePositionMock,
                             validator: (p0) => null,
@@ -103,6 +103,7 @@ class EmployeesAgentScreenState extends State<EmployeesAgentScreen> {
                               controller.selectedPosition.text =
                                   v!.label.toString();
                               // controller.positionController.clearPositions();
+                              print("selected position: ${v.id} ${v.label}");
                               await reloadPositions(v.id);
                             }),
                       ),

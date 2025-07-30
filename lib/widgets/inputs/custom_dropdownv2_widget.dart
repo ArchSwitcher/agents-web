@@ -43,26 +43,31 @@ class _CustomDropdownV2WidgetState extends State<CustomDropdownV2Widget> {
       // widget.textEditingController.text = _selectedValue!.id;
       _selectedValue = widget.items.firstWhere(
         (item) => item.id == widget.textEditingController.text,
-        orElse: () => widget.initialValue ?? widget.items.first,
+        orElse: () => DropDownOption(id: "", label: ""),
       );
     }
   }
 
-  // @override
-  // void didUpdateWidget(covariant CustomDropdownV2Widget oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
-  //   final matchingItem = widget.items.firstWhere(
-  //     (item) => item.id == widget.textEditingController.text,
-  //     orElse: () => widget.initialValue ?? widget.items.first,
-  //   );
+  @override
+  void didUpdateWidget(covariant CustomDropdownV2Widget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print("didUpdateWidget called ${widget.initialValue?.label}");
+    final matchingItem = widget.items.firstWhere(
+      (item) => item.id == widget.textEditingController.text,
+      orElse: () => DropDownOption(id: "", label: ""),
+    );
+    print("Matching item: ${widget.labelText} ${matchingItem.label} ------- ${_selectedValue?.id != matchingItem.id} ${_selectedValue?.id} ${matchingItem.id}");
 
-  //   print("Matching item: ${matchingItem.label}");
-  //   if (_selectedValue?.id != matchingItem.id) {
-  //     setState(() {
-  //       _selectedValue = matchingItem;
-  //     });
-  //   }
-  // }
+    if ((_selectedValue?.id != matchingItem.id) && matchingItem.id.isNotEmpty) {
+      setState(() {
+        _selectedValue = matchingItem;
+      });
+    }else {
+      setState(() {
+        _selectedValue = null;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,11 +85,11 @@ class _CustomDropdownV2WidgetState extends State<CustomDropdownV2Widget> {
         DropdownButtonFormField<DropDownOption>(
           style: CustomStyle.textStyleBlack(context),
           onChanged: (value) {
-            // setState(() {
-            //   _selectedValue = value;
-            // });
-            // widget.onValueChanged(value);
-            // widget.textEditingController.text = value?.id ?? '';
+            setState(() {
+              _selectedValue = value;
+            });
+            widget.onValueChanged(value);
+            widget.textEditingController.text = value?.id ?? '';
           },
           value: _selectedValue,
           items: widget.items.map((DropDownOption option) {

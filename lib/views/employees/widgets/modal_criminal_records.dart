@@ -12,7 +12,7 @@ void showCriminalModal({
   String description = "",
   String title = "Antecedentes penales del empleado",
   bool isEdit = true,
-  required EmployeeAgentController controller,
+  required ManageEmployeeController controller,
 }) {
   showDialog(
     context: context,
@@ -32,7 +32,7 @@ void showCriminalModal({
 }
 
 class ModalCriminalRecord extends StatefulWidget {
-  final EmployeeAgentController controller;
+  final ManageEmployeeController controller;
 
   const ModalCriminalRecord({Key? key, required this.controller}) : super(key: key);
 

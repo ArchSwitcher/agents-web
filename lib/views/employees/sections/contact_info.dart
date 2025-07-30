@@ -8,7 +8,7 @@ import 'package:agents_app/widgets/inputs/dropdown_widget.dart';
 import 'package:flutter/material.dart';
 
 Widget contactInfo(
-    BuildContext context, EmployeeAgentController controller, bool enabled) {
+    BuildContext context, ManageEmployeeController controller, bool enabled) {
   return ContentCard(
     child: LayoutBuilder(builder: (context, constraints) {
       final isWideScreen = constraints.maxWidth > 750;

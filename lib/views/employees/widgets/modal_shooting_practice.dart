@@ -12,7 +12,7 @@ void showShootingPracticesModal({
   String description = "",
   String title = "Practica de tiro del empleado",
   bool isEdit = true,
-  required EmployeeAgentController controller,
+  required ManageEmployeeController controller,
 }) {
   showDialog(
     context: context,
@@ -32,7 +32,7 @@ void showShootingPracticesModal({
 }
 
 class ModalShootingPractice extends StatefulWidget {
-  final EmployeeAgentController controller;
+  final ManageEmployeeController controller;
 
   const ModalShootingPractice({Key? key, required this.controller}) : super(key: key);
 

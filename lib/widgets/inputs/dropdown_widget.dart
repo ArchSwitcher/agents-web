@@ -34,7 +34,7 @@ class LoadingAutocompleteDropdown extends StatefulWidget {
     this.prefixIcon = Icons.person_outline,
     this.loadingText = '',
     this.initialValue,
-    this.validator,
+    this.validator
   });
 
   @override
@@ -45,7 +45,7 @@ class _LoadingAutocompleteDropdownState extends State<LoadingAutocompleteDropdow
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (widget.isLoading.value) {
+      if (widget.isLoading.value || widget.listItems.isEmpty) {
         return SizedBox(
           width: widget.width,
           child: Align(
@@ -66,6 +66,7 @@ class _LoadingAutocompleteDropdownState extends State<LoadingAutocompleteDropdow
       return SizedBox(
         width: widget.width,
         child: AutocompleteDropdownWidget(
+          key: ValueKey(widget.initialValue?.id),
           validator: widget.validator,
           initialValue: widget.initialValue,
           prefixIcon: widget.prefixIcon,
